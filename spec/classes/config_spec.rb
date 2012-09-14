@@ -61,44 +61,42 @@ describe "redis" do
     }
   }
 
-  it do
-    should contain_file('_config_file_').with_owner('_config_user_')
-    should contain_file('_config_file_').with_group('_config_group_')
-    should contain_file('_config_file_').with_owner('_config_user_')
-    should contain_file('_config_file_').with_group('_config_group_')
+  it { should contain_file('_config_file_').with_owner('_config_user_') }
+  it { should contain_file('_config_file_').with_group('_config_group_') }
+  it { should contain_file('_config_file_').with_owner('_config_user_') }
+  it { should contain_file('_config_file_').with_group('_config_group_') }
 
-    should contain_file('_config_file_').with_content(/_activerehashing_/)
-    should contain_file('_config_file_').with_content(/_appendfsync_/)
-    should contain_file('_config_file_').with_content(/_appendonly_/)
-    should contain_file('_config_file_').with_content(/_auto_aof_rewrite_min_size_/)
-    should contain_file('_config_file_').with_content(/_auto_aof_rewrite_percentage_/)
-    should contain_file('_config_file_').with_content(/_bind_/)
-    should contain_file('_config_file_').with_content(/_daemonize_/)
-    should contain_file('_config_file_').with_content(/_databases_/)
-    should contain_file('_config_file_').with_content(/_dbfilename_/)
-    should contain_file('_config_file_').with_content(/_hash_max_zipmap_entries_/)
-    should contain_file('_config_file_').with_content(/_hash_max_zipmap_value_/)
-    should contain_file('_config_file_').with_content(/_list_max_ziplist_entries_/)
-    should contain_file('_config_file_').with_content(/_list_max_ziplist_value_/)
-    should contain_file('_config_file_').with_content(/_log_file_/)
-    should contain_file('_config_file_').with_content(/_log_level_/)
-    should contain_file('_config_file_').with_content(/_no_appendfsync_on_rewrite_/)
-    should contain_file('_config_file_').with_content(/_pid_file_/)
-    should contain_file('_config_file_').with_content(/_port_/)
-    should contain_file('_config_file_').with_content(/_rdbcompression_/)
-    should contain_file('_config_file_').with_content(/_set_max_intset_entries_/)
-    should contain_file('_config_file_').with_content(/_slave_serve_stale_data_/)
-    should contain_file('_config_file_').with_content(/_slowlog_log_slower_than_/)
-    should contain_file('_config_file_').with_content(/_slowlog_max_len_/)
-    should contain_file('_config_file_').with_content(/_timeout_/)
-    should contain_file('_config_file_').with_content(/_vm_max_memory_/)
-    should contain_file('_config_file_').with_content(/_vm_max_threads_/)
-    should contain_file('_config_file_').with_content(/_vm_page_size_/)
-    should contain_file('_config_file_').with_content(/_vm_pages_/)
-    should contain_file('_config_file_').with_content(/_vm_swap_file_/)
-    should contain_file('_config_file_').with_content(/_workdir_/)
-    should contain_file('_config_file_').with_content(/_zset_max_ziplist_entries_/)
-    should contain_file('_config_file_').with_content(/_zset_max_ziplist_value_/)
-  end
+  it { should contain_file('_config_file_').with_content(/_activerehashing_/) }
+  it { should contain_file('_config_file_').with_content(/_appendfsync_/) }
+  it { should contain_file('_config_file_').with_content(/_appendonly_/) }
+  it { should contain_file('_config_file_').with_content(/_auto_aof_rewrite_min_size_/) }
+  it { should contain_file('_config_file_').with_content(/_auto_aof_rewrite_percentage_/) }
+  it { should contain_file('_config_file_').with_content(/_bind_/) }
+  it { should contain_file('_config_file_').with_content(/_daemonize_/) }
+  it { should contain_file('_config_file_').with_content(/_databases_/) }
+  it { should contain_file('_config_file_').with_content(/_dbfilename_/) }
+  it { should contain_file('_config_file_').with_content(/_hash_max_zipmap_entries_/) }
+  it { should contain_file('_config_file_').with_content(/_hash_max_zipmap_value_/) }
+  it { should contain_file('_config_file_').with_content(/_list_max_ziplist_entries_/) }
+  it { should contain_file('_config_file_').with_content(/_list_max_ziplist_value_/) }
+  it { should contain_file('_config_file_').with_content(/_log_file_/) }
+  it { should contain_file('_config_file_').with_content(/_log_level_/) }
+  it { should contain_file('_config_file_').with_content(/_no_appendfsync_on_rewrite_/) }
+  it { should contain_file('_config_file_').with_content(/_pid_file_/) }
+  it { should contain_file('_config_file_').with_content(/_port_/) }
+  it { should contain_file('_config_file_').with_content(/_rdbcompression_/) }
+  it { should contain_file('_config_file_').with_content(/_set_max_intset_entries_/) }
+  it { should contain_file('_config_file_').with_content(/_slave_serve_stale_data_/) }
+  it { should contain_file('_config_file_').with_content(/_slowlog_log_slower_than_/) }
+  it { should contain_file('_config_file_').with_content(/_slowlog_max_len_/) }
+  it { should contain_file('_config_file_').with_content(/_timeout_/) }
+  it { should contain_file('_config_file_').with_content(/_vm_max_memory_/) }
+  it { should contain_file('_config_file_').with_content(/_vm_max_threads_/) }
+  it { should contain_file('_config_file_').with_content(/_vm_page_size_/) }
+  it { should contain_file('_config_file_').with_content(/_vm_pages_/) }
+  it { should contain_file('_config_file_').with_content(/_vm_swap_file_/) }
+  it { should contain_file('_config_file_').with_content(/_workdir_/) }
+  it { should contain_file('_config_file_').with_content(/_zset_max_ziplist_entries_/) }
+  it { should contain_file('_config_file_').with_content(/_zset_max_ziplist_value_/) }
 end
 

@@ -17,9 +17,7 @@ describe "redis" do
     }
   }
 
-  it do
-    should contain_package('_package_name_').with_ensure('_package_ensure_')
-    #should contain_package('_package_deps_').with_ensure('_package_ensure_')
-  end
+  it { should contain_package('_package_name_').with_ensure('_package_ensure_') }
+ #it { should contain_package('_package_deps_').with_ensure('_package_ensure_') }
 end
 

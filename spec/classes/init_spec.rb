@@ -19,11 +19,9 @@ describe 'redis' do
         }
       end
 
-      it do
-        should include_class('redis')
-        should include_class('redis::install')
-        should include_class('redis::config')
-      end
+      it { should include_class('redis') }
+      it { should include_class('redis::install') }
+      it { should include_class('redis::config') }
     end
   end
 
@@ -35,11 +33,9 @@ describe 'redis' do
         }
       end
 
-      it do
-        should include_class('redis')
-        should include_class('redis::install')
-        should include_class('redis::config')
-      end
+      it { should include_class('redis') }
+      it { should include_class('redis::install') }
+      it { should include_class('redis::config') }
     end
   end
 end
