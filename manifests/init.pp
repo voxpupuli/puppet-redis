@@ -73,13 +73,13 @@ class redis (
 
   # motd::register{'redis': }
 
-  include install
   include preinstall
+  include install
   include config
   include service
 
-  Class['install'] ->
   Class['preinstall'] ->
+  Class['install'] ->
   Class['config'] ->
   Class['service']
 
