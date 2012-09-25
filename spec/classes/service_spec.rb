@@ -24,7 +24,7 @@ describe "redis" do
     should contain_service('_daemon_name_').with(
       'ensure'    => '_daemon_ensure_',
       'enable'    => '_daemon_enable_',
-      'hasstatus' => '_daemon_hasstatus_',
+      'hasstatus' => '_daemon_hasstatus_'
     )
   end
 end
