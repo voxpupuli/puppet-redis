@@ -4,7 +4,7 @@
 # Such as package repositories.
 #
 class redis::preinstall {
-  if $redis::manage_repo {
+  if $::redis::manage_repo {
     case $::operatingsystem {
       'RedHat', 'CentOS', 'Scientific', 'OEL', 'Amazon': {
         $epel_mirror = $::operatingsystemrelease ? {
