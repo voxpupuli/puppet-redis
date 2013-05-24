@@ -1,4 +1,4 @@
-# = Class: redis
+# == Class: redis
 #
 # This class installs redis
 #
