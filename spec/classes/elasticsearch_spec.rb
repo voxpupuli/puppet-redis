@@ -303,13 +303,13 @@ describe 'redis', :type => :class do
   describe 'with parameter: service_enable' do
     let (:params) { { :service_enable => true } }
 
-    it { should contain_service('redis').with_enable(true) }
+    it { should contain_service('redis-server').with_enable(true) }
   end
 
   describe 'with parameter: service_ensure' do
     let (:params) { { :service_ensure => '_VALUE_' } }
 
-    it { should contain_service('redis').with_ensure('_VALUE_') }
+    it { should contain_service('redis-server').with_ensure('_VALUE_') }
   end
 
   describe 'with parameter: service_group' do
@@ -321,13 +321,13 @@ describe 'redis', :type => :class do
   describe 'with parameter: service_hasrestart' do
     let (:params) { { :service_hasrestart => true } }
 
-    it { should contain_service('redis').with_hasrestart(true) }
+    it { should contain_service('redis-server').with_hasrestart(true) }
   end
 
   describe 'with parameter: service_hasstatus' do
     let (:params) { { :service_hasstatus => true } }
 
-    it { should contain_service('redis').with_hasstatus(true) }
+    it { should contain_service('redis-server').with_hasstatus(true) }
   end
 
   describe 'with parameter: service_name' do
