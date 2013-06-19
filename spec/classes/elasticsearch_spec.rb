@@ -17,11 +17,11 @@ describe 'redis', :type => :class do
       )
     }
 
-    it { should contain_service('redis').with(
+    it { should contain_service('redis-server').with(
         'ensure'     => 'running',
         'enable'     => 'true',
         'hasrestart' => 'true',
-        'hasstatus'  => 'true'
+        'hasstatus'  => 'false'
       )
     }
   end

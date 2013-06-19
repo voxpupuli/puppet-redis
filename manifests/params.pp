@@ -66,7 +66,7 @@ class redis::params {
       $service_ensure     = 'running'
       $service_group      = 'redis'
       $service_hasrestart = true
-      $service_hasstatus  = true
+      $service_hasstatus  = false
       $service_name       = 'redis-server'
       $service_user       = 'redis'
     }
