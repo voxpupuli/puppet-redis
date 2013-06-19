@@ -14,20 +14,20 @@
 
 # By default Redis does not run as a daemon. Use 'yes' if you need it.
 # Note that Redis will write a pid file in /var/run/redis.pid when daemonized.
-daemonize <%= scope.lookupvar('::redis::daemonize') %>
+daemonize <%= @daemonize %>
 
 # When running daemonized, Redis writes a pid file in /var/run/redis.pid by
 # default. You can specify a custom pid file location here.
-pidfile <%= scope.lookupvar('::redis::pid_file') %>
+pidfile <%= @pid_file %>
 
 # Accept connections on the specified port, default is 6379.
 # If port 0 is specified Redis will not listen on a TCP socket.
-port <%= scope.lookupvar('::redis::port') %>
+port <%= @port %>
 
 # If you want you can bind a single interface, if the bind option is not
 # specified all the interfaces will listen for incoming connections.
 #
-bind <%= scope.lookupvar('::redis::bind') %>
+bind <%= @bind %>
 
 # Specify the path for the unix socket that will be used to listen for
 # incoming connections. There is no default, so Redis will not listen
@@ -37,7 +37,7 @@ bind <%= scope.lookupvar('::redis::bind') %>
 # unixsocketperm 755
 
 # Close the connection after a client is idle for N seconds (0 to disable)
-timeout <%= scope.lookupvar('::redis::timeout') %>
+timeout <%= @timeout %>
 
 # Set server verbosity to 'debug'
 # it can be one of:
@@ -45,12 +45,12 @@ timeout <%= scope.lookupvar('::redis::timeout') %>
 # verbose (many rarely useful info, but not a mess like the debug level)
 # notice (moderately verbose, what you want in production probably)
 # warning (only very important / critical messages are logged)
-loglevel <%= scope.lookupvar('::redis::log_level') %>
+loglevel <%= @log_level %>
 
 # Specify the log file name. Also 'stdout' can be used to force
 # Redis to log on the standard output. Note that if you use standard
 # output for logging but daemonize, logs will be sent to /dev/null
-logfile <%= scope.lookupvar('::redis::log_file') %>
+logfile <%= @log_file %>
 
 # To enable logging to the system logger, just set 'syslog-enabled' to yes,
 # and optionally update the other syslog parameters to suit your needs.
@@ -65,7 +65,7 @@ logfile <%= scope.lookupvar('::redis::log_file') %>
 # Set the number of databases. The default database is DB 0, you can select
 # a different one on a per-connection basis using SELECT <dbid> where
 # dbid is a number between 0 and 'databases'-1
-databases <%= scope.lookupvar('::redis::databases') %>
+databases <%= @databases %>
 
 ################################ SNAPSHOTTING  #################################
 #
@@ -91,20 +91,20 @@ save 60 10000
 # For default that's set to 'yes' as it's almost always a win.
 # If you want to save some CPU in the saving child set it to 'no' but
 # the dataset will likely be bigger if you have compressible values or keys.
-rdbcompression <%= scope.lookupvar('::redis::rdbcompression') %>
+rdbcompression <%= @rdbcompression %>
 
 # The filename where to dump the DB
-dbfilename <%= scope.lookupvar('::redis::dbfilename') %>
+dbfilename <%= @dbfilename %>
 
 # The working directory.
 #
 # The DB will be written inside this directory, with the filename specified
 # above using the 'dbfilename' configuration directive.
-# 
+#
 # Also the Append Only File will be created inside this directory.
-# 
+#
 # Note that you must specify a directory here, not a file name.
-dir <%= scope.lookupvar('::redis::workdir') %>
+dir <%= @workdir %>
 
 ################################# REPLICATION #################################
 
@@ -139,13 +139,13 @@ masterauth <%= @masterauth %>
 #    an error "SYNC with master in progress" to all the kind of commands
 #    but to INFO and SLAVEOF.
 #
-slave-serve-stale-data <%= scope.lookupvar('::redis::slave_serve_stale_data') %>
+slave-serve-stale-data <%= @slave_serve_stale_data %>
 
 # Slaves send PINGs to server in a predefined interval. It's possible to change
 # this interval with the repl_ping_slave_period option. The default value is 10
 # seconds.
 #
-repl-ping-slave-period <%= scope.lookupvar('::redis::repl_ping_slave_period') %>
+repl-ping-slave-period <%= @repl_ping_slave_period %>
 
 # The following option sets a timeout for both Bulk transfer I/O timeout and
 # master data or ping response timeout. The default value is 60 seconds.
@@ -154,7 +154,7 @@ repl-ping-slave-period <%= scope.lookupvar('::redis::repl_ping_slave_period') %>
 # specified for repl-ping-slave-period otherwise a timeout will be detected
 # every time there is low traffic between the master and the slave.
 #
-repl-timeout <%= scope.lookupvar('::redis::repl_timeout') %>
+repl-timeout <%= @repl_timeout %>
 
 ################################## SECURITY ###################################
 
@@ -164,7 +164,7 @@ repl-timeout <%= scope.lookupvar('::redis::repl_timeout') %>
 #
 # This should stay commented out for backward compatibility and because most
 # people do not need auth (e.g. they run their own servers).
-# 
+#
 # Warning: since Redis is pretty fast an outside user can try up to
 # 150k passwords per second against a good box. This means that you should
 # use a very strong password otherwise it will be very easy to break.
@@ -196,7 +196,7 @@ repl-timeout <%= scope.lookupvar('::redis::repl_timeout') %>
 # an error 'max number of clients reached'.
 #
 # maxclients 128
-maxclients <%= scope.lookupvar('::redis::maxclients') %>
+maxclients <%= @maxclients %>
 
 # Don't use more memory than the specified amount of bytes.
 # When the memory limit is reached Redis will try to remove keys
@@ -225,14 +225,14 @@ maxclients <%= scope.lookupvar('::redis::maxclients') %>
 
 # MAXMEMORY POLICY: how Redis will select what to remove when maxmemory
 # is reached? You can select among five behavior:
-# 
+#
 # volatile-lru -> remove the key with an expire set using an LRU algorithm
 # allkeys-lru -> remove any key accordingly to the LRU algorithm
 # volatile-random -> remove a random key with an expire set
 # allkeys->random -> remove a random key, any key
 # volatile-ttl -> remove the key with the nearest expire time (minor TTL)
 # noeviction -> don't expire at all, just return an error on write operations
-# 
+#
 # Note: with all the kind of policies, Redis will return an error on write
 #       operations, when there are not suitable keys for eviction.
 #
@@ -272,13 +272,13 @@ maxclients <%= scope.lookupvar('::redis::maxclients') %>
 # IMPORTANT: Check the BGREWRITEAOF to check how to rewrite the append
 # log file in background when it gets too big.
 
-appendonly <%= scope.lookupvar('::redis::appendonly') %>
+appendonly <%= @appendonly %>
 
 # The name of the append only file (default: "appendonly.aof")
 # appendfilename appendonly.aof
 
 # The fsync() call tells the Operating System to actually write data on disk
-# instead to wait for more data in the output buffer. Some OS will really flush 
+# instead to wait for more data in the output buffer. Some OS will really flush
 # data on disk, some other OS will just try to do it ASAP.
 #
 # Redis supports three different modes:
@@ -299,7 +299,7 @@ appendonly <%= scope.lookupvar('::redis::appendonly') %>
 
 # appendfsync always
 # appendfsync no
-appendfsync <%= scope.lookupvar('::redis::appendfsync') %>
+appendfsync <%= @appendfsync %>
 
 # When the AOF fsync policy is set to always or everysec, and a background
 # saving process (a background save or AOF log background rewriting) is
@@ -316,15 +316,15 @@ appendfsync <%= scope.lookupvar('::redis::appendfsync') %>
 # the same as "appendfsync none", that in pratical terms means that it is
 # possible to lost up to 30 seconds of log in the worst scenario (with the
 # default Linux settings).
-# 
+#
 # If you have latency problems turn this to "yes". Otherwise leave it as
 # "no" that is the safest pick from the point of view of durability.
-no-appendfsync-on-rewrite <%= scope.lookupvar('::redis::no_appendfsync_on_rewrite') %>
+no-appendfsync-on-rewrite <%= @no_appendfsync_on_rewrite %>
 
 # Automatic rewrite of the append only file.
 # Redis is able to automatically rewrite the log file implicitly calling
 # BGREWRITEAOF when the AOF log size will growth by the specified percentage.
-# 
+#
 # This is how it works: Redis remembers the size of the AOF file after the
 # latest rewrite (or if no rewrite happened since the restart, the size of
 # the AOF at startup is used).
@@ -338,8 +338,8 @@ no-appendfsync-on-rewrite <%= scope.lookupvar('::redis::no_appendfsync_on_rewrit
 # Specify a precentage of zero in order to disable the automatic AOF
 # rewrite feature.
 
-auto-aof-rewrite-percentage <%= scope.lookupvar('::redis::auto_aof_rewrite_percentage') %>
-auto-aof-rewrite-min-size <%= scope.lookupvar('::redis::auto_aof_rewrite_min_size') %>
+auto-aof-rewrite-percentage <%= @auto_aof_rewrite_percentage %>
+auto-aof-rewrite-min-size <%= @auto_aof_rewrite_min_size %>
 
 ################################## SLOW LOG ###################################
 
@@ -349,7 +349,7 @@ auto-aof-rewrite-min-size <%= scope.lookupvar('::redis::auto_aof_rewrite_min_siz
 # but just the time needed to actually execute the command (this is the only
 # stage of command execution where the thread is blocked and can not serve
 # other requests in the meantime).
-# 
+#
 # You can configure the slow log with two parameters: one tells Redis
 # what is the execution time, in microseconds, to exceed in order for the
 # command to get logged, and the other parameter is the length of the
@@ -359,11 +359,11 @@ auto-aof-rewrite-min-size <%= scope.lookupvar('::redis::auto_aof_rewrite_min_siz
 # The following time is expressed in microseconds, so 1000000 is equivalent
 # to one second. Note that a negative number disables the slow log, while
 # a value of zero forces the logging of every command.
-slowlog-log-slower-than <%= scope.lookupvar('::redis::slowlog_log_slower_than') %>
+slowlog-log-slower-than <%= @slowlog_log_slower_than %>
 
 # There is no limit to this length. Just be aware that it will consume memory.
 # You can reclaim memory used by the slow log with SLOWLOG RESET.
-slowlog-max-len <%= scope.lookupvar('::redis::slowlog_max_len') %>
+slowlog-max-len <%= @slowlog_max_len %>
 
 ################################ VIRTUAL MEMORY ###############################
 
@@ -387,13 +387,13 @@ vm-enabled no
 # file for every redis process you are running. Redis will complain if the
 # swap file is already in use.
 #
-# The best kind of storage for the Redis swap file (that's accessed at random) 
+# The best kind of storage for the Redis swap file (that's accessed at random)
 # is a Solid State Disk (SSD).
 #
 # *** WARNING *** if you are using a shared hosting the default of putting
 # the swap file under /tmp is not secure. Create a dir with access granted
 # only to Redis user and configure Redis to create the swap file there.
-vm-swap-file <%= scope.lookupvar('::redis::vm_swap_file') %>
+vm-swap-file <%= @vm_swap_file %>
 
 # vm-max-memory configures the VM to use at max the specified amount of
 # RAM. Everything that deos not fit will be swapped on disk *if* possible, that
@@ -403,7 +403,7 @@ vm-swap-file <%= scope.lookupvar('::redis::vm_swap_file') %>
 # default, just specify the max amount of RAM you can in bytes, but it's
 # better to leave some margin. For instance specify an amount of RAM
 # that's more or less between 60 and 80% of your free RAM.
-vm-max-memory <%= scope.lookupvar('::redis::vm_max_memory') %>
+vm-max-memory <%= @vm_max_memory %>
 
 # Redis swap files is split into pages. An object can be saved using multiple
 # contiguous pages, but pages can't be shared between different objects.
@@ -414,7 +414,7 @@ vm-max-memory <%= scope.lookupvar('::redis::vm_max_memory') %>
 # If you use a lot of small objects, use a page size of 64 or 32 bytes.
 # If you use a lot of big objects, use a bigger page size.
 # If unsure, use the default :)
-vm-page-size <%= scope.lookupvar('::redis::vm_page_size') %>
+vm-page-size <%= @vm_page_size %>
 
 # Number of total memory pages in the swap file.
 # Given that the page table (a bitmap of free/used pages) is taken in memory,
@@ -427,7 +427,7 @@ vm-page-size <%= scope.lookupvar('::redis::vm_page_size') %>
 #
 # It's better to use the smallest acceptable value for your application,
 # but the default is large in order to work in most conditions.
-vm-pages <%= scope.lookupvar('::redis::vm_pages') %>
+vm-pages <%= @vm_pages %>
 
 # Max number of VM I/O threads running at the same time.
 # This threads are used to read/write data from/to swap file, since they
@@ -438,7 +438,7 @@ vm-pages <%= scope.lookupvar('::redis::vm_pages') %>
 #
 # The special value of 0 turn off threaded I/O and enables the blocking
 # Virtual Memory implementation.
-vm-max-threads <%= scope.lookupvar('::redis::vm_max_threads') %>
+vm-max-threads <%= @vm_max_threads %>
 
 ############################### ADVANCED CONFIG ###############################
 
@@ -446,27 +446,27 @@ vm-max-threads <%= scope.lookupvar('::redis::vm_max_threads') %>
 # have at max a given numer of elements, and the biggest element does not
 # exceed a given threshold. You can configure this limits with the following
 # configuration directives.
-hash-max-zipmap-entries <%= scope.lookupvar('::redis::hash_max_zipmap_entries') %>
-hash-max-zipmap-value <%= scope.lookupvar('::redis::hash_max_zipmap_value') %>
+hash-max-zipmap-entries <%= @hash_max_zipmap_entries %>
+hash-max-zipmap-value <%= @hash_max_zipmap_value %>
 
 # Similarly to hashes, small lists are also encoded in a special way in order
 # to save a lot of space. The special representation is only used when
 # you are under the following limits:
-list-max-ziplist-entries <%= scope.lookupvar('::redis::list_max_ziplist_entries') %>
-list-max-ziplist-value <%= scope.lookupvar('::redis::list_max_ziplist_value') %>
+list-max-ziplist-entries <%= @list_max_ziplist_entries %>
+list-max-ziplist-value <%= @list_max_ziplist_value %>
 
 # Sets have a special encoding in just one case: when a set is composed
 # of just strings that happens to be integers in radix 10 in the range
 # of 64 bit signed integers.
 # The following configuration setting sets the limit in the size of the
 # set in order to use this special memory saving encoding.
-set-max-intset-entries <%= scope.lookupvar('::redis::set_max_intset_entries') %>
+set-max-intset-entries <%= @set_max_intset_entries %>
 
 # Similarly to hashes and lists, sorted sets are also specially encoded in
 # order to save a lot of space. This encoding is only used when the length and
 # elements of a sorted set are below the following limits:
-zset-max-ziplist-entries <%= scope.lookupvar('::redis::zset_max_ziplist_entries') %>
-zset-max-ziplist-value <%= scope.lookupvar('::redis::zset_max_ziplist_value') %>
+zset-max-ziplist-entries <%= @zset_max_ziplist_entries %>
+zset-max-ziplist-value <%= @zset_max_ziplist_value %>
 
 # Active rehashing uses 1 millisecond every 100 milliseconds of CPU time in
 # order to help rehashing the main Redis hash table (the one mapping top-level
@@ -475,7 +475,7 @@ zset-max-ziplist-value <%= scope.lookupvar('::redis::zset_max_ziplist_value') %>
 # that is rhashing, the more rehashing "steps" are performed, so if the
 # server is idle the rehashing is never complete and some more memory is used
 # by the hash table.
-# 
+#
 # The default is to use this millisecond 10 times every second in order to
 # active rehashing the main dictionaries, freeing memory when possible.
 #
@@ -486,7 +486,7 @@ zset-max-ziplist-value <%= scope.lookupvar('::redis::zset_max_ziplist_value') %>
 #
 # use "activerehashing yes" if you don't have such hard requirements but
 # want to free memory asap when possible.
-activerehashing <%= scope.lookupvar('::redis::activerehashing') %>
+activerehashing <%= @activerehashing %>
 
 ################################## INCLUDES ###################################
 

@@ -4,17 +4,7 @@
 #
 class redis::params {
   # Generic
-  $config_dir       = '/etc/redis'
-  $config_file      = '/etc/redis.conf'
-  $config_group     = 'root'
-  $config_user      = 'root'
-  $daemon_enable    = true
-  $daemon_ensure    = 'running'
-  $daemon_group     = 'redis'
-  $daemon_hasstatus = true
-  $daemon_user      = 'redis'
-  $manage_repo      = false
-  $package_ensure   = 'present'
+  $manage_repo = false
 
   # redis.conf.erb
   $activerehashing             = 'yes'
@@ -62,17 +52,39 @@ class redis::params {
   $slave_serve_stale_data = 'yes'
   $slaveof                = undef
 
-  case $::operatingsystem {
-    'debian', 'ubuntu': {
-      $daemon_name  = 'redis'
-      $package_deps = ''
-      $package_name = 'redis-server'
+  case $::osfamily {
+    'Debian': {
+      $config_dir        = '/etc/redis'
+      $config_file       = '/etc/redis.conf'
+      $config_group      = 'root'
+      $config_user       = 'root'
+      $daemon_enable     = true
+      $daemon_ensure     = 'running'
+      $daemon_group      = 'redis'
+      $daemon_hasrestart = true
+      $daemon_hasstatus  = true
+      $daemon_name       = 'redis'
+      $daemon_user       = 'redis'
+      $package_deps      = ''
+      $package_ensure    = 'present'
+      $package_name      = 'redis-server'
     }
 
-    'RedHat', 'CentOS', 'Scientific', 'OEL', 'Amazon': {
-      $daemon_name  = 'redis'
-      $package_deps = ''
-      $package_name = 'redis'
+    'RedHat': {
+      $config_dir        = '/etc/redis'
+      $config_file       = '/etc/redis.conf'
+      $config_group      = 'root'
+      $config_user       = 'root'
+      $daemon_enable     = true
+      $daemon_ensure     = 'running'
+      $daemon_group      = 'redis'
+      $daemon_hasrestart = true
+      $daemon_hasstatus  = true
+      $daemon_name       = 'redis'
+      $daemon_user       = 'redis'
+      $package_deps      = ''
+      $package_ensure    = 'present'
+      $package_name      = 'redis'
     }
 
     default: {

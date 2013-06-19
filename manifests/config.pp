@@ -3,9 +3,6 @@
 # This class provides configuration for Redis.
 #
 class redis::config {
-  $slaveof    = $::redis::slaveof
-  $masterauth = $::redis::masterauth
-
   File {
     owner  => $::redis::config_user,
     group  => $::redis::config_group,
