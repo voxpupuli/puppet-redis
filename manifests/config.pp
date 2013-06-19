@@ -6,12 +6,14 @@ class redis::config {
   File {
     owner  => $::redis::config_user,
     group  => $::redis::config_group,
+    mode   => $::redis::config_file_mode,
     notify => Service[$::redis::service_name],
   }
 
   file {
     $::redis::config_dir:
-      ensure => directory;
+      ensure => directory,
+      mode   => $::redis::config_dir_mode;
 
     $::redis::config_file:
       ensure  => present,
@@ -19,8 +21,9 @@ class redis::config {
 
     $::redis::log_dir:
       ensure => directory,
-      owner  => $::redis::service_user,
-      group  => $::redis::service_group;
+      group  => $::redis::service_group,
+      mode   => $::redis::config_dir_mode,
+      owner  => $::redis::service_user;
   }
 }
 
