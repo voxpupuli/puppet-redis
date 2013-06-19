@@ -60,7 +60,6 @@ class redis::params {
       $config_file_mode   = '0644'
       $config_group       = 'root'
       $config_owner       = 'root'
-      $package_deps       = ''
       $package_ensure     = 'present'
       $package_name       = 'redis-server'
       $service_enable     = true
@@ -79,7 +78,6 @@ class redis::params {
       $config_file_mode   = '0644'
       $config_group       = 'root'
       $config_owner       = 'root'
-      $package_deps       = ''
       $package_ensure     = 'present'
       $package_name       = 'redis'
       $service_enable     = true

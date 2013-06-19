@@ -43,7 +43,6 @@ class redis (
   $manage_repo                 = $::redis::params::manage_repo,
   $masterauth                  = $::redis::params::masterauth,
   $no_appendfsync_on_rewrite   = $::redis::params::no_appendfsync_on_rewrite,
-  $package_deps                = $::redis::params::package_deps,
   $package_ensure              = $::redis::params::package_ensure,
   $package_name                = $::redis::params::package_name,
   $pid_file                    = $::redis::params::pid_file,
