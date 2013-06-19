@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe 'redis', :type => :class do
-  describe 'without parameters' do
-    let (:facts) { debian_facts }
+  let (:facts) { debian_facts }
 
+  describe 'without parameters' do
     it { should create_class('redis') }
     it { should include_class('redis::preinstall') }
     it { should include_class('redis::install') }
@@ -27,7 +27,6 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: activerehashing' do
-    let (:facts) { debian_facts }
     let (:params) { { :activerehashing => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
@@ -37,7 +36,6 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: appendfsync' do
-    let (:facts) { debian_facts }
     let (:params) { { :appendfsync => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
@@ -47,7 +45,6 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: appendonly' do
-    let (:facts) { debian_facts }
     let (:params) { { :appendonly => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
@@ -57,7 +54,6 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: auto_aof_rewrite_min_size' do
-    let (:facts) { debian_facts }
     let (:params) { { :auto_aof_rewrite_min_size => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
@@ -67,7 +63,6 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: auto_aof_rewrite_percentage' do
-    let (:facts) { debian_facts }
     let (:params) { { :auto_aof_rewrite_percentage => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
@@ -77,7 +72,6 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: bind' do
-    let (:facts) { debian_facts }
     let (:params) { { :bind => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
@@ -87,49 +81,42 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: config_dir' do
-    let (:facts) { debian_facts }
     let (:params) { { :config_dir => '_VALUE_' } }
 
     it { should contain_file('_VALUE_').with_ensure('directory') }
   end
 
   describe 'with parameter: config_dir_mode' do
-    let (:facts) { debian_facts }
     let (:params) { { :config_dir_mode => '_VALUE_' } }
 
     it { should contain_file('/etc/redis').with_mode('_VALUE_') }
   end
 
   describe 'with parameter: config_file' do
-    let (:facts) { debian_facts }
     let (:params) { { :config_file => '_VALUE_' } }
 
     it { should contain_file('_VALUE_') }
   end
 
   describe 'with parameter: config_file_mode' do
-    let (:facts) { debian_facts }
     let (:params) { { :config_file_mode => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with_mode('_VALUE_') }
   end
 
   describe 'with parameter: config_group' do
-    let (:facts) { debian_facts }
     let (:params) { { :config_group => '_VALUE_' } }
 
     it { should contain_file('/etc/redis').with_group('_VALUE_') }
   end
 
   describe 'with parameter: config_owner' do
-    let (:facts) { debian_facts }
     let (:params) { { :config_owner => '_VALUE_' } }
 
     it { should contain_file('/etc/redis').with_owner('_VALUE_') }
   end
 
   describe 'with parameter: daemonize' do
-    let (:facts) { debian_facts }
     let (:params) { { :daemonize => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
@@ -139,7 +126,6 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: databases' do
-    let (:facts) { debian_facts }
     let (:params) { { :databases => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
@@ -149,7 +135,6 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: dbfilename' do
-    let (:facts) { debian_facts }
     let (:params) { { :dbfilename => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
@@ -159,7 +144,6 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: hash_max_zipmap_entries' do
-    let (:facts) { debian_facts }
     let (:params) { { :hash_max_zipmap_entries => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
@@ -169,7 +153,6 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: hash_max_zipmap_value' do
-    let (:facts) { debian_facts }
     let (:params) { { :hash_max_zipmap_value => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
@@ -179,7 +162,6 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: list_max_ziplist_entries' do
-    let (:facts) { debian_facts }
     let (:params) { { :list_max_ziplist_entries => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
@@ -189,7 +171,6 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: list_max_ziplist_value' do
-    let (:facts) { debian_facts }
     let (:params) { { :list_max_ziplist_value => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
@@ -199,14 +180,12 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: log_dir' do
-    let (:facts) { debian_facts }
     let (:params) { { :log_dir => '_VALUE_' } }
 
     it { should contain_file('_VALUE_').with_ensure('directory') }
   end
 
   describe 'with parameter: log_file' do
-    let (:facts) { debian_facts }
     let (:params) { { :log_file => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
@@ -216,7 +195,6 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: log_level' do
-    let (:facts) { debian_facts }
     let (:params) { { :log_level => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
@@ -248,7 +226,6 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: masterauth' do
-    let (:facts) { debian_facts }
     let (:params) { { :masterauth => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
@@ -258,7 +235,6 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: no_appendfsync_on_rewrite' do
-    let (:facts) { debian_facts }
     let (:params) { { :no_appendfsync_on_rewrite => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
@@ -268,21 +244,18 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: package_ensure' do
-    let (:facts) { debian_facts }
     let (:params) { { :package_ensure => '_VALUE_' } }
 
     it { should contain_package('redis-server').with_ensure('_VALUE_') }
   end
 
   describe 'with parameter: package_name' do
-    let (:facts) { debian_facts }
     let (:params) { { :package_name => '_VALUE_' } }
 
     it { should contain_package('_VALUE_') }
   end
 
   describe 'with parameter: pid_file' do
-    let (:facts) { debian_facts }
     let (:params) { { :pid_file => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
@@ -292,7 +265,6 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: port' do
-    let (:facts) { debian_facts }
     let (:params) { { :port => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
@@ -302,7 +274,6 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: rdbcompression' do
-    let (:facts) { debian_facts }
     let (:params) { { :rdbcompression => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
@@ -312,7 +283,6 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: repl_ping_slave_period' do
-    let (:facts) { debian_facts }
     let (:params) { { :repl_ping_slave_period => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
@@ -322,7 +292,6 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: repl_timeout' do
-    let (:facts) { debian_facts }
     let (:params) { { :repl_timeout => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
@@ -332,56 +301,48 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: service_enable' do
-    let (:facts) { debian_facts }
     let (:params) { { :service_enable => true } }
 
     it { should contain_service('redis').with_enable(true) }
   end
 
   describe 'with parameter: service_ensure' do
-    let (:facts) { debian_facts }
     let (:params) { { :service_ensure => '_VALUE_' } }
 
     it { should contain_service('redis').with_ensure('_VALUE_') }
   end
 
   describe 'with parameter: service_group' do
-    let (:facts) { debian_facts }
     let (:params) { { :service_group => '_VALUE_' } }
 
     it { should contain_file('/var/log/redis').with_group('_VALUE_') }
   end
 
   describe 'with parameter: service_hasrestart' do
-    let (:facts) { debian_facts }
     let (:params) { { :service_hasrestart => true } }
 
     it { should contain_service('redis').with_hasrestart(true) }
   end
 
   describe 'with parameter: service_hasstatus' do
-    let (:facts) { debian_facts }
     let (:params) { { :service_hasstatus => true } }
 
     it { should contain_service('redis').with_hasstatus(true) }
   end
 
   describe 'with parameter: service_name' do
-    let (:facts) { debian_facts }
     let (:params) { { :service_name => '_VALUE_' } }
 
     it { should contain_service('_VALUE_').with_name('_VALUE_') }
   end
 
   describe 'with parameter: service_user' do
-    let (:facts) { debian_facts }
     let (:params) { { :service_user => '_VALUE_' } }
 
     it { should contain_file('/var/log/redis').with_owner('_VALUE_') }
   end
 
   describe 'with parameter: set_max_intset_entries' do
-    let (:facts) { debian_facts }
     let (:params) { { :set_max_intset_entries => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
@@ -391,7 +352,6 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: slave_serve_stale_data' do
-    let (:facts) { debian_facts }
     let (:params) { { :slave_serve_stale_data => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
@@ -401,8 +361,6 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: slaveof' do
-    let (:facts) { debian_facts }
-
     context 'binding to localhost' do
       let (:params) { { :slaveof => '_VALUE_' } }
 
@@ -429,7 +387,6 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: slowlog_log_slower_than' do
-    let (:facts) { debian_facts }
     let (:params) { { :slowlog_log_slower_than => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
@@ -439,7 +396,6 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: slowlog_max_len' do
-    let (:facts) { debian_facts }
     let (:params) { { :slowlog_max_len => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
@@ -449,7 +405,6 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: timeout' do
-    let (:facts) { debian_facts }
     let (:params) { { :timeout => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
@@ -459,7 +414,6 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: vm_max_memory' do
-    let (:facts) { debian_facts }
     let (:params) { { :vm_max_memory => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
@@ -469,7 +423,6 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: vm_max_threads' do
-    let (:facts) { debian_facts }
     let (:params) { { :vm_max_threads => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
@@ -479,7 +432,6 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: vm_page_size' do
-    let (:facts) { debian_facts }
     let (:params) { { :vm_page_size => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
@@ -489,7 +441,6 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: vm_pages' do
-    let (:facts) { debian_facts }
     let (:params) { { :vm_pages => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
@@ -499,7 +450,6 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: vm_swap_file' do
-    let (:facts) { debian_facts }
     let (:params) { { :vm_swap_file => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
@@ -509,7 +459,6 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: workdir' do
-    let (:facts) { debian_facts }
     let (:params) { { :workdir => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
@@ -519,7 +468,6 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: zset_max_ziplist_entries' do
-    let (:facts) { debian_facts }
     let (:params) { { :zset_max_ziplist_entries => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
@@ -529,7 +477,6 @@ describe 'redis', :type => :class do
   end
 
   describe 'with parameter: zset_max_ziplist_value' do
-    let (:facts) { debian_facts }
     let (:params) { { :zset_max_ziplist_value => '_VALUE_' } }
 
     it { should contain_file('/etc/redis.conf').with(
