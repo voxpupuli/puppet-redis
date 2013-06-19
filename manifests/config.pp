@@ -6,7 +6,7 @@ class redis::config {
   File {
     owner  => $::redis::config_user,
     group  => $::redis::config_group,
-    notify => Service[$::redis::daemon_name],
+    notify => Service[$::redis::service_name],
   }
 
   file {
@@ -19,8 +19,8 @@ class redis::config {
 
     $::redis::log_dir:
       ensure => directory,
-      owner  => $::redis::daemon_user,
-      group  => $::redis::daemon_group;
+      owner  => $::redis::service_user,
+      group  => $::redis::service_group;
   }
 }
 

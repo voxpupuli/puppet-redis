@@ -3,11 +3,11 @@
 # This class manages the Redis daemon.
 #
 class redis::service {
-  service { $::redis::daemon_name:
-    ensure     => $::redis::daemon_ensure,
-    enable     => $::redis::daemon_enable,
-    hasrestart => $::redis::daemon_hasrestart,
-    hasstatus  => $::redis::daemon_hasstatus,
+  service { $::redis::service_name:
+    ensure     => $::redis::service_ensure,
+    enable     => $::redis::service_enable,
+    hasrestart => $::redis::service_hasrestart,
+    hasstatus  => $::redis::service_hasstatus,
   }
 }
 

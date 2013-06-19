@@ -58,16 +58,16 @@ class redis::params {
       $config_file       = '/etc/redis.conf'
       $config_group      = 'root'
       $config_user       = 'root'
-      $daemon_enable     = true
-      $daemon_ensure     = 'running'
-      $daemon_group      = 'redis'
-      $daemon_hasrestart = true
-      $daemon_hasstatus  = true
-      $daemon_name       = 'redis'
-      $daemon_user       = 'redis'
       $package_deps      = ''
       $package_ensure    = 'present'
       $package_name      = 'redis-server'
+      $service_enable     = true
+      $service_ensure     = 'running'
+      $service_group      = 'redis'
+      $service_hasrestart = true
+      $service_hasstatus  = true
+      $service_name       = 'redis'
+      $service_user       = 'redis'
     }
 
     'RedHat': {
@@ -75,16 +75,16 @@ class redis::params {
       $config_file       = '/etc/redis.conf'
       $config_group      = 'root'
       $config_user       = 'root'
-      $daemon_enable     = true
-      $daemon_ensure     = 'running'
-      $daemon_group      = 'redis'
-      $daemon_hasrestart = true
-      $daemon_hasstatus  = true
-      $daemon_name       = 'redis'
-      $daemon_user       = 'redis'
       $package_deps      = ''
       $package_ensure    = 'present'
       $package_name      = 'redis'
+      $service_enable     = true
+      $service_ensure     = 'running'
+      $service_group      = 'redis'
+      $service_hasrestart = true
+      $service_hasstatus  = true
+      $service_name       = 'redis'
+      $service_user       = 'redis'
     }
 
     default: {
