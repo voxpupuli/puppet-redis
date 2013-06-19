@@ -56,7 +56,7 @@ class redis::params {
     'Debian': {
       $config_dir         = '/etc/redis'
       $config_dir_mode    = '0755'
-      $config_file        = '/etc/redis.conf'
+      $config_file        = '/etc/redis/redis.conf'
       $config_file_mode   = '0644'
       $config_group       = 'root'
       $config_owner       = 'root'
@@ -74,7 +74,7 @@ class redis::params {
     'RedHat': {
       $config_dir         = '/etc/redis'
       $config_dir_mode    = '0755'
-      $config_file        = '/etc/redis.conf'
+      $config_file        = '/etc/redis/redis.conf'
       $config_file_mode   = '0644'
       $config_group       = 'root'
       $config_owner       = 'root'
