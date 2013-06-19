@@ -54,15 +54,15 @@ class redis::params {
 
   case $::osfamily {
     'Debian': {
-      $config_dir        = '/etc/redis'
-      $config_dir_mode   = '0755'
-      $config_file       = '/etc/redis.conf'
-      $config_file_mode  = '0644'
-      $config_group      = 'root'
-      $config_user       = 'root'
-      $package_deps      = ''
-      $package_ensure    = 'present'
-      $package_name      = 'redis-server'
+      $config_dir         = '/etc/redis'
+      $config_dir_mode    = '0755'
+      $config_file        = '/etc/redis.conf'
+      $config_file_mode   = '0644'
+      $config_group       = 'root'
+      $config_owner       = 'root'
+      $package_deps       = ''
+      $package_ensure     = 'present'
+      $package_name       = 'redis-server'
       $service_enable     = true
       $service_ensure     = 'running'
       $service_group      = 'redis'
@@ -73,15 +73,15 @@ class redis::params {
     }
 
     'RedHat': {
-      $config_dir        = '/etc/redis'
-      $config_dir_mode   = '0755'
-      $config_file       = '/etc/redis.conf'
-      $config_file_mode  = '0644'
-      $config_group      = 'root'
-      $config_user       = 'root'
-      $package_deps      = ''
-      $package_ensure    = 'present'
-      $package_name      = 'redis'
+      $config_dir         = '/etc/redis'
+      $config_dir_mode    = '0755'
+      $config_file        = '/etc/redis.conf'
+      $config_file_mode   = '0644'
+      $config_group       = 'root'
+      $config_owner       = 'root'
+      $package_deps       = ''
+      $package_ensure     = 'present'
+      $package_name       = 'redis'
       $service_enable     = true
       $service_ensure     = 'running'
       $service_group      = 'redis'

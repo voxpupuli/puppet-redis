@@ -4,7 +4,7 @@
 #
 class redis::config {
   File {
-    owner  => $::redis::config_user,
+    owner  => $::redis::config_owner,
     group  => $::redis::config_group,
     mode   => $::redis::config_file_mode,
     notify => Service[$::redis::service_name],
