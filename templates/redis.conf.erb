@@ -54,7 +54,7 @@ logfile <%= @log_file %>
 
 # To enable logging to the system logger, just set 'syslog-enabled' to yes,
 # and optionally update the other syslog parameters to suit your needs.
-# syslog-enabled no
+<% if @syslog_enabled -%>syslog-enabled yes<% else -%>syslog-enabled no<% end -%>
 
 # Specify the syslog identity.
 # syslog-ident redis

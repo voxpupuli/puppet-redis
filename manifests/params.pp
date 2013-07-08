@@ -35,6 +35,7 @@ class redis::params {
   $set_max_intset_entries      = '512'
   $slowlog_log_slower_than     = '10000'
   $slowlog_max_len             = '1024'
+  $syslog_enabled              = false
   $timeout                     = '0'
   $vm_max_memory               = '0'
   $vm_max_threads              = '4'

@@ -62,6 +62,7 @@ class redis (
   $slaveof                     = $::redis::params::slaveof,
   $slowlog_log_slower_than     = $::redis::params::slowlog_log_slower_than,
   $slowlog_max_len             = $::redis::params::slowlog_max_len,
+  $syslog_enabled              = $::redis::params::syslog_enabled,
   $timeout                     = $::redis::params::timeout,
   $vm_max_memory               = $::redis::params::vm_max_memory,
   $vm_max_threads              = $::redis::params::vm_max_threads,
