@@ -7,41 +7,35 @@ class redis::params {
   $manage_repo = false
 
   # redis.conf.erb
-  $activerehashing             = 'yes'
+  $activerehashing             = true
   $appendfsync                 = 'everysec'
-  $appendonly                  = 'no'
+  $appendonly                  = false
   $auto_aof_rewrite_min_size   = '64min'
   $auto_aof_rewrite_percentage = '100'
   $bind                        = '127.0.0.1'
-  $daemonize                   = 'yes'
+  $daemonize                   = true
   $databases                   = '16'
   $dbfilename                  = 'dump.rdb'
-  $hash_max_zipmap_entries     = '512'
-  $hash_max_zipmap_value       = '64'
+  $hash_max_ziplist_entries    = '512'
+  $hash_max_ziplist_value      = '64'
   $list_max_ziplist_entries    = '512'
   $list_max_ziplist_value      = '64'
   $log_dir                     = '/var/log/redis'
   $log_file                    = '/var/log/redis/redis.log'
   $log_level                   = 'notice'
-  $maxclients                  = '0'
+  $maxclients                  = '10000'
   $maxmemory                   = undef
   $maxmemory_policy            = undef
   $maxmemory_samples           = undef
-  $no_appendfsync_on_rewrite   = 'no'
+  $no_appendfsync_on_rewrite   = false
   $pid_file                    = '/var/run/redis/redis-server.pid'
   $port                        = '6379'
-  $rdbcompression              = 'yes'
+  $rdbcompression              = true
   $requirepass                 = undef
   $set_max_intset_entries      = '512'
   $slowlog_log_slower_than     = '10000'
   $slowlog_max_len             = '1024'
-  $syslog_enabled              = false
   $timeout                     = '0'
-  $vm_max_memory               = '0'
-  $vm_max_threads              = '4'
-  $vm_page_size                = '32'
-  $vm_pages                    = '134217728'
-  $vm_swap_file                = '/tmp/redis.swap'
   $workdir                     = '/var/lib/redis/'
   $zset_max_ziplist_entries    = '128'
   $zset_max_ziplist_value      = '64'
@@ -50,8 +44,9 @@ class redis::params {
   $masterauth             = undef
   $repl_ping_slave_period = '10'
   $repl_timeout           = '60'
-  $slave_serve_stale_data = 'yes'
+  $slave_serve_stale_data = true
   $slaveof                = undef
+  $slave_read_only        = true
 
   case $::osfamily {
     'Debian': {
