@@ -552,19 +552,6 @@ describe 'redis', :type => :class do
     }
   end
 
-#  describe 'with parameter slaveof' do
-#    let (:params) {
-#      {
-#        :slaveof => '_VALUE_'
-#      }
-#    }
-#
-#    it { should contain_file('/etc/redis/redis.conf').with(
-#        'content' => /slaveof.*_VALUE_/
-#      )
-#    }
-#  end
-
   describe 'with parameter: slaveof' do
     context 'binding to localhost' do
       let (:params) { { :slaveof => '_VALUE_' } }
