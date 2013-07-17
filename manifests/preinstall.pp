@@ -7,24 +7,24 @@ class redis::preinstall {
   if $::redis::manage_repo {
     case $::operatingsystem {
       'RedHat', 'CentOS', 'Scientific', 'OEL', 'Amazon': {
-        $epel_mirror = $::operatingsystemrelease ? {
-          /^5/    => 'https://mirrors.fedoraproject.org/metalink?repo=epel-5&arch=$basearch',
-          /^6/    => 'https://mirrors.fedoraproject.org/metalink?repo=epel-6&arch=$basearch',
+        $rpm_url = $::operatingsystemrelease ? {
+          /^5/    => "http://download.powerstack.org/5/${::architecture}/",
+          /^6/    => "http://download.powerstack.org/6/${::architecture}/",
           default => Fail['Operating system or release version not supported.'],
         }
 
-        $epel_gpgkey = $::operatingsystemrelease ? {
-          /^5/    => 'http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-5',
-          /^6/    => 'http://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-6',
+        $rpm_gpgkey = $::operatingsystemrelease ? {
+          /^5/    => 'https://raw.github.com/santisaez/powerstack/master/RPM-GPG-KEY-powerstack',
+          /^6/    => 'https://raw.github.com/santisaez/powerstack/master/RPM-GPG-KEY-powerstack',
           default => Fail['Operating system or release version not supported.'],
         }
 
-        yumrepo { 'epel':
-          descr      => 'Extra Packages for Enterprise Linux',
-          mirrorlist => $epel_mirror,
-          gpgkey     => $epel_gpgkey,
-          enabled    => 1,
-          gpgcheck   => 1;
+        yumrepo { 'powerstack':
+          descr    => 'PowerStack for CentOS',
+          baseurl  => $rpm_url,
+          gpgkey   => $rpm_gpgkey,
+          enabled  => 1,
+          gpgcheck => 1;
         }
       }
 

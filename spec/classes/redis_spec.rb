@@ -296,7 +296,7 @@ describe 'redis', :type => :class do
         }
       }
 
-      it { should create_yumrepo('epel').with_enabled(1) }
+      it { should create_yumrepo('powerstack').with_enabled(1) }
     end
   end
 
