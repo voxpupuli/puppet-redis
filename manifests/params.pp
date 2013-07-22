@@ -36,6 +36,7 @@ class redis::params {
   $slowlog_log_slower_than     = 10000
   $slowlog_max_len             = 1024
   $timeout                     = 0
+  $ulimit                      = 65536
   $workdir                     = '/var/lib/redis/'
   $zset_max_ziplist_entries    = 128
   $zset_max_ziplist_value      = 64

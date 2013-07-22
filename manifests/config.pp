@@ -25,5 +25,27 @@ class redis::config {
       mode   => $::redis::config_dir_mode,
       owner  => $::redis::service_user;
   }
+
+  # Adjust /etc/default/redis-server on Debian systems
+  case $::osfamily {
+    'Debian': {
+      file { '/etc/default/redis-server':
+        ensure => present,
+        group  => $::redis::config_group,
+        mode   => $::redis::config_file_mode,
+        owner  => $::redis::config_owner,
+      }
+
+      if $::redis::ulimit {
+        augeas { 'redis ulimit' :
+          context => '/files/etc/default/redis-server',
+          changes => "set ULIMIT ${::redis::ulimit}",
+        }
+      }
+    }
+
+    default: {
+    }
+  }
 }
 

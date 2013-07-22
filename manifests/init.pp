@@ -69,6 +69,7 @@ class redis (
   $slowlog_log_slower_than     = $::redis::params::slowlog_log_slower_than,
   $slowlog_max_len             = $::redis::params::slowlog_max_len,
   $timeout                     = $::redis::params::timeout,
+  $ulimit                      = $::redis::params::ulimit,
   $workdir                     = $::redis::params::workdir,
   $zset_max_ziplist_entries    = $::redis::params::zset_max_ziplist_entries,
   $zset_max_ziplist_value      = $::redis::params::zset_max_ziplist_value,
