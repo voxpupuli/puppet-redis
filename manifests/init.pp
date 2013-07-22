@@ -82,7 +82,7 @@ class redis (
 
   Class['preinstall'] ->
   Class['install'] ->
-  Class['config'] ->
+  Class['config'] ~>
   Class['service']
 
   # Sanity check
