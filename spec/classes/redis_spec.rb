@@ -554,7 +554,12 @@ describe 'redis', :type => :class do
 
   describe 'with parameter: slaveof' do
     context 'binding to localhost' do
-      let (:params) { { :slaveof => '_VALUE_' } }
+      let (:params) {
+        {
+          :bind    => '127.0.0.1',
+          :slaveof => '_VALUE_'
+        }
+      }
 
       it do
         expect {
