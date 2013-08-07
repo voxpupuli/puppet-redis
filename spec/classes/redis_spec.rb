@@ -287,6 +287,18 @@ describe 'redis', :type => :class do
       it { should create_apt__source('dotdeb') }
     end
 
+    context 'on Ubuntu' do
+      let (:facts) {
+        {
+          :lsbdistcodename => 'raring',
+          :operatingsystem => 'Ubuntu',
+          :osfamily        => 'Debian'
+        }
+      }
+
+      it { should create_apt__ppa('ppa:chris-lea/redis-server') }
+    end
+
     context 'on RHEL 6' do
       let (:facts) {
         {
