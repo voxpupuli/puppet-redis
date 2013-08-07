@@ -66,6 +66,7 @@ class redis::params {
       $service_hasstatus  = false
       $service_name       = 'redis-server'
       $service_user       = 'redis'
+      $ppa_repo           = 'ppa:chris-lea/redis-server'
     }
 
     'RedHat': {

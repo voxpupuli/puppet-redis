@@ -35,6 +35,13 @@ repositories you can use this snippet:
       manage_repo => true,
     }
 
+On Ubuntu, "chris-lea/redis-server" ppa repo will be added. You can change it by using ppa_repo parameter: 
+
+    class { 'redis':
+      manage_repo => true,
+      ppa_repo    => 'ppa:rwky/redis',
+    }
+
 ## Unit testing
 
 Plain RSpec:

@@ -43,6 +43,10 @@ class redis::preinstall {
         }
       }
 
+      'Ubuntu': {
+        apt::ppa { $::redis::ppa_repo: }
+      }
+
       default: {
       }
     }

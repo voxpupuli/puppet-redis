@@ -51,6 +51,7 @@ class redis (
   $package_name                = $::redis::params::package_name,
   $pid_file                    = $::redis::params::pid_file,
   $port                        = $::redis::params::port,
+  $ppa_repo                    = $::redis::params::ppa_repo,
   $rdbcompression              = $::redis::params::rdbcompression,
   $repl_ping_slave_period      = $::redis::params::repl_ping_slave_period,
   $repl_timeout                = $::redis::params::repl_timeout,
