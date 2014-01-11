@@ -7,4 +7,4 @@ description   'Redis module with cluster support'
 project_page  'http://arioch.github.io/puppet-redis/'
 
 dependency    'puppetlabs/stdlib', '>= 4.0.0'
-
+dependency    'puppetlabs/apt', '>= 1.4.0'
