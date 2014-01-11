@@ -45,6 +45,7 @@ class redis::preinstall {
       }
 
       'Ubuntu': {
+        include apt
         apt::ppa { $::redis::ppa_repo: }
       }
 
