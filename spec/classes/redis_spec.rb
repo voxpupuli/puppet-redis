@@ -5,10 +5,10 @@ describe 'redis', :type => :class do
 
   describe 'without parameters' do
     it { should create_class('redis') }
-    it { should include_class('redis::preinstall') }
-    it { should include_class('redis::install') }
-    it { should include_class('redis::config') }
-    it { should include_class('redis::service') }
+    it { should contain_class('redis::preinstall') }
+    it { should contain_class('redis::install') }
+    it { should contain_class('redis::config') }
+    it { should contain_class('redis::service') }
 
     it { should contain_package('redis-server').with_ensure('present') }
 
