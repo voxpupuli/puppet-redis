@@ -274,10 +274,10 @@ describe 'redis', :type => :class do
     let (:params) { { :manage_repo => true } }
 
     context 'on Debian' do
-      let (:facts) { debian_facts }
       let (:facts) {
         {
           :lsbdistcodename => 'wheezy',
+          :lsbdistid       => 'Debian',
           :operatingsystem => 'Debian',
           :osfamily        => 'Debian'
         }
@@ -291,6 +291,7 @@ describe 'redis', :type => :class do
       let (:facts) {
         {
           :lsbdistcodename => 'raring',
+          :lsbdistid       => 'Ubuntu',
           :operatingsystem => 'Ubuntu',
           :osfamily        => 'Debian'
         }
