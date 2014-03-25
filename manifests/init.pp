@@ -30,6 +30,7 @@ class redis (
   $config_file_mode            = $::redis::params::config_file_mode,
   $config_group                = $::redis::params::config_group,
   $config_owner                = $::redis::params::config_owner,
+  $conf_template               = $::redis::params::conf_template,
   $daemonize                   = $::redis::params::daemonize,
   $databases                   = $::redis::params::databases,
   $dbfilename                  = $::redis::params::dbfilename,

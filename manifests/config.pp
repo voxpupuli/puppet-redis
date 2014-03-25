@@ -17,7 +17,7 @@ class redis::config {
 
     $::redis::config_file:
       ensure  => present,
-      content => template('redis/redis.conf.erb');
+      content => template($::redis::conf_template);
 
     $::redis::log_dir:
       ensure => directory,

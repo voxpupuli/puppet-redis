@@ -13,6 +13,7 @@ class redis::params {
   $auto_aof_rewrite_min_size   = '64min'
   $auto_aof_rewrite_percentage = 100
   $bind                        = '127.0.0.1'
+  $conf_template               = 'redis/redis.conf.erb'
   $daemonize                   = true
   $databases                   = 16
   $dbfilename                  = 'dump.rdb'
