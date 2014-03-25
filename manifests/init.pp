@@ -33,6 +33,7 @@ class redis (
   $daemonize                   = $::redis::params::daemonize,
   $databases                   = $::redis::params::databases,
   $dbfilename                  = $::redis::params::dbfilename,
+  $extra_config_file           = $::redis::params::extra_config_file,
   $hash_max_ziplist_entries    = $::redis::params::hash_max_ziplist_entries,
   $hash_max_ziplist_value      = $::redis::params::hash_max_ziplist_value,
   $list_max_ziplist_entries    = $::redis::params::list_max_ziplist_entries,

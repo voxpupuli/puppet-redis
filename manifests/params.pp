@@ -16,6 +16,7 @@ class redis::params {
   $daemonize                   = true
   $databases                   = 16
   $dbfilename                  = 'dump.rdb'
+  $extra_config_file           = undef
   $hash_max_ziplist_entries    = 512
   $hash_max_ziplist_value      = 64
   $list_max_ziplist_entries    = 512
