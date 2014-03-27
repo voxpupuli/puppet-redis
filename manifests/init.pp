@@ -70,6 +70,8 @@ class redis (
   $slaveof                     = $::redis::params::slaveof,
   $slowlog_log_slower_than     = $::redis::params::slowlog_log_slower_than,
   $slowlog_max_len             = $::redis::params::slowlog_max_len,
+  $syslog_enabled              = $::redis::params::syslog_enabled,
+  $syslog_facility             = $::redis::params::syslog_facility,
   $timeout                     = $::redis::params::timeout,
   $ulimit                      = $::redis::params::ulimit,
   $workdir                     = $::redis::params::workdir,
