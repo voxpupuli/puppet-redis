@@ -1,5 +1,5 @@
 name          'arioch-redis'
-version       '0.0.7'
+version       '0.0.8'
 author        'Tom De Vylder'
 license       'Apache License, Version 2.0'
 summary       'Redis module'
