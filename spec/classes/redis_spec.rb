@@ -622,6 +622,33 @@ describe 'redis', :type => :class do
     }
   end
 
+  describe 'with parameter syslog_enabled' do
+    let (:params) {
+      {
+        :syslog_enabled => true
+      }
+    }
+
+    it { should contain_file('/etc/redis/redis.conf').with(
+        'content' => /syslog-enabled yes/
+      )
+    }
+  end
+
+  describe 'with parameter syslog_facility' do
+    let (:params) {
+      {
+        :syslog_enabled => true,
+        :syslog_facility => '_VALUE_'
+      }
+    }
+
+    it { should contain_file('/etc/redis/redis.conf').with(
+        'content' => /syslog-facility.*_VALUE_/
+      )
+    }
+  end
+
   describe 'with parameter timeout' do
     let (:params) {
       {
