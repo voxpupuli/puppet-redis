@@ -47,6 +47,7 @@ class redis (
   $maxmemory_policy            = $::redis::params::maxmemory_policy,
   $maxmemory_samples           = $::redis::params::maxmemory_samples,
   $no_appendfsync_on_rewrite   = $::redis::params::no_appendfsync_on_rewrite,
+  $notifyservice               = $::redis::params::notifyservice,
   $package_ensure              = $::redis::params::package_ensure,
   $package_name                = $::redis::params::package_name,
   $pid_file                    = $::redis::params::pid_file,
@@ -81,10 +82,17 @@ class redis (
   include config
   include service
 
-  Class['preinstall'] ->
-  Class['install'] ->
-  Class['config'] ~>
-  Class['service']
+  if $::redis::notifyservice {
+    Class['preinstall'] ->
+    Class['install'] ->
+    Class['config'] ~>
+    Class['service']
+  } else {
+    Class['preinstall'] ->
+    Class['install'] ->
+    Class['config'] ->
+    Class['service']
+  }
 
   # Sanity check
   if $::redis::slaveof {
