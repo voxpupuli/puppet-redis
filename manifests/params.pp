@@ -28,7 +28,7 @@ class redis::params {
   $maxmemory_policy            = undef
   $maxmemory_samples           = undef
   $no_appendfsync_on_rewrite   = false
-  $notifyservice               = undef
+  $notifyservice               = true
   $pid_file                    = '/var/run/redis/redis-server.pid'
   $port                        = 6379
   $rdbcompression              = true
