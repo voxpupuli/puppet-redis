@@ -4,7 +4,7 @@
 #
 class redis::config {
 
-  if $::redis::notifyservice {
+  if $::redis::notifyservice == true {
     File {
       owner  => $::redis::config_owner,
       group  => $::redis::config_group,

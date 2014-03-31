@@ -86,7 +86,7 @@ class redis (
   include config
   include service
 
-  if $::redis::notifyservice {
+  if $::redis::notifyservice == true {
     Class['preinstall'] ->
     Class['install'] ->
     Class['config'] ~>
