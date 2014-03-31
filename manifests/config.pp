@@ -3,11 +3,20 @@
 # This class provides configuration for Redis.
 #
 class redis::config {
-  File {
-    owner  => $::redis::config_owner,
-    group  => $::redis::config_group,
-    mode   => $::redis::config_file_mode,
-    notify => Service[$::redis::service_name],
+
+  if $::redis::notifyservice {
+    File {
+      owner  => $::redis::config_owner,
+      group  => $::redis::config_group,
+      mode   => $::redis::config_file_mode,
+      notify => Service[$::redis::service_name]
+    }
+  } else {
+    File {
+      owner  => $::redis::config_owner,
+      group  => $::redis::config_group,
+      mode   => $::redis::config_file_mode,
+    }
   }
 
   file {
