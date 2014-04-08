@@ -378,6 +378,19 @@ describe 'redis', :type => :class do
     }
   end
 
+  describe 'with parameter notify_service' do
+    let (:params) {
+      {
+        :notify_service => true
+      }
+    }
+
+    it { should contain_file('/etc/redis/redis.conf').with(
+        'content' => /notify_service.*yes/
+      )
+    }
+  end
+
   describe 'with parameter no_appendfsync_on_rewrite' do
     let (:params) {
       {
