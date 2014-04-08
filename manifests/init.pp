@@ -49,7 +49,7 @@ class redis (
   $maxmemory_policy            = $::redis::params::maxmemory_policy,
   $maxmemory_samples           = $::redis::params::maxmemory_samples,
   $no_appendfsync_on_rewrite   = $::redis::params::no_appendfsync_on_rewrite,
-  $notifyservice               = $::redis::params::notifyservice,
+  $notify_service              = $::redis::params::notify_service,
   $package_ensure              = $::redis::params::package_ensure,
   $package_name                = $::redis::params::package_name,
   $pid_file                    = $::redis::params::pid_file,
@@ -86,7 +86,7 @@ class redis (
   include config
   include service
 
-  if $::redis::notifyservice == true {
+  if $::redis::notify_service == true {
     Class['preinstall'] ->
     Class['install'] ->
     Class['config'] ~>
