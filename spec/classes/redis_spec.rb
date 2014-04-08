@@ -385,7 +385,7 @@ describe 'redis', :type => :class do
       }
     }
 
-    it { should contain_file('/etc/redis/redis.conf').that_notifies('Service[redis-server]') }
+    it { should contain_file('/etc/redis/redis.conf').that_notifies('Service[redis-server]'
       )
     }
   end
