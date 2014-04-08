@@ -54,13 +54,13 @@ logfile <%= @log_file %>
 
 # To enable logging to the system logger, just set 'syslog-enabled' to yes,
 # and optionally update the other syslog parameters to suit your needs.
-<% if @syslog_enabled -%>syslog-enabled yes<% else -%>syslog-enabled no<% end -%>
+<% if @syslog_enabled %>syslog-enabled yes<% else %>syslog-enabled no<% end %>
 
 # Specify the syslog identity.
 # syslog-ident redis
 
 # Specify the syslog facility.  Must be USER or between LOCAL0-LOCAL7.
-# syslog-facility local0
+<% if @syslog_facility %>syslog-facility <%= @syslog_facility %><% else %># syslog-facility local0<% end %>
 
 # Set the number of databases. The default database is DB 0, you can select
 # a different one on a per-connection basis using SELECT <dbid> where
@@ -541,3 +541,7 @@ client-output-buffer-limit pubsub 32mb 8mb 60
 #
 # include /path/to/local.conf
 # include /path/to/other.conf
+<% if @extra_config_file -%>
+include <%= @extra_config_file %>
+<% end -%>
+

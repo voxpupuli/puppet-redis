@@ -13,9 +13,11 @@ class redis::params {
   $auto_aof_rewrite_min_size   = '64min'
   $auto_aof_rewrite_percentage = 100
   $bind                        = '127.0.0.1'
+  $conf_template               = 'redis/redis.conf.erb'
   $daemonize                   = true
   $databases                   = 16
   $dbfilename                  = 'dump.rdb'
+  $extra_config_file           = undef
   $hash_max_ziplist_entries    = 512
   $hash_max_ziplist_value      = 64
   $list_max_ziplist_entries    = 512
@@ -36,6 +38,8 @@ class redis::params {
   $set_max_intset_entries      = 512
   $slowlog_log_slower_than     = 10000
   $slowlog_max_len             = 1024
+  $syslog_enabled              = undef
+  $syslog_facility             = undef
   $timeout                     = 0
   $ulimit                      = 65536
   $workdir                     = '/var/lib/redis/'
