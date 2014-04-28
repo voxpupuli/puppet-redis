@@ -14,8 +14,8 @@ class redis::preinstall {
         }
 
         $rpm_gpgkey = $::operatingsystemrelease ? {
-          /^5/    => 'https://raw.github.com/santisaez/powerstack/master/RPM-GPG-KEY-powerstack',
-          /^6/    => 'https://raw.github.com/santisaez/powerstack/master/RPM-GPG-KEY-powerstack',
+          /^5/    => 'https://raw.githubusercontent.com/santisaez/powerstack/master/RPM-GPG-KEY-powerstack',
+          /^6/    => 'https://raw.githubusercontent.com/santisaez/powerstack/master/RPM-GPG-KEY-powerstack',
           default => Fail['Operating system or release version not supported.'],
         }
 
@@ -35,7 +35,7 @@ class redis::preinstall {
         }
 
         $rpm_gpgkey = $::operatingsystemrelease ? {
-          /^3/    => 'https://raw.github.com/santisaez/powerstack/master/RPM-GPG-KEY-powerstack',
+          /^3/    => 'https://raw.githubusercontent.com/santisaez/powerstack/master/RPM-GPG-KEY-powerstack',
           default => Fail['Operating system or release version not supported.'],
         }
 
