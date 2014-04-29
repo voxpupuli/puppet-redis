@@ -42,29 +42,26 @@
 <h3>
 <a name="standalone" class="anchor" href="#standalone"><span class="octicon octicon-link"></span></a>Standalone</h3>
 
-<pre><code>class {
-  'redis':;
+<pre><code>class { 'redis':;
 }
 </code></pre>
 
 <h3>
 <a name="master-node" class="anchor" href="#master-node"><span class="octicon octicon-link"></span></a>Master node</h3>
 
-<pre><code>class {
-  'redis':
-    bind        =&gt; '10.0.1.1';
-   #masterauth  =&gt; 'secret';
+<pre><code>class { 'redis':
+  bind        =&gt; '10.0.1.1';
+  #masterauth  =&gt; 'secret';
 }
 </code></pre>
 
 <h3>
 <a name="slave-node" class="anchor" href="#slave-node"><span class="octicon octicon-link"></span></a>Slave node</h3>
 
-<pre><code>class {
-  'redis':
-    bind        =&gt; '10.0.1.2',
-    slaveof     =&gt; '10.0.1.1 6379';
-   #masterauth  =&gt; 'secret';
+<pre><code>class { 'redis':
+  bind        =&gt; '10.0.1.2',
+  slaveof     =&gt; '10.0.1.1 6379';
+  #masterauth  =&gt; 'secret';
 }
 </code></pre>
 
@@ -74,9 +71,16 @@
 <p>Disabled by default but if you really want the module to manage the required
 repositories you can use this snippet:</p>
 
-<pre><code>class {
-  'redis':
-    manage_repo =&gt; true,
+<pre><code>class { 'redis':
+  manage_repo =&gt; true,
+}
+</code></pre>
+
+<p>On Ubuntu, "chris-lea/redis-server" ppa repo will be added. You can change it by using ppa_repo parameter: </p>
+
+<pre><code>class { 'redis':
+  manage_repo =&gt; true,
+  ppa_repo    =&gt; 'ppa:rwky/redis',
 }
 </code></pre>
 
