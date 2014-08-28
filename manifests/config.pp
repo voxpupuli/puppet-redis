@@ -3,8 +3,7 @@
 # This class provides configuration for Redis.
 #
 class redis::config {
-
-  if $::redis::notify_service == true {
+  if $::redis::notify_service {
     File {
       owner  => $::redis::config_owner,
       group  => $::redis::config_group,
@@ -13,9 +12,9 @@ class redis::config {
     }
   } else {
     File {
-      owner  => $::redis::config_owner,
-      group  => $::redis::config_group,
-      mode   => $::redis::config_file_mode,
+      owner => $::redis::config_owner,
+      group => $::redis::config_group,
+      mode  => $::redis::config_file_mode,
     }
   }
 
