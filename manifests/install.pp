@@ -1,4 +1,4 @@
-# == Class: redis::install
+# = Class: redis::install
 #
 # This class installs the application.
 #

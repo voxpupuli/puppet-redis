@@ -1,4 +1,4 @@
-# == Class: redis::params
+# = Class: redis::params
 #
 # This class provides a number of parameters.
 #

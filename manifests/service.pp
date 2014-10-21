@@ -1,4 +1,4 @@
-# == Class: redis::service
+# = Class: redis::service
 #
 # This class manages the Redis daemon.
 #

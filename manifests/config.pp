@@ -1,4 +1,4 @@
-# == Class: redis::config
+# = Class: redis::config
 #
 # This class provides configuration for Redis.
 #

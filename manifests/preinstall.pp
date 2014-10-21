@@ -1,4 +1,4 @@
-# == Class: redis::preinstall
+# = Class: redis::preinstall
 #
 # This class provides anything required by the install class.
 # Such as package repositories.
