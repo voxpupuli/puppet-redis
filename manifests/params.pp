@@ -35,6 +35,17 @@ class redis::params {
   $port                        = 6379
   $rdbcompression              = true
   $requirepass                 = undef
+  $sentinel_config_file_mode   = '0644'
+  $sentinel_config_group       = 'root'
+  $sentinel_config_owner       = 'redis'
+  $sentinel_conf_template      = 'redis/redis-sentinel.conf.erb'
+  $sentinel_down_after         = 30000
+  $sentinel_failover_timeout   = 18000
+  $sentinel_master_name        = 'mymaster'
+  $sentinel_parallel_sync      = 1
+  $sentinel_port               = 26379
+  $sentinel_quorum             = 2
+  $sentinel_working_dir        = '/tmp'
   $set_max_intset_entries      = 512
   $slowlog_log_slower_than     = 10000
   $slowlog_max_len             = 1024
@@ -56,40 +67,42 @@ class redis::params {
 
   case $::osfamily {
     'Debian': {
-      $config_dir         = '/etc/redis'
-      $config_dir_mode    = '0755'
-      $config_file        = '/etc/redis/redis.conf'
-      $config_file_mode   = '0644'
-      $config_group       = 'root'
-      $config_owner       = 'root'
-      $package_ensure     = 'present'
-      $package_name       = 'redis-server'
-      $service_enable     = true
-      $service_ensure     = 'running'
-      $service_group      = 'redis'
-      $service_hasrestart = true
-      $service_hasstatus  = false
-      $service_name       = 'redis-server'
-      $service_user       = 'redis'
-      $ppa_repo           = 'ppa:chris-lea/redis-server'
+      $config_dir           = '/etc/redis'
+      $config_dir_mode      = '0755'
+      $config_file          = '/etc/redis/redis.conf'
+      $config_file_mode     = '0644'
+      $config_group         = 'root'
+      $config_owner         = 'root'
+      $package_ensure       = 'present'
+      $package_name         = 'redis-server'
+      $sentinel_config_file = '/etc/redis/redis-sentinel.conf'
+      $service_enable       = true
+      $service_ensure       = 'running'
+      $service_group        = 'redis'
+      $service_hasrestart   = true
+      $service_hasstatus    = false
+      $service_name         = 'redis-server'
+      $service_user         = 'redis'
+      $ppa_repo             = 'ppa:chris-lea/redis-server'
     }
 
     'RedHat': {
-      $config_dir         = '/etc/redis'
-      $config_dir_mode    = '0755'
-      $config_file        = '/etc/redis.conf'
-      $config_file_mode   = '0644'
-      $config_group       = 'root'
-      $config_owner       = 'root'
-      $package_ensure     = 'present'
-      $package_name       = 'redis'
-      $service_enable     = true
-      $service_ensure     = 'running'
-      $service_group      = 'redis'
-      $service_hasrestart = true
-      $service_hasstatus  = true
-      $service_name       = 'redis'
-      $service_user       = 'redis'
+      $config_dir           = '/etc/redis'
+      $config_dir_mode      = '0755'
+      $config_file          = '/etc/redis.conf'
+      $config_file_mode     = '0644'
+      $config_group         = 'root'
+      $config_owner         = 'root'
+      $package_ensure       = 'present'
+      $package_name         = 'redis'
+      $sentinel_config_file = '/etc/redis-sentinel.conf'
+      $service_enable       = true
+      $service_ensure       = 'running'
+      $service_group        = 'redis'
+      $service_hasrestart   = true
+      $service_hasstatus    = true
+      $service_name         = 'redis'
+      $service_user         = 'redis'
     }
 
     default: {
