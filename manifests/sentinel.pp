@@ -11,6 +11,7 @@ class redis::sentinel (
   $down_after        = $::redis::params::sentinel_down_after,
   $failover_timeout  = $::redis::params::sentinel_failover_timeout,
   $log_dir           = $::redis::params::log_dir,
+  $log_file          = $::redis::params::log_file,
   $master_name       = $::redis::params::sentinel_master_name,
   $redis_host        = $::redis::params::bind,
   $redis_port        = $::redis::params::port,
