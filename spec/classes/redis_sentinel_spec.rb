@@ -6,8 +6,13 @@ describe 'redis::sentinel', :type => :class do
   describe 'without parameters' do
     it { should create_class('redis::sentinel') }
 
-    it { should contain_file('/etc/redis/redis-sentinel.conf').with(
+    it { should contain_file('/etc/redis/redis-sentinel.conf.puppet').with(
         'ensure' => 'present'
+      )
+    }
+
+    it { should contain_file('/etc/redis/redis-sentinel.conf').with(
+        'mode' => '0644'
       )
     }
 

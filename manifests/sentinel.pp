@@ -3,6 +3,7 @@ class redis::sentinel (
   $config_dir        = $::redis::params::config_dir,
   $config_dir_mode   = $::redis::params::config_dir_mode,
   $config_file       = $::redis::params::sentinel_config_file,
+  $config_file_orig  = $::redis::params::sentinel_config_file_orig,
   $config_file_mode  = $::redis::params::sentinel_config_file_mode,
   $config_file_group = $::redis::params::sentinel_config_file_group,
   $config_file_owner = $::redis::params::sentinel_config_file_owner, 
@@ -26,15 +27,28 @@ class redis::sentinel (
       ensure => directory,
       mode   => $config_dir_mode;
 
-    $config_file:
+    $config_file_orig:
       ensure  => present,
-      content => template($conf_template);
+      content => template($conf_template),
+      require => File[$config_dir];
+
+    $config_file:
+      owner => $service_user,
+      group => $service_group,
+      mode  => $config_file_mode;
 
     $log_dir:
       ensure => directory,
       group  => $service_group,
       mode   => $config_dir_mode,
       owner  => $service_user;
+  }
+
+  exec {
+    "cp $config_file_orig $config_file":
+      path        => "/usr/bin:/bin",
+      subscribe   => File[$config_file_orig],
+      refreshonly => true;
   }
 
 }
