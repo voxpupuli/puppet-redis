@@ -1,13 +1,39 @@
 require 'spec_helper'
 
+$expected_noparams_content = <<EOF
+port 26379
+dir /tmp
+
+sentinel monitor mymaster 127.0.0.1 6379 2
+sentinel down-after-milliseconds mymaster 30000
+sentinel parallel-syncs mymaster 1
+sentinel failover-timeout mymaster 18000
+
+logfile /var/log/redis/redis.log
+EOF
+
+$expected_params_content = <<EOF
+port 26379
+dir /tmp
+
+sentinel monitor cow 127.0.0.1 6379 2
+sentinel down-after-milliseconds cow 6000
+sentinel parallel-syncs cow 1
+sentinel failover-timeout cow 28000
+
+logfile /tmp/barn-sentinel.log
+EOF
+
 describe 'redis::sentinel', :type => :class do
   let (:facts) { debian_facts }
 
   describe 'without parameters' do
+
     it { should create_class('redis::sentinel') }
 
     it { should contain_file('/etc/redis/redis-sentinel.conf.puppet').with(
-        'ensure' => 'present'
+        'ensure'  => 'present',
+        'content' => $expected_noparams_content
       )
     }
 
@@ -26,11 +52,20 @@ describe 'redis::sentinel', :type => :class do
 
   end
 
-  describe 'with parameter: down_after' do
-    let (:params) { { :down_after => 6000 } }
+  describe 'with custom parameters' do
+    let (:params) {
+      {
+        :master_name      => 'cow',
+        :down_after       => 6000,
+        :log_file         => '/tmp/barn-sentinel.log',
+        :failover_timeout => 28000
+      }
+    }
+
+    it { should create_class('redis::sentinel') }
 
     it { should contain_file('/etc/redis/redis-sentinel.conf.puppet').with(
-        'content' => /sentinel down-after-milliseconds mymaster 6000/
+        'content' => $expected_params_content
       )
     }
   end
