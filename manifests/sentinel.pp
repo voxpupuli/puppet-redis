@@ -6,7 +6,7 @@ class redis::sentinel (
   $config_file_orig  = $::redis::params::sentinel_config_file_orig,
   $config_file_mode  = $::redis::params::sentinel_config_file_mode,
   $config_file_group = $::redis::params::sentinel_config_file_group,
-  $config_file_owner = $::redis::params::sentinel_config_file_owner, 
+  $config_file_owner = $::redis::params::sentinel_config_file_owner,
   $conf_template     = $::redis::params::sentinel_conf_template,
   $down_after        = $::redis::params::sentinel_down_after,
   $failover_timeout  = $::redis::params::sentinel_failover_timeout,
@@ -25,25 +25,14 @@ class redis::sentinel (
 ) inherits redis::params {
 
   file {
-#     $config_dir:
-#       ensure => directory,
-#       mode   => $config_dir_mode;
-
     $config_file_orig:
       ensure  => present,
       content => template($conf_template);
-#     require => File[$config_dir];
 
     $config_file:
       owner => $service_user,
       group => $service_group,
       mode  => $config_file_mode;
-
-#     $log_dir:
-#       ensure => directory,
-#       group  => $service_group,
-#       mode   => $config_dir_mode,
-#       owner  => $service_user;
   }
 
   exec {
