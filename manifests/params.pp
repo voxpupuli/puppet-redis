@@ -40,7 +40,7 @@ class redis::params {
   $sentinel_config_owner       = 'redis'
   $sentinel_conf_template      = 'redis/redis-sentinel.conf.erb'
   $sentinel_down_after         = 30000
-  $sentinel_failover_timeout   = 18000
+  $sentinel_failover_timeout   = 180000
   $sentinel_master_name        = 'mymaster'
   $sentinel_parallel_sync      = 1
   $sentinel_port               = 26379
