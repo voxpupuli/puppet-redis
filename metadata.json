@@ -1,6 +1,6 @@
 {
   "name": "arioch-redis",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": "Tom De Vylder",
   "summary": "Redis module",
   "license": "Apache License, Version 2.0",
@@ -9,10 +9,11 @@
   "issues_url": "https://github.com/arioch/puppet-redis/issues",
   "description": "Redis module with cluster support",
   "tags": [
-    "redis",
     "cluster",
     "failover",
-    "loadbalancing"
+    "loadbalancing",
+    "redis",
+    "sentinel"
   ],
   "operatingsystem_support": [
     {
