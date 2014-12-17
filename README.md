@@ -41,6 +41,21 @@ On Ubuntu, "chris-lea/redis-server" ppa repo will be added. You can change it by
       manage_repo => true,
       ppa_repo    => 'ppa:rwky/redis',
     }
+### Redis Sentinel
+
+Optionally install and configuration a redis-sentinel server.
+
+With default settings:
+
+    class { 'redis::sentinel':}
+
+With adjustments:
+
+    class { 'redis::sentinel':
+      master_name => 'cow',
+      redis_host  => '192.168.1.5',
+      failover_timeout => 30000,
+    }
 
 ## Unit testing
 
