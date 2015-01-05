@@ -61,6 +61,8 @@
     }
   ],
   "dependencies": [
-  
+    {
+      "name": "puppetlabs/apt"
+    }
   ]
 }
