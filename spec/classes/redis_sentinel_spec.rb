@@ -33,12 +33,9 @@ describe 'redis::sentinel', :type => :class do
 
     it { should contain_file('/etc/redis/redis-sentinel.conf.puppet').with(
         'ensure'  => 'present',
+        'mode'    => '0644',
+        'owner'   => 'redis',
         'content' => $expected_noparams_content
-      )
-    }
-
-    it { should contain_file('/etc/redis/redis-sentinel.conf').with(
-        'mode' => '0644'
       )
     }
 
