@@ -150,6 +150,10 @@ class redis::sentinel (
       refreshonly => true;
   }
 
+  package { $::redis::params::package_name:
+    ensure => $::redis::params::package_ensure,
+  }
+
   service { $service_name:
     ensure     => $::redis::params::service_ensure,
     enable     => $::redis::params::service_enable,
