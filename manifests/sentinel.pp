@@ -133,13 +133,19 @@ class redis::sentinel (
   $working_dir       = $::redis::params::sentinel_working_dir,
 ) inherits redis::params {
 
+
+  package { $::redis::params::package_name:
+    ensure => $::redis::params::package_ensure,
+  }
+
   file {
     $config_file_orig:
       ensure  => present,
-      owner => $service_user,
-      group => $service_group,
-      mode  => $config_file_mode,
-      content => template($conf_template);
+      owner   => $service_user,
+      group   => $service_group,
+      mode    => $config_file_mode,
+      content => template($conf_template),
+      require => Package[$::redis::params::package_name];
   }
 
   exec {
@@ -148,10 +154,6 @@ class redis::sentinel (
       subscribe   => File[$config_file_orig],
       notify      => Service[$service_name],
       refreshonly => true;
-  }
-
-  package { $::redis::params::package_name:
-    ensure => $::redis::params::package_ensure,
   }
 
   service { $service_name:
