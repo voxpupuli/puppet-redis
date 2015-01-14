@@ -50,6 +50,11 @@
 #
 #   Default: OS dependant
 #
+# [*config_file_real*]
+#   Adjust configuration file managed by Redis Sentinel itself.
+#
+#   Default: OS dependant
+#
 # [*config_file_mode*]
 #   Adjust permissions for configuration files.
 #
@@ -229,6 +234,48 @@
 #
 #   Default: undef
 #
+# [*sentinel_enabled*]
+#   Enable or not Sentinel system.
+#
+#   Default: false
+#
+# [*sentinel_down_after*]
+#   Time to wait until a node is considered as down.
+#
+#   Default: 60000
+#
+# [*sentinel_failover_timeout*]
+#   Time to try to failover the same master again.
+#
+#   Default: 180000
+#
+# [*sentinel_master_name*]
+#   Sentinel master name
+#
+#   Default: mymaster
+#
+# [*sentinel_master_host*]
+#   Sentinel master hostname or IP address
+#
+#   Default: 127.0.0.1
+#
+# [*sentinel_master_port*]
+#   Sentinel master port
+#
+#   Default: 6379
+#
+# [*sentinel_parallel_sync*]
+#   Sets the number of slaves that can be reconfigured to use the new master
+#   after a failover at the same time.
+#
+#   Default: 1
+#
+# [*sentinel_quorum*]
+#   Specify the number of Sentinel processes that need to agree about the
+#   unreachability or error condition of the master in order to trigger a failover.
+#
+#   Default: 2
+#
 # [*service_enable*]
 #   Enable/disable daemon at boot.
 #
@@ -364,6 +411,7 @@ class redis (
   $config_dir                  = $::redis::params::config_dir,
   $config_dir_mode             = $::redis::params::config_dir_mode,
   $config_file                 = $::redis::params::config_file,
+  $config_file_real            = $::redis::params::config_file,
   $config_file_mode            = $::redis::params::config_file_mode,
   $config_group                = $::redis::params::config_group,
   $config_owner                = $::redis::params::config_owner,
@@ -396,6 +444,14 @@ class redis (
   $repl_ping_slave_period      = $::redis::params::repl_ping_slave_period,
   $repl_timeout                = $::redis::params::repl_timeout,
   $requirepass                 = $::redis::params::requirepass,
+  $sentinel_enabled            = $::redis::params::sentinel_enabled,
+  $sentinel_down_after         = $::redis::params::sentinel_down_after,
+  $sentinel_failover_timeout   = $::redis::params::sentinel_failover_timeout,
+  $sentinel_master_name        = $::redis::params::sentinel_master_name,
+  $sentinel_master_host        = $::redis::params::sentinel_master_host,
+  $sentinel_master_port        = $::redis::params::sentinel_master_port,
+  $sentinel_parallel_sync      = $::redis::params::sentinel_parallel_sync,
+  $sentinel_quorum             = $::redis::params::sentinel_quorum,
   $service_enable              = $::redis::params::service_enable,
   $service_ensure              = $::redis::params::service_ensure,
   $service_group               = $::redis::params::service_group,
@@ -440,5 +496,6 @@ class redis (
       fail "Replication is not possible when binding to ${::redis::bind}."
     }
   }
+
 }
 

@@ -545,3 +545,9 @@ client-output-buffer-limit pubsub 32mb 8mb 60
 include <%= @extra_config_file %>
 <% end -%>
 
+<% if @sentinel_enabled -%>
+sentinel monitor <%= @sentinel_master_name %> <%= @sentinel_master_host %> <%= @sentinel_master_port %> <%= @sentinel_quorum %>
+sentinel down-after-milliseconds <%= @sentinel_master_name %> <%= @sentinel_down_after %>
+sentinel parallel-syncs <%= @sentinel_master_name %> <%= @sentinel_parallel_sync %>
+sentinel failover-timeout <%= @sentinel_master_name %> <%= @sentinel_failover_timeout %>
+<% end -%>

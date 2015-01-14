@@ -34,6 +34,17 @@ class redis::config {
       owner  => $::redis::service_user;
   }
 
+  # Redis Sentinel manages itself the configuration file
+  # so first initiate the configuration and then copy it to the real
+  # configuration file so Puppet will never modify it and let Sentinel does it.
+  if $::redis::sentinel_enabled {
+    file { $::redis::config_file_real:
+      ensure    => present,
+      subscribe => File[$config_file],
+      content   => template($::redis::conf_template);
+    }
+  }
+
   # Adjust /etc/default/redis-server on Debian systems
   case $::osfamily {
     'Debian': {

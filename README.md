@@ -45,16 +45,17 @@ On Ubuntu, "chris-lea/redis-server" ppa repo will be added. You can change it by
 
 Optionally install and configuration a redis-sentinel server.
 
-With default settings:
-
-    class { 'redis::sentinel':}
-
-With adjustments:
-
-    class { 'redis::sentinel':
-      master_name => 'cow',
-      redis_host  => '192.168.1.5',
-      failover_timeout => 30000,
+    class { 'redis':
+      sentinel_enabled          => true,
+      service_name              => 'redis-sentinel',
+      sentinel_master_name      => 'cow',
+      sentinel_master_host      => '192.168.1.5',
+      sentinel_failover_timeout => 30000,
+      config_file               => '/etc/redis-sentinel-puppet.conf',
+      config_file_real          => '/etc/redis-sentinel.conf',
+      config_owner              => 'redis',
+      config_group              => 'redis',
+      port                      => '26379',
     }
 
 ## Unit testing
