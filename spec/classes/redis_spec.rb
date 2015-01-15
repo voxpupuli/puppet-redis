@@ -712,5 +712,46 @@ describe 'redis', :type => :class do
       )
     }
   end
+
+  describe 'when running Redis with Sentinel system' do
+    let (:params) {
+      {
+        :sentinel_enabled          => true,
+        :config_file               => '/etc/redis/redis-sentinel-puppet.conf',
+        :config_file_real          => '/etc/redis/redis-sentinel.conf',
+        :config_group              => 'redis',
+        :config_owner              => 'redis',
+        :conf_template             => 'redis/redis.conf.erb',
+        :port                      => '26379',
+        :sentinel_down_after       => '30000',
+        :sentinel_failover_timeout => '180000',
+        :sentinel_master_name      => 'mymaster',
+        :sentinel_master_host      => '127.0.0.1',
+        :sentinel_master_port      => '6379',
+        :sentinel_parallel_sync    => '1',
+        :sentinel_quorum           => '2',
+        :service_name              => 'redis-sentinel',
+      }
+    }
+
+    it { should contain_file('/etc/redis').with_group('redis') }
+    it { should contain_file('/etc/redis').with_owner('redis') }
+
+    it { should contain_file('/etc/redis/redis-sentinel.conf').with('content' => /port.*26379/) }
+    it { should contain_file('/etc/redis/redis-sentinel.conf').with('content' => /sentinel monitor.*mymaster 127.0.0.1 6379 2/) }
+    it { should contain_file('/etc/redis/redis-sentinel.conf').with('content' => /sentinel down-after-milliseconds.*mymaster 30000/) }
+    it { should contain_file('/etc/redis/redis-sentinel.conf').with('content' => /sentinel parallel-syncs.*mymaster 1/) }
+    it { should contain_file('/etc/redis/redis-sentinel.conf').with('content' => /sentinel failover-timeout.*mymaster 180000/) }
+
+    it { should contain_file('/etc/redis/redis-sentinel-puppet.conf').with('content' => /sentinel failover-timeout.*mymaster 180000/) }
+
+    it { should contain_service('redis-sentinel').with(
+        'ensure'     => 'running',
+        'enable'     => 'true',
+        'hasrestart' => 'true',
+        'hasstatus'  => 'false'
+      )
+    }
+  end
 end
 
