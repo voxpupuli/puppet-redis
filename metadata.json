@@ -68,8 +68,7 @@
     }
   ],
   "dependencies": [
-    {
-      "name": "puppetlabs/apt"
-    }
+    { "name": "puppetlabs/apt" },
+    { "name": "puppetlabs/stdlib" },
   ]
 }
