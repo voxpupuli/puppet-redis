@@ -27,6 +27,12 @@ EOF
 describe 'redis::sentinel', :type => :class do
   let (:facts) { debian_facts }
 
+  let :pre_condition do
+    [
+     'class { redis: }'
+    ]
+  end
+
   describe 'without parameters' do
 
     it { should create_class('redis::sentinel') }

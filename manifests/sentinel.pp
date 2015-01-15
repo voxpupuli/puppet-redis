@@ -134,9 +134,9 @@ class redis::sentinel (
 ) inherits redis::params {
 
 
-  package { $::redis::params::package_name:
-    ensure => $::redis::params::package_ensure,
-  }
+  ensure_resource('package', $::redis::params::package_name, {
+    'ensure' => $::redis::params::package_ensure
+  })
 
   file {
     $config_file_orig:

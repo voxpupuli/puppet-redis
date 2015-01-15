@@ -3,8 +3,8 @@
 # This class installs the application.
 #
 class redis::install {
-  package { $::redis::package_name:
-    ensure => $::redis::package_ensure,
-  }
+  ensure_resource('package', $::redis::package_name, {
+    'ensure' => $::redis::package_ensure
+  })
 }
 
