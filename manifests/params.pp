@@ -14,7 +14,6 @@ class redis::params {
   $auto_aof_rewrite_percentage = 100
   $bind                        = '127.0.0.1'
   $conf_template               = 'redis/redis.conf.erb'
-  $daemonize                   = true
   $databases                   = 16
   $dbfilename                  = 'dump.rdb'
   $extra_config_file           = undef
@@ -47,6 +46,7 @@ class redis::params {
   $sentinel_quorum             = 2
   $sentinel_service_name       = 'redis-sentinel'
   $sentinel_working_dir        = '/tmp'
+  $sentinel_init_template      = 'redis/redis-sentinel.init.erb'
   $set_max_intset_entries      = 512
   $slowlog_log_slower_than     = 10000
   $slowlog_max_len             = 1024
@@ -74,10 +74,14 @@ class redis::params {
       $config_file_mode          = '0644'
       $config_group              = 'root'
       $config_owner              = 'root'
+      $daemonize                 = true
       $package_ensure            = 'present'
       $package_name              = 'redis-server'
       $sentinel_config_file      = '/etc/redis/redis-sentinel.conf'
       $sentinel_config_file_orig = '/etc/redis/redis-sentinel.conf.puppet'
+      $sentinel_init_script      = '/etc/init.d/redis-sentinel'
+      $sentinel_package_name     = 'redis-server'
+      $sentinel_package_ensure   = 'present'
       $service_enable            = true
       $service_ensure            = 'running'
       $service_group             = 'redis'
@@ -95,10 +99,14 @@ class redis::params {
       $config_file_mode          = '0644'
       $config_group              = 'root'
       $config_owner              = 'root'
+      $daemonize                 = false
       $package_ensure            = 'present'
       $package_name              = 'redis'
       $sentinel_config_file      = '/etc/redis-sentinel.conf'
       $sentinel_config_file_orig = '/etc/redis-sentinel.conf.puppet'
+      $sentinel_init_script      = undef
+      $sentinel_package_name     = 'redis'
+      $sentinel_package_ensure   = 'present'
       $service_enable            = true
       $service_ensure            = 'running'
       $service_group             = 'redis'

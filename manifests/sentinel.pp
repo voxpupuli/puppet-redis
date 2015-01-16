@@ -1,6 +1,6 @@
 # = Class: redis::sentinel
 #
-# This class install redis-sentinel
+# This class installs redis-sentinel
 #
 # == Parameters:
 #
@@ -42,6 +42,11 @@
 #
 #   Default: 180000
 #
+# [*init_script*]
+#   Specifiy the init script that will be created for sentinel.
+#
+#   Default: undef on rpm, /etc/init.d/redis-sentinel on apt.
+#
 # [*log_file*]
 #   Specify where to write log entries.
 #
@@ -62,6 +67,16 @@
 #   Specify the port of the master redis server.
 #
 #   Default: 6379
+#
+# [*package_name*]
+#   The name of the package that installs sentinel.
+#
+#   Default: 'redis-server' on apt, 'redis' on rpm
+#
+# [*package_ensure*]
+#   Do we ensure this package.
+#
+#   Default: 'present'
 #
 # [*parallel_sync*]
 #   How many slaves can be reconfigured at the same time to use a
@@ -120,10 +135,14 @@ class redis::sentinel (
   $conf_template     = $::redis::params::sentinel_conf_template,
   $down_after        = $::redis::params::sentinel_down_after,
   $failover_timeout  = $::redis::params::sentinel_failover_timeout,
+  $init_script       = $::redis::params::sentinel_init_script,
+  $init_template     = $::redis::params::sentinel_init_template,
   $log_file          = $::redis::params::log_file,
   $master_name       = $::redis::params::sentinel_master_name,
   $redis_host        = $::redis::params::bind,
   $redis_port        = $::redis::params::port,
+  $package_name      = $::redis::params::sentinel_package_name,
+  $package_ensure    = $::redis::params::sentinel_package_ensure,
   $parallel_sync     = $::redis::params::sentinel_parallel_sync,
   $quorum            = $::redis::params::sentinel_quorum,
   $sentinel_port     = $::redis::params::sentinel_port,
@@ -134,8 +153,8 @@ class redis::sentinel (
 ) inherits redis::params {
 
 
-  ensure_resource('package', $::redis::params::package_name, {
-    'ensure' => $::redis::params::package_ensure
+  ensure_resource('package', $package_name, {
+    'ensure' => $package_ensure
   })
 
   file {
@@ -145,7 +164,7 @@ class redis::sentinel (
       group   => $service_group,
       mode    => $config_file_mode,
       content => template($conf_template),
-      require => Package[$::redis::params::package_name];
+      require => Package[$package_name];
   }
 
   exec {
@@ -154,6 +173,18 @@ class redis::sentinel (
       subscribe   => File[$config_file_orig],
       notify      => Service[$service_name],
       refreshonly => true;
+  }
+
+  if $init_script {
+    file {
+      $init_script:
+        ensure  => present,
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0755',
+        content => template($init_template),
+        require => Package[$package_name];
+    }
   }
 
   service { $service_name:
