@@ -47,6 +47,7 @@ class redis::params {
   $sentinel_service_name       = 'redis-sentinel'
   $sentinel_working_dir        = '/tmp'
   $sentinel_init_template      = 'redis/redis-sentinel.init.erb'
+  $sentinel_pid_file           = '/var/run/redis/redis-sentinel.pid'
   $set_max_intset_entries      = 512
   $slowlog_log_slower_than     = 10000
   $slowlog_max_len             = 1024

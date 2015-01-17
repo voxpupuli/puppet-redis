@@ -84,6 +84,11 @@
 #
 #   Default: 1
 #
+# [*pid_file*]
+#   If sentinel is daemonized it will write its pid at this location.
+#
+#   Default: /var/run/redis/redis-sentinel.pid
+#
 # [*quorum*]
 #   Number of sentinels that must agree that a master is down to
 #   signal sdown state.
@@ -144,6 +149,7 @@ class redis::sentinel (
   $package_name      = $::redis::params::sentinel_package_name,
   $package_ensure    = $::redis::params::sentinel_package_ensure,
   $parallel_sync     = $::redis::params::sentinel_parallel_sync,
+  $pid_file          = $::redis::params::sentinel_pid_file,
   $quorum            = $::redis::params::sentinel_quorum,
   $sentinel_port     = $::redis::params::sentinel_port,
   $service_group     = $::redis::params::service_group,
@@ -184,6 +190,10 @@ class redis::sentinel (
         mode    => '0755',
         content => template($init_template),
         require => Package[$package_name];
+    }
+    exec {
+       "/usr/sbin/update-rc.d redis-sentinel defaults":
+         require => File[$init_script];
     }
   }
 
