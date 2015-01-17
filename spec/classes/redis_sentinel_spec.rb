@@ -4,6 +4,8 @@ $expected_noparams_content = <<EOF
 port 26379
 dir /tmp
 daemonize yes
+pidfile /var/run/redis/redis-sentinel.pid
+
 sentinel monitor mymaster 127.0.0.1 6379 2
 sentinel down-after-milliseconds mymaster 30000
 sentinel parallel-syncs mymaster 1
@@ -16,6 +18,8 @@ $expected_params_content = <<EOF
 port 26379
 dir /tmp
 daemonize yes
+pidfile /var/run/redis/redis-sentinel.pid
+
 sentinel monitor cow 127.0.0.1 6379 2
 sentinel down-after-milliseconds cow 6000
 sentinel parallel-syncs cow 1
