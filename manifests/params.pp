@@ -122,7 +122,7 @@ class redis::params {
       $config_dir_mode           = '0755'
       $config_file               = '/usr/local/etc/redis.conf'
       $config_file_mode          = '0644'
-      $config_group              = 'root'
+      $config_group              = 'wheel'
       $config_owner              = 'root'
       $daemonize                 = false
       $package_ensure            = 'present'
