@@ -124,7 +124,7 @@ class redis::params {
       $config_file_mode          = '0644'
       $config_group              = 'wheel'
       $config_owner              = 'root'
-      $daemonize                 = false
+      $daemonize                 = true
       $package_ensure            = 'present'
       $package_name              = 'redis'
       $sentinel_config_file      = '/usr/local/etc/redis-sentinel.conf'
