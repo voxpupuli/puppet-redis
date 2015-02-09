@@ -197,8 +197,8 @@ class redis::sentinel (
         require => Package[$package_name];
     }
     exec {
-       "/usr/sbin/update-rc.d redis-sentinel defaults":
-         require => File[$init_script];
+      '/usr/sbin/update-rc.d redis-sentinel defaults':
+        require => File[$init_script];
     }
   }
 
