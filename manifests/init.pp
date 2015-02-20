@@ -417,21 +417,21 @@ class redis (
   $zset_max_ziplist_entries    = $::redis::params::zset_max_ziplist_entries,
   $zset_max_ziplist_value      = $::redis::params::zset_max_ziplist_value,
 ) inherits redis::params {
-  include preinstall
-  include install
-  include config
-  include service
+  include redis::preinstall
+  include redis::install
+  include redis::config
+  include redis::service
 
   if $::redis::notify_service {
-    Class['preinstall'] ->
-    Class['install'] ->
-    Class['config'] ~>
-    Class['service']
+    Class['redis::preinstall'] ->
+    Class['redis::install'] ->
+    Class['redis::config'] ~>
+    Class['redis::service']
   } else {
-    Class['preinstall'] ->
-    Class['install'] ->
-    Class['config'] ->
-    Class['service']
+    Class['redis::preinstall'] ->
+    Class['redis::install'] ->
+    Class['redis::config'] ->
+    Class['redis::service']
   }
 
   # Sanity check
