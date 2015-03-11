@@ -4,6 +4,12 @@
 #
 # == Parameters:
 #
+#
+# [*auth_pass*]
+#   The password to use to authenticate with the master and slaves.
+#
+#   Default: undef
+#
 # [*config_file*]
 #   The location and name of the sentinel config file.
 #
@@ -138,6 +144,7 @@
 #   }
 #
 class redis::sentinel (
+  $auth_pass           = $::redis::params::sentinel_auth_pass,
   $config_file         = $::redis::params::sentinel_config_file,
   $config_file_orig    = $::redis::params::sentinel_config_file_orig,
   $config_file_mode    = $::redis::params::sentinel_config_file_mode,

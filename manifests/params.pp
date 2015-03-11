@@ -34,6 +34,7 @@ class redis::params {
   $port                         = 6379
   $rdbcompression               = true
   $requirepass                  = undef
+  $sentinel_auth_pass           = undef
   $sentinel_config_file_mode    = '0644'
   $sentinel_config_group        = 'root'
   $sentinel_config_owner        = 'redis'
