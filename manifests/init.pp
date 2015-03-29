@@ -417,21 +417,29 @@ class redis (
   $zset_max_ziplist_entries    = $::redis::params::zset_max_ziplist_entries,
   $zset_max_ziplist_value      = $::redis::params::zset_max_ziplist_value,
 ) inherits redis::params {
+
+  anchor { 'redis::begin': }
+  anchor { 'redis::end': }
+
   include redis::preinstall
   include redis::install
   include redis::config
   include redis::service
 
   if $::redis::notify_service {
+    Anchor['redis::begin'] ->
     Class['redis::preinstall'] ->
     Class['redis::install'] ->
     Class['redis::config'] ~>
-    Class['redis::service']
+    Class['redis::service'] ->
+    Anchor['redis::end']
   } else {
+    Anchor['redis::begin'] ->
     Class['redis::preinstall'] ->
     Class['redis::install'] ->
     Class['redis::config'] ->
-    Class['redis::service']
+    Class['redis::service'] ->
+    Anchor['redis::end']
   }
 
   # Sanity check
@@ -440,5 +448,5 @@ class redis (
       fail "Replication is not possible when binding to ${::redis::bind}."
     }
   }
-}
 
+}
