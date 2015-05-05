@@ -78,6 +78,7 @@ class redis::params {
       $config_group              = 'root'
       $config_owner              = 'root'
       $daemonize                 = true
+      $log_dir_mode              = '0755'
       $package_ensure            = 'present'
       $package_name              = 'redis-server'
       $sentinel_config_file      = '/etc/redis/redis-sentinel.conf'
@@ -103,6 +104,7 @@ class redis::params {
       $config_group              = 'root'
       $config_owner              = 'root'
       $daemonize                 = false
+      $log_dir_mode              = '0755'
       $package_ensure            = 'present'
       $package_name              = 'redis'
       $sentinel_config_file      = '/etc/redis-sentinel.conf'
@@ -127,6 +129,7 @@ class redis::params {
       $config_group              = 'wheel'
       $config_owner              = 'root'
       $daemonize                 = true
+      $log_dir_mode              = '0755'
       $package_ensure            = 'present'
       $package_name              = 'redis'
       $sentinel_config_file      = '/usr/local/etc/redis-sentinel.conf'

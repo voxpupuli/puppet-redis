@@ -30,7 +30,7 @@ class redis::config {
     $::redis::log_dir:
       ensure => directory,
       group  => $::redis::service_group,
-      mode   => $::redis::config_dir_mode,
+      mode   => $::redis::log_dir_mode,
       owner  => $::redis::service_user;
   }
 

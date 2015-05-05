@@ -115,6 +115,11 @@
 #
 #   Default: /var/log/redis
 #
+# [*log_dir_mode*]
+#   Adjust mode for directory containing log files.
+#
+#   Default: 0755
+#
 # [*log_file*]
 #   Specify file where to write log entries.
 #
@@ -377,6 +382,7 @@ class redis (
   $list_max_ziplist_entries    = $::redis::params::list_max_ziplist_entries,
   $list_max_ziplist_value      = $::redis::params::list_max_ziplist_value,
   $log_dir                     = $::redis::params::log_dir,
+  $log_dir_mode                = $::redis::params::log_dir_mode,
   $log_file                    = $::redis::params::log_file,
   $log_level                   = $::redis::params::log_level,
   $manage_repo                 = $::redis::params::manage_repo,
