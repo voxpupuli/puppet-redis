@@ -116,6 +116,12 @@ describe 'redis', :type => :class do
     it { should contain_file('/etc/redis').with_mode('_VALUE_') }
   end
 
+  describe 'with parameter: log_dir_mode' do
+    let (:params) { { :log_dir_mode => '_VALUE_' } }
+
+    it { should contain_file('/var/log/redis').with_mode('_VALUE_') }
+  end
+
   describe 'with parameter: config_file' do
     let (:params) { { :config_file => '_VALUE_' } }
 
