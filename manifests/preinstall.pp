@@ -51,16 +51,15 @@ class redis::preinstall {
       'Debian': {
         include apt
         apt::key { 'dotdeb':
-          key        => '89DF5277',
-          key_source => 'http://www.dotdeb.org/dotdeb.gpg',
+          id      => '89DF5277',
+          content => 'http://www.dotdeb.org/dotdeb.gpg',
         }
 
         apt::source { 'dotdeb':
-          location    => 'http://packages.dotdeb.org',
-          release     => $::lsbdistcodename,
-          repos       => 'all',
-          include_src => true,
-          require     => Apt::Key['dotdeb'],
+          location => 'http://packages.dotdeb.org',
+          release  => $::lsbdistcodename,
+          repos    => 'all',
+          require  => Apt::Key['dotdeb'],
         }
       }
 

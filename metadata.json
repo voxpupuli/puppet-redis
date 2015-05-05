@@ -7,6 +7,10 @@
   "source": "https://github.com/arioch/puppet-redis",
   "project_page": "http://arioch.github.io/puppet-redis/",
   "issues_url": "https://github.com/arioch/puppet-redis/issues",
+  "dependencies": [
+    {"name":"puppetlabs/apt","version_requirement":">= 2.0.1"},
+    {"name":"puppetlabs/stdlib"}
+  ],
   "description": "Redis module with cluster support",
   "tags": [
     "cluster",
@@ -66,9 +70,5 @@
         "6.5"
       ]
     }
-  ],
-  "dependencies": [
-    { "name": "puppetlabs/apt" },
-    { "name": "puppetlabs/stdlib" }
   ]
 }
