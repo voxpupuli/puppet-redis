@@ -13,6 +13,7 @@ matrix:
     - rvm: 2.0.0
       env: PUPPET_VERSION="2.7"
     - env: PUPPET_VERSION="2.7"
+    - env: PUPPET_VERSION="4.0"
 
 before_install:
   - 'gem install bundler'
@@ -25,6 +26,12 @@ env:
   - PUPPET_VERSION="3.0"
   - PUPPET_VERSION="3.1"
   - PUPPET_VERSION="3.2"
+  - PUPPET_VERSION="3.3"
+  - PUPPET_VERSION="3.4"
+  - PUPPET_VERSION="3.5"
+  - PUPPET_VERSION="3.6"
+  - PUPPET_VERSION="3.7"
+  - PUPPET_VERSION="4.0"
 
 branches:
   only:
