@@ -149,7 +149,7 @@ class redis::params {
     'Suse': {
       $config_dir                = '/etc/redis'
       $config_dir_mode           = '0750'
-      $config_file               = '/etc/redis/redis.conf'
+      $config_file               = '/etc/redis/redis-server.conf'
       $config_file_mode          = '0644'
       $config_group              = 'redis'
       $config_owner              = 'redis'
