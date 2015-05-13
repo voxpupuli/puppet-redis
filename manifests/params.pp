@@ -86,6 +86,7 @@ class redis::params {
       $sentinel_init_script      = '/etc/init.d/redis-sentinel'
       $sentinel_package_name     = 'redis-server'
       $sentinel_package_ensure   = 'present'
+      $service_manage            = true
       $service_enable            = true
       $service_ensure            = 'running'
       $service_group             = 'redis'
@@ -112,6 +113,7 @@ class redis::params {
       $sentinel_init_script      = undef
       $sentinel_package_name     = 'redis'
       $sentinel_package_ensure   = 'present'
+      $service_manage            = true
       $service_enable            = true
       $service_ensure            = 'running'
       $service_group             = 'redis'
@@ -137,6 +139,7 @@ class redis::params {
       $sentinel_init_script      = undef
       $sentinel_package_name     = 'redis'
       $sentinel_package_ensure   = 'present'
+      $service_manage            = true
       $service_enable            = true
       $service_ensure            = 'running'
       $service_group             = 'redis'
@@ -162,6 +165,7 @@ class redis::params {
       $sentinel_init_script      = undef
       $sentinel_package_name     = 'redis'
       $sentinel_package_ensure   = 'present'
+      $service_manage            = true
       $service_enable            = true
       $service_ensure            = 'running'
       $service_group             = 'redis'

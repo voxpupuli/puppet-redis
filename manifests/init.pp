@@ -234,6 +234,11 @@
 #
 #   Default: undef
 #
+# [*service_manage*]
+#   Specify if the service should be part of the catalog.
+#
+#   Default: true
+#
 # [*service_enable*]
 #   Enable/disable daemon at boot.
 #
@@ -402,6 +407,7 @@ class redis (
   $repl_ping_slave_period      = $::redis::params::repl_ping_slave_period,
   $repl_timeout                = $::redis::params::repl_timeout,
   $requirepass                 = $::redis::params::requirepass,
+  $service_manage              = $::redis::params::service_manage,
   $service_enable              = $::redis::params::service_enable,
   $service_ensure              = $::redis::params::service_ensure,
   $service_group               = $::redis::params::service_group,

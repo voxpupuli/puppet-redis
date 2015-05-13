@@ -502,6 +502,12 @@ describe 'redis', :type => :class do
     }
   end
 
+  describe 'with parameter: service_manage (set to false)' do
+    let (:params) { { :service_manage => false } }
+
+    it { should_not contain_service('redis-server') }
+  end
+
   describe 'with parameter: service_enable' do
     let (:params) { { :service_enable => true } }
 
