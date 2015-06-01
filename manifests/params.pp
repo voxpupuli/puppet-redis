@@ -121,6 +121,7 @@ class redis::params {
       $service_hasstatus         = true
       $service_name              = 'redis'
       $service_user              = 'redis'
+      $ppa_repo                  = undef
     }
 
     'FreeBSD': {
@@ -147,6 +148,7 @@ class redis::params {
       $service_hasstatus         = true
       $service_name              = 'redis'
       $service_user              = 'redis'
+      $ppa_repo                  = undef
     }
 
     'Suse': {
@@ -173,6 +175,7 @@ class redis::params {
       $service_hasstatus         = true
       $service_name              = 'redis'
       $service_user              = 'redis'
+      $ppa_repo                  = undef
     }
 
     default: {
