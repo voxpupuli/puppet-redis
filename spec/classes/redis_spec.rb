@@ -13,7 +13,8 @@ describe 'redis', :type => :class do
     it { should contain_package('redis-server').with_ensure('present') }
 
     it { should contain_file('/etc/redis/redis.conf').with(
-        'ensure' => 'present'
+        'ensure'  => 'present',
+        'content' => /port 6379/
       )
     }
 

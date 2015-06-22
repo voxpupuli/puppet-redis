@@ -2,7 +2,7 @@
 #
 # This class provides configuration for Redis.
 #
-class redis::config {
+class redis::config inherits redis {
   if $::redis::notify_service {
     File {
       owner  => $::redis::config_owner,
