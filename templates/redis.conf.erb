@@ -60,7 +60,7 @@ logfile <%= @log_file %>
 # syslog-ident redis
 
 # Specify the syslog facility.  Must be USER or between LOCAL0-LOCAL7.
-<% if @syslog_facility %>syslog-facility <%= @syslog_facility %><% else %># syslog-facility local0<% end %>
+<% if defined? @syslog_facility %>syslog-facility <%= @syslog_facility %><% else %># syslog-facility local0<% end %>
 
 # Set the number of databases. The default database is DB 0, you can select
 # a different one on a per-connection basis using SELECT <dbid> where
@@ -144,7 +144,7 @@ dir <%= @workdir %>
 # different interval, or to listen to another port, and so on.
 #
 # slaveof <masterip> <masterport>
-<% if @slaveof -%>slaveof <%= @slaveof %><% end -%>
+<% if defined? @slaveof -%>slaveof <%= @slaveof %><% end -%>
 
 # If the master is password protected (using the "requirepass" configuration
 # directive below) it is possible to tell the slave to authenticate before
@@ -152,7 +152,7 @@ dir <%= @workdir %>
 # refuse the slave request.
 #
 # masterauth <master-password>
-<% if @masterauth -%>masterauth <%= @masterauth %><% end -%>
+<% if defined? @masterauth -%>masterauth <%= @masterauth %><% end -%>
 
 # When a slave lost the connection with the master, or when the replication
 # is still in progress, the slave can act in two different ways:
@@ -226,7 +226,7 @@ slave-priority 100
 # 150k passwords per second against a good box. This means that you should
 # use a very strong password otherwise it will be very easy to break.
 #
-<% if @requirepass -%>requirepass <%= @requirepass %><% end -%>
+<% if defined? @requirepass -%>requirepass <%= @requirepass %><% end -%>
 
 # Command renaming.
 #
@@ -281,7 +281,7 @@ maxclients <%= @maxclients %>
 # output buffers (but this is not needed if the policy is 'noeviction').
 #
 # maxmemory <bytes>
-<% if @maxmemory -%>maxmemory <%= @maxmemory %><% end -%>
+<% if defined? @maxmemory -%>maxmemory <%= @maxmemory %><% end -%>
 
 # MAXMEMORY POLICY: how Redis will select what to remove when maxmemory
 # is reached? You can select among five behavior:
@@ -305,7 +305,7 @@ maxclients <%= @maxclients %>
 # The default is:
 #
 # maxmemory-policy volatile-lru
-<% if @maxmemory_policy -%>maxmemory-policy <%= @maxmemory_policy %><% end -%>
+<% if defined? @maxmemory_policy -%>maxmemory-policy <%= @maxmemory_policy %><% end -%>
 
 # LRU and minimal TTL algorithms are not precise algorithms but approximated
 # algorithms (in order to save memory), so you can select as well the sample
@@ -314,7 +314,7 @@ maxclients <%= @maxclients %>
 # using the following configuration directive.
 #
 # maxmemory-samples 3
-<% if @maxmemory_samples -%>maxmemory-samples <%= @maxmemory_samples %><% end -%>
+<% if defined? @maxmemory_samples -%>maxmemory-samples <%= @maxmemory_samples %><% end -%>
 
 ############################## APPEND ONLY MODE ###############################
 
