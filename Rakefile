@@ -1,5 +1,4 @@
 require 'rake'
-require 'rspec/core/rake_task'
 require 'puppetlabs_spec_helper/rake_tasks'
 
 RSpec::Core::RakeTask.new(:spec_verbose) do |t|
