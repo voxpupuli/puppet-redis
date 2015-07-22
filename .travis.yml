@@ -19,7 +19,7 @@ before_install:
   - 'gem install bundler'
 
 script:
-  - 'rake spec'
+  - 'bundle exec rake spec'
 
 env:
   - PUPPET_VERSION="2.7"
