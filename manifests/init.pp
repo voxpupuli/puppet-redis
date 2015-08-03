@@ -234,6 +234,11 @@
 #
 #   Default: undef
 #
+#[*save_db_to_disk*]
+#   Set if save db to disk.
+#
+#   Default: true
+#
 # [*service_manage*]
 #   Specify if the service should be part of the catalog.
 #
@@ -407,6 +412,7 @@ class redis (
   $repl_ping_slave_period      = $::redis::params::repl_ping_slave_period,
   $repl_timeout                = $::redis::params::repl_timeout,
   $requirepass                 = $::redis::params::requirepass,
+  $save_db_to_disk             = $::redis::params::save_db_to_disk,
   $service_manage              = $::redis::params::service_manage,
   $service_enable              = $::redis::params::service_enable,
   $service_ensure              = $::redis::params::service_ensure,

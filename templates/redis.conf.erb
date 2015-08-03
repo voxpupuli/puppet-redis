@@ -89,9 +89,15 @@ databases <%= @databases %>
 #
 #   save ""
 
+<% if @save_db_to_disk %>
 save 900 1
 save 300 10
 save 60 10000
+<% else %>
+#save 900 1
+#save 300 10
+#save 60 10000
+<% end %>
 
 # By default Redis will stop accepting writes if RDB snapshots are enabled
 # (at least one save point) and the latest background save failed.
