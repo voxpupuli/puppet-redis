@@ -169,10 +169,9 @@ class redis::sentinel (
   $working_dir         = $::redis::params::sentinel_working_dir,
   $notification_script = $::redis::params::sentinel_notification_script,
 ) inherits redis::params {
-
   $daemonize = $::redis::daemonize
 
-  unless defined(Package["$package_name"]) {
+  unless defined(Package['$package_name']) {
     ensure_resource('package', $package_name, {
       'ensure' => $package_ensure
     })

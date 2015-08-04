@@ -3,7 +3,6 @@
 # This class provides configuration for Redis.
 #
 class redis::config {
-
   $daemonize                    = $::redis::daemonize
   $pid_file                     = $::redis::pid_file
   $port                         = $::redis::port
