@@ -23,6 +23,7 @@ class redis::config {
   $slave_read_only              = $::redis::slave_read_only
   $repl_timeout                 = $::redis::repl_timeout
   $requirepass                  = $::redis::requirepass
+  $save_db_to_disk              = $::redis::save_db_to_disk
   $maxclients                   = $::redis::maxclients
   $maxmemory                    = $::redis::maxmemory
   $maxmemory_policy             = $::redis::maxmemory_policy
