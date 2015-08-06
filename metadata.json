@@ -3,7 +3,7 @@
   "version": "1.1.1",
   "author": "Tom De Vylder",
   "summary": "Redis module",
-  "license": "Apache License, Version 2.0",
+  "license": "Apache-2.0",
   "source": "https://github.com/arioch/puppet-redis",
   "project_page": "http://arioch.github.io/puppet-redis/",
   "issues_url": "https://github.com/arioch/puppet-redis/issues",
@@ -12,6 +12,7 @@
     {"name":"puppetlabs/stdlib","version_requirement":">= 1.0.2 <3.0.0"},
     {"name":"stahnma/epel","version_requirement":">= 1.0.2 <2.0.0"}
   ],
+  "data_provider": null,
   "description": "Redis module with cluster support",
   "tags": [
     "cluster",
