@@ -8,8 +8,9 @@
   "project_page": "http://arioch.github.io/puppet-redis/",
   "issues_url": "https://github.com/arioch/puppet-redis/issues",
   "dependencies": [
-    {"name":"puppetlabs/apt","version_requirement":">= 2.0.1"},
-    {"name":"puppetlabs/stdlib"}
+    {"name":"puppetlabs/apt","version_requirement":">= 2.0.1 <3.0.0"},
+    {"name":"puppetlabs/stdlib","version_requirement":">= 1.0.2 <3.0.0"},
+    {"name":"stahnma/epel","version_requirement":">= 1.0.2 <2.0.0"}
   ],
   "description": "Redis module with cluster support",
   "tags": [
