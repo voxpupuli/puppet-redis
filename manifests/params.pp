@@ -19,6 +19,7 @@ class redis::params {
   $extra_config_file            = undef
   $hash_max_ziplist_entries     = 512
   $hash_max_ziplist_value       = 64
+  $hz                           = 10
   $list_max_ziplist_entries     = 512
   $list_max_ziplist_value       = 64
   $log_dir                      = '/var/log/redis'

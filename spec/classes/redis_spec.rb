@@ -450,6 +450,19 @@ describe 'redis', :type => :class do
     }
   end
 
+  describe 'with parameter hz' do
+    let (:params) {
+      {
+        :hz=> '_VALUE_'
+      }
+    }
+
+    it { should contain_file('/etc/redis/redis.conf').with(
+        'content' => /hz.*_VALUE_/
+      )
+    }
+  end
+
   describe 'with parameter rdbcompression' do
     let (:params) {
       {

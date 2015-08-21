@@ -100,6 +100,11 @@
 #
 #   Default: 64
 #
+# [*hz*]
+#   Set redis background tasks frequency
+#
+#   Default: 10
+#
 # [*list_max_ziplist_entries*]
 #   Set max ziplist entries for lists.
 #
@@ -389,6 +394,7 @@ class redis (
   $extra_config_file           = $::redis::params::extra_config_file,
   $hash_max_ziplist_entries    = $::redis::params::hash_max_ziplist_entries,
   $hash_max_ziplist_value      = $::redis::params::hash_max_ziplist_value,
+  $hz                          = $::redis::params::hz,
   $list_max_ziplist_entries    = $::redis::params::list_max_ziplist_entries,
   $list_max_ziplist_value      = $::redis::params::list_max_ziplist_value,
   $log_dir                     = $::redis::params::log_dir,

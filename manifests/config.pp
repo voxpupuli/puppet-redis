@@ -36,6 +36,7 @@ class redis::config {
   $slowlog_max_len              = $::redis::slowlog_max_len
   $hash_max_ziplist_entries     = $::redis::hash_max_ziplist_entries
   $hash_max_ziplist_value       = $::redis::hash_max_ziplist_value
+  $hz                           = $::redis::hz
   $list_max_ziplist_entries     = $::redis::list_max_ziplist_entries
   $list_max_ziplist_value       = $::redis::list_max_ziplist_value
   $set_max_intset_entries       = $::redis::set_max_intset_entries
