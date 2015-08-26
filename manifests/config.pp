@@ -18,6 +18,7 @@ class redis::config {
   $workdir                      = $::redis::workdir
   $slaveof                      = $::redis::slaveof
   $masterauth                   = $::redis::masterauth
+  $slave_priority               = $::redis::params::slave_priority,
   $slave_serve_stale_data       = $::redis::slave_serve_stale_data
   $slave_read_only              = $::redis::slave_read_only
   $repl_timeout                 = $::redis::repl_timeout
