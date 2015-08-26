@@ -474,15 +474,13 @@ class redis (
     Anchor['redis::end']
   }
 
-  # Sanity check
+  # Sanity checks
   if $::redis::slaveof {
     if $::redis::bind =~ /^127.0.0./ {
       fail "Replication is not possible when binding to ${::redis::bind}."
     }
   }
   
-  if !validate_integer($::redis::slave_priority,100,0) {
-    fail "Slave priority must be an integer between 0 and 100."
-  }
+  validate_integer($::redis::slave_priority,100,0)
 }
 
