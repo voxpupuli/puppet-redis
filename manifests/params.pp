@@ -70,6 +70,7 @@ class redis::params {
   $slave_read_only        = true
   $slave_serve_stale_data = true
   $slaveof                = undef
+  $slave_priority         = 100
 
   case $::osfamily {
     'Debian': {
