@@ -44,6 +44,7 @@ class redis::config {
   $stop_writes_on_bgsave_error  = $::redis::stop_writes_on_bgsave_error
   $syslog_enabled               = $::redis::syslog_enabled
   $syslog_facility              = $::redis::syslog_facility
+  $tcp_keepalive                = $::redis::tcp_keepalive
   $timeout                      = $::redis::timeout
   $workdir                      = $::redis::workdir
   $zset_max_ziplist_entries     = $::redis::zset_max_ziplist_entries

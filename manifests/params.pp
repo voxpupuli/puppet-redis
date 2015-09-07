@@ -59,6 +59,7 @@ class redis::params {
   $stop_writes_on_bgsave_error  = true
   $syslog_enabled               = undef
   $syslog_facility              = undef
+  $tcp_keepalive                = 0
   $timeout                      = 0
   $ulimit                       = 65536
   $workdir                      = '/var/lib/redis/'

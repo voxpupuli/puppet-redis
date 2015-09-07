@@ -739,6 +739,19 @@ describe 'redis', :type => :class do
     }
   end
 
+  describe 'with parameter tcp_keepalive' do
+    let (:params) {
+      {
+        :tcp_keepalive => '_VALUE_'
+      }
+    }
+
+    it { should contain_file('/etc/redis/redis.conf').with(
+        'content' => /tcp_keepalive.*_VALUE_/
+      )
+    }
+  end
+
   describe 'with parameter timeout' do
     let (:params) {
       {
