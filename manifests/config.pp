@@ -8,6 +8,7 @@ class redis::config {
   $port                         = $::redis::port
   $bind                         = $::redis::bind
   $timeout                      = $::redis::timeout
+  $tcp_keepalive                = $::redis::tcp_keepalive
   $log_level                    = $::redis::log_level
   $log_file                     = $::redis::log_file
   $syslog_enabled               = $::redis::syslog_enabled

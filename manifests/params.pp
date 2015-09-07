@@ -57,6 +57,7 @@ class redis::params {
   $slowlog_max_len              = 1024
   $syslog_enabled               = undef
   $syslog_facility              = undef
+  $tcp_keepalive                = 0
   $timeout                      = 0
   $ulimit                       = 65536
   $workdir                      = '/var/lib/redis/'
