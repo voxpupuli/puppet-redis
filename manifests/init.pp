@@ -331,6 +331,12 @@
 #
 #   Default: 1024
 #
+# [*stop_writes_on_bgsave_error*]
+#   If false then Redis will continue to work as usual even if there
+#   are problems with disk, permissions, and so forth.
+#
+#   Default: true
+#
 # [*syslog_enabled*]
 #   Enable/disable logging to the system logger.
 #
@@ -456,6 +462,7 @@ class redis (
   $slaveof                     = $::redis::params::slaveof,
   $slowlog_log_slower_than     = $::redis::params::slowlog_log_slower_than,
   $slowlog_max_len             = $::redis::params::slowlog_max_len,
+  $stop_writes_on_bgsave_error = $::redis::params::stop_writes_on_bgsave_error,
   $syslog_enabled              = $::redis::params::syslog_enabled,
   $syslog_facility             = $::redis::params::syslog_facility,
   $timeout                     = $::redis::params::timeout,

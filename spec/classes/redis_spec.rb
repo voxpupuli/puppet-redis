@@ -699,6 +699,19 @@ describe 'redis', :type => :class do
     }
   end
 
+  describe 'with parameter stop_writes_on_bgsave_error' do
+    let (:params) {
+      {
+        :stop_writes_on_bgsave_error => true
+      }
+    }
+
+    it { should contain_file('/etc/redis/redis.conf').with(
+        'content' => /stop-writes-on-bgsave-error.*yes/
+      )
+    }
+  end
+
   describe 'with parameter syslog_enabled' do
     let (:params) {
       {
