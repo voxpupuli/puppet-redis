@@ -7,7 +7,7 @@ class redis::preinstall {
   if $::redis::manage_repo {
     case $::operatingsystem {
       'RedHat', 'CentOS', 'Scientific', 'OEL': {
-        if $::operatingsystemrelease < 7 {
+        if (versioncmp($::operatingsystemrelease, '7.0') == -1) {
           $rpm_url = $::operatingsystemrelease ? {
             /^5/    => "http://download.powerstack.org/5/${::architecture}/",
             /^6/    => "http://download.powerstack.org/6/${::architecture}/",
@@ -29,7 +29,7 @@ class redis::preinstall {
           }
         }
 
-        if $::operatingsystemrelease == 7 {
+        if (versioncmp($::operatingsystemrelease, '7.0') >= 0) {
           require ::epel
         }
       }
