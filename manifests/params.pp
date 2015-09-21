@@ -91,6 +91,7 @@ class redis::params {
       $package_name              = 'redis-server'
       $sentinel_config_file      = '/etc/redis/redis-sentinel.conf'
       $sentinel_config_file_orig = '/etc/redis/redis-sentinel.conf.puppet'
+      $sentinel_daemonize        = true
       $sentinel_init_script      = '/etc/init.d/redis-sentinel'
       $sentinel_package_name     = 'redis-server'
       $sentinel_package_ensure   = 'present'
@@ -118,6 +119,7 @@ class redis::params {
       $package_name              = 'redis'
       $sentinel_config_file      = '/etc/redis-sentinel.conf'
       $sentinel_config_file_orig = '/etc/redis-sentinel.conf.puppet'
+      $sentinel_daemonize        = false
       $sentinel_init_script      = undef
       $sentinel_package_name     = 'redis'
       $sentinel_package_ensure   = 'present'
@@ -145,6 +147,7 @@ class redis::params {
       $package_name              = 'redis'
       $sentinel_config_file      = '/usr/local/etc/redis-sentinel.conf'
       $sentinel_config_file_orig = '/usr/local/etc/redis-sentinel.conf.puppet'
+      $sentinel_daemonize        = true
       $sentinel_init_script      = undef
       $sentinel_package_name     = 'redis'
       $sentinel_package_ensure   = 'present'
@@ -172,6 +175,7 @@ class redis::params {
       $package_name              = 'redis'
       $sentinel_config_file      = '/etc/redis/redis-sentinel.conf'
       $sentinel_config_file_orig = '/etc/redis/redis-sentinel.conf.puppet'
+      $sentinel_daemonize        = true
       $sentinel_init_script      = undef
       $sentinel_package_name     = 'redis'
       $sentinel_package_ensure   = 'present'
