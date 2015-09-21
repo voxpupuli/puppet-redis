@@ -196,6 +196,7 @@ class redis::sentinel (
   }
 
   if $init_script {
+
     file {
       $init_script:
         ensure  => present,
@@ -205,10 +206,13 @@ class redis::sentinel (
         content => template($init_template),
         require => Package[$package_name];
     }
+
     exec {
       '/usr/sbin/update-rc.d redis-sentinel defaults':
-        require => File[$init_script];
+        subscribe   => File[$init_script],
+        refreshonly => true;
     }
+
   }
 
   service { $service_name:
