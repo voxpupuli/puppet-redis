@@ -7,6 +7,9 @@ sentinel monitor <%= @master_name %> <%= @redis_host %> <%= @redis_port %> <%= @
 sentinel down-after-milliseconds <%= @master_name %> <%= @down_after %>
 sentinel parallel-syncs <%= @master_name %> <%= @parallel_sync %>
 sentinel failover-timeout <%= @master_name %> <%= @failover_timeout %>
+<% if @auth_pass -%>
+sentinel auth-pass <%= @master_name %> <%= @auth_pass %>
+<% end -%>
 <% if @notification_script -%>
 sentinel notification-script <%= @master_name %> <%= @notification_script %>
 <% end -%>

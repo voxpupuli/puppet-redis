@@ -19,6 +19,7 @@ class redis::params {
   $extra_config_file            = undef
   $hash_max_ziplist_entries     = 512
   $hash_max_ziplist_value       = 64
+  $hz                           = 10
   $list_max_ziplist_entries     = 512
   $list_max_ziplist_value       = 64
   $log_dir                      = '/var/log/redis'
@@ -34,6 +35,8 @@ class redis::params {
   $port                         = 6379
   $rdbcompression               = true
   $requirepass                  = undef
+  $save_db_to_disk              = true
+  $sentinel_auth_pass           = undef
   $sentinel_config_file_mode    = '0644'
   $sentinel_config_group        = 'root'
   $sentinel_config_owner        = 'redis'
@@ -75,8 +78,9 @@ class redis::params {
       $config_file               = '/etc/redis/redis.conf'
       $config_file_mode          = '0644'
       $config_group              = 'root'
-      $config_owner              = 'root'
+      $config_owner              = 'redis'
       $daemonize                 = true
+      $log_dir_mode              = '0755'
       $package_ensure            = 'present'
       $package_name              = 'redis-server'
       $sentinel_config_file      = '/etc/redis/redis-sentinel.conf'
@@ -84,6 +88,7 @@ class redis::params {
       $sentinel_init_script      = '/etc/init.d/redis-sentinel'
       $sentinel_package_name     = 'redis-server'
       $sentinel_package_ensure   = 'present'
+      $service_manage            = true
       $service_enable            = true
       $service_ensure            = 'running'
       $service_group             = 'redis'
@@ -100,8 +105,9 @@ class redis::params {
       $config_file               = '/etc/redis.conf'
       $config_file_mode          = '0644'
       $config_group              = 'root'
-      $config_owner              = 'root'
+      $config_owner              = 'redis'
       $daemonize                 = false
+      $log_dir_mode              = '0755'
       $package_ensure            = 'present'
       $package_name              = 'redis'
       $sentinel_config_file      = '/etc/redis-sentinel.conf'
@@ -109,6 +115,7 @@ class redis::params {
       $sentinel_init_script      = undef
       $sentinel_package_name     = 'redis'
       $sentinel_package_ensure   = 'present'
+      $service_manage            = true
       $service_enable            = true
       $service_ensure            = 'running'
       $service_group             = 'redis'
@@ -116,6 +123,7 @@ class redis::params {
       $service_hasstatus         = true
       $service_name              = 'redis'
       $service_user              = 'redis'
+      $ppa_repo                  = undef
     }
 
     'FreeBSD': {
@@ -124,8 +132,9 @@ class redis::params {
       $config_file               = '/usr/local/etc/redis.conf'
       $config_file_mode          = '0644'
       $config_group              = 'wheel'
-      $config_owner              = 'root'
+      $config_owner              = 'redis'
       $daemonize                 = true
+      $log_dir_mode              = '0755'
       $package_ensure            = 'present'
       $package_name              = 'redis'
       $sentinel_config_file      = '/usr/local/etc/redis-sentinel.conf'
@@ -133,6 +142,7 @@ class redis::params {
       $sentinel_init_script      = undef
       $sentinel_package_name     = 'redis'
       $sentinel_package_ensure   = 'present'
+      $service_manage            = true
       $service_enable            = true
       $service_ensure            = 'running'
       $service_group             = 'redis'
@@ -140,6 +150,34 @@ class redis::params {
       $service_hasstatus         = true
       $service_name              = 'redis'
       $service_user              = 'redis'
+      $ppa_repo                  = undef
+    }
+
+    'Suse': {
+      $config_dir                = '/etc/redis'
+      $config_dir_mode           = '0750'
+      $config_file               = '/etc/redis/redis-server.conf'
+      $config_file_mode          = '0644'
+      $config_group              = 'redis'
+      $config_owner              = 'redis'
+      $daemonize                 = true
+      $log_dir_mode              = '0750'
+      $package_ensure            = 'present'
+      $package_name              = 'redis'
+      $sentinel_config_file      = '/etc/redis/redis-sentinel.conf'
+      $sentinel_config_file_orig = '/etc/redis/redis-sentinel.conf.puppet'
+      $sentinel_init_script      = undef
+      $sentinel_package_name     = 'redis'
+      $sentinel_package_ensure   = 'present'
+      $service_manage            = true
+      $service_enable            = true
+      $service_ensure            = 'running'
+      $service_group             = 'redis'
+      $service_hasrestart        = true
+      $service_hasstatus         = true
+      $service_name              = 'redis'
+      $service_user              = 'redis'
+      $ppa_repo                  = undef
     }
 
     default: {

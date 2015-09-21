@@ -4,6 +4,12 @@
 #
 # == Parameters:
 #
+#
+# [*auth_pass*]
+#   The password to use to authenticate with the master and slaves.
+#
+#   Default: undef
+#
 # [*config_file*]
 #   The location and name of the sentinel config file.
 #
@@ -138,6 +144,7 @@
 #   }
 #
 class redis::sentinel (
+  $auth_pass           = $::redis::params::sentinel_auth_pass,
   $config_file         = $::redis::params::sentinel_config_file,
   $config_file_orig    = $::redis::params::sentinel_config_file_orig,
   $config_file_mode    = $::redis::params::sentinel_config_file_mode,
@@ -162,11 +169,13 @@ class redis::sentinel (
   $working_dir         = $::redis::params::sentinel_working_dir,
   $notification_script = $::redis::params::sentinel_notification_script,
 ) inherits redis::params {
+  $daemonize = $::redis::daemonize
 
-
-  ensure_resource('package', $package_name, {
-    'ensure' => $package_ensure
-  })
+  unless defined(Package['$package_name']) {
+    ensure_resource('package', $package_name, {
+      'ensure' => $package_ensure
+    })
+  }
 
   file {
     $config_file_orig:

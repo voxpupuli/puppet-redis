@@ -116,6 +116,12 @@ describe 'redis', :type => :class do
     it { should contain_file('/etc/redis').with_mode('_VALUE_') }
   end
 
+  describe 'with parameter: log_dir_mode' do
+    let (:params) { { :log_dir_mode => '_VALUE_' } }
+
+    it { should contain_file('/var/log/redis').with_mode('_VALUE_') }
+  end
+
   describe 'with parameter: config_file' do
     let (:params) { { :config_file => '_VALUE_' } }
 
@@ -444,6 +450,19 @@ describe 'redis', :type => :class do
     }
   end
 
+  describe 'with parameter hz' do
+    let (:params) {
+      {
+        :hz=> '_VALUE_'
+      }
+    }
+
+    it { should contain_file('/etc/redis/redis.conf').with(
+        'content' => /hz.*_VALUE_/
+      )
+    }
+  end
+
   describe 'with parameter rdbcompression' do
     let (:params) {
       {
@@ -494,6 +513,40 @@ describe 'redis', :type => :class do
         'content' => /requirepass.*_VALUE_/
       )
     }
+  end
+
+  describe 'with parameter save_db_to_disk' do
+    context 'true' do
+      let (:params) {
+        {
+          :save_db_to_disk => true
+        }
+      }
+
+      it { should contain_file('/etc/redis/redis.conf').with(
+          'content' => /^save/
+        )
+      }
+    end
+
+    context 'false' do
+      let (:params) {
+        {
+          :save_db_to_disk => false
+        }
+      }
+
+      it { should contain_file('/etc/redis/redis.conf').with(
+          'content' => /^(?!save)/
+        )
+      }
+    end
+  end
+
+  describe 'with parameter: service_manage (set to false)' do
+    let (:params) { { :service_manage => false } }
+
+    it { should_not contain_service('redis-server') }
   end
 
   describe 'with parameter: service_enable' do

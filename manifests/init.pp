@@ -100,6 +100,11 @@
 #
 #   Default: 64
 #
+# [*hz*]
+#   Set redis background tasks frequency
+#
+#   Default: 10
+#
 # [*list_max_ziplist_entries*]
 #   Set max ziplist entries for lists.
 #
@@ -114,6 +119,11 @@
 #   Specify directory where to write log entries.
 #
 #   Default: /var/log/redis
+#
+# [*log_dir_mode*]
+#   Adjust mode for directory containing log files.
+#
+#   Default: 0755
 #
 # [*log_file*]
 #   Specify file where to write log entries.
@@ -228,6 +238,16 @@
 #   other commands.
 #
 #   Default: undef
+#
+#[*save_db_to_disk*]
+#   Set if save db to disk.
+#
+#   Default: true
+#
+# [*service_manage*]
+#   Specify if the service should be part of the catalog.
+#
+#   Default: true
 #
 # [*service_enable*]
 #   Enable/disable daemon at boot.
@@ -361,22 +381,24 @@ class redis (
   $auto_aof_rewrite_min_size   = $::redis::params::auto_aof_rewrite_min_size,
   $auto_aof_rewrite_percentage = $::redis::params::auto_aof_rewrite_percentage,
   $bind                        = $::redis::params::bind,
+  $conf_template               = $::redis::params::conf_template,
   $config_dir                  = $::redis::params::config_dir,
   $config_dir_mode             = $::redis::params::config_dir_mode,
   $config_file                 = $::redis::params::config_file,
   $config_file_mode            = $::redis::params::config_file_mode,
   $config_group                = $::redis::params::config_group,
   $config_owner                = $::redis::params::config_owner,
-  $conf_template               = $::redis::params::conf_template,
   $daemonize                   = $::redis::params::daemonize,
   $databases                   = $::redis::params::databases,
   $dbfilename                  = $::redis::params::dbfilename,
   $extra_config_file           = $::redis::params::extra_config_file,
   $hash_max_ziplist_entries    = $::redis::params::hash_max_ziplist_entries,
   $hash_max_ziplist_value      = $::redis::params::hash_max_ziplist_value,
+  $hz                          = $::redis::params::hz,
   $list_max_ziplist_entries    = $::redis::params::list_max_ziplist_entries,
   $list_max_ziplist_value      = $::redis::params::list_max_ziplist_value,
   $log_dir                     = $::redis::params::log_dir,
+  $log_dir_mode                = $::redis::params::log_dir_mode,
   $log_file                    = $::redis::params::log_file,
   $log_level                   = $::redis::params::log_level,
   $manage_repo                 = $::redis::params::manage_repo,
@@ -396,11 +418,13 @@ class redis (
   $repl_ping_slave_period      = $::redis::params::repl_ping_slave_period,
   $repl_timeout                = $::redis::params::repl_timeout,
   $requirepass                 = $::redis::params::requirepass,
+  $save_db_to_disk             = $::redis::params::save_db_to_disk,
   $service_enable              = $::redis::params::service_enable,
   $service_ensure              = $::redis::params::service_ensure,
   $service_group               = $::redis::params::service_group,
   $service_hasrestart          = $::redis::params::service_hasrestart,
   $service_hasstatus           = $::redis::params::service_hasstatus,
+  $service_manage              = $::redis::params::service_manage,
   $service_name                = $::redis::params::service_name,
   $service_user                = $::redis::params::service_user,
   $set_max_intset_entries      = $::redis::params::set_max_intset_entries,
@@ -417,21 +441,28 @@ class redis (
   $zset_max_ziplist_entries    = $::redis::params::zset_max_ziplist_entries,
   $zset_max_ziplist_value      = $::redis::params::zset_max_ziplist_value,
 ) inherits redis::params {
+  anchor { 'redis::begin': }
+  anchor { 'redis::end': }
+
   include redis::preinstall
   include redis::install
   include redis::config
   include redis::service
 
   if $::redis::notify_service {
+    Anchor['redis::begin'] ->
     Class['redis::preinstall'] ->
     Class['redis::install'] ->
     Class['redis::config'] ~>
-    Class['redis::service']
+    Class['redis::service'] ->
+    Anchor['redis::end']
   } else {
+    Anchor['redis::begin'] ->
     Class['redis::preinstall'] ->
     Class['redis::install'] ->
     Class['redis::config'] ->
-    Class['redis::service']
+    Class['redis::service'] ->
+    Anchor['redis::end']
   }
 
   # Sanity check
