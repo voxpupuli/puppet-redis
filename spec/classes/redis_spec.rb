@@ -765,5 +765,43 @@ describe 'redis', :type => :class do
       )
     }
   end
+  describe 'with parameter cluster_enabled' do
+    let (:params) {
+      {
+        :cluster_enabled => '_VALUE_'
+      }
+    }
+
+    it { should contain_file('/etc/redis/redis.conf').with(
+        'content' => /cluster-enabled.*_VALUE_/
+      )
+    }
+  end
+  describe 'with parameter cluster_config_file' do
+    let (:params) {
+      {
+        :cluster_enabled => true,
+        :cluster_config_file => '_VALUE_'
+      }
+    }
+
+    it { should contain_file('/etc/redis/redis.conf').with(
+        'content' => /cluster-config-file.*_VALUE_/
+      )
+    }
+  end
+  describe 'with parameter cluster_config_file' do
+    let (:params) {
+      {
+        :cluster_enabled => true,
+        :cluster_node_timeout => '_VALUE_'
+      }
+    }
+
+    it { should contain_file('/etc/redis/redis.conf').with(
+        'content' => /cluster-node-timeout.*_VALUE_/
+      )
+    }
+  end
 end
 
