@@ -363,6 +363,23 @@
 #
 #   Default: 64
 #
+# [*cluster_enabled*]
+#   Enables redis 3.0 cluster functionality
+#
+#   Default: false
+#
+# [*cluster_config_file*]
+#   Config file for saving cluster nodes configuration. This file is never touched by humans.
+#   Only set if cluster_enabled is true
+#
+#   Default: nodes.conf
+#
+# [*cluster_node_timeout*]
+#   Node timeout
+#   Only set if cluster_enabled is true
+#
+#   Default: 5000
+#
 # == Actions:
 #   - Install and configure Redis
 #
