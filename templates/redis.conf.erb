@@ -551,6 +551,16 @@ client-output-buffer-limit pubsub 32mb 8mb 60
 # 100 only in environments where very low latency is required.
 hz <%= @hz %>
 
+# Redis Cluster Settings
+<% if @cluster_enabled -%>
+cluster-enabled yes
+cluster-config-file <%= @cluster_config_file %>
+cluster-node-timeout <%= @cluster_node_timeout %>
+<% else -%>
+cluster-enabled no
+<% end -%>
+
+
 ################################## INCLUDES ###################################
 
 # Include one or more other config files here.  This is useful if you
