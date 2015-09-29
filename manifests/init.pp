@@ -440,6 +440,9 @@ class redis (
   $workdir                     = $::redis::params::workdir,
   $zset_max_ziplist_entries    = $::redis::params::zset_max_ziplist_entries,
   $zset_max_ziplist_value      = $::redis::params::zset_max_ziplist_value,
+  $cluster_enabled             = $::redis::params::cluster_enabled,
+  $cluster_config_file         = $::redis::params::cluster_config_file,
+  $cluster_node_timeout        = $::redis::params::cluster_node_timeout,
 ) inherits redis::params {
   anchor { 'redis::begin': }
   anchor { 'redis::end': }
