@@ -44,6 +44,9 @@ class redis::config {
   $zset_max_ziplist_value       = $::redis::zset_max_ziplist_value
   $activerehashing              = $::redis::activerehashing
   $extra_config_file            = $::redis::extra_config_file
+  $cluster_enabled              = $::redis::cluster_enabled
+  $cluster_config_file          = $::redis::cluster_config_file
+  $cluster_node_timeout         = $::redis::cluster_node_timeout
 
   if $::redis::notify_service {
     File {

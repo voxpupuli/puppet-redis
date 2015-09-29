@@ -368,6 +368,23 @@
 #
 #   Default: 64
 #
+# [*cluster_enabled*]
+#   Enables redis 3.0 cluster functionality
+#
+#   Default: false
+#
+# [*cluster_config_file*]
+#   Config file for saving cluster nodes configuration. This file is never touched by humans.
+#   Only set if cluster_enabled is true
+#
+#   Default: nodes.conf
+#
+# [*cluster_node_timeout*]
+#   Node timeout
+#   Only set if cluster_enabled is true
+#
+#   Default: 5000
+#
 # == Actions:
 #   - Install and configure Redis
 #
@@ -446,6 +463,9 @@ class redis (
   $workdir                     = $::redis::params::workdir,
   $zset_max_ziplist_entries    = $::redis::params::zset_max_ziplist_entries,
   $zset_max_ziplist_value      = $::redis::params::zset_max_ziplist_value,
+  $cluster_enabled             = $::redis::params::cluster_enabled,
+  $cluster_config_file         = $::redis::params::cluster_config_file,
+  $cluster_node_timeout        = $::redis::params::cluster_node_timeout,
 ) inherits redis::params {
   anchor { 'redis::begin': }
   anchor { 'redis::end': }
