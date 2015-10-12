@@ -52,6 +52,7 @@ class redis::params {
   $sentinel_init_template       = 'redis/redis-sentinel.init.erb'
   $sentinel_pid_file            = '/var/run/redis/redis-sentinel.pid'
   $sentinel_notification_script = undef
+  $service_provider             = undef
   $set_max_intset_entries       = 512
   $slowlog_log_slower_than      = 10000
   $slowlog_max_len              = 1024

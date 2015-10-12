@@ -279,6 +279,11 @@
 #
 #   Default: OS dependant
 #
+# [*service_provider*]
+#   Specify the service provider to use
+#
+#   Default: undef
+#
 # [*service_user*]
 #   Specify which user to run as.
 #
@@ -426,6 +431,7 @@ class redis (
   $service_hasstatus           = $::redis::params::service_hasstatus,
   $service_manage              = $::redis::params::service_manage,
   $service_name                = $::redis::params::service_name,
+  $service_provider            = $::redis::params::service_provider,
   $service_user                = $::redis::params::service_user,
   $set_max_intset_entries      = $::redis::params::set_max_intset_entries,
   $slave_read_only             = $::redis::params::slave_read_only,
