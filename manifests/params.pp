@@ -112,7 +112,7 @@ class redis::params {
       $config_file_mode          = '0644'
       $config_group              = 'root'
       $config_owner              = 'redis'
-      $daemonize                 = false
+      $daemonize                 = true
       $log_dir_mode              = '0755'
       $package_ensure            = 'present'
       $package_name              = 'redis'
