@@ -7,16 +7,16 @@ class redis::preinstall {
   if $::redis::manage_repo {
     case $::operatingsystem {
       'RedHat', 'CentOS', 'Scientific', 'OEL': {
-        if $::operatingsystemrelease < 7 {
-          $rpm_url = $::operatingsystemrelease ? {
-            /^5/    => "http://download.powerstack.org/5/${::architecture}/",
-            /^6/    => "http://download.powerstack.org/6/${::architecture}/",
+        if $::operatingsystemmajrelease < '7' {
+          $rpm_url = $::operatingsystemmajrelease ? {
+            '5'    => "http://download.powerstack.org/5/${::architecture}/",
+            '6'    => "http://download.powerstack.org/6/${::architecture}/",
             default => Fail['Operating system or release not supported.'],
           }
 
-          $rpm_gpgkey = $::operatingsystemrelease ? {
-            /^5/    => 'https://raw.githubusercontent.com/santisaez/powerstack/master/RPM-GPG-KEY-powerstack',
-            /^6/    => 'https://raw.githubusercontent.com/santisaez/powerstack/master/RPM-GPG-KEY-powerstack',
+          $rpm_gpgkey = $::operatingsystemmajrelease ? {
+            '5'    => 'https://raw.githubusercontent.com/santisaez/powerstack/master/RPM-GPG-KEY-powerstack',
+            '6'    => 'https://raw.githubusercontent.com/santisaez/powerstack/master/RPM-GPG-KEY-powerstack',
             default => Fail['Operating system or release not supported.'],
           }
 
@@ -29,19 +29,19 @@ class redis::preinstall {
           }
         }
 
-        if $::operatingsystemrelease == 7 {
+        if $::operatingsystemmajrelease == '7' {
           require ::epel
         }
       }
 
       'Amazon': {
-        $rpm_url = $::operatingsystemrelease ? {
-          /^3/    => "http://download.powerstack.org/6/${::architecture}/",
+        $rpm_url = $::operatingsystemmajrelease ? {
+          '3'    => "http://download.powerstack.org/6/${::architecture}/",
           default => Fail['Operating system or release version not supported.'],
         }
 
-        $rpm_gpgkey = $::operatingsystemrelease ? {
-          /^3/    => 'https://raw.githubusercontent.com/santisaez/powerstack/master/RPM-GPG-KEY-powerstack',
+        $rpm_gpgkey = $::operatingsystemmajrelease ? {
+          '3'    => 'https://raw.githubusercontent.com/santisaez/powerstack/master/RPM-GPG-KEY-powerstack',
           default => Fail['Operating system or release version not supported.'],
         }
 
