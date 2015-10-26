@@ -311,11 +311,23 @@ describe 'redis', :type => :class do
         {
           :osfamily => 'RedHat',
           :operatingsystem => 'RedHat',
-          :operatingsystemrelease => '6'
+          :operatingsystemmajrelease => '6'
         }
       }
 
       it { should create_yumrepo('powerstack').with_enabled(1) }
+    end
+
+    context 'on RHEL 7' do
+      let (:facts) {
+        {
+          :osfamily => 'RedHat',
+          :operatingsystem => 'RedHat',
+          :operatingsystemmajrelease => '7'
+        }
+      }
+
+      it { should contain_class('epel') }
     end
   end
 
