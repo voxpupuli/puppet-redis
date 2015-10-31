@@ -18,7 +18,7 @@ before_install:
 script:
   - bundle install
   - bundle update
-  - bundle exec rake all
+  - bundle exec rake
 
 env:
   - PUPPET_VERSION="3.0"
