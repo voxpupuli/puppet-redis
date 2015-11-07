@@ -44,6 +44,7 @@ class redis::config {
   $zset_max_ziplist_value       = $::redis::zset_max_ziplist_value
   $activerehashing              = $::redis::activerehashing
   $extra_config_file            = $::redis::extra_config_file
+  $stop_writes_on_bgsave_error  = $::redis::stop_writes_on_bgsave_error
 
   if $::redis::notify_service {
     File {

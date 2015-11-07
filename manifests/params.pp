@@ -56,6 +56,7 @@ class redis::params {
   $set_max_intset_entries       = 512
   $slowlog_log_slower_than      = 10000
   $slowlog_max_len              = 1024
+  $stop_writes_on_bgsave_error  = true
   $syslog_enabled               = undef
   $syslog_facility              = undef
   $timeout                      = 0
