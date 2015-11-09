@@ -765,15 +765,27 @@ describe 'redis', :type => :class do
       )
     }
   end
-  describe 'with parameter cluster_enabled' do
+  describe 'with parameter cluster_enabled-false' do
     let (:params) {
       {
-        :cluster_enabled => '_VALUE_'
+        :cluster_enabled => false
       }
     }
 
     it { should contain_file('/etc/redis/redis.conf').with(
-        'content' => /cluster-enabled.*_VALUE_/
+        'content' => /cluster-enabled.*no/
+      )
+    }
+  end
+  describe 'with parameter cluster_enabled-true' do
+    let (:params) {
+      {
+        :cluster_enabled => true
+      }
+    }
+
+    it { should contain_file('/etc/redis/redis.conf').with(
+        'content' => /cluster-enabled.*yes/
       )
     }
   end
