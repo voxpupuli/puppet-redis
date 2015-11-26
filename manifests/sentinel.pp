@@ -171,7 +171,7 @@ class redis::sentinel (
 ) inherits redis::params {
   $daemonize = $::redis::daemonize
 
-  unless defined(Package['$package_name']) {
+  unless defined(Package["$package_name"]) {
     ensure_resource('package', $package_name, {
       'ensure' => $package_ensure
     })
