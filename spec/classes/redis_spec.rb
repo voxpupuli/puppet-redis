@@ -803,6 +803,7 @@ describe 'redis', :type => :class do
       )
     }
   end
+
   describe 'with parameter cluster_config_file' do
     let (:params) {
       {
@@ -816,6 +817,7 @@ describe 'redis', :type => :class do
       )
     }
   end
+
   describe 'with parameter cluster_config_file' do
     let (:params) {
       {
@@ -829,5 +831,6 @@ describe 'redis', :type => :class do
       )
     }
   end
+
 end
 
