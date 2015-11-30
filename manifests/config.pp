@@ -48,6 +48,9 @@ class redis::config {
   $cluster_config_file          = $::redis::cluster_config_file
   $cluster_node_timeout         = $::redis::cluster_node_timeout
   $stop_writes_on_bgsave_error  = $::redis::stop_writes_on_bgsave_error
+  $cluster_enabled              = $::redis::cluster_enabled
+  $cluster_config_file          = $::redis::cluster_config_file
+  $cluster_node_timeout         = $::redis::cluster_node_timeout
 
   if $::redis::notify_service {
     File {

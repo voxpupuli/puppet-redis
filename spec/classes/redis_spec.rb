@@ -798,8 +798,8 @@ describe 'redis', :type => :class do
       }
     }
 
-    it { should_not contain_file('/etc/redis/redis.conf').with(
-        'content' => /cluster-enabled.*/
+    it { should contain_file('/etc/redis/redis.conf').with(
+        'content' => /cluster-enabled.*no/
       )
     }
   end
