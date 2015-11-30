@@ -26,6 +26,16 @@
       #masterauth  => 'secret';
     }
 
+### Redis 3.0 Clustering
+
+    class { 'redis':
+      bind                 => '10.0.1.2',
+      appendonly           => true,
+      cluster_enabled      => true,
+      cluster_config_file  => 'nodes.conf',
+      cluster_node_timeout => 5000,
+    }
+
 ### Manage repositories
 
 Disabled by default but if you really want the module to manage the required

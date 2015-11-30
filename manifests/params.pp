@@ -72,6 +72,11 @@ class redis::params {
   $slave_serve_stale_data = true
   $slaveof                = undef
 
+  # redis.conf.erb - redis 3.0 clustering
+  $cluster_enabled        = false
+  $cluster_config_file    = 'nodes.conf'
+  $cluster_node_timeout   = 5000
+
   case $::osfamily {
     'Debian': {
       $config_dir                = '/etc/redis'
