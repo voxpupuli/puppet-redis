@@ -7,14 +7,14 @@ class redis::preinstall {
   if $::redis::manage_repo {
     case $::operatingsystem {
       'RedHat', 'CentOS', 'Scientific', 'OEL': {
-        if $::operatingsystemmajrelease < '7' {
-          $rpm_url = $::operatingsystemmajrelease ? {
+        if $::lsbmajdistrelease < '7' {
+          $rpm_url = $::lsbmajdistrelease ? {
             '5'    => "http://download.powerstack.org/5/${::architecture}/",
             '6'    => "http://download.powerstack.org/6/${::architecture}/",
             default => Fail['Operating system or release not supported.'],
           }
 
-          $rpm_gpgkey = $::operatingsystemmajrelease ? {
+          $rpm_gpgkey = $::lsbmajdistrelease ? {
             '5'    => 'https://raw.githubusercontent.com/santisaez/powerstack/master/RPM-GPG-KEY-powerstack',
             '6'    => 'https://raw.githubusercontent.com/santisaez/powerstack/master/RPM-GPG-KEY-powerstack',
             default => Fail['Operating system or release not supported.'],
@@ -29,18 +29,18 @@ class redis::preinstall {
           }
         }
 
-        if $::operatingsystemmajrelease == '7' {
+        if $::lsbmajdistrelease == '7' {
           require ::epel
         }
       }
 
       'Amazon': {
-        $rpm_url = $::operatingsystemmajrelease ? {
+        $rpm_url = $::lsbmajdistrelease ? {
           '3'    => "http://download.powerstack.org/6/${::architecture}/",
           default => Fail['Operating system or release version not supported.'],
         }
 
-        $rpm_gpgkey = $::operatingsystemmajrelease ? {
+        $rpm_gpgkey = $::lsbmajdistrelease ? {
           '3'    => 'https://raw.githubusercontent.com/santisaez/powerstack/master/RPM-GPG-KEY-powerstack',
           default => Fail['Operating system or release version not supported.'],
         }
