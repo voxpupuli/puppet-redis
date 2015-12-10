@@ -10,7 +10,7 @@ class redis::params {
   $activerehashing              = true
   $appendfsync                  = 'everysec'
   $appendonly                   = false
-  $auto_aof_rewrite_min_size    = '64min'
+  $auto_aof_rewrite_min_size    = '64mb'
   $auto_aof_rewrite_percentage  = 100
   $bind                         = '127.0.0.1'
   $conf_template                = 'redis/redis.conf.erb'

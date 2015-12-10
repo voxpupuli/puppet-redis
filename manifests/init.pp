@@ -23,7 +23,7 @@
 # [*auto_aof_rewrite_min_size*]
 #   Adjust minimum size for auto-aof-rewrite.
 #
-#   Default: 64min
+#   Default: 64mb
 #
 # [*auto_aof_rewrite_percentage*]
 #   Adjust percentatge for auto-aof-rewrite.
