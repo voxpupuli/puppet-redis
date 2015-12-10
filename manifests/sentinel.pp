@@ -176,7 +176,7 @@ class redis::sentinel (
   $notification_script = $::redis::params::sentinel_notification_script,
 ) inherits redis::params {
 
-  unless defined(Package["$package_name"]) {
+  unless defined(Package[$package_name]) {
     ensure_resource('package', $package_name, {
       'ensure' => $package_ensure
     })
