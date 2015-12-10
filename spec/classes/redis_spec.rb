@@ -747,7 +747,7 @@ describe 'redis', :type => :class do
     }
 
     it { should contain_file('/etc/redis/redis.conf').with(
-        'content' => /tcp_keepalive.*_VALUE_/
+        'content' => /tcp-keepalive.*_VALUE_/
       )
     }
   end

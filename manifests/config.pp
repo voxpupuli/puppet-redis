@@ -43,7 +43,6 @@ class redis::config {
   $slowlog_max_len              = $::redis::slowlog_max_len
   $stop_writes_on_bgsave_error  = $::redis::stop_writes_on_bgsave_error
   $syslog_enabled               = $::redis::syslog_enabled
-  $syslog_enabled               = $::redis::syslog_enabled
   $syslog_facility              = $::redis::syslog_facility
   $tcp_keepalive                = $::redis::tcp_keepalive
   $timeout                      = $::redis::timeout
