@@ -295,6 +295,14 @@
 #
 #   Default: 512
 #
+# [*slave_priority*]
+#   When Sentinels are determining the next master, they consult this setting
+#   on each slave to determine eligibility and preference. A lower number makes
+#   a given slave more likely to be selected as the next master. A value of 0
+#   marks a slave as ineligible for promotion to master.
+# 
+#   Default: 100
+#
 # [*slave_read_only*]
 #   You can configure a slave instance to accept writes or not.
 #
@@ -451,6 +459,7 @@ class redis (
   $service_provider            = $::redis::params::service_provider,
   $service_user                = $::redis::params::service_user,
   $set_max_intset_entries      = $::redis::params::set_max_intset_entries,
+  $slave_priority              = $::redis::params::slave_priority,
   $slave_read_only             = $::redis::params::slave_read_only,
   $slave_serve_stale_data      = $::redis::params::slave_serve_stale_data,
   $slaveof                     = $::redis::params::slaveof,
@@ -491,11 +500,13 @@ class redis (
     Anchor['redis::end']
   }
 
-  # Sanity check
+  # Sanity checks
   if $::redis::slaveof {
     if $::redis::bind =~ /^127.0.0./ {
       fail "Replication is not possible when binding to ${::redis::bind}."
     }
   }
+  
+  validate_integer($::redis::slave_priority,100,0)
 }
 
