@@ -29,7 +29,7 @@ class redis::preinstall {
           }
         }
 
-        if (versioncmp($::operatingsystemrelease, '7.0') >= 0) {
+        if (versioncmp($::operatingsystemmajrelease, '7') >= 0) {
           require ::epel
         }
       }
