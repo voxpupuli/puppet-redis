@@ -45,6 +45,16 @@
 #
 #   Default: 0755
 #
+# [*config_file_orig*]
+#   The location and name of a config file that provides the source
+#   of the redis config file. Two different files are needed
+#   because sentinel writes to the redis config file and we do
+#   not want override that when puppet is run unless there are
+#   changes from the manifests.
+#
+#   Default for deb: /etc/redis/redis.conf.puppet
+#   Default for rpm: /etc/redis.conf.puppet
+#
 # [*config_file*]
 #   Adjust main configuration file.
 #
@@ -430,6 +440,7 @@ class redis (
   $config_dir_mode             = $::redis::params::config_dir_mode,
   $config_file                 = $::redis::params::config_file,
   $config_file_mode            = $::redis::params::config_file_mode,
+  $config_file_orig            = $::redis::params::config_file_orig,
   $config_group                = $::redis::params::config_group,
   $config_owner                = $::redis::params::config_owner,
   $daemonize                   = $::redis::params::daemonize,

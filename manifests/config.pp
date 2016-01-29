@@ -70,7 +70,7 @@ class redis::config {
       ensure => directory,
       mode   => $::redis::config_dir_mode;
 
-    $::redis::config_file:
+    $::redis::config_file_orig:
       ensure  => present,
       content => template($::redis::conf_template);
 
@@ -79,6 +79,14 @@ class redis::config {
       group  => $::redis::service_group,
       mode   => $::redis::log_dir_mode,
       owner  => $::redis::service_user;
+  }
+
+  exec {
+    "cp -p ${::redis::config_file_orig} ${::redis::config_file}":
+      path        => '/usr/bin:/bin',
+      subscribe   => File[$::redis::config_file_orig],
+      notify      => Service[$::redis::service_name],
+      refreshonly => true;
   }
 
   # Adjust /etc/default/redis-server on Debian systems
