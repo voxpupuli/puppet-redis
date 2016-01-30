@@ -12,7 +12,7 @@ describe 'redis', :type => :class do
 
     it { should contain_package('redis-server').with_ensure('present') }
 
-    it { should contain_file('/etc/redis/redis.conf.puppet.puppet').with(
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
         'ensure' => 'present'
       )
     }
@@ -33,7 +33,7 @@ describe 'redis', :type => :class do
       }
     }
 
-    it { should contain_file('/etc/redis/redis.conf.puppet.puppet').with(
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
         'content' => /activerehashing.*yes/
       )
     }
@@ -46,7 +46,7 @@ describe 'redis', :type => :class do
       }
     }
 
-    it { should contain_file('/etc/redis/redis.conf.puppet.puppet').with(
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
         'content' => /appendfsync.*_VALUE_/
       )
     }
@@ -59,7 +59,7 @@ describe 'redis', :type => :class do
       }
     }
 
-    it { should contain_file('/etc/redis/redis.conf.puppet.puppet').with(
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
         'content' => /appendonly.*yes/
       )
     }
@@ -72,7 +72,7 @@ describe 'redis', :type => :class do
       }
     }
 
-    it { should contain_file('/etc/redis/redis.conf.puppet.puppet').with(
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
         'content' => /auto-aof-rewrite-min-size.*_VALUE_/
       )
     }
@@ -85,7 +85,7 @@ describe 'redis', :type => :class do
       }
     }
 
-    it { should contain_file('/etc/redis/redis.conf.puppet.puppet').with(
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
         'content' => /auto-aof-rewrite-percentage.*_VALUE_/
       )
     }
@@ -98,7 +98,7 @@ describe 'redis', :type => :class do
       }
     }
 
-    it { should contain_file('/etc/redis/redis.conf.puppet.puppet').with(
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
         'content' => /bind.*_VALUE_/
       )
     }
@@ -131,7 +131,7 @@ describe 'redis', :type => :class do
   describe 'with parameter: config_file_mode' do
     let (:params) { { :config_file_mode => '_VALUE_' } }
 
-    it { should contain_file('/etc/redis/redis.conf.puppet.puppet').with_mode('_VALUE_') }
+    it { should contain_file('/etc/redis/redis.conf.puppet').with_mode('_VALUE_') }
   end
 
   describe 'with parameter: config_group' do
@@ -153,7 +153,7 @@ describe 'redis', :type => :class do
       }
     }
 
-    it { should contain_file('/etc/redis/redis.conf.puppet.puppet').with(
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
         'content' => /daemonize.*yes/
       )
     }
@@ -166,7 +166,7 @@ describe 'redis', :type => :class do
       }
     }
 
-    it { should contain_file('/etc/redis/redis.conf.puppet.puppet').with(
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
         'content' => /databases.*_VALUE_/
       )
     }
@@ -179,7 +179,7 @@ describe 'redis', :type => :class do
       }
     }
 
-    it { should contain_file('/etc/redis/redis.conf.puppet.puppet').with(
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
         'content' => /dbfilename.*_VALUE_/
       )
     }
@@ -192,7 +192,7 @@ describe 'redis', :type => :class do
       }
     }
 
-    it { should contain_file('/etc/redis/redis.conf.puppet.puppet').with(
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
         'content' => /hash-max-ziplist-entries.*_VALUE_/
       )
     }
@@ -205,7 +205,7 @@ describe 'redis', :type => :class do
       }
     }
 
-    it { should contain_file('/etc/redis/redis.conf.puppet.puppet').with(
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
         'content' => /hash-max-ziplist-value.*_VALUE_/
       )
     }
@@ -218,7 +218,7 @@ describe 'redis', :type => :class do
       }
     }
 
-    it { should contain_file('/etc/redis/redis.conf.puppet.puppet').with(
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
         'content' => /list-max-ziplist-entries.*_VALUE_/
       )
     }
@@ -231,7 +231,7 @@ describe 'redis', :type => :class do
       }
     }
 
-    it { should contain_file('/etc/redis/redis.conf.puppet.puppet').with(
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
         'content' => /list-max-ziplist-value.*_VALUE_/
       )
     }
@@ -257,7 +257,7 @@ describe 'redis', :type => :class do
       }
     }
 
-    it { should contain_file('/etc/redis/redis.conf.puppet.puppet').with(
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
         'content' => /logfile.*_VALUE_/
       )
     }
@@ -270,7 +270,7 @@ describe 'redis', :type => :class do
       }
     }
 
-    it { should contain_file('/etc/redis/redis.conf.puppet.puppet').with(
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
         'content' => /loglevel.*_VALUE_/
       )
     }
@@ -338,7 +338,7 @@ describe 'redis', :type => :class do
       }
     }
 
-    it { should contain_file('/etc/redis/redis.conf.puppet.puppet').with(
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
         'content' => /masterauth.*_VALUE_/
       )
     }
@@ -351,7 +351,7 @@ describe 'redis', :type => :class do
       }
     }
 
-    it { should contain_file('/etc/redis/redis.conf.puppet.puppet').with(
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
         'content' => /maxclients.*_VALUE_/
       )
     }
@@ -364,7 +364,7 @@ describe 'redis', :type => :class do
       }
     }
 
-    it { should contain_file('/etc/redis/redis.conf.puppet.puppet').with(
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
         'content' => /maxmemory.*_VALUE_/
       )
     }
@@ -377,7 +377,7 @@ describe 'redis', :type => :class do
       }
     }
 
-    it { should contain_file('/etc/redis/redis.conf.puppet.puppet').with(
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
         'content' => /maxmemory-policy.*_VALUE_/
       )
     }
@@ -390,7 +390,7 @@ describe 'redis', :type => :class do
       }
     }
 
-    it { should contain_file('/etc/redis/redis.conf.puppet.puppet').with(
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
         'content' => /maxmemory-samples.*_VALUE_/
       )
     }
@@ -403,7 +403,7 @@ describe 'redis', :type => :class do
       }
     }
 
-    it { should contain_file('/etc/redis/redis.conf.puppet.puppet').that_notifies('Service[redis-server]'
+    it { should contain_file('/etc/redis/redis.conf.puppet').that_notifies('Service[redis-server]'
       )
     }
   end
@@ -415,7 +415,7 @@ describe 'redis', :type => :class do
       }
     }
 
-    it { should contain_file('/etc/redis/redis.conf.puppet.puppet').with(
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
         'content' => /no-appendfsync-on-rewrite.*yes/
       )
     }
@@ -443,7 +443,7 @@ describe 'redis', :type => :class do
       }
     }
 
-    it { should contain_file('/etc/redis/redis.conf.puppet.puppet').with(
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
         'content' => /pidfile.*_VALUE_/
       )
     }
@@ -456,7 +456,7 @@ describe 'redis', :type => :class do
       }
     }
 
-    it { should contain_file('/etc/redis/redis.conf.puppet.puppet').with(
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
         'content' => /port.*_VALUE_/
       )
     }
@@ -469,7 +469,7 @@ describe 'redis', :type => :class do
       }
     }
 
-    it { should contain_file('/etc/redis/redis.conf.puppet.puppet').with(
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
         'content' => /hz.*_VALUE_/
       )
     }
@@ -482,7 +482,7 @@ describe 'redis', :type => :class do
       }
     }
 
-    it { should contain_file('/etc/redis/redis.conf.puppet.puppet').with(
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
         'content' => /rdbcompression.*yes/
       )
     }
@@ -495,7 +495,7 @@ describe 'redis', :type => :class do
       }
     }
 
-    it { should contain_file('/etc/redis/redis.conf.puppet.puppet').with(
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
         'content' => /repl-ping-slave-period.*1/
       )
     }
@@ -508,7 +508,7 @@ describe 'redis', :type => :class do
       }
     }
 
-    it { should contain_file('/etc/redis/redis.conf.puppet.puppet').with(
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
         'content' => /repl-timeout.*1/
       )
     }
@@ -521,7 +521,7 @@ describe 'redis', :type => :class do
       }
     }
 
-    it { should contain_file('/etc/redis/redis.conf.puppet.puppet').with(
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
         'content' => /requirepass.*_VALUE_/
       )
     }
