@@ -85,6 +85,7 @@ class redis::params {
       $config_dir_mode           = '0755'
       $config_file               = '/etc/redis/redis.conf'
       $config_file_mode          = '0644'
+      $config_file_orig          = '/etc/redis/redis.conf.puppet'
       $config_group              = 'root'
       $config_owner              = 'redis'
       $daemonize                 = true
@@ -113,6 +114,7 @@ class redis::params {
       $config_dir_mode           = '0755'
       $config_file               = '/etc/redis.conf'
       $config_file_mode          = '0644'
+      $config_file_orig          = '/etc/redis.conf.puppet'
       $config_group              = 'root'
       $config_owner              = 'redis'
       $daemonize                 = true
