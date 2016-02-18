@@ -5,6 +5,8 @@
 class redis::params {
   # Generic
   $manage_repo = false
+  $redis_server = true
+  $redis_sentinel = false
 
   # redis.conf.erb
   $activerehashing                 = true
@@ -97,8 +99,6 @@ class redis::params {
       $sentinel_config_file_orig = '/etc/redis/redis-sentinel.conf.puppet'
       $sentinel_daemonize        = true
       $sentinel_init_script      = '/etc/init.d/redis-sentinel'
-      $sentinel_package_name     = 'redis-server'
-      $sentinel_package_ensure   = 'present'
       $service_manage            = true
       $service_enable            = true
       $service_ensure            = 'running'
@@ -126,8 +126,6 @@ class redis::params {
       $sentinel_config_file_orig = '/etc/redis-sentinel.conf.puppet'
       $sentinel_daemonize        = false
       $sentinel_init_script      = undef
-      $sentinel_package_name     = 'redis'
-      $sentinel_package_ensure   = 'present'
       $service_manage            = true
       $service_enable            = true
       $service_ensure            = 'running'
@@ -154,8 +152,6 @@ class redis::params {
       $sentinel_config_file_orig = '/usr/local/etc/redis-sentinel.conf.puppet'
       $sentinel_daemonize        = true
       $sentinel_init_script      = undef
-      $sentinel_package_name     = 'redis'
-      $sentinel_package_ensure   = 'present'
       $service_manage            = true
       $service_enable            = true
       $service_ensure            = 'running'
@@ -182,8 +178,6 @@ class redis::params {
       $sentinel_config_file_orig = '/etc/redis/redis-sentinel.conf.puppet'
       $sentinel_daemonize        = true
       $sentinel_init_script      = undef
-      $sentinel_package_name     = 'redis'
-      $sentinel_package_ensure   = 'present'
       $service_manage            = true
       $service_enable            = true
       $service_ensure            = 'running'

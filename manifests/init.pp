@@ -4,6 +4,19 @@
 #
 # == Parameters:
 #
+# [*redis_server*]
+#   Ensures redis-server config and service will be applied
+#   That means redis::config and redis::service class will both
+#   be applied
+#
+#   Default:  true
+#
+# [*redis_sentinel*]
+#   Ensures redis-sentinel config will be applied
+#   That means redis::sentinel class will be applied.
+#
+#   Default:  false
+#
 # [*activerehashing*]
 #   Enable/disable active rehashing.
 #
@@ -429,6 +442,8 @@
 #   }
 #
 class redis (
+  $redis_server                = $::redis::params::redis_server,
+  $redis_sentinel              = $::redis::params::redis_sentinel,
   $activerehashing             = $::redis::params::activerehashing,
   $appendfsync                 = $::redis::params::appendfsync,
   $appendonly                  = $::redis::params::appendonly,
@@ -502,26 +517,29 @@ class redis (
   $cluster_config_file         = $::redis::params::cluster_config_file,
   $cluster_node_timeout        = $::redis::params::cluster_node_timeout,
 ) inherits redis::params {
+
   anchor { 'redis::begin': }
+
+  class { 'redis::preinstall': } ->
+  class { 'redis::install': } ->
+
+  if $redis_server {
+    # Sanity check
+    if $::redis::slaveof {
+      if $::redis::bind =~ /^127.0.0./ {
+        fail "Replication is not possible when binding to ${::redis::bind}."
+      }
+    }
+
+    class { 'redis::config': } ->
+    class { 'redis::service': } ->
+  }
+
+  if $redis_sentinel {
+    class { 'redis::sentinel': } ->
+  }
+
   anchor { 'redis::end': }
 
-  include redis::preinstall
-  include redis::install
-  include redis::config
-  include redis::service
-
-  Anchor['redis::begin'] ->
-  Class['redis::preinstall'] ->
-  Class['redis::install'] ->
-  Class['redis::config'] ->
-  Class['redis::service'] ->
-  Anchor['redis::end']
-
-  # Sanity check
-  if $::redis::slaveof {
-    if $::redis::bind =~ /^127.0.0./ {
-      fail "Replication is not possible when binding to ${::redis::bind}."
-    }
-  }
 }
 
