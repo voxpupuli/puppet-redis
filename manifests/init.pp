@@ -510,21 +510,12 @@ class redis (
   include redis::config
   include redis::service
 
-  if $::redis::notify_service {
-    Anchor['redis::begin'] ->
-    Class['redis::preinstall'] ->
-    Class['redis::install'] ->
-    Class['redis::config'] ~>
-    Class['redis::service'] ->
-    Anchor['redis::end']
-  } else {
-    Anchor['redis::begin'] ->
-    Class['redis::preinstall'] ->
-    Class['redis::install'] ->
-    Class['redis::config'] ->
-    Class['redis::service'] ->
-    Anchor['redis::end']
-  }
+  Anchor['redis::begin'] ->
+  Class['redis::preinstall'] ->
+  Class['redis::install'] ->
+  Class['redis::config'] ->
+  Class['redis::service'] ->
+  Anchor['redis::end']
 
   # Sanity check
   if $::redis::slaveof {
