@@ -518,28 +518,34 @@ class redis (
   $cluster_node_timeout        = $::redis::params::cluster_node_timeout,
 ) inherits redis::params {
 
-  anchor { 'redis::begin': }
+  if $redis_server and $redis_sentinel{
 
-  class { 'redis::preinstall': } ->
-  class { 'redis::install': } ->
-
-  if $redis_server {
-    # Sanity check
-    if $::redis::slaveof {
-      if $::redis::bind =~ /^127.0.0./ {
-        fail "Replication is not possible when binding to ${::redis::bind}."
-      }
-    }
-
+    anchor { 'redis::begin': } ->
+    class { 'redis::preinstall': } ->
+    class { 'redis::install': } ->
     class { 'redis::config': } ->
     class { 'redis::service': } ->
-  }
+     class { 'redis::sentinel': } ->
+    anchor { 'redis::end': }
 
-  if $redis_sentinel {
+  } elsif $redis_sentinel {
+
+    anchor { 'redis::begin': } ->
+    class { 'redis::preinstall': } ->
+    class { 'redis::install': } ->
     class { 'redis::sentinel': } ->
-  }
+    anchor { 'redis::end': }
 
-  anchor { 'redis::end': }
+  } elsif $redis_server {
+
+    anchor { 'redis::begin': } ->
+    class { 'redis::preinstall': } ->
+    class { 'redis::install': } ->
+    class { 'redis::config': } ->
+    class { 'redis::service': } ->
+    anchor { 'redis::end': }
+
+  }
 
 }
 

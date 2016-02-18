@@ -50,6 +50,13 @@ class redis::config {
   $zset_max_ziplist_entries     = $::redis::zset_max_ziplist_entries
   $zset_max_ziplist_value       = $::redis::zset_max_ziplist_value
 
+  # Sanity check
+  if $::redis::slaveof {
+    if $::redis::bind =~ /^127.0.0./ {
+      fail "Replication is not possible when binding to ${::redis::bind}."
+    }
+  }
+
   if $::redis::notify_service {
     File {
       owner  => $::redis::config_owner,
