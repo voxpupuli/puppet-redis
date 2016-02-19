@@ -4,14 +4,14 @@
 #
 # == Parameters:
 #
-# [*redis_server*]
+# [*redis_server_enabled*]
 #   Ensures redis-server config and service will be applied
 #   That means redis::config and redis::service class will both
 #   be applied
 #
 #   Default:  true
 #
-# [*redis_sentinel*]
+# [*sentinel_enabled*]
 #   Ensures redis-sentinel config will be applied
 #   That means redis::sentinel class will be applied.
 #
@@ -442,8 +442,8 @@
 #   }
 #
 class redis (
-  $redis_server                = $::redis::params::redis_server,
-  $redis_sentinel              = $::redis::params::redis_sentinel,
+  $redis_server_enabled        = $::redis::params::redis_server_enabled,
+  $sentinel_enabled            = $::redis::params::sentinel_enabled,
   $activerehashing             = $::redis::params::activerehashing,
   $appendfsync                 = $::redis::params::appendfsync,
   $appendonly                  = $::redis::params::appendonly,
@@ -469,7 +469,7 @@ class redis (
   $list_max_ziplist_value      = $::redis::params::list_max_ziplist_value,
   $log_dir                     = $::redis::params::log_dir,
   $log_dir_mode                = $::redis::params::log_dir_mode,
-  $log_file                    = $::redis::params::log_file,
+  $log_file                    = $::redis::params::server_log_file,
   $log_level                   = $::redis::params::log_level,
   $manage_repo                 = $::redis::params::manage_repo,
   $masterauth                  = $::redis::params::masterauth,
@@ -518,7 +518,7 @@ class redis (
   $cluster_node_timeout        = $::redis::params::cluster_node_timeout,
 ) inherits redis::params {
 
-  if $redis_server and $redis_sentinel{
+  if $redis_server_enabled and $sentinel_enabled {
 
     anchor { 'redis::begin': } ->
     class { 'redis::preinstall': } ->
@@ -528,7 +528,7 @@ class redis (
      class { 'redis::sentinel': } ->
     anchor { 'redis::end': }
 
-  } elsif $redis_sentinel {
+  } elsif $sentinel_enabled {
 
     anchor { 'redis::begin': } ->
     class { 'redis::preinstall': } ->
@@ -536,7 +536,7 @@ class redis (
     class { 'redis::sentinel': } ->
     anchor { 'redis::end': }
 
-  } elsif $redis_server {
+  } elsif $redis_server_enabled {
 
     anchor { 'redis::begin': } ->
     class { 'redis::preinstall': } ->
