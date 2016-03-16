@@ -26,5 +26,4 @@ gem 'rspec-puppet', '>=0.1.6'
 gem 'puppetlabs_spec_helper', '>=0.4.1'
 
 gem 'beaker-rspec'
-gem 'bundler', '<= 1.10.5'
 gem 'vagrant-wrapper'
