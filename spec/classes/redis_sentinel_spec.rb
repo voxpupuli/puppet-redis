@@ -70,7 +70,7 @@ describe 'redis::sentinel', :type => :class do
         :down_after             => 6000,
         :log_file               => '/tmp/barn-sentinel.log',
         :failover_timeout       => 28000,
-        :notification_script    => 'bar.sh'
+        :notification_script    => 'bar.sh',
         :client_reconfig_script => 'foo.sh'
       }
     }
