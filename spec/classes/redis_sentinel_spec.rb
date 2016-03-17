@@ -26,6 +26,7 @@ sentinel parallel-syncs cow 1
 sentinel failover-timeout cow 28000
 sentinel auth-pass cow password
 sentinel notification-script cow bar.sh
+sentinel client-reconfig-script cow foo.sh
 
 logfile /tmp/barn-sentinel.log
 EOF
@@ -64,12 +65,13 @@ describe 'redis::sentinel', :type => :class do
   describe 'with custom parameters' do
     let (:params) {
       {
-        :auth_pass           => 'password',
-        :master_name         => 'cow',
-        :down_after          => 6000,
-        :log_file            => '/tmp/barn-sentinel.log',
-        :failover_timeout    => 28000,
-        :notification_script => 'bar.sh'
+        :auth_pass              => 'password',
+        :master_name            => 'cow',
+        :down_after             => 6000,
+        :log_file               => '/tmp/barn-sentinel.log',
+        :failover_timeout       => 28000,
+        :notification_script    => 'bar.sh'
+        :client_reconfig_script => 'foo.sh'
       }
     }
 
