@@ -9,6 +9,21 @@
 #
 #   Default:  true
 #
+# [*aof_load_truncated*]
+#   Enable/disable loading truncated AOF file
+#
+#   Default:  true
+#
+# [*aof_rewrite_incremental_fsync*]
+#   Enable/disable fsync for AOF file
+#
+#   Default:  true
+#
+# [*appendfilename*]
+#   The name of the append only file
+#
+#   Default:  appendonly.aof
+#
 # [*appendfsync*]
 #   Adjust fsync mode.
 #   Valid options: always, everysec, no.
@@ -110,10 +125,20 @@
 #
 #   Default: 64
 #
+# [*hll_sparse_max_bytes*]
+#   HyperLogLog sparse representation bytes limit
+#
+#   Default: 3000
+#
 # [*hz*]
 #   Set redis background tasks frequency
 #
 #   Default: 10
+#
+# [*latency_monitor_threshold*]
+#   Latency monitoring threshold in milliseconds
+#
+#   Default: 0 (disabled)
 #
 # [*list_max_ziplist_entries*]
 #   Set max ziplist entries for lists.
@@ -186,11 +211,27 @@
 #
 #   Default: undef
 #
+# [*min_slaves_max_lag*]
+#   The lag in seconds
+#
+#   Default: 10
+#
+# [*min_slaves_to_write*]
+#   Minimum number of slaves to be in "online" state
+#
+#   Default: 0
+#
 # [*no_appendfsync_on_rewrite*]
 #   If you have latency problems turn this to 'true'. Otherwise leave it as
 #   'false' that is the safest pick from the point of view of durability.
 #
 #   Default: false
+#
+# [*notify_keyspace_events*]
+#   Which events to notify Pub/Sub clients about events happening
+#   in the key space
+#
+#   Default: undef
 #
 # [*notify_service*]
 #   You may disable service reloads when config files change if you
@@ -227,6 +268,21 @@
 #   Enable/disable compression of string objects using LZF when dumping.
 #
 #   Default: true
+#
+# [*repl_backlog_size*]
+#   The replication backlog size
+#
+#   Default: 1mb
+#
+# [*repl_backlog_ttl*]
+#   The number of seconds to elapse before freeing backlog buffer
+#
+#   Default: 3600
+#
+# [*repl_disable_tcp_nodelay*]
+#   Enable/disable TCP_NODELAY on the slave socket after SYNC
+#
+#   Default: false
 #
 # [*repl_ping_slave_period*]
 #   Slaves send PINGs to server in a predefined interval. It's possible
@@ -305,6 +361,11 @@
 #
 #   Default: 512
 #
+# [*slave_priority*]
+#   The priority number for slave promotion by Sentinel
+#
+#   Default: 100
+#
 # [*slave_read_only*]
 #   You can configure a slave instance to accept writes or not.
 #
@@ -357,6 +418,11 @@
 #   Must be USER or between LOCAL0-LOCAL7.
 #
 #   Default: undef
+#
+# [*tcp_backlog*]
+#   Sets the TCP backlog
+#
+#   Default: 511
 #
 # [*tcp_keepalive*]
 #   TCP keepalive.
@@ -429,78 +495,91 @@
 #   }
 #
 class redis (
-  $activerehashing             = $::redis::params::activerehashing,
-  $appendfsync                 = $::redis::params::appendfsync,
-  $appendonly                  = $::redis::params::appendonly,
-  $auto_aof_rewrite_min_size   = $::redis::params::auto_aof_rewrite_min_size,
-  $auto_aof_rewrite_percentage = $::redis::params::auto_aof_rewrite_percentage,
-  $bind                        = $::redis::params::bind,
-  $conf_template               = $::redis::params::conf_template,
-  $config_dir                  = $::redis::params::config_dir,
-  $config_dir_mode             = $::redis::params::config_dir_mode,
-  $config_file                 = $::redis::params::config_file,
-  $config_file_mode            = $::redis::params::config_file_mode,
-  $config_file_orig            = $::redis::params::config_file_orig,
-  $config_group                = $::redis::params::config_group,
-  $config_owner                = $::redis::params::config_owner,
-  $daemonize                   = $::redis::params::daemonize,
-  $databases                   = $::redis::params::databases,
-  $dbfilename                  = $::redis::params::dbfilename,
-  $extra_config_file           = $::redis::params::extra_config_file,
-  $hash_max_ziplist_entries    = $::redis::params::hash_max_ziplist_entries,
-  $hash_max_ziplist_value      = $::redis::params::hash_max_ziplist_value,
-  $hz                          = $::redis::params::hz,
-  $list_max_ziplist_entries    = $::redis::params::list_max_ziplist_entries,
-  $list_max_ziplist_value      = $::redis::params::list_max_ziplist_value,
-  $log_dir                     = $::redis::params::log_dir,
-  $log_dir_mode                = $::redis::params::log_dir_mode,
-  $log_file                    = $::redis::params::log_file,
-  $log_level                   = $::redis::params::log_level,
-  $manage_repo                 = $::redis::params::manage_repo,
-  $masterauth                  = $::redis::params::masterauth,
-  $maxclients                  = $::redis::params::maxclients,
-  $maxmemory                   = $::redis::params::maxmemory,
-  $maxmemory_policy            = $::redis::params::maxmemory_policy,
-  $maxmemory_samples           = $::redis::params::maxmemory_samples,
-  $no_appendfsync_on_rewrite   = $::redis::params::no_appendfsync_on_rewrite,
-  $notify_service              = $::redis::params::notify_service,
-  $package_ensure              = $::redis::params::package_ensure,
-  $package_name                = $::redis::params::package_name,
-  $pid_file                    = $::redis::params::pid_file,
-  $port                        = $::redis::params::port,
-  $ppa_repo                    = $::redis::params::ppa_repo,
-  $rdbcompression              = $::redis::params::rdbcompression,
-  $repl_ping_slave_period      = $::redis::params::repl_ping_slave_period,
-  $repl_timeout                = $::redis::params::repl_timeout,
-  $requirepass                 = $::redis::params::requirepass,
-  $save_db_to_disk             = $::redis::params::save_db_to_disk,
-  $service_enable              = $::redis::params::service_enable,
-  $service_ensure              = $::redis::params::service_ensure,
-  $service_group               = $::redis::params::service_group,
-  $service_hasrestart          = $::redis::params::service_hasrestart,
-  $service_hasstatus           = $::redis::params::service_hasstatus,
-  $service_manage              = $::redis::params::service_manage,
-  $service_name                = $::redis::params::service_name,
-  $service_provider            = $::redis::params::service_provider,
-  $service_user                = $::redis::params::service_user,
-  $set_max_intset_entries      = $::redis::params::set_max_intset_entries,
-  $slave_read_only             = $::redis::params::slave_read_only,
-  $slave_serve_stale_data      = $::redis::params::slave_serve_stale_data,
-  $slaveof                     = $::redis::params::slaveof,
-  $slowlog_log_slower_than     = $::redis::params::slowlog_log_slower_than,
-  $slowlog_max_len             = $::redis::params::slowlog_max_len,
-  $stop_writes_on_bgsave_error = $::redis::params::stop_writes_on_bgsave_error,
-  $syslog_enabled              = $::redis::params::syslog_enabled,
-  $syslog_facility             = $::redis::params::syslog_facility,
-  $tcp_keepalive               = $::redis::params::tcp_keepalive,
-  $timeout                     = $::redis::params::timeout,
-  $ulimit                      = $::redis::params::ulimit,
-  $workdir                     = $::redis::params::workdir,
-  $zset_max_ziplist_entries    = $::redis::params::zset_max_ziplist_entries,
-  $zset_max_ziplist_value      = $::redis::params::zset_max_ziplist_value,
-  $cluster_enabled             = $::redis::params::cluster_enabled,
-  $cluster_config_file         = $::redis::params::cluster_config_file,
-  $cluster_node_timeout        = $::redis::params::cluster_node_timeout,
+  $activerehashing               = $::redis::params::activerehashing,
+  $aof_load_truncated            = $::redis::params::aof_load_truncated,
+  $aof_rewrite_incremental_fsync = $::redis::params::aof_rewrite_incremental_fsync,
+  $appendfilename                = $::redis::params::appendfilename,
+  $appendfsync                   = $::redis::params::appendfsync,
+  $appendonly                    = $::redis::params::appendonly,
+  $auto_aof_rewrite_min_size     = $::redis::params::auto_aof_rewrite_min_size,
+  $auto_aof_rewrite_percentage   = $::redis::params::auto_aof_rewrite_percentage,
+  $bind                          = $::redis::params::bind,
+  $conf_template                 = $::redis::params::conf_template,
+  $config_dir                    = $::redis::params::config_dir,
+  $config_dir_mode               = $::redis::params::config_dir_mode,
+  $config_file                   = $::redis::params::config_file,
+  $config_file_mode              = $::redis::params::config_file_mode,
+  $config_file_orig              = $::redis::params::config_file_orig,
+  $config_group                  = $::redis::params::config_group,
+  $config_owner                  = $::redis::params::config_owner,
+  $daemonize                     = $::redis::params::daemonize,
+  $databases                     = $::redis::params::databases,
+  $dbfilename                    = $::redis::params::dbfilename,
+  $extra_config_file             = $::redis::params::extra_config_file,
+  $hash_max_ziplist_entries      = $::redis::params::hash_max_ziplist_entries,
+  $hash_max_ziplist_value        = $::redis::params::hash_max_ziplist_value,
+  $hll_sparse_max_bytes          = $::redis::params::hll_sparse_max_bytes,
+  $hz                            = $::redis::params::hz,
+  $latency_monitor_threshold     = $::redis::params::latency_monitor_threshold,
+  $list_max_ziplist_entries      = $::redis::params::list_max_ziplist_entries,
+  $list_max_ziplist_value        = $::redis::params::list_max_ziplist_value,
+  $log_dir                       = $::redis::params::log_dir,
+  $log_dir_mode                  = $::redis::params::log_dir_mode,
+  $log_file                      = $::redis::params::log_file,
+  $log_level                     = $::redis::params::log_level,
+  $manage_repo                   = $::redis::params::manage_repo,
+  $masterauth                    = $::redis::params::masterauth,
+  $maxclients                    = $::redis::params::maxclients,
+  $maxmemory                     = $::redis::params::maxmemory,
+  $maxmemory_policy              = $::redis::params::maxmemory_policy,
+  $maxmemory_samples             = $::redis::params::maxmemory_samples,
+  $min_slaves_max_lag            = $::redis::params::min_slaves_max_lag,
+  $min_slaves_to_write           = $::redis::params::min_slaves_to_write,
+  $no_appendfsync_on_rewrite     = $::redis::params::no_appendfsync_on_rewrite,
+  $notify_keyspace_events        = $::redis::params::notify_keyspace_events,
+  $notify_service                = $::redis::params::notify_service,
+  $package_ensure                = $::redis::params::package_ensure,
+  $package_name                  = $::redis::params::package_name,
+  $pid_file                      = $::redis::params::pid_file,
+  $port                          = $::redis::params::port,
+  $ppa_repo                      = $::redis::params::ppa_repo,
+  $rdbcompression                = $::redis::params::rdbcompression,
+  $repl_backlog_size             = $::redis::params::repl_backlog_size,
+  $repl_backlog_ttl              = $::redis::params::repl_backlog_ttl,
+  $repl_disable_tcp_nodelay      = $::redis::params::repl_disable_tcp_nodelay,
+  $repl_ping_slave_period        = $::redis::params::repl_ping_slave_period,
+  $repl_timeout                  = $::redis::params::repl_timeout,
+  $requirepass                   = $::redis::params::requirepass,
+  $save_db_to_disk               = $::redis::params::save_db_to_disk,
+  $service_enable                = $::redis::params::service_enable,
+  $service_ensure                = $::redis::params::service_ensure,
+  $service_group                 = $::redis::params::service_group,
+  $service_hasrestart            = $::redis::params::service_hasrestart,
+  $service_hasstatus             = $::redis::params::service_hasstatus,
+  $service_manage                = $::redis::params::service_manage,
+  $service_name                  = $::redis::params::service_name,
+  $service_provider              = $::redis::params::service_provider,
+  $service_user                  = $::redis::params::service_user,
+  $set_max_intset_entries        = $::redis::params::set_max_intset_entries,
+  $slave_priority                = $::redis::params::slave_priority,
+  $slave_read_only               = $::redis::params::slave_read_only,
+  $slave_serve_stale_data        = $::redis::params::slave_serve_stale_data,
+  $slaveof                       = $::redis::params::slaveof,
+  $slowlog_log_slower_than       = $::redis::params::slowlog_log_slower_than,
+  $slowlog_max_len               = $::redis::params::slowlog_max_len,
+  $stop_writes_on_bgsave_error   = $::redis::params::stop_writes_on_bgsave_error,
+  $syslog_enabled                = $::redis::params::syslog_enabled,
+  $syslog_facility               = $::redis::params::syslog_facility,
+  $tcp_backlog                   = $::redis::params::tcp_backlog,
+  $tcp_keepalive                 = $::redis::params::tcp_keepalive,
+  $timeout                       = $::redis::params::timeout,
+  $ulimit                        = $::redis::params::ulimit,
+  $workdir                       = $::redis::params::workdir,
+  $zset_max_ziplist_entries      = $::redis::params::zset_max_ziplist_entries,
+  $zset_max_ziplist_value        = $::redis::params::zset_max_ziplist_value,
+  $cluster_enabled               = $::redis::params::cluster_enabled,
+  $cluster_config_file           = $::redis::params::cluster_config_file,
+  $cluster_node_timeout          = $::redis::params::cluster_node_timeout,
 ) inherits redis::params {
   anchor { 'redis::begin': }
   anchor { 'redis::end': }

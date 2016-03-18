@@ -8,6 +8,9 @@ class redis::params {
 
   # redis.conf.erb
   $activerehashing                 = true
+  $aof_load_truncated              = true
+  $aof_rewrite_incremental_fsync   = true
+  $appendfilename                  = 'appendonly.aof'
   $appendfsync                     = 'everysec'
   $appendonly                      = false
   $auto_aof_rewrite_min_size       = '64mb'
@@ -19,7 +22,9 @@ class redis::params {
   $extra_config_file               = undef
   $hash_max_ziplist_entries        = 512
   $hash_max_ziplist_value          = 64
+  $hll_sparse_max_bytes            = 3000
   $hz                              = 10
+  $latency_monitor_threshold       = 0
   $list_max_ziplist_entries        = 512
   $list_max_ziplist_value          = 64
   $log_dir                         = '/var/log/redis'
@@ -30,6 +35,7 @@ class redis::params {
   $maxmemory_policy                = undef
   $maxmemory_samples               = undef
   $no_appendfsync_on_rewrite       = false
+  $notify_keyspace_events          = undef
   $notify_service                  = true
   $pid_file                        = '/var/run/redis/redis-server.pid'
   $port                            = 6379
@@ -55,11 +61,13 @@ class redis::params {
   $sentinel_client_reconfig_script = undef
   $service_provider                = undef
   $set_max_intset_entries          = 512
+  $slave_priority                  = 100
   $slowlog_log_slower_than         = 10000
   $slowlog_max_len                 = 1024
   $stop_writes_on_bgsave_error     = true
   $syslog_enabled                  = undef
   $syslog_facility                 = undef
+  $tcp_backlog                     = 511
   $tcp_keepalive                   = 0
   $timeout                         = 0
   $ulimit                          = 65536
@@ -68,12 +76,17 @@ class redis::params {
   $zset_max_ziplist_value          = 64
 
   # redis.conf.erb - replication
-  $masterauth             = undef
-  $repl_ping_slave_period = 10
-  $repl_timeout           = 60
-  $slave_read_only        = true
-  $slave_serve_stale_data = true
-  $slaveof                = undef
+  $masterauth               = undef
+  $min_slaves_to_write      = 0
+  $min_slaves_max_lag       = 10
+  $repl_backlog_size        = '1mb'
+  $repl_backlog_ttl         = 3600
+  $repl_disable_tcp_nodelay = false
+  $repl_ping_slave_period   = 10
+  $repl_timeout             = 60
+  $slave_read_only          = true
+  $slave_serve_stale_data   = true
+  $slaveof                  = undef
 
   # redis.conf.erb - redis 3.0 clustering
   $cluster_enabled        = false

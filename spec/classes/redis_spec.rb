@@ -39,6 +39,45 @@ describe 'redis', :type => :class do
     }
   end
 
+  describe 'with parameter aof_load_truncated' do
+    let (:params) {
+      {
+        :aof_load_truncated => true
+      }
+    }
+
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
+        'content' => /aof-load-truncated.*yes/
+      )
+    }
+  end
+
+  describe 'with parameter aof_rewrite_incremental_fsync' do
+    let (:params) {
+      {
+        :aof_rewrite_incremental_fsync => true
+      }
+    }
+
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
+        'content' => /aof-rewrite-incremental-fsync.*yes/
+      )
+    }
+  end
+
+  describe 'with parameter appendfilename' do
+    let (:params) {
+      {
+        :appendfilename => '_VALUE_'
+      }
+    }
+
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
+        'content' => /appendfilename.*_VALUE_/
+      )
+    }
+  end
+
   describe 'with parameter appendfsync' do
     let (:params) {
       {
@@ -399,6 +438,45 @@ describe 'redis', :type => :class do
     }
   end
 
+  describe 'with parameter min_slaves_max_lag' do
+    let (:params) {
+      {
+        :min_slaves_max_lag => '_VALUE_'
+      }
+    }
+
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
+        'content' => /min-slaves-max-lag.*_VALUE_/
+      )
+    }
+  end
+
+  describe 'with parameter min_slaves_to_write' do
+    let (:params) {
+      {
+        :min_slaves_to_write => '_VALUE_'
+      }
+    }
+
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
+        'content' => /min-slaves-to-write.*_VALUE_/
+      )
+    }
+  end
+
+  describe 'with parameter notify_keyspace_events' do
+    let (:params) {
+      {
+        :notify_keyspace_events => '_VALUE_'
+      }
+    }
+
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
+        'content' => /notify-keyspace-events.*_VALUE_/
+      )
+    }
+  end
+
   describe 'with parameter notify_service' do
     let (:params) {
       {
@@ -465,6 +543,19 @@ describe 'redis', :type => :class do
     }
   end
 
+  describe 'with parameter hll_sparse_max_bytes' do
+    let (:params) {
+      {
+        :hll_sparse_max_bytes=> '_VALUE_'
+      }
+    }
+
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
+        'content' => /hll-sparse-max-bytes.*_VALUE_/
+      )
+    }
+  end
+
   describe 'with parameter hz' do
     let (:params) {
       {
@@ -478,6 +569,19 @@ describe 'redis', :type => :class do
     }
   end
 
+  describe 'with parameter latency_monitor_threshold' do
+    let (:params) {
+      {
+        :latency_monitor_threshold=> '_VALUE_'
+      }
+    }
+
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
+        'content' => /latency-monitor-threshold.*_VALUE_/
+      )
+    }
+  end
+
   describe 'with parameter rdbcompression' do
     let (:params) {
       {
@@ -487,6 +591,45 @@ describe 'redis', :type => :class do
 
     it { should contain_file('/etc/redis/redis.conf.puppet').with(
         'content' => /rdbcompression.*yes/
+      )
+    }
+  end
+
+  describe 'with parameter repl_backlog_size' do
+    let (:params) {
+      {
+        :repl_backlog_size => '_VALUE_'
+      }
+    }
+
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
+        'content' => /repl-backlog-size.*_VALUE_/
+      )
+    }
+  end
+
+  describe 'with parameter repl_backlog_ttl' do
+    let (:params) {
+      {
+        :repl_backlog_ttl => '_VALUE_'
+      }
+    }
+
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
+        'content' => /repl-backlog-ttl.*_VALUE_/
+      )
+    }
+  end
+
+  describe 'with parameter repl_disable_tcp_nodelay' do
+    let (:params) {
+      {
+        :repl_disable_tcp_nodelay => true
+      }
+    }
+
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
+        'content' => /repl-disable-tcp-nodelay.*yes/
       )
     }
   end
@@ -619,6 +762,19 @@ describe 'redis', :type => :class do
     }
   end
 
+  describe 'with parameter slave_priority' do
+    let (:params) {
+      {
+        :slave_priority => '_VALUE_'
+      }
+    }
+
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
+        'content' => /slave-priority.*_VALUE_/
+      )
+    }
+  end
+
   describe 'with parameter slave_read_only' do
     let (:params) {
       {
@@ -738,6 +894,19 @@ describe 'redis', :type => :class do
 
     it { should contain_file('/etc/redis/redis.conf.puppet').with(
         'content' => /syslog-facility.*_VALUE_/
+      )
+    }
+  end
+
+  describe 'with parameter tcp_backlog' do
+    let (:params) {
+      {
+        :tcp_backlog=> '_VALUE_'
+      }
+    }
+
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
+        'content' => /tcp-backlog.*_VALUE_/
       )
     }
   end
