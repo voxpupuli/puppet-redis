@@ -85,9 +85,8 @@ class redis::config {
     "cp -p ${::redis::config_file_orig} ${::redis::config_file}":
       path        => '/usr/bin:/bin',
       subscribe   => File[$::redis::config_file_orig],
-      notify      => Service[$::redis::service_name],
       refreshonly => true;
-  }
+  } ~> Service <| title == $::redis::service_name |>
 
   # Adjust /etc/default/redis-server on Debian systems
   case $::osfamily {
