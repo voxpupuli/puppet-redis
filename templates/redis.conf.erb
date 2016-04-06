@@ -84,7 +84,7 @@ syslog-enabled <% if @syslog_enabled %>yes<% else %>no<% end %>
 # Specify the syslog identity.
 # syslog-ident redis
 
-# Specify the syslog facility.  Must be USER or between LOCAL0-LOCAL7.
+# Specify the syslog facility. Must be USER or between LOCAL0-LOCAL7.
 <% if @syslog_facility %>syslog-facility <%= @syslog_facility %><% else %># syslog-facility local0<% end %>
 
 # Set the number of databases. The default database is DB 0, you can select
@@ -113,16 +113,14 @@ databases <%= @databases %>
 #   like in the following example:
 #
 #   save ""
-
 <% if @save_db_to_disk %>
 save 900 1
 save 300 10
 save 60 10000
 <% end %>
-
 # By default Redis will stop accepting writes if RDB snapshots are enabled
 # (at least one save point) and the latest background save failed.
-# This will make the user aware (in an hard way) that data is not persisting
+# This will make the user aware (in a hard way) that data is not persisting
 # on disk properly, otherwise chances are that no one will notice and some
 # distater will happen.
 #
@@ -131,15 +129,15 @@ save 60 10000
 #
 # However if you have setup your proper monitoring of the Redis server
 # and persistence, you may want to disable this feature so that Redis will
-# continue to work as usually even if there are problems with disk,
+# continue to work as usual even if there are problems with disk,
 # permissions, and so forth.
-stop-writes-on-bgsave-error <% if @stop_writes_on_bgsave_error -%>yes<% else -%>no<% end -%>
+stop-writes-on-bgsave-error <% if @stop_writes_on_bgsave_error -%>yes<% else -%>no<% end %>
 
 # Compress string objects using LZF when dump .rdb databases?
 # For default that's set to 'yes' as it's almost always a win.
 # If you want to save some CPU in the saving child set it to 'no' but
 # the dataset will likely be bigger if you have compressible values or keys.
-rdbcompression <% if @rdbcompression -%>yes<% else -%>no<% end -%>
+rdbcompression <% if @rdbcompression -%>yes<% else -%>no<% end %>
 
 # Since verison 5 of RDB a CRC64 checksum is placed at the end of the file.
 # This makes the format more resistant to corruption but there is a performance
@@ -181,7 +179,7 @@ dir <%= @workdir %>
 # masterauth <master-password>
 <% if @masterauth -%>masterauth <%= @masterauth %><% end -%>
 
-# When a slave lost the connection with the master, or when the replication
+# When a slave loses the connection with the master, or when the replication
 # is still in progress, the slave can act in two different ways:
 #
 # 1) if slave-serve-stale-data is set to 'yes' (the default) the slave will
@@ -192,7 +190,7 @@ dir <%= @workdir %>
 #    an error "SYNC with master in progress" to all the kind of commands
 #    but to INFO and SLAVEOF.
 #
-slave-serve-stale-data <% if @slave_serve_stale_data -%>yes<% else -%>no<% end -%>
+slave-serve-stale-data <% if @slave_serve_stale_data -%>yes<% else -%>no<% end %>
 
 # You can configure a slave instance to accept writes or not. Writing against
 # a slave instance may be useful to store some ephemeral data (because data
@@ -208,7 +206,7 @@ slave-serve-stale-data <% if @slave_serve_stale_data -%>yes<% else -%>no<% end -
 # such as CONFIG, DEBUG, and so forth. To a limited extend you can improve
 # security of read only slaves using 'rename-command' to shadow all the
 # administrative / dangerous commands.
-slave-read-only <% if @slave_read_only -%>yes<% else -%>no<% end -%>
+slave-read-only <% if @slave_read_only -%>yes<% else -%>no<% end %>
 
 # Slaves send PINGs to server in a predefined interval. It's possible to change
 # this interval with the repl_ping_slave_period option. The default value is 10
