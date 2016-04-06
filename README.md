@@ -8,7 +8,7 @@
 
 ### Standalone
 
-    class { 'redis':;
+    class { 'redis':
     }
 
 ### Master node
