@@ -71,6 +71,8 @@ class redis::params {
   $tcp_keepalive                   = 0
   $timeout                         = 0
   $ulimit                          = 65536
+  $unixsocket                      = '/var/run/redis/redis.sock'
+  $unixsocketperm                  = 755
   $workdir                         = '/var/lib/redis/'
   $zset_max_ziplist_entries        = 128
   $zset_max_ziplist_value          = 64

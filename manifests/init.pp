@@ -450,6 +450,16 @@
 #
 #   Default: 65536
 #
+# [*unixsocket*]
+#   Define unix socket path
+#
+#   Default: undef
+#
+# [*unixsocketperm*]
+#   Define unix socket file permissions
+#
+#   Default: undef
+#
 # [*workdir*]
 #   The DB will be written inside this directory, with the filename specified
 #   above using the 'dbfilename' configuration directive.
@@ -573,6 +583,8 @@ class redis (
   $tcp_backlog                   = $::redis::params::tcp_backlog,
   $tcp_keepalive                 = $::redis::params::tcp_keepalive,
   $timeout                       = $::redis::params::timeout,
+  $unixsocket                    = $::redis::unixsocket,
+  $unixsocketperm                = $::redis::unixsocketperm,
   $ulimit                        = $::redis::params::ulimit,
   $workdir                       = $::redis::params::workdir,
   $zset_max_ziplist_entries      = $::redis::params::zset_max_ziplist_entries,

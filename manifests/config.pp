@@ -60,6 +60,8 @@ class redis::config {
   $tcp_backlog                   = $::redis::tcp_backlog
   $tcp_keepalive                 = $::redis::tcp_keepalive
   $timeout                       = $::redis::timeout
+  $unixsocket                    = $::redis::unixsocket
+  $unixsocketperm                = $::redis::unixsocketperm
   $workdir                       = $::redis::workdir
   $zset_max_ziplist_entries      = $::redis::zset_max_ziplist_entries
   $zset_max_ziplist_value        = $::redis::zset_max_ziplist_value
