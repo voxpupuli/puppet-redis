@@ -583,8 +583,8 @@ class redis (
   $tcp_backlog                   = $::redis::params::tcp_backlog,
   $tcp_keepalive                 = $::redis::params::tcp_keepalive,
   $timeout                       = $::redis::params::timeout,
-  $unixsocket                    = $::redis::unixsocket,
-  $unixsocketperm                = $::redis::unixsocketperm,
+  $unixsocket                    = $::redis::params::unixsocket,
+  $unixsocketperm                = $::redis::params::unixsocketperm,
   $ulimit                        = $::redis::params::ulimit,
   $workdir                       = $::redis::params::workdir,
   $zset_max_ziplist_entries      = $::redis::params::zset_max_ziplist_entries,
@@ -624,4 +624,3 @@ class redis (
     }
   }
 }
-
