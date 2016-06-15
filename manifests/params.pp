@@ -71,7 +71,6 @@ class redis::params {
   $tcp_keepalive                   = 0
   $timeout                         = 0
   $ulimit                          = 65536
-  $workdir                         = '/var/lib/redis/'
   $zset_max_ziplist_entries        = 128
   $zset_max_ziplist_value          = 64
 
@@ -121,6 +120,7 @@ class redis::params {
       $service_name              = 'redis-server'
       $service_user              = 'redis'
       $ppa_repo                  = 'ppa:chris-lea/redis-server'
+      $workdir                   = '/var/lib/redis/'
     }
 
     'RedHat': {
@@ -150,6 +150,7 @@ class redis::params {
       $service_name              = 'redis'
       $service_user              = 'redis'
       $ppa_repo                  = undef
+      $workdir                   = '/var/lib/redis/'
     }
 
     'FreeBSD': {
@@ -178,6 +179,7 @@ class redis::params {
       $service_name              = 'redis'
       $service_user              = 'redis'
       $ppa_repo                  = undef
+      $workdir                   = '/var/db/redis/'
     }
 
     'Suse': {
@@ -206,6 +208,7 @@ class redis::params {
       $service_name              = 'redis'
       $service_user              = 'redis'
       $ppa_repo                  = undef
+      $workdir                   = '/var/lib/redis/'
     }
 
     default: {
