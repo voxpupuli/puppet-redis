@@ -37,7 +37,6 @@ class redis::params {
   $no_appendfsync_on_rewrite       = false
   $notify_keyspace_events          = undef
   $notify_service                  = true
-  $pid_file                        = '/var/run/redis/redis-server.pid'
   $port                            = 6379
   $rdbcompression                  = true
   $requirepass                     = undef
@@ -105,6 +104,7 @@ class redis::params {
       $log_dir_mode              = '0755'
       $package_ensure            = 'present'
       $package_name              = 'redis-server'
+      $pid_file                  = '/var/run/redis/redis-server.pid'
       $sentinel_config_file      = '/etc/redis/redis-sentinel.conf'
       $sentinel_config_file_orig = '/etc/redis/redis-sentinel.conf.puppet'
       $sentinel_daemonize        = true
@@ -135,6 +135,7 @@ class redis::params {
       $log_dir_mode              = '0755'
       $package_ensure            = 'present'
       $package_name              = 'redis'
+      $pid_file                  = '/var/run/redis/redis-server.pid'
       $sentinel_config_file      = '/etc/redis-sentinel.conf'
       $sentinel_config_file_orig = '/etc/redis-sentinel.conf.puppet'
       $sentinel_daemonize        = false
@@ -165,6 +166,7 @@ class redis::params {
       $log_dir_mode              = '0755'
       $package_ensure            = 'present'
       $package_name              = 'redis'
+      $pid_file                  = '/var/run/redis/redis.pid'
       $sentinel_config_file      = '/usr/local/etc/redis-sentinel.conf'
       $sentinel_config_file_orig = '/usr/local/etc/redis-sentinel.conf.puppet'
       $sentinel_daemonize        = true
@@ -194,6 +196,7 @@ class redis::params {
       $log_dir_mode              = '0750'
       $package_ensure            = 'present'
       $package_name              = 'redis'
+      $pid_file                  = '/var/run/redis/redis-server.pid'
       $sentinel_config_file      = '/etc/redis/redis-sentinel.conf'
       $sentinel_config_file_orig = '/etc/redis/redis-sentinel.conf.puppet'
       $sentinel_daemonize        = true
