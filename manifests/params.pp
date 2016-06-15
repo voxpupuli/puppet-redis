@@ -37,7 +37,6 @@ class redis::params {
   $no_appendfsync_on_rewrite       = false
   $notify_keyspace_events          = undef
   $notify_service                  = true
-  $pid_file                        = '/var/run/redis/redis-server.pid'
   $port                            = 6379
   $rdbcompression                  = true
   $requirepass                     = undef
@@ -71,7 +70,6 @@ class redis::params {
   $tcp_keepalive                   = 0
   $timeout                         = 0
   $ulimit                          = 65536
-  $workdir                         = '/var/lib/redis/'
   $zset_max_ziplist_entries        = 128
   $zset_max_ziplist_value          = 64
 
@@ -106,6 +104,7 @@ class redis::params {
       $log_dir_mode              = '0755'
       $package_ensure            = 'present'
       $package_name              = 'redis-server'
+      $pid_file                  = '/var/run/redis/redis-server.pid'
       $sentinel_config_file      = '/etc/redis/redis-sentinel.conf'
       $sentinel_config_file_orig = '/etc/redis/redis-sentinel.conf.puppet'
       $sentinel_daemonize        = true
@@ -121,6 +120,7 @@ class redis::params {
       $service_name              = 'redis-server'
       $service_user              = 'redis'
       $ppa_repo                  = 'ppa:chris-lea/redis-server'
+      $workdir                   = '/var/lib/redis/'
     }
 
     'RedHat': {
@@ -135,6 +135,7 @@ class redis::params {
       $log_dir_mode              = '0755'
       $package_ensure            = 'present'
       $package_name              = 'redis'
+      $pid_file                  = '/var/run/redis/redis-server.pid'
       $sentinel_config_file      = '/etc/redis-sentinel.conf'
       $sentinel_config_file_orig = '/etc/redis-sentinel.conf.puppet'
       $sentinel_daemonize        = false
@@ -150,6 +151,7 @@ class redis::params {
       $service_name              = 'redis'
       $service_user              = 'redis'
       $ppa_repo                  = undef
+      $workdir                   = '/var/lib/redis/'
     }
 
     'FreeBSD': {
@@ -157,12 +159,14 @@ class redis::params {
       $config_dir_mode           = '0755'
       $config_file               = '/usr/local/etc/redis.conf'
       $config_file_mode          = '0644'
+      $config_file_orig          = '/usr/local/etc/redis.conf.puppet'
       $config_group              = 'wheel'
       $config_owner              = 'redis'
       $daemonize                 = true
       $log_dir_mode              = '0755'
       $package_ensure            = 'present'
       $package_name              = 'redis'
+      $pid_file                  = '/var/run/redis/redis.pid'
       $sentinel_config_file      = '/usr/local/etc/redis-sentinel.conf'
       $sentinel_config_file_orig = '/usr/local/etc/redis-sentinel.conf.puppet'
       $sentinel_daemonize        = true
@@ -178,6 +182,7 @@ class redis::params {
       $service_name              = 'redis'
       $service_user              = 'redis'
       $ppa_repo                  = undef
+      $workdir                   = '/var/db/redis/'
     }
 
     'Suse': {
@@ -191,6 +196,7 @@ class redis::params {
       $log_dir_mode              = '0750'
       $package_ensure            = 'present'
       $package_name              = 'redis'
+      $pid_file                  = '/var/run/redis/redis-server.pid'
       $sentinel_config_file      = '/etc/redis/redis-sentinel.conf'
       $sentinel_config_file_orig = '/etc/redis/redis-sentinel.conf.puppet'
       $sentinel_daemonize        = true
@@ -206,6 +212,7 @@ class redis::params {
       $service_name              = 'redis'
       $service_user              = 'redis'
       $ppa_repo                  = undef
+      $workdir                   = '/var/lib/redis/'
     }
 
     default: {
