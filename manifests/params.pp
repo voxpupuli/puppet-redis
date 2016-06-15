@@ -158,6 +158,7 @@ class redis::params {
       $config_dir_mode           = '0755'
       $config_file               = '/usr/local/etc/redis.conf'
       $config_file_mode          = '0644'
+      $config_file_orig          = '/usr/local/etc/redis.conf.puppet'
       $config_group              = 'wheel'
       $config_owner              = 'redis'
       $daemonize                 = true
