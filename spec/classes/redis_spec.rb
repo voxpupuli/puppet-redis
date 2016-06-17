@@ -373,6 +373,32 @@ describe 'redis', :type => :class do
     end
   end
 
+  describe 'with parameter unixsocket' do
+    let (:params) {
+      {
+        :unixsocket => '/tmp/redis.sock'
+      }
+    }
+
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
+        'content' => /unixsocket.*\/tmp\/redis.sock/
+      )
+    }
+  end
+
+  describe 'with parameter unixsocketperm' do
+    let (:params) {
+      {
+        :unixsocketperm => '777'
+      }
+    }
+
+    it { should contain_file('/etc/redis/redis.conf.puppet').with(
+        'content' => /unixsocketperm.*777/
+      )
+    }
+  end
+
   describe 'with parameter masterauth' do
     let (:params) {
       {
