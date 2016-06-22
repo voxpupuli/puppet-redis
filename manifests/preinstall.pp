@@ -56,17 +56,14 @@ class redis::preinstall {
 
       'Debian': {
         include apt
-        apt::key { 'dotdeb':
-          id     => '89DF5277',
-          source => 'http://www.dotdeb.org/dotdeb.gpg',
-        }
-
         apt::source { 'dotdeb':
-          location => 'http://packages.dotdeb.org',
-          release  => $::lsbdistcodename,
-          repos    => 'all',
-          require  => Apt::Key['dotdeb'],
-        }
+          location    => 'http://packages.dotdeb.org/',
+          release     =>  $::lsbdistcodename,
+          repos       => 'all',
+          key         => { id => '89DF5277', source => 'http://www.dotdeb.org/dotdeb.gpg', }, 
+          include_src => true
+        } 
+        
       }
 
       'Ubuntu': {
