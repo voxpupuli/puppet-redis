@@ -1,3 +1,6 @@
+<% if @sentinel_bind -%>
+bind <%= @sentinel_bind %>
+<% end -%>
 port <%= @sentinel_port %>
 dir <%= @working_dir %>
 <% if @daemonize -%>daemonize yes<% else -%>daemonize no<% end %>
