@@ -106,6 +106,12 @@
 #
 #   Default: 2
 #
+# [*sentinel_bind*]
+#   Allow optional sentinel server ip binding.  Can help overcome
+#   issues arising from protect-mode added Redis 3.2
+#
+#   Default: undef
+#
 # [*sentinel_port*]
 #   The port of sentinel server.
 #
@@ -173,6 +179,7 @@ class redis::sentinel (
   $parallel_sync          = $::redis::params::sentinel_parallel_sync,
   $pid_file               = $::redis::params::sentinel_pid_file,
   $quorum                 = $::redis::params::sentinel_quorum,
+  $sentinel_bind          = $::redis::params::sentinel_bind,
   $sentinel_port          = $::redis::params::sentinel_port,
   $service_group          = $::redis::params::service_group,
   $service_name           = $::redis::params::sentinel_service_name,
