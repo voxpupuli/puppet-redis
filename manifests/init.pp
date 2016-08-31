@@ -466,6 +466,11 @@
 #
 #   Default: /var/lib/redis/
 #
+# [*workdir_mode*]
+#   Adjust mode for directory containing DB.
+#
+#   Default: 0755
+#
 # [*zset_max_ziplist_entries*]
 #   Set max entries for sorted sets.
 #
@@ -482,7 +487,8 @@
 #   Default: false
 #
 # [*cluster_config_file*]
-#   Config file for saving cluster nodes configuration. This file is never touched by humans.
+#   Config file for saving cluster nodes configuration. This file is never
+#   touched by humans.
 #   Only set if cluster_enabled is true
 #
 #   Default: nodes.conf
@@ -587,6 +593,7 @@ class redis (
   $unixsocketperm                = $::redis::params::unixsocketperm,
   $ulimit                        = $::redis::params::ulimit,
   $workdir                       = $::redis::params::workdir,
+  $workdir_mode                  = $::redis::params::workdir_mode,
   $zset_max_ziplist_entries      = $::redis::params::zset_max_ziplist_entries,
   $zset_max_ziplist_value        = $::redis::params::zset_max_ziplist_value,
   $cluster_enabled               = $::redis::params::cluster_enabled,
