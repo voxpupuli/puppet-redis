@@ -21,7 +21,7 @@ describe 'redis', :type => :class do
         'ensure'     => 'running',
         'enable'     => 'true',
         'hasrestart' => 'true',
-        'hasstatus'  => 'false'
+        'hasstatus'  => 'true'
       )
     }
   end
