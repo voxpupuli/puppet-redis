@@ -82,5 +82,10 @@ describe 'redis::sentinel', :type => :class do
       )
     }
   end
+  describe 'with parameter: service_hasstatus' do
+    let (:params) { { :service_hasstatus => true } }
+
+    it { should contain_service('redis-sentinel').with_hasstatus(true) }
+  end
 
 end
