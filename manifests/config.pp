@@ -33,6 +33,12 @@ class redis::config {
       group  => $::redis::service_group,
       mode   => $::redis::log_dir_mode,
       owner  => $::redis::service_user;
+
+    $::redis::workdir:
+      ensure => directory,
+      group  => $::redis::service_group,
+      mode   => $::redis::workdir_mode,
+      owner  => $::redis::service_user;
   }
 
   exec {
