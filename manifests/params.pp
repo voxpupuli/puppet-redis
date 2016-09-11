@@ -43,6 +43,7 @@ class redis::params {
   $requirepass                     = undef
   $save_db_to_disk                 = true
   $sentinel_auth_pass              = undef
+  $sentinel_bind                   = '127.0.0.1'
   $sentinel_config_file_mode       = '0644'
   $sentinel_config_group           = 'root'
   $sentinel_config_owner           = 'redis'
@@ -215,4 +216,3 @@ class redis::params {
     }
   }
 }
-
