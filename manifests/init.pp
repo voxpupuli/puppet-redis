@@ -310,6 +310,14 @@
 #
 #   Default: true
 #
+#[*save_db_to_disk_interval*]
+#    save the dataset every N seconds if there are at least M changes in the dataset
+#
+#   Default:
+#           save 900 1
+#           save 300 10
+#           save 60 10000
+#
 # [*service_manage*]
 #   Specify if the service should be part of the catalog.
 #
@@ -561,6 +569,7 @@ class redis (
   $repl_timeout                  = $::redis::params::repl_timeout,
   $requirepass                   = $::redis::params::requirepass,
   $save_db_to_disk               = $::redis::params::save_db_to_disk,
+  $save_db_to_disk_interval      = $::redis::params::save_db_to_disk_interval,
   $service_enable                = $::redis::params::service_enable,
   $service_ensure                = $::redis::params::service_ensure,
   $service_group                 = $::redis::params::service_group,
