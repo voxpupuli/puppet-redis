@@ -90,6 +90,12 @@ class redis::config {
       ensure  => present,
       content => template($::redis::conf_template);
 
+    $::redis::workdir:
+      ensure => directory,
+      owner  => $::redis::service_user,
+      group  => $::redis::service_group,
+      mode   => $::redis::workdir_mode;
+
     $::redis::log_dir:
       ensure => directory,
       group  => $::redis::service_group,
