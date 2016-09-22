@@ -47,6 +47,7 @@ class redis::config {
   $repl_timeout                  = $::redis::repl_timeout
   $requirepass                   = $::redis::requirepass
   $save_db_to_disk               = $::redis::save_db_to_disk
+  $save_db_to_disk_interval      = $::redis::save_db_to_disk_interval
   $set_max_intset_entries        = $::redis::set_max_intset_entries
   $slave_priority                = $::redis::slave_priority
   $slave_read_only               = $::redis::slave_read_only
@@ -126,4 +127,3 @@ class redis::config {
     }
   }
 }
-
