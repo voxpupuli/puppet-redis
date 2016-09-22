@@ -1,11 +1,13 @@
 source 'https://rubygems.org'
 
-# special dependencies for Ruby 1.8
+# special dependencies for Rubies < 2.0.0
 # since there are still several OSes with it
-if RUBY_VERSION =~ /^1\.8\./
-  gem 'rspec-core', '~> 3.1.7'
-  gem 'nokogiri', '~> 1.5.0'
-end
+gem 'rspec-core','~> 3.1.7' if RUBY_VERSION >= '1.8.7' && RUBY_VERSION < '1.9'
+gem 'nokogiri', '~> 1.5.0'  if RUBY_VERSION >= '1.8.7' && RUBY_VERSION < '1.9'
+gem 'rspec',     '~> 2.0'   if RUBY_VERSION >= '1.8.7' && RUBY_VERSION < '1.9'
+gem 'rake',      '~> 10.0'  if RUBY_VERSION >= '1.8.7' && RUBY_VERSION < '1.9'
+gem 'json',      '<= 1.8'   if RUBY_VERSION < '2.0.0'
+gem 'json_pure', '<= 2.0.1' if RUBY_VERSION < '2.0.0'
 
 puppetversion = ENV.key?('PUPPET_VERSION') ? "~> #{ENV['PUPPET_VERSION']}" : ['>= 3.2.1']
 gem 'puppet', puppetversion
@@ -19,8 +21,6 @@ facterversion = ENV.key?('FACTER_VERSION') ? "~> #{ENV['FACTER_VERSION']}" : ['>
 
 gem 'facter', facterversion
 
-gem 'rake'
-gem 'rspec'
 gem 'puppet-lint', '>=0.3.2'
 gem 'rspec-puppet', '>=0.1.6'
 gem 'puppetlabs_spec_helper', '>=0.4.1'
