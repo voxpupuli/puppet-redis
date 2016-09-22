@@ -324,7 +324,8 @@ describe 'redis', :type => :class do
           :lsbdistcodename => 'wheezy',
           :lsbdistid       => 'Debian',
           :operatingsystem => 'Debian',
-          :osfamily        => 'Debian'
+          :osfamily        => 'Debian',
+          :puppetversion   => '4.6.0',
         }
       }
 
