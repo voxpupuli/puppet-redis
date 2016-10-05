@@ -466,6 +466,11 @@
 #
 #   Default: /var/lib/redis/
 #
+# [*workdir_mode*]
+#   Adjust mode for data directory.
+#
+#   Default: 0750
+#
 # [*zset_max_ziplist_entries*]
 #   Set max entries for sorted sets.
 #
@@ -587,6 +592,7 @@ class redis (
   $unixsocketperm                = $::redis::params::unixsocketperm,
   $ulimit                        = $::redis::params::ulimit,
   $workdir                       = $::redis::params::workdir,
+  $workdir_mode                  = $::redis::params::workdir_mode,
   $zset_max_ziplist_entries      = $::redis::params::zset_max_ziplist_entries,
   $zset_max_ziplist_value        = $::redis::params::zset_max_ziplist_value,
   $cluster_enabled               = $::redis::params::cluster_enabled,
