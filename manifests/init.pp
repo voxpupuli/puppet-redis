@@ -175,6 +175,11 @@
 #
 #   Default: false
 #
+# [*manage_package*]
+#   Enable/disable management of package
+#
+#   Default: true
+#
 # [*masterauth*]
 #   If the master is password protected (using the "requirepass" configuration
 #   directive below) it is possible to tell the slave to authenticate before
@@ -547,6 +552,7 @@ class redis (
   $log_dir_mode                  = $::redis::params::log_dir_mode,
   $log_file                      = $::redis::params::log_file,
   $log_level                     = $::redis::params::log_level,
+  $manage_package                = $::redis::params::manage_package,
   $manage_repo                   = $::redis::params::manage_repo,
   $masterauth                    = $::redis::params::masterauth,
   $maxclients                    = $::redis::params::maxclients,
