@@ -1,15 +1,7 @@
 require 'beaker-rspec'
+require 'beaker/puppet_install_helper'
 
-unless ENV['RS_PROVISION'] == 'no'
-  hosts.each do |host|
-    # Install Puppet
-    if host.is_pe?
-      install_pe
-    else
-      install_puppet
-    end
-  end
-end
+run_puppet_install_helper unless ENV['BEAKER_provision'] == 'no'
 
 RSpec.configure do |c|
   # Project root
@@ -23,9 +15,14 @@ RSpec.configure do |c|
     puppet_module_install(:source => proj_root, :module_name => 'redis')
 
     hosts.each do |host|
-      shell("/bin/touch #{default['puppetpath']}/hiera.yaml")
-
-      shell('puppet module install puppetlabs-stdlib',  { :acceptable_exit_codes => [0,1] })
+      if fact('osfamily') == 'Debian'
+        # These should be on all Deb-flavor machines by default...
+        # But Docker is often more slimline
+        shell('apt-get install apt-transport-https software-properties-common -y', { :acceptable_exit_codes => [0] })
+      end
+      on host, puppet('module', 'install', 'puppetlabs-stdlib -v 4.11.0'), { :acceptable_exit_codes => [0] }
+      on host, puppet('module', 'install', 'puppetlabs-apt -v 2.3.0'), { :acceptable_exit_codes => [0] }
+      on host, puppet('module', 'install', 'stahnma-epel -v 1.0.2'), { :acceptable_exit_codes => [0] }
     end
   end
 end
