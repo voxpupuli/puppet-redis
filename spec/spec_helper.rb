@@ -14,3 +14,11 @@ def debian_facts
     :osfamily        => 'Debian',
   }
 end
+
+def freebsd_facts
+  {
+    :operatingsystem => 'FreeBSD',
+    :osfamily        => 'FreeBSD',
+  }
+end
+
