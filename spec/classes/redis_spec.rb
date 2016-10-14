@@ -728,6 +728,50 @@ describe 'redis', :type => :class do
     end
   end
 
+  describe 'with parameter save_db_to_disk_interval' do
+    context 'with save_db_to_disk true' do
+      context 'default' do
+        let (:params) {
+          {
+            :save_db_to_disk => true
+          }
+        }
+
+        it { should contain_file('/etc/redis/redis.conf.puppet').with('content' => /save 900 1/)}
+        it { should contain_file('/etc/redis/redis.conf.puppet').with('content' => /save 300 10/)}
+        it { should contain_file('/etc/redis/redis.conf.puppet').with('content' => /save 60 10000/)
+        }
+      end
+      context 'default' do
+        let (:params) {
+          {
+            :save_db_to_disk => true,
+            :save_db_to_disk_interval => {'900' =>'2', '300' => '11', '60' => '10011'}
+          }
+        }
+
+        it { should contain_file('/etc/redis/redis.conf.puppet').with('content' => /save 900 2/)}
+        it { should contain_file('/etc/redis/redis.conf.puppet').with('content' => /save 300 11/)}
+        it { should contain_file('/etc/redis/redis.conf.puppet').with('content' => /save 60 10011/)
+        }
+      end
+    end
+    context 'with save_db_to_disk false' do
+      context 'default' do
+        let (:params) {
+          {
+            :save_db_to_disk => false
+          }
+        }
+
+        it { should contain_file('/etc/redis/redis.conf.puppet').without('content' => /save 900 1/)}
+        it { should contain_file('/etc/redis/redis.conf.puppet').without('content' => /save 300 10/)}
+        it { should contain_file('/etc/redis/redis.conf.puppet').without('content' => /save 60 10000/)
+        }
+      end
+    end
+  end
+
   describe 'with parameter: service_manage (set to false)' do
     let (:params) { { :service_manage => false } }
 

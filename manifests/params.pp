@@ -41,6 +41,7 @@ class redis::params {
   $rdbcompression                  = true
   $requirepass                     = undef
   $save_db_to_disk                 = true
+  $save_db_to_disk_interval        = {'900' =>'1', '300' => '10', '60' => '10000'}
   $sentinel_auth_pass              = undef
   $sentinel_config_file_mode       = '0644'
   $sentinel_config_group           = 'root'
@@ -222,4 +223,3 @@ class redis::params {
     }
   }
 }
-
