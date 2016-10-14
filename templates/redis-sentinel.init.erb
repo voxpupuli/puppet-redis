@@ -14,7 +14,7 @@
 
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 DAEMON=/usr/bin/redis-sentinel
-DAEMON_ARGS=<%= @config_file %>
+DAEMON_ARGS=<%= scope['redis::config_file'] %>
 NAME=redis-sentinel
 DESC=redis-senitnel
 
@@ -37,7 +37,7 @@ case "$1" in
 	echo -n "Starting $DESC: "
 	mkdir -p $RUNDIR
 	touch $PIDFILE
-	chown <%= @service_user %>:<%= @service_group %> $RUNDIR $PIDFILE
+	chown <%= scope['redis::service_user'] %>:<%= scope['redis::service_group'] %> $RUNDIR $PIDFILE
 	chmod 755 $RUNDIR
 
 	if [ -n "$ULIMIT" ]
@@ -45,7 +45,7 @@ case "$1" in
 		ulimit -n $ULIMIT
 	fi
 
-	if start-stop-daemon --start --quiet --umask 007 --pidfile $PIDFILE --chuid <%= @service_user %>:<%= @service_group %> --exec $DAEMON -- $DAEMON_ARGS
+	if start-stop-daemon --start --quiet --umask 007 --pidfile $PIDFILE --chuid <%= scope['redis::service_user'] %>:<%= scope['redis::service_group'] %> --exec $DAEMON -- $DAEMON_ARGS
 	then
 		echo "$NAME."
 	else
