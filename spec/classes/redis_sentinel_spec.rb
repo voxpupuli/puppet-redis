@@ -15,6 +15,7 @@ logfile /var/log/redis/redis.log
 EOF
 
 $expected_params_content = <<EOF
+bind 1.2.3.4
 port 26379
 dir /tmp
 daemonize yes
@@ -66,6 +67,7 @@ describe 'redis::sentinel', :type => :class do
     let (:params) {
       {
         :auth_pass              => 'password',
+        :sentinel_bind          => '1.2.3.4',
         :master_name            => 'cow',
         :down_after             => 6000,
         :log_file               => '/tmp/barn-sentinel.log',
