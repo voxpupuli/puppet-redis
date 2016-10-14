@@ -26,8 +26,9 @@ group :test do
   gem 'puppet-strings', '0.4.0',                                    :require => false
   gem 'rubocop-rspec', '~> 1.6',                                    :require => false if RUBY_VERSION >= '2.3.0'
   gem 'json_pure', '<= 2.0.1',                                      :require => false if RUBY_VERSION < '2.0.0'
-  gem 'safe_yaml', '~> 1.0.4'
-  gem 'listen', '<= 3.0.6', :require => false
+  gem 'safe_yaml', '~> 1.0.4',                                      :require => false
+  gem 'listen', '<= 3.0.6',                                         :require => false
+  gem 'puppet-syntax',                                              :require => false, git: 'https://github.com/gds-operations/puppet-syntax.git'
 end
 
 group :system_tests do
