@@ -1,14 +1,14 @@
 require 'spec_helper_acceptance'
 
 describe 'redis' do
-  it 'should run successfully' do
-    case fact('osfamily')
-    when 'Debian'
-      redis_name = 'redis-server'
-    else
-      redis_name = 'redis'
-    end
+  case fact('osfamily')
+  when 'Debian'
+    redis_name = 'redis-server'
+  else
+    redis_name = 'redis'
+  end
 
+  it 'should run successfully' do
     pp = <<-EOS
     Exec {
       path => [ '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin', ]
