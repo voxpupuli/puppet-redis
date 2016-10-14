@@ -596,10 +596,10 @@ class redis (
   anchor { 'redis::begin': }
   anchor { 'redis::end': }
 
-  include redis::preinstall
-  include redis::install
-  include redis::config
-  include redis::service
+  include ::redis::preinstall
+  include ::redis::install
+  include ::redis::config
+  include ::redis::service
 
   if $::redis::notify_service {
     Anchor['redis::begin'] ->
