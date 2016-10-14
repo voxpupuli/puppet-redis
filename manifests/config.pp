@@ -71,7 +71,7 @@ class redis::config {
       owner  => $::redis::config_owner,
       group  => $::redis::config_group,
       mode   => $::redis::config_file_mode,
-      notify => Service[$::redis::service_name]
+      notify => Service[$::redis::service_name],
     }
   } else {
     File {

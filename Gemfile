@@ -1,30 +1,56 @@
-source 'https://rubygems.org'
+source ENV['GEM_SOURCE'] || "https://rubygems.org"
 
-# special dependencies for Rubies < 2.0.0
-# since there are still several OSes with it
-gem 'rspec-core','~> 3.1.7' if RUBY_VERSION >= '1.8.7' && RUBY_VERSION < '1.9'
-gem 'nokogiri', '~> 1.5.0'  if RUBY_VERSION >= '1.8.7' && RUBY_VERSION < '1.9'
-gem 'rspec',     '~> 2.0'   if RUBY_VERSION >= '1.8.7' && RUBY_VERSION < '1.9'
-gem 'rake',      '~> 10.0'  if RUBY_VERSION >= '1.8.7' && RUBY_VERSION < '1.9'
-gem 'json',      '<= 1.8'   if RUBY_VERSION < '2.0.0'
-gem 'json_pure', '<= 2.0.1' if RUBY_VERSION < '2.0.0'
-
-puppetversion = ENV.key?('PUPPET_VERSION') ? "~> #{ENV['PUPPET_VERSION']}" : ['>= 3.2.1']
-gem 'puppet', puppetversion
-
-if puppetversion =~ /^3/
-  ## rspec-hiera-puppet is puppet 3 only
-  gem 'rspec-hiera-puppet', '>=1.0.0'
+def location_for(place, fake_version = nil)
+  if place =~ /^(git[:@][^#]*)#(.*)/
+    [fake_version, { :git => $1, :branch => $2, :require => false }].compact
+  elsif place =~ /^file:\/\/(.*)/
+    ['>= 0', { :path => File.expand_path($1), :require => false }]
+  else
+    [place, { :require => false }]
+  end
 end
 
-facterversion = ENV.key?('FACTER_VERSION') ? "~> #{ENV['FACTER_VERSION']}" : ['>= 1.7.1']
+group :test do
+  gem 'puppetlabs_spec_helper', '~> 1.2.2',                         :require => false
+  gem 'rspec-puppet',                                               :require => false, :git => 'https://github.com/rodjek/rspec-puppet.git'
+  gem 'rspec-puppet-facts',                                         :require => false
+  gem 'rspec-puppet-utils',                                         :require => false
+  gem 'puppet-lint-absolute_classname-check',                       :require => false
+  gem 'puppet-lint-leading_zero-check',                             :require => false
+  gem 'puppet-lint-trailing_comma-check',                           :require => false
+  gem 'puppet-lint-version_comparison-check',                       :require => false
+  gem 'puppet-lint-classes_and_types_beginning_with_digits-check',  :require => false
+  gem 'puppet-lint-unquoted_string-check',                          :require => false
+  gem 'puppet-lint-variable_contains_upcase',                       :require => false
+  gem 'metadata-json-lint',                                         :require => false
+  gem 'puppet-strings', '0.4.0',                                    :require => false
+  gem 'rubocop-rspec', '~> 1.6',                                    :require => false if RUBY_VERSION >= '2.3.0'
+  gem 'json_pure', '<= 2.0.1',                                      :require => false if RUBY_VERSION < '2.0.0'
+  gem 'safe_yaml', '~> 1.0.4'
+  gem 'listen', '<= 3.0.6', :require => false
+end
 
-gem 'facter', facterversion
+group :system_tests do
+  if beaker_version = ENV['BEAKER_VERSION']
+    gem 'beaker', *location_for(beaker_version)
+  end
+  if beaker_rspec_version = ENV['BEAKER_RSPEC_VERSION']
+    gem 'beaker-rspec', *location_for(beaker_rspec_version)
+  else
+    gem 'beaker-rspec',  :require => false
+  end
+  gem 'beaker-puppet_install_helper',  :require => false
+end
 
-gem 'puppet-lint', '>=0.3.2'
-gem 'rspec-puppet', '>=0.1.6'
-gem 'puppetlabs_spec_helper', '>=0.4.1'
 
-gem 'beaker-rspec'
-gem 'bundler'
-gem 'vagrant-wrapper'
+
+if facterversion = ENV['FACTER_GEM_VERSION']
+  gem 'facter', facterversion.to_s, :require => false, :groups => [:test]
+else
+  gem 'facter', :require => false, :groups => [:test]
+end
+
+ENV['PUPPET_VERSION'].nil? ? puppetversion = '~> 4.0' : puppetversion = ENV['PUPPET_VERSION'].to_s
+gem 'puppet', puppetversion, :require => false, :groups => [:test]
+
+# vim: syntax=ruby
