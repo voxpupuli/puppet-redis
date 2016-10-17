@@ -118,6 +118,7 @@ databases <%= @databases %>
 save <%= seconds -%> <%= key_change -%> <%= "\n" -%>
 <%- end -%>
 <% end %>
+
 # By default Redis will stop accepting writes if RDB snapshots are enabled
 # (at least one save point) and the latest background save failed.
 # This will make the user aware (in a hard way) that data is not persisting
@@ -169,7 +170,7 @@ dir <%= @workdir %>
 # different interval, or to listen to another port, and so on.
 #
 # slaveof <masterip> <masterport>
-<% if @slaveof -%>slaveof <%= @slaveof %><% end -%>
+<% if (@slaveof && @slaveof_port) -%>slaveof <%= @slaveof %> <%= @slaveof_port %><% end -%>
 
 # If the master is password protected (using the "requirepass" configuration
 # directive below) it is possible to tell the slave to authenticate before
@@ -719,9 +720,9 @@ activerehashing <% if @activerehashing -%>yes<% else -%>no<% end -%>
 # subscribers and slaves receive data in a push fashion.
 #
 # Both the hard or the soft limit can be disabled just setting it to zero.
-client-output-buffer-limit normal 0 0 0
-client-output-buffer-limit slave 256mb 64mb 60
-client-output-buffer-limit pubsub 32mb 8mb 60
+client-output-buffer-limit normal <%= @client_output_buffer_limit_normal %>
+client-output-buffer-limit slave  <%= @client_output_buffer_limit_slave  %>
+client-output-buffer-limit pubsub <%= @client_output_buffer_limit_pubsub %>
 
 # Redis calls an internal function to perform many background tasks, like
 # closing connections of clients in timeout, purging expired keys that are

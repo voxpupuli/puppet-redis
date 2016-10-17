@@ -53,6 +53,7 @@ class redis::config {
   $slave_read_only               = $::redis::slave_read_only
   $slave_serve_stale_data        = $::redis::slave_serve_stale_data
   $slaveof                       = $::redis::slaveof
+  $slaveof_port                  = $::redis::slaveof_port
   $slowlog_log_slower_than       = $::redis::slowlog_log_slower_than
   $slowlog_max_len               = $::redis::slowlog_max_len
   $stop_writes_on_bgsave_error   = $::redis::stop_writes_on_bgsave_error
@@ -66,64 +67,85 @@ class redis::config {
   $workdir                       = $::redis::workdir
   $zset_max_ziplist_entries      = $::redis::zset_max_ziplist_entries
   $zset_max_ziplist_value        = $::redis::zset_max_ziplist_value
+  $client_output_buffer_limit_normal = $::redis::client_output_buffer_limit_normal
+  $client_output_buffer_limit_slave  = $::redis::client_output_buffer_limit_slave
+  $client_output_buffer_limit_pubsub = $::redis::client_output_buffer_limit_pubsub
+  $redis_binary_path                 = $::redis::redis_binary_path
+  $redis_binary_name                 = $::redis::redis_binary_name
 
-  if $::redis::notify_service {
-    File {
-      owner  => $::redis::config_owner,
-      group  => $::redis::config_group,
-      mode   => $::redis::config_file_mode,
-      notify => Service[$::redis::service_name],
-    }
-  } else {
-    File {
-      owner => $::redis::config_owner,
-      group => $::redis::config_group,
-      mode  => $::redis::config_file_mode,
-    }
+  if ($::redis::instances ) {
+	file {
+	   $::redis::config_dir:
+	      ensure => directory,
+	      mode   => $::redis::config_dir_mode;
+	   $::redis::log_dir:
+	      ensure => directory,
+	      group  => $::redis::service_group,
+	      mode   => $::redis::log_dir_mode,
+	      owner  => $::redis::service_user;
+	 }
+    create_resources(::redis::instance, $::redis::instances, {})
   }
+  else {
+	  if $::redis::notify_service {
+	    File {
+	      owner  => $::redis::config_owner,
+	      group  => $::redis::config_group,
+	      mode   => $::redis::config_file_mode,
+	      notify => Service[$::redis::service_name]
+	    }
+	  } else {
+	    File {
+	      owner => $::redis::config_owner,
+	      group => $::redis::config_group,
+	      mode  => $::redis::config_file_mode,
+	    }
+	  }
 
-  file {
-    $::redis::config_dir:
-      ensure => directory,
-      mode   => $::redis::config_dir_mode;
+	  file {
+	    $::redis::config_dir:
+	      ensure => directory,
+	      mode   => $::redis::config_dir_mode;
 
-    $::redis::config_file_orig:
-      ensure  => present,
-      content => template($::redis::conf_template);
+	    $::redis::config_file_orig:
+	      ensure  => present,
+	      content => template($::redis::conf_template);
 
-    $::redis::log_dir:
-      ensure => directory,
-      group  => $::redis::service_group,
-      mode   => $::redis::log_dir_mode,
-      owner  => $::redis::service_user;
-  }
+	    $::redis::log_dir:
+	      ensure => directory,
+	      group  => $::redis::service_group,
+	      mode   => $::redis::log_dir_mode,
+	      owner  => $::redis::service_user;
+	  }
 
-  exec {
-    "cp -p ${::redis::config_file_orig} ${::redis::config_file}":
-      path        => '/usr/bin:/bin',
-      subscribe   => File[$::redis::config_file_orig],
-      refreshonly => true;
-  } ~> Service <| title == $::redis::service_name |>
+	  exec {
+	    "cp -p ${::redis::config_file_orig} ${::redis::config_file}":
+	      path        => '/usr/bin:/bin',
+	      subscribe   => File[$::redis::config_file_orig],
+	      refreshonly => true;
+	  } ~> Service <| title == $::redis::service_name |>
 
-  # Adjust /etc/default/redis-server on Debian systems
-  case $::osfamily {
-    'Debian': {
-      file { '/etc/default/redis-server':
-        ensure => present,
-        group  => $::redis::config_group,
-        mode   => $::redis::config_file_mode,
-        owner  => $::redis::config_owner,
-      }
+	  # Adjust /etc/default/redis-server on Debian systems
+	  case $::osfamily {
+	    'Debian': {
+	      file { '/etc/default/redis-server':
+	        ensure => present,
+	        group  => $::redis::config_group,
+	        mode   => $::redis::config_file_mode,
+	        owner  => $::redis::config_owner,
+	      }
 
-      if $::redis::ulimit {
-        augeas { 'redis ulimit' :
-          context => '/files/etc/default/redis-server',
-          changes => "set ULIMIT ${::redis::ulimit}",
-        }
-      }
-    }
+	      if $::redis::ulimit {
+	        augeas { 'redis ulimit' :
+	          context => '/files/etc/default/redis-server',
+	          changes => "set ULIMIT ${::redis::ulimit}",
+	        }
+	      }
+	    }
 
-    default: {
-    }
+	    default: {
+	    }
+	  }
   }
 }
+

@@ -5,6 +5,7 @@
 class redis::params {
   # Generic
   $manage_repo = false
+  $instances   = undef
 
   # redis.conf.erb
   $activerehashing                 = true
@@ -42,6 +43,8 @@ class redis::params {
   $requirepass                     = undef
   $save_db_to_disk                 = true
   $save_db_to_disk_interval        = {'900' =>'1', '300' => '10', '60' => '10000'}
+  $redis_init_template             = 'redis/redis.init.erb'
+  $redis_init_file_mode            = '0755'
   $sentinel_auth_pass              = undef
   $sentinel_bind                   = undef
   $sentinel_config_file_mode       = '0644'
@@ -56,10 +59,13 @@ class redis::params {
   $sentinel_quorum                 = 2
   $sentinel_service_name           = 'redis-sentinel'
   $sentinel_working_dir            = '/tmp'
-  $sentinel_init_template          = 'redis/redis-sentinel.init.erb'
   $sentinel_pid_file               = '/var/run/redis/redis-sentinel.pid'
   $sentinel_notification_script    = undef
   $sentinel_client_reconfig_script = undef
+  $sentinel_discover_master        = false
+  $sentinel_multiple_instances     = false
+  $sentinel_members                = {}
+  $sentinel_log_file               = '/var/log/redis/sentinel.log'
   $service_provider                = undef
   $set_max_intset_entries          = 512
   $slave_priority                  = 100
@@ -76,6 +82,9 @@ class redis::params {
   $unixsocketperm                  = 755
   $zset_max_ziplist_entries        = 128
   $zset_max_ziplist_value          = 64
+  $client_output_buffer_limit_normal = '0 0 0'
+  $client_output_buffer_limit_slave  = '256mb 64mb 60'
+  $client_output_buffer_limit_pubsub = '32mb 8mb 60'
 
   # redis.conf.erb - replication
   $masterauth               = undef
@@ -89,6 +98,7 @@ class redis::params {
   $slave_read_only          = true
   $slave_serve_stale_data   = true
   $slaveof                  = undef
+  $slaveport                = undef
 
   # redis.conf.erb - redis 3.0 clustering
   $cluster_enabled        = false
@@ -115,6 +125,7 @@ class redis::params {
       $sentinel_init_script      = '/etc/init.d/redis-sentinel'
       $sentinel_package_name     = 'redis-server'
       $sentinel_package_ensure   = 'present'
+      $sentinel_init_template    = 'redis/redis-sentinel.init.erb'
       $service_manage            = true
       $service_enable            = true
       $service_ensure            = 'running'
@@ -125,12 +136,14 @@ class redis::params {
       $service_user              = 'redis'
       $ppa_repo                  = 'ppa:chris-lea/redis-server'
       $workdir                   = '/var/lib/redis/'
+      $redis_binary_path         = '/usr/bin/'
+      $redis_binary_name         = 'redis-server'
     }
 
     'RedHat': {
       $config_dir                = '/etc/redis'
       $config_dir_mode           = '0755'
-      $config_file               = '/etc/redis.conf'
+      $config_file               = '/etc/redis/redis.conf'
       $config_file_mode          = '0644'
       $config_file_orig          = '/etc/redis.conf.puppet'
       $config_group              = 'root'
@@ -140,12 +153,13 @@ class redis::params {
       $package_ensure            = 'present'
       $package_name              = 'redis'
       $pid_file                  = '/var/run/redis/redis-server.pid'
-      $sentinel_config_file      = '/etc/redis-sentinel.conf'
-      $sentinel_config_file_orig = '/etc/redis-sentinel.conf.puppet'
+      $sentinel_config_file      = '/etc/redis/redis-sentinel.conf'
+      $sentinel_config_file_orig = '/etc/redis/redis-sentinel.conf.puppet'
       $sentinel_daemonize        = false
-      $sentinel_init_script      = undef
+      $sentinel_init_script      = '/etc/init.d/redis-sentinel'
       $sentinel_package_name     = 'redis'
       $sentinel_package_ensure   = 'present'
+      $sentinel_init_template    = 'redis/redis-sentinel.init.redhat.erb'
       $service_manage            = true
       $service_enable            = true
       $service_ensure            = 'running'
@@ -156,6 +170,9 @@ class redis::params {
       $service_user              = 'redis'
       $ppa_repo                  = undef
       $workdir                   = '/var/lib/redis/'
+      $provider                  = 'yum'
+      $redis_binary_path         = '/usr/bin/'
+      $redis_binary_name         = 'redis-server'
     }
 
     'FreeBSD': {
@@ -177,6 +194,7 @@ class redis::params {
       $sentinel_init_script      = undef
       $sentinel_package_name     = 'redis'
       $sentinel_package_ensure   = 'present'
+      $sentinel_init_template    = 'redis/redis-sentinel.init.erb'
       $service_manage            = true
       $service_enable            = true
       $service_ensure            = 'running'
@@ -187,6 +205,8 @@ class redis::params {
       $service_user              = 'redis'
       $ppa_repo                  = undef
       $workdir                   = '/var/db/redis/'
+      $redis_binary_path         = '/usr/bin/'
+      $redis_binary_name         = 'redis-server'
     }
 
     'Suse': {
@@ -207,6 +227,7 @@ class redis::params {
       $sentinel_init_script      = undef
       $sentinel_package_name     = 'redis'
       $sentinel_package_ensure   = 'present'
+      $sentinel_init_template    = 'redis/redis-sentinel.init.erb'
       $service_manage            = true
       $service_enable            = true
       $service_ensure            = 'running'
@@ -217,6 +238,8 @@ class redis::params {
       $service_user              = 'redis'
       $ppa_repo                  = undef
       $workdir                   = '/var/lib/redis/'
+      $redis_binary_path         = '/usr/bin/'
+      $redis_binary_name         = 'redis-server'
     }
 
     default: {
@@ -224,3 +247,4 @@ class redis::params {
     }
   }
 }
+

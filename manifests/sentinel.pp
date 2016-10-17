@@ -105,7 +105,6 @@
 #   signal sdown state.
 #
 #   Default: 2
-#
 # [*sentinel_bind*]
 #   Allow optional sentinel server ip binding.  Can help overcome
 #   issues arising from protect-mode added Redis 3.2
@@ -170,7 +169,7 @@ class redis::sentinel (
   $failover_timeout       = $::redis::params::sentinel_failover_timeout,
   $init_script            = $::redis::params::sentinel_init_script,
   $init_template          = $::redis::params::sentinel_init_template,
-  $log_file               = $::redis::params::log_file,
+  $log_file               = $::redis::params::sentinel_log_file,
   $master_name            = $::redis::params::sentinel_master_name,
   $redis_host             = $::redis::params::bind,
   $redis_port             = $::redis::params::port,
@@ -187,12 +186,21 @@ class redis::sentinel (
   $working_dir            = $::redis::params::sentinel_working_dir,
   $notification_script    = $::redis::params::sentinel_notification_script,
   $client_reconfig_script = $::redis::params::sentinel_client_reconfig_script,
+  $discover_master        = $::redis::params::sentinel_discover_master,
+  $members                = $::redis::params::sentinel_members,
+  $multiple_instances     = $::redis::params::sentinel_multiple_instances,
+  $instances              = $::redis::instances,
 ) inherits redis::params {
 
   unless defined(Package[$package_name]) {
     ensure_resource('package', $package_name, {
-      'ensure' => $package_ensure
+      'ensure' => $package_ensure,
+      'provider' => $redis::provider,
     })
+  }
+
+  if $discover_master {
+       $discovered_sentinel_info = template('redis/discover_master.erb')
   }
 
   file {
