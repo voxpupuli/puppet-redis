@@ -200,7 +200,7 @@ class redis::sentinel (
   }
 
   if $discover_master {
-       $discovered_sentinel_info = template('redis/discover_master.erb')
+    $discovered_sentinel_info = template('redis/discover_master.erb')
   }
 
   file {

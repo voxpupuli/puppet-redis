@@ -64,19 +64,19 @@ define redis::instance (
   $client_output_buffer_limit_normal = $::redis::client_output_buffer_limit_normal,
   $client_output_buffer_limit_slave  = $::redis::client_output_buffer_limit_slave,
   $client_output_buffer_limit_pubsub = $::redis::client_output_buffer_limit_pubsub,
- ) {
+ )  {
 
   $instance_name          = "redis-${title}"
   $service_name           = $instance_name
   $config_dir             = "${::redis::config_dir}/${service_name}"
-  $config_file            = "$config_dir/redis.conf"
-  $config_file_orig       = "$config_dir/redis.conf.puppet"
+  $config_file            = "${config_dir}/redis.conf"
+  $config_file_orig       = "${config_dir}/redis.conf.puppet"
   $instance_init_file     = "/etc/init.d/${service_name}"
   $pid_file               = "/var/run/redis/${instance_name}.pid"
   $log_file               = "/var/log/redis/${instance_name}.log"
   $redis_binary_path      = $::redis::redis_binary_path
-  $redis_binary_name      = "$instance_name"
-  $instance_symlink       = "${::redis::redis_binary_path}/$instance_name"
+  $redis_binary_name      = $instance_name
+  $instance_symlink       = "${::redis::redis_binary_path}/${instance_name}"
   $redis_server_binary    = "${::redis::redis_binary_path}/${::redis::redis_binary_name}"
 
   # We should not be making a host a slave of itself
@@ -97,7 +97,7 @@ define redis::instance (
       owner  => $::redis::config_owner,
       group  => $::redis::config_group,
       mode   => $::redis::config_file_mode,
-      notify => Service[$service_name]
+      notify => Service[$service_name],
     }
   } else {
     File {
@@ -122,8 +122,8 @@ define redis::instance (
       mode    => $::redis::redis_init_file_mode;
 
     $instance_symlink:
-      ensure  => 'link',
-      target  => $redis_server_binary;
+      ensure => 'link',
+      target => $redis_server_binary;
   }
 
   exec {
