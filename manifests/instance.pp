@@ -64,7 +64,7 @@ define redis::instance (
   $client_output_buffer_limit_normal = $::redis::client_output_buffer_limit_normal,
   $client_output_buffer_limit_slave  = $::redis::client_output_buffer_limit_slave,
   $client_output_buffer_limit_pubsub = $::redis::client_output_buffer_limit_pubsub,
- )  {
+  ) {
 
   $instance_name          = "redis-${title}"
   $service_name           = $instance_name

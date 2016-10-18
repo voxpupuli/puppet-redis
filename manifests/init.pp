@@ -647,7 +647,7 @@ class redis (
         Class['redis::service'] ->
         Anchor['redis::end']
       }
- }
+  }
   # Sanity check
   if $::redis::slaveof {
     if $::redis::bind =~ /^127.0.0./ {
