@@ -17,6 +17,7 @@ class redis::params {
   $auto_aof_rewrite_percentage     = 100
   $bind                            = '127.0.0.1'
   $conf_template                   = 'redis/redis.conf.erb'
+  $service_template                = 'redis/redis.service.erb'
   $databases                       = 16
   $dbfilename                      = 'dump.rdb'
   $extra_config_file               = undef
@@ -102,6 +103,8 @@ class redis::params {
       $config_file               = '/etc/redis/redis.conf'
       $config_file_mode          = '0644'
       $config_file_orig          = '/etc/redis/redis.conf.puppet'
+      $service_file_orig         = '/lib/systemd/system/redis.service'
+      $service_file_mode         = '0644'
       $config_group              = 'root'
       $config_owner              = 'redis'
       $daemonize                 = true
@@ -133,6 +136,8 @@ class redis::params {
       $config_file               = '/etc/redis.conf'
       $config_file_mode          = '0644'
       $config_file_orig          = '/etc/redis.conf.puppet'
+      $service_file_orig         = '/lib/systemd/system/redis.service'
+      $service_file_mode         = '0644'
       $config_group              = 'root'
       $config_owner              = 'redis'
       $daemonize                 = true
