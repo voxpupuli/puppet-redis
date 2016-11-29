@@ -7,3 +7,4 @@ doc
 log/
 pkg
 spec/fixtures
+.bundle/
