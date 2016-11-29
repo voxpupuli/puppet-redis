@@ -685,7 +685,386 @@ describe 'redis', :type => :class do
         end
       end
 
+      describe 'with parameter save_db_to_disk_interval' do
+        context 'with save_db_to_disk true' do
 
+          context 'default' do
+            let (:params) {
+              {
+                :save_db_to_disk => true
+              }
+            }
+
+            it { is_expected.to contain_file(config_file_orig).with('content' => /save 900 1/)}
+            it { is_expected.to contain_file(config_file_orig).with('content' => /save 300 10/)}
+            it { is_expected.to contain_file(config_file_orig).with('content' => /save 60 10000/)
+            }
+          end
+
+          context 'default' do
+            let (:params) {
+              {
+                :save_db_to_disk => true,
+                :save_db_to_disk_interval => {'900' =>'2', '300' => '11', '60' => '10011'}
+              }
+            }
+
+            it { is_expected.to contain_file(config_file_orig).with('content' => /save 900 2/)}
+            it { is_expected.to contain_file(config_file_orig).with('content' => /save 300 11/)}
+            it { is_expected.to contain_file(config_file_orig).with('content' => /save 60 10011/)
+            }
+          end
+
+        end
+
+        context 'with save_db_to_disk false' do
+          context 'default' do
+            let (:params) {
+              {
+                :save_db_to_disk => false
+              }
+            }
+
+            it { is_expected.to contain_file(config_file_orig).without('content' => /save 900 1/) }
+            it { is_expected.to contain_file(config_file_orig).without('content' => /save 300 10/) }
+            it { is_expected.to contain_file(config_file_orig).without('content' => /save 60 10000/) }
+          end
+        end
+      end
+
+      describe 'with parameter: service_manage (set to false)' do
+        let (:params) { { :service_manage => false } }
+        let(:package_name) { manifest_vars[:package_name] }
+
+        it { should_not contain_service(package_name) }
+      end
+
+      describe 'with parameter: service_enable' do
+        let (:params) { { :service_enable => true } }
+        let(:package_name) { manifest_vars[:package_name] }
+
+        it { is_expected.to contain_service(package_name).with_enable(true) }
+      end
+
+      describe 'with parameter: service_ensure' do
+        let (:params) { { :service_ensure => '_VALUE_' } }
+        let(:package_name) { manifest_vars[:package_name] }
+
+        it { is_expected.to contain_service(package_name).with_ensure('_VALUE_') }
+      end
+
+      describe 'with parameter: service_group' do
+        let (:params) { { :service_group => '_VALUE_' } }
+
+        it { is_expected.to contain_file('/var/log/redis').with_group('_VALUE_') }
+      end
+
+      describe 'with parameter: service_hasrestart' do
+        let (:params) { { :service_hasrestart => true } }
+        let(:package_name) { manifest_vars[:package_name] }
+
+        it { is_expected.to contain_service(package_name).with_hasrestart(true) }
+      end
+
+      describe 'with parameter: service_hasstatus' do
+        let (:params) { { :service_hasstatus => true } }
+        let(:package_name) { manifest_vars[:package_name] }
+
+        it { is_expected.to contain_service(package_name).with_hasstatus(true) }
+      end
+
+      describe 'with parameter: service_name' do
+        let (:params) { { :service_name => '_VALUE_' } }
+
+        it { is_expected.to contain_service('_VALUE_').with_name('_VALUE_') }
+      end
+
+      describe 'with parameter: service_user' do
+        let (:params) { { :service_user => '_VALUE_' } }
+
+        it { is_expected.to contain_file('/var/log/redis').with_owner('_VALUE_') }
+      end
+
+      describe 'with parameter set_max_intset_entries' do
+        let (:params) {
+          {
+            :set_max_intset_entries => '_VALUE_'
+          }
+        }
+
+        it { is_expected.to contain_file(config_file_orig).with(
+            'content' => /set-max-intset-entries.*_VALUE_/
+          )
+        }
+      end
+
+      describe 'with parameter slave_priority' do
+        let (:params) {
+          {
+            :slave_priority => '_VALUE_'
+          }
+        }
+
+        it { is_expected.to contain_file(config_file_orig).with(
+            'content' => /slave-priority.*_VALUE_/
+          )
+        }
+      end
+
+      describe 'with parameter slave_read_only' do
+        let (:params) {
+          {
+            :slave_read_only => true
+          }
+        }
+
+        it { is_expected.to contain_file(config_file_orig).with(
+            'content' => /slave-read-only.*yes/
+          )
+        }
+      end
+
+      describe 'with parameter slave_serve_stale_data' do
+        let (:params) {
+          {
+            :slave_serve_stale_data => true
+          }
+        }
+
+        it { is_expected.to contain_file(config_file_orig).with(
+            'content' => /slave-serve-stale-data.*yes/
+          )
+        }
+      end
+
+      describe 'with parameter: slaveof' do
+        context 'binding to localhost' do
+          let (:params) {
+            {
+              :bind    => '127.0.0.1',
+              :slaveof => '_VALUE_'
+            }
+          }
+
+          it do
+            expect {
+              is_expected.to create_class('redis')
+            }.to raise_error(Puppet::Error, /Replication is not possible/)
+          end
+        end
+
+        context 'binding to external ip' do
+          let (:params) {
+            {
+              :bind    => '10.0.0.1',
+              :slaveof => '_VALUE_'
+            }
+          }
+
+          it { is_expected.to contain_file(config_file_orig).with(
+            'content' => /^slaveof _VALUE_/
+          )
+        }
+        end
+      end
+
+      describe 'with parameter slowlog_log_slower_than' do
+        let (:params) {
+          {
+            :slowlog_log_slower_than => '_VALUE_'
+          }
+        }
+
+        it { is_expected.to contain_file(config_file_orig).with(
+            'content' => /slowlog-log-slower-than.*_VALUE_/
+          )
+        }
+      end
+
+      describe 'with parameter slowlog_max_len' do
+        let (:params) {
+          {
+            :slowlog_max_len => '_VALUE_'
+          }
+        }
+
+        it { is_expected.to contain_file(config_file_orig).with(
+            'content' => /slowlog-max-len.*_VALUE_/
+          )
+        }
+      end
+
+      describe 'with parameter stop_writes_on_bgsave_error' do
+        let (:params) {
+          {
+            :stop_writes_on_bgsave_error => true
+          }
+        }
+
+        it { is_expected.to contain_file(config_file_orig).with(
+            'content' => /stop-writes-on-bgsave-error.*yes/
+          )
+        }
+      end
+
+      describe 'with parameter syslog_enabled' do
+        let (:params) {
+          {
+            :syslog_enabled => true
+          }
+        }
+
+        it { is_expected.to contain_file(config_file_orig).with(
+            'content' => /syslog-enabled yes/
+          )
+        }
+      end
+
+      describe 'with parameter syslog_facility' do
+        let (:params) {
+          {
+            :syslog_enabled => true,
+            :syslog_facility => '_VALUE_'
+          }
+        }
+
+        it { is_expected.to contain_file(config_file_orig).with(
+            'content' => /syslog-facility.*_VALUE_/
+          )
+        }
+      end
+
+      describe 'with parameter tcp_backlog' do
+        let (:params) {
+          {
+            :tcp_backlog=> '_VALUE_'
+          }
+        }
+
+        it { is_expected.to contain_file(config_file_orig).with(
+            'content' => /tcp-backlog.*_VALUE_/
+          )
+        }
+      end
+
+      describe 'with parameter tcp_keepalive' do
+        let (:params) {
+          {
+            :tcp_keepalive => '_VALUE_'
+          }
+        }
+
+        it { is_expected.to contain_file(config_file_orig).with(
+            'content' => /tcp-keepalive.*_VALUE_/
+          )
+        }
+      end
+
+      describe 'with parameter timeout' do
+        let (:params) {
+          {
+            :timeout => '_VALUE_'
+          }
+        }
+
+        it { is_expected.to contain_file(config_file_orig).with(
+            'content' => /timeout.*_VALUE_/
+          )
+        }
+      end
+
+      describe 'with parameter workdir' do
+        let (:params) {
+          {
+            :workdir => '_VALUE_'
+          }
+        }
+
+        it { is_expected.to contain_file(config_file_orig).with(
+            'content' => /dir.*_VALUE_/
+          )
+        }
+      end
+
+      describe 'with parameter zset_max_ziplist_entries' do
+        let (:params) {
+          {
+            :zset_max_ziplist_entries => '_VALUE_'
+          }
+        }
+
+        it { is_expected.to contain_file(config_file_orig).with(
+            'content' => /zset-max-ziplist-entries.*_VALUE_/
+          )
+        }
+      end
+
+      describe 'with parameter zset_max_ziplist_value' do
+        let (:params) {
+          {
+            :zset_max_ziplist_value => '_VALUE_'
+          }
+        }
+
+        it { is_expected.to contain_file(config_file_orig).with(
+            'content' => /zset-max-ziplist-value.*_VALUE_/
+          )
+        }
+      end
+
+      describe 'with parameter cluster_enabled-false' do
+        let (:params) {
+          {
+            :cluster_enabled => false
+          }
+        }
+
+        it { should_not contain_file(config_file_orig).with(
+            'content' => /cluster-enabled/
+          )
+        }
+      end
+
+      describe 'with parameter cluster_enabled-true' do
+        let (:params) {
+          {
+            :cluster_enabled => true
+          }
+        }
+
+        it { is_expected.to contain_file(config_file_orig).with(
+            'content' => /cluster-enabled.*yes/
+          )
+        }
+      end
+
+      describe 'with parameter cluster_config_file' do
+        let (:params) {
+          {
+            :cluster_enabled => true,
+            :cluster_config_file => '_VALUE_'
+          }
+        }
+
+        it { is_expected.to contain_file(config_file_orig).with(
+            'content' => /cluster-config-file.*_VALUE_/
+          )
+        }
+      end
+
+      describe 'with parameter cluster_config_file' do
+        let (:params) {
+          {
+            :cluster_enabled => true,
+            :cluster_node_timeout => '_VALUE_'
+          }
+        }
+
+        it { is_expected.to contain_file(config_file_orig).with(
+            'content' => /cluster-node-timeout.*_VALUE_/
+          )
+        }
+      end
 
 
     end
@@ -693,379 +1072,3 @@ describe 'redis', :type => :class do
 
 end
 
-=begin
-
-
-  describe 'with parameter save_db_to_disk_interval' do
-    context 'with save_db_to_disk true' do
-      context 'default' do
-        let (:params) {
-          {
-            :save_db_to_disk => true
-          }
-        }
-
-        it { is_expected.to contain_file(config_file_orig).with('content' => /save 900 1/)}
-        it { is_expected.to contain_file(config_file_orig).with('content' => /save 300 10/)}
-        it { is_expected.to contain_file(config_file_orig).with('content' => /save 60 10000/)
-        }
-      end
-      context 'default' do
-        let (:params) {
-          {
-            :save_db_to_disk => true,
-            :save_db_to_disk_interval => {'900' =>'2', '300' => '11', '60' => '10011'}
-          }
-        }
-
-        it { is_expected.to contain_file(config_file_orig).with('content' => /save 900 2/)}
-        it { is_expected.to contain_file(config_file_orig).with('content' => /save 300 11/)}
-        it { is_expected.to contain_file(config_file_orig).with('content' => /save 60 10011/)
-        }
-      end
-    end
-    context 'with save_db_to_disk false' do
-      context 'default' do
-        let (:params) {
-          {
-            :save_db_to_disk => false
-          }
-        }
-
-        it { is_expected.to contain_file(config_file_orig).without('content' => /save 900 1/)}
-        it { is_expected.to contain_file(config_file_orig).without('content' => /save 300 10/)}
-        it { is_expected.to contain_file(config_file_orig).without('content' => /save 60 10000/)
-        }
-      end
-    end
-  end
-
-  describe 'with parameter: service_manage (set to false)' do
-    let (:params) { { :service_manage => false } }
-
-    it { should_not contain_service('redis-server') }
-  end
-
-  describe 'with parameter: service_enable' do
-    let (:params) { { :service_enable => true } }
-
-    it { is_expected.to contain_service('redis-server').with_enable(true) }
-  end
-
-  describe 'with parameter: service_ensure' do
-    let (:params) { { :service_ensure => '_VALUE_' } }
-
-    it { is_expected.to contain_service('redis-server').with_ensure('_VALUE_') }
-  end
-
-  describe 'with parameter: service_group' do
-    let (:params) { { :service_group => '_VALUE_' } }
-
-    it { is_expected.to contain_file('/var/log/redis').with_group('_VALUE_') }
-  end
-
-  describe 'with parameter: service_hasrestart' do
-    let (:params) { { :service_hasrestart => true } }
-
-    it { is_expected.to contain_service('redis-server').with_hasrestart(true) }
-  end
-
-  describe 'with parameter: service_hasstatus' do
-    let (:params) { { :service_hasstatus => true } }
-
-    it { is_expected.to contain_service('redis-server').with_hasstatus(true) }
-  end
-
-  describe 'with parameter: service_name' do
-    let (:params) { { :service_name => '_VALUE_' } }
-
-    it { is_expected.to contain_service('_VALUE_').with_name('_VALUE_') }
-  end
-
-  describe 'with parameter: service_user' do
-    let (:params) { { :service_user => '_VALUE_' } }
-
-    it { is_expected.to contain_file('/var/log/redis').with_owner('_VALUE_') }
-  end
-
-  describe 'with parameter set_max_intset_entries' do
-    let (:params) {
-      {
-        :set_max_intset_entries => '_VALUE_'
-      }
-    }
-
-    it { is_expected.to contain_file(config_file_orig).with(
-        'content' => /set-max-intset-entries.*_VALUE_/
-      )
-    }
-  end
-
-  describe 'with parameter slave_priority' do
-    let (:params) {
-      {
-        :slave_priority => '_VALUE_'
-      }
-    }
-
-    it { is_expected.to contain_file(config_file_orig).with(
-        'content' => /slave-priority.*_VALUE_/
-      )
-    }
-  end
-
-  describe 'with parameter slave_read_only' do
-    let (:params) {
-      {
-        :slave_read_only => true
-      }
-    }
-
-    it { is_expected.to contain_file(config_file_orig).with(
-        'content' => /slave-read-only.*yes/
-      )
-    }
-  end
-
-  describe 'with parameter slave_serve_stale_data' do
-    let (:params) {
-      {
-        :slave_serve_stale_data => true
-      }
-    }
-
-    it { is_expected.to contain_file(config_file_orig).with(
-        'content' => /slave-serve-stale-data.*yes/
-      )
-    }
-  end
-
-  describe 'with parameter: slaveof' do
-    context 'binding to localhost' do
-      let (:params) {
-        {
-          :bind    => '127.0.0.1',
-          :slaveof => '_VALUE_'
-        }
-      }
-
-      it do
-        expect {
-          is_expected.to create_class('redis')
-        }.to raise_error(Puppet::Error, /Replication is not possible/)
-      end
-    end
-
-    context 'binding to external ip' do
-      let (:params) {
-        {
-          :bind    => '10.0.0.1',
-          :slaveof => '_VALUE_'
-        }
-      }
-
-      it { is_expected.to contain_file(config_file_orig).with(
-        'content' => /^slaveof _VALUE_/
-      )
-    }
-    end
-  end
-
-  describe 'with parameter slowlog_log_slower_than' do
-    let (:params) {
-      {
-        :slowlog_log_slower_than => '_VALUE_'
-      }
-    }
-
-    it { is_expected.to contain_file(config_file_orig).with(
-        'content' => /slowlog-log-slower-than.*_VALUE_/
-      )
-    }
-  end
-
-  describe 'with parameter slowlog_max_len' do
-    let (:params) {
-      {
-        :slowlog_max_len => '_VALUE_'
-      }
-    }
-
-    it { is_expected.to contain_file(config_file_orig).with(
-        'content' => /slowlog-max-len.*_VALUE_/
-      )
-    }
-  end
-
-  describe 'with parameter stop_writes_on_bgsave_error' do
-    let (:params) {
-      {
-        :stop_writes_on_bgsave_error => true
-      }
-    }
-
-    it { is_expected.to contain_file(config_file_orig).with(
-        'content' => /stop-writes-on-bgsave-error.*yes/
-      )
-    }
-  end
-
-  describe 'with parameter syslog_enabled' do
-    let (:params) {
-      {
-        :syslog_enabled => true
-      }
-    }
-
-    it { is_expected.to contain_file(config_file_orig).with(
-        'content' => /syslog-enabled yes/
-      )
-    }
-  end
-
-  describe 'with parameter syslog_facility' do
-    let (:params) {
-      {
-        :syslog_enabled => true,
-        :syslog_facility => '_VALUE_'
-      }
-    }
-
-    it { is_expected.to contain_file(config_file_orig).with(
-        'content' => /syslog-facility.*_VALUE_/
-      )
-    }
-  end
-
-  describe 'with parameter tcp_backlog' do
-    let (:params) {
-      {
-        :tcp_backlog=> '_VALUE_'
-      }
-    }
-
-    it { is_expected.to contain_file(config_file_orig).with(
-        'content' => /tcp-backlog.*_VALUE_/
-      )
-    }
-  end
-
-  describe 'with parameter tcp_keepalive' do
-    let (:params) {
-      {
-        :tcp_keepalive => '_VALUE_'
-      }
-    }
-
-    it { is_expected.to contain_file(config_file_orig).with(
-        'content' => /tcp-keepalive.*_VALUE_/
-      )
-    }
-  end
-
-  describe 'with parameter timeout' do
-    let (:params) {
-      {
-        :timeout => '_VALUE_'
-      }
-    }
-
-    it { is_expected.to contain_file(config_file_orig).with(
-        'content' => /timeout.*_VALUE_/
-      )
-    }
-  end
-
-  describe 'with parameter workdir' do
-    let (:params) {
-      {
-        :workdir => '_VALUE_'
-      }
-    }
-
-    it { is_expected.to contain_file(config_file_orig).with(
-        'content' => /dir.*_VALUE_/
-      )
-    }
-  end
-
-  describe 'with parameter zset_max_ziplist_entries' do
-    let (:params) {
-      {
-        :zset_max_ziplist_entries => '_VALUE_'
-      }
-    }
-
-    it { is_expected.to contain_file(config_file_orig).with(
-        'content' => /zset-max-ziplist-entries.*_VALUE_/
-      )
-    }
-  end
-
-  describe 'with parameter zset_max_ziplist_value' do
-    let (:params) {
-      {
-        :zset_max_ziplist_value => '_VALUE_'
-      }
-    }
-
-    it { is_expected.to contain_file(config_file_orig).with(
-        'content' => /zset-max-ziplist-value.*_VALUE_/
-      )
-    }
-  end
-
-  describe 'with parameter cluster_enabled-false' do
-    let (:params) {
-      {
-        :cluster_enabled => false
-      }
-    }
-
-    it { should_not contain_file(config_file_orig).with(
-        'content' => /cluster-enabled/
-      )
-    }
-  end
-
-  describe 'with parameter cluster_enabled-true' do
-    let (:params) {
-      {
-        :cluster_enabled => true
-      }
-    }
-
-    it { is_expected.to contain_file(config_file_orig).with(
-        'content' => /cluster-enabled.*yes/
-      )
-    }
-  end
-
-  describe 'with parameter cluster_config_file' do
-    let (:params) {
-      {
-        :cluster_enabled => true,
-        :cluster_config_file => '_VALUE_'
-      }
-    }
-
-    it { is_expected.to contain_file(config_file_orig).with(
-        'content' => /cluster-config-file.*_VALUE_/
-      )
-    }
-  end
-
-  describe 'with parameter cluster_config_file' do
-    let (:params) {
-      {
-        :cluster_enabled => true,
-        :cluster_node_timeout => '_VALUE_'
-      }
-    }
-
-    it { is_expected.to contain_file(config_file_orig).with(
-        'content' => /cluster-node-timeout.*_VALUE_/
-      )
-    }
-  end
-=end
