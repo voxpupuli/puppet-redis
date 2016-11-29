@@ -46,6 +46,31 @@ def read_fixture_file filename
   File.read(filename)
 end
 
+def manifest_vars
+
+  vars = {}
+
+  case facts[:osfamily].to_s
+  when 'RedHat'
+    vars[:package_name] = 'redis'
+    vars[:service_name] = 'redis'
+    vars[:config_file_orig] = '/etc/redis.conf.puppet'
+    vars[:ppa_repo] = nil
+  when 'FreeBSD',
+    vars[:package_name] = 'redis'
+    vars[:service_name] = 'redis'
+    vars[:config_file_orig] = '/usr/local/etc/redis.conf.puppet'
+    vars[:ppa_repo] = nil
+  when 'Debian'
+    vars[:package_name] = 'redis-server'
+    vars[:service_name] = 'redis-server'
+    vars[:config_file_orig] = '/etc/redis/redis.conf.puppet'
+    vars[:ppa_repo] = 'ppa:chris-lea/redis-server'
+  end
+
+  vars
+end
+
 def centos_facts
   {
     :operatingsystem => 'CentOS',
