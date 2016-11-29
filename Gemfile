@@ -24,6 +24,7 @@ group :test do
   gem 'puppet-lint-variable_contains_upcase',                       :require => false
   gem 'metadata-json-lint',                                         :require => false
   gem 'puppet-strings', '0.4.0',                                    :require => false
+  gem 'puppet_facts',                                               :require => false
   gem 'rubocop-rspec', '~> 1.6',                                    :require => false if RUBY_VERSION >= '2.3.0'
   gem 'json_pure', '<= 2.0.1',                                      :require => false if RUBY_VERSION < '2.0.0'
   gem 'safe_yaml', '~> 1.0.4',                                      :require => false
