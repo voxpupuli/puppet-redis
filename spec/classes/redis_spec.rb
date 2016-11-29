@@ -315,6 +315,15 @@ describe 'redis', :type => :class do
               })
             end
 
+            it do
+              is_expected.to contain_file('/var/run/redis').with({
+                :ensure => 'directory',
+                :owner  => 'redis',
+                :group  => 'redis',
+                :mode   => '0755',
+              })
+            end
+
           end
 
         when 'Ubuntu'
@@ -322,6 +331,15 @@ describe 'redis', :type => :class do
           let(:ppa_repo) { manifest_vars[:ppa_repo] }
 
           it { is_expected.to contain_apt__ppa(ppa_repo) }
+
+          it do
+            is_expected.to contain_file('/var/run/redis').with({
+              :ensure => 'directory',
+              :owner  => 'redis',
+              :group  => 'redis',
+              :mode   => '0755',
+            })
+          end
 
         when 'RedHat', 'CentOS', 'Scientific', 'OEL', 'Amazon'
 
