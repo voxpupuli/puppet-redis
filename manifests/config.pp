@@ -115,6 +115,13 @@ class redis::config {
         owner  => $::redis::config_owner,
       }
 
+      file { '/var/run/redis':
+        ensure => 'directory',
+        owner  => 'redis',
+        group  => 'redis',
+        mode   => '0755',
+      }
+
       if $::redis::ulimit {
         augeas { 'redis ulimit' :
           context => '/files/etc/default/redis-server',
