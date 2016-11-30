@@ -1,0 +1,51 @@
+<%
+##  This erb is actually a script that discovers the sentinel master by making calls to
+##  all the redis::sentinel::members.
+##
+discover_master = @discover_master
+instances = @instances
+discovery = Hash.new()
+if (discover_master && instances) then
+    quorum = @quorum
+    quorum = quorum.to_i
+    instances.sort.each do |instance_name, value|
+        members = @members
+        sentinel_port = @sentinel_port
+        port =  value['port']
+        possible_masters = Array.new()
+        # We will now try to ask all the hosts in the sentinel member list
+        # who do they think the master is
+        members.each do |host|
+           get_sentinel_master_cmd = sprintf("(echo 'sentinel get-master-" +
+                "addr-by-name %s';sleep 0.1) | /usr/bin/nc -w 1 %s %s |  " +
+                "grep -oE '\\b([0-9]{1,3}\.){3}[0-9]{1,3}\\b'", instance_name, host, sentinel_port)
+           res = IO.popen(get_sentinel_master_cmd).read
+           possible_masters.push(res.chomp)
+        end
+        # find Consensus: not the best way, but should work.
+        discovered_sentinel_master = ""
+        uniq_masters = Hash.new 0
+        possible_masters.each do |host|
+            uniq_masters[host] += 1
+        end
+        uniq_masters.each do | master_host, count|
+            if (count >= quorum) then
+                discovered_sentinel_master = master_host
+            end
+        end
+        # At this point in time we should have arrived at a master for this instance
+        if (discovered_sentinel_master != nil && discovered_sentinel_master != "") then
+            master = discovered_sentinel_master
+        else
+        # We default at the first member in case we did not "discover" anything
+            master = members[0]
+        end
+        discovery[instance_name] = Hash.new()
+        discovery[instance_name]['port'] = port
+        discovery[instance_name]['quorum'] = quorum
+        discovery[instance_name]['sentinel_master'] = master
+    end
+end
+require 'json'
+dump = discovery.to_json
+-%><%= dump -%>

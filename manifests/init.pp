@@ -525,6 +525,8 @@ class redis (
   $auto_aof_rewrite_percentage   = $::redis::params::auto_aof_rewrite_percentage,
   $bind                          = $::redis::params::bind,
   $conf_template                 = $::redis::params::conf_template,
+  $redis_init_template           = $::redis::params::redis_init_template,
+  $redis_init_file_mode          = $::redis::params::redis_init_file_mode,
   $config_dir                    = $::redis::params::config_dir,
   $config_dir_mode               = $::redis::params::config_dir_mode,
   $config_file                   = $::redis::params::config_file,
@@ -586,6 +588,7 @@ class redis (
   $slave_read_only               = $::redis::params::slave_read_only,
   $slave_serve_stale_data        = $::redis::params::slave_serve_stale_data,
   $slaveof                       = $::redis::params::slaveof,
+  $slaveof_port                  = $::redis::params::slaveof_port,
   $slowlog_log_slower_than       = $::redis::params::slowlog_log_slower_than,
   $slowlog_max_len               = $::redis::params::slowlog_max_len,
   $stop_writes_on_bgsave_error   = $::redis::params::stop_writes_on_bgsave_error,
@@ -600,34 +603,51 @@ class redis (
   $workdir                       = $::redis::params::workdir,
   $zset_max_ziplist_entries      = $::redis::params::zset_max_ziplist_entries,
   $zset_max_ziplist_value        = $::redis::params::zset_max_ziplist_value,
+  $client_output_buffer_limit_normal = $::redis::params::client_output_buffer_limit_normal,
+  $client_output_buffer_limit_slave  = $::redis::params::client_output_buffer_limit_slave,
+  $client_output_buffer_limit_pubsub = $::redis::params::client_output_buffer_limit_pubsub,
   $cluster_enabled               = $::redis::params::cluster_enabled,
   $cluster_config_file           = $::redis::params::cluster_config_file,
   $cluster_node_timeout          = $::redis::params::cluster_node_timeout,
+  $instances                     = $::redis::params::instances,
+  $redis_binary_path             = $::redis::params::redis_binary_path,
+  $redis_binary_name             = $::redis::params::redis_binary_name,
+
+
 ) inherits redis::params {
   anchor { 'redis::begin': }
   anchor { 'redis::end': }
 
-  include ::redis::preinstall
-  include ::redis::install
-  include ::redis::config
-  include ::redis::service
-
-  if $::redis::notify_service {
-    Anchor['redis::begin'] ->
-    Class['redis::preinstall'] ->
-    Class['redis::install'] ->
-    Class['redis::config'] ~>
-    Class['redis::service'] ->
-    Anchor['redis::end']
+  if $::redis::instances {
+      include ::redis::preinstall
+      include ::redis::install
+      include ::redis::config
+      Anchor['redis::begin'] ->
+      Class['redis::preinstall'] ->
+      Class['redis::install'] ->
+      Class['redis::config'] ~>
+      Anchor['redis::end']
   } else {
-    Anchor['redis::begin'] ->
-    Class['redis::preinstall'] ->
-    Class['redis::install'] ->
-    Class['redis::config'] ->
-    Class['redis::service'] ->
-    Anchor['redis::end']
+      include ::redis::preinstall
+      include ::redis::install
+      include ::redis::config
+      include ::redis::service
+      if $::redis::notify_service {
+        Anchor['redis::begin'] ->
+        Class['redis::preinstall'] ->
+        Class['redis::install'] ->
+        Class['redis::config'] ~>
+        Class['redis::service'] ~>
+        Anchor['redis::end']
+      } else {
+        Anchor['redis::begin'] ->
+        Class['redis::preinstall'] ->
+        Class['redis::install'] ->
+        Class['redis::config'] ->
+        Class['redis::service'] ->
+        Anchor['redis::end']
+      }
   }
-
   # Sanity check
   if $::redis::slaveof {
     if $::redis::bind =~ /^127.0.0./ {
