@@ -114,7 +114,7 @@ databases <%= scope['redis::databases'] %>
 #
 #   save ""
 <% if scope['redis::save_db_to_disk'] %>
-<%- scope['save_db_to_disk_interval'].sort_by{}.each do |seconds, key_change| -%>
+<%- scope['redis::save_db_to_disk_interval'].sort_by{}.each do |seconds, key_change| -%>
 save <%= seconds -%> <%= key_change -%> <%= "\n" -%>
 <%- end -%>
 <% end %>
