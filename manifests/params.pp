@@ -5,6 +5,7 @@
 class redis::params {
   # Generic
   $manage_repo = false
+  $manage_package = true
 
   # redis.conf.erb
   $activerehashing                 = true
