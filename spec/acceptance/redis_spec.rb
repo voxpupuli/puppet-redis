@@ -31,4 +31,10 @@ describe 'redis' do
   describe service(redis_name) do
     it { should be_running }
   end
+
+  context 'redis should respond to ping command' do
+    describe command('redis-cli ping') do
+      its(:stdout) { should match /PONG/ }
+    end
+  end
 end
