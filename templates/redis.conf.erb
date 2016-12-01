@@ -85,7 +85,7 @@ syslog-enabled <% if scope['redis::syslog_enabled'] %>yes<% else %>no<% end %>
 # syslog-ident redis
 
 # Specify the syslog facility. Must be USER or between LOCAL0-LOCAL7.
-<% if scope['redis::syslog_facility'] %>syslog-facility <%= scope['redis::syslog_facility'] %><% else %># syslog-facility local0<% end %>
+<% unless [:undef, false].include?(scope['redis::syslog_facility']) %>syslog-facility <%= scope['redis::syslog_facility'] %><% else %># syslog-facility local0<% end %>
 
 # Set the number of databases. The default database is DB 0, you can select
 # a different one on a per-connection basis using SELECT <dbid> where
@@ -169,7 +169,7 @@ dir <%= scope['redis::workdir'] %>
 # different interval, or to listen to another port, and so on.
 #
 # slaveof <masterip> <masterport>
-<% if scope['redis::slaveof'] -%>slaveof <%= scope['redis::slaveof'] %><% end -%>
+<% unless [:undef, false].include?(scope['redis::slaveof']) -%>slaveof <%= scope['redis::slaveof'] %><% end -%>
 
 # If the master is password protected (using the "requirepass" configuration
 # directive below) it is possible to tell the slave to authenticate before
@@ -177,7 +177,7 @@ dir <%= scope['redis::workdir'] %>
 # refuse the slave request.
 #
 # masterauth <master-password>
-<% if scope['redis::masterauth'] -%>masterauth <%= scope['redis::masterauth'] %><% end -%>
+<% unless [:undef, false].include?(scope['redis::masterauth']) -%>masterauth <%= scope['redis::masterauth'] %><% end -%>
 
 # When a slave loses the connection with the master, or when the replication
 # is still in progress, the slave can act in two different ways:
@@ -312,7 +312,7 @@ min-slaves-max-lag <%= scope['redis::min_slaves_max_lag'] %>
 # 150k passwords per second against a good box. This means that you should
 # use a very strong password otherwise it will be very easy to break.
 #
-<% if scope['redis::requirepass'] -%>requirepass <%= scope['redis::requirepass'] %><% end -%>
+<% unless [:undef, false].include?(scope['redis::requirepass']) -%>requirepass <%= scope['redis::requirepass'] %><% end -%>
 
 # Command renaming.
 #
@@ -367,7 +367,7 @@ maxclients <%= scope['redis::maxclients'] %>
 # output buffers (but this is not needed if the policy is 'noeviction').
 #
 # maxmemory <bytes>
-<% if scope['redis::maxmemory'] -%>maxmemory <%= scope['redis::maxmemory'] %><% end -%>
+<% unless [:undef, false].include?(scope['redis::maxmemory']) -%>maxmemory <%= scope['redis::maxmemory'] %><% end -%>
 
 # MAXMEMORY POLICY: how Redis will select what to remove when maxmemory
 # is reached? You can select among five behavior:
@@ -391,7 +391,7 @@ maxclients <%= scope['redis::maxclients'] %>
 # The default is:
 #
 # maxmemory-policy volatile-lru
-<% if scope['redis::maxmemory_policy'] -%>maxmemory-policy <%= scope['redis::maxmemory_policy'] %><% end -%>
+<% unless [:undef, false].include?(scope['redis::maxmemory_policy']) -%>maxmemory-policy <%= scope['redis::maxmemory_policy'] %><% end -%>
 
 # LRU and minimal TTL algorithms are not precise algorithms but approximated
 # algorithms (in order to save memory), so you can select as well the sample
@@ -400,7 +400,7 @@ maxclients <%= scope['redis::maxclients'] %>
 # using the following configuration directive.
 #
 # maxmemory-samples 3
-<% if scope['redis::maxmemory_samples'] -%>maxmemory-samples <%= scope['redis::maxmemory_samples'] %><% end -%>
+<% unless [:undef, false].include?(scope['redis::maxmemory_samples']) -%>maxmemory-samples <%= scope['redis::maxmemory_samples'] %><% end -%>
 
 ############################## APPEND ONLY MODE ###############################
 
@@ -623,7 +623,7 @@ latency-monitor-threshold <%= scope['redis::latency_monitor_threshold'] %>
 #  By default all notifications are disabled because most users don't need
 #  this feature and the feature has some overhead. Note that if you don't
 #  specify at least one of K or E, no events will be delivered.
-notify-keyspace-events <% if scope['redis::notify_keyspace_events'] -%><%= scope['redis::notify_keyspace_events'] %><% else -%>""<% end -%>
+notify-keyspace-events <% unless [:undef, false].include?(scope['redis::notify_keyspace_events']) -%><%= scope['redis::notify_keyspace_events'] %><% else -%>""<% end -%>
 
 ############################### ADVANCED CONFIG ###############################
 
@@ -763,6 +763,6 @@ cluster-node-timeout <%= scope['redis::cluster_node_timeout'] %>
 #
 # include /path/to/local.conf
 # include /path/to/other.conf
-<% if scope['redis::extra_config_file'] -%>
+<% unless [:undef, false].include?(scope['redis::extra_config_file']) -%>
 include <%= scope['redis::extra_config_file'] %>
 <% end -%>

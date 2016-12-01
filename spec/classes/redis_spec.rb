@@ -21,6 +21,8 @@ describe 'redis', :type => :class do
 
         it { is_expected.to contain_file(config_file_orig).with_ensure('present') }
 
+        it { is_expected.to contain_file(config_file_orig).without_content(/undef/) }
+
         it do
           is_expected.to contain_service(service_name).with(
             'ensure'     => 'running',
