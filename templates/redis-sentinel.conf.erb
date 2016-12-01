@@ -1,4 +1,4 @@
-<% unless [:undef, false].include?(scope['redis::sentinel::sentinel_bind']) -%>
+<% unless [:undef, false, nil, ''].include?(scope['redis::sentinel::sentinel_bind']) -%>
 bind <%= scope['redis::sentinel::sentinel_bind'] %>
 <% end -%>
 port <%= scope['redis::sentinel::sentinel_port'] %>
@@ -10,13 +10,13 @@ sentinel monitor <%= scope['redis::sentinel::master_name'] %> <%= scope['redis::
 sentinel down-after-milliseconds <%= scope['redis::sentinel::master_name'] %> <%= scope['redis::sentinel::down_after'] %>
 sentinel parallel-syncs <%= scope['redis::sentinel::master_name'] %> <%= scope['redis::sentinel::parallel_sync'] %>
 sentinel failover-timeout <%= scope['redis::sentinel::master_name'] %> <%= scope['redis::sentinel::failover_timeout'] %>
-<% unless [:undef, false].include?(scope['redis::sentinel::auth_pass']) -%>
+<% unless [:undef, false, nil, ''].include?(scope['redis::sentinel::auth_pass']) -%>
 sentinel auth-pass <%= scope['redis::sentinel::master_name'] %> <%= scope['redis::sentinel::auth_pass'] %>
 <% end -%>
-<% unless [:undef, false].include?(scope['redis::sentinel::notification_script']) -%>
+<% unless [:undef, false, nil, ''].include?(scope['redis::sentinel::notification_script']) -%>
 sentinel notification-script <%= scope['redis::sentinel::master_name'] %> <%= scope['redis::sentinel::notification_script'] %>
 <% end -%>
-<% unless [:undef, false].include?(scope['redis::sentinel::client_reconfig_script']) -%>
+<% unless [:undef, false, nil, ''].include?(scope['redis::sentinel::client_reconfig_script']) -%>
 sentinel client-reconfig-script <%= scope['redis::sentinel::master_name'] %> <%= scope['redis::sentinel::client_reconfig_script'] %>
 <% end -%>
 
