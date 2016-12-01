@@ -149,7 +149,7 @@ rdbcompression <% if scope['redis::rdbcompression'] -%>yes<% else -%>no<% end %>
 rdbchecksum yes
 
 # The filename where to dump the DB
-dbfilename <%= scope['redis::dbfilename'] %>
+<% if scope['redis::dbfilename'] %>dbfilename <%= scope['redis::dbfilename'] %><% else %># dbfilename dump.rdb<% end %>
 
 # The working directory.
 #
