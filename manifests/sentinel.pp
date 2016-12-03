@@ -183,6 +183,7 @@ class redis::sentinel (
   $sentinel_port          = $::redis::params::sentinel_port,
   $service_group          = $::redis::params::service_group,
   $service_name           = $::redis::params::sentinel_service_name,
+  $service_ensure         = $::redis::params::service_ensure,
   $service_user           = $::redis::params::service_user,
   $working_dir            = $::redis::params::sentinel_working_dir,
   $notification_script    = $::redis::params::sentinel_notification_script,
@@ -234,7 +235,7 @@ class redis::sentinel (
   }
 
   service { $service_name:
-    ensure     => $::redis::params::service_ensure,
+    ensure     => $service_ensure,
     enable     => $::redis::params::service_enable,
     hasrestart => $::redis::params::service_hasrestart,
     hasstatus  => $::redis::params::service_hasstatus,
