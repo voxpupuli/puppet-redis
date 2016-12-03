@@ -127,6 +127,19 @@ class redis::params {
       $ppa_repo                  = 'ppa:chris-lea/redis-server'
       $workdir                   = '/var/lib/redis/'
       $workdir_mode              = '0750'
+
+      case $::operatingsystem {
+        'Ubuntu': {
+          # Latest from PPA is 3.0.7
+          $minimum_version           = '3.0.7'
+        }
+        default: {
+          # Debian standard package is 2.4.14
+          # But we have dotdeb repo which is 3.2.5
+          $minimum_version           = '3.2.5'
+        }
+      }
+
     }
 
     'RedHat': {
@@ -159,6 +172,9 @@ class redis::params {
       $ppa_repo                  = undef
       $workdir                   = '/var/lib/redis/'
       $workdir_mode              = '0750'
+
+      # EPEL package is 2.8.19
+      $minimum_version           = '2.8.19'
     }
 
     'FreeBSD': {
@@ -191,6 +207,9 @@ class redis::params {
       $ppa_repo                  = undef
       $workdir                   = '/var/db/redis/'
       $workdir_mode              = '0750'
+
+      # pkg version
+      $minimum_version           = '3.2.4'
     }
 
     'Suse': {
@@ -222,6 +241,9 @@ class redis::params {
       $ppa_repo                  = undef
       $workdir                   = '/var/lib/redis/'
       $workdir_mode              = '0750'
+
+      # suse package version
+      $minimum_version           = '3.0.5'
     }
 
     default: {
