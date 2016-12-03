@@ -82,40 +82,51 @@ class redis::config {
     }
   }
 
-  file {
-    $::redis::config_dir:
-      ensure => directory,
-      mode   => $::redis::config_dir_mode;
-
-    $::redis::config_file_orig:
-      ensure  => present,
-      content => template($::redis::conf_template);
-
-    $::redis::log_dir:
-      ensure => directory,
-      group  => $::redis::service_group,
-      mode   => $::redis::log_dir_mode,
-      owner  => $::redis::service_user;
-
-    $::redis::workdir:
-      ensure => directory,
-      group  => $::redis::service_group,
-      mode   => $::redis::workdir_mode,
-      owner  => $::redis::service_user;
+  file { $::redis::config_dir:
+    ensure => 'directory',
+    owner  => $::redis::config_owner,
+    group  => $::redis::config_group,
+    mode   => $::redis::config_dir_mode,
   }
 
-  exec {
-    "cp -p ${::redis::config_file_orig} ${::redis::config_file}":
-      path        => '/usr/bin:/bin',
-      subscribe   => File[$::redis::config_file_orig],
-      refreshonly => true;
-  } ~> Service <| title == $::redis::service_name |>
+  file { $::redis::config_file_orig:
+    ensure => 'file',
+    owner  => $::redis::config_owner,
+    group  => $::redis::config_group,
+  }
+
+  file { $::redis::log_dir:
+    ensure => 'directory',
+    owner  => $::redis::config_owner,
+    group  => $::redis::config_group,
+    mode   => $::redis::log_dir_mode,
+  }
+
+  file { $::redis::workdir:
+    ensure => 'directory',
+    group  => $::redis::service_group,
+    mode   => $::redis::workdir_mode,
+    owner  => $::redis::service_user,
+  }
+
+  if (($::redis::redis_version_real) and (versioncmp('2.8.1','redis::redis_version_real') >= 0)) {
+    File[$::redis::config_file_orig] { content => template($::redis::conf_template) }
+  } else {
+    File[$::redis::config_file_orig] { content => template('redis/redis.conf.2.4.10.erb') }
+  }
+
+  # Redis overwrites it's own config, so we need to only put it in once
+  exec { "cp -p ${::redis::config_file_orig} ${::redis::config_file}":
+    path        => '/usr/bin:/bin',
+    subscribe   => File[$::redis::config_file_orig],
+    refreshonly => true;
+  }
 
   # Adjust /etc/default/redis-server on Debian systems
   case $::osfamily {
     'Debian': {
       file { '/etc/default/redis-server':
-        ensure => present,
+        ensure => 'file',
         group  => $::redis::config_group,
         mode   => $::redis::config_file_mode,
         owner  => $::redis::config_owner,
