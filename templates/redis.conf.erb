@@ -149,7 +149,7 @@ rdbcompression <% if @rdbcompression -%>yes<% else -%>no<% end %>
 rdbchecksum yes
 
 # The filename where to dump the DB
-dbfilename <%= @dbfilename %>
+<% if @dbfilename %>dbfilename <%= @dbfilename %><% else %># dbfilename dump.rdb<% end %>
 
 # The working directory.
 #
