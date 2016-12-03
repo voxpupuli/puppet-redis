@@ -126,6 +126,7 @@ class redis::params {
       $service_user              = 'redis'
       $ppa_repo                  = 'ppa:chris-lea/redis-server'
       $workdir                   = '/var/lib/redis/'
+      $workdir_mode              = '0750'
     }
 
     'RedHat': {
@@ -157,6 +158,7 @@ class redis::params {
       $service_user              = 'redis'
       $ppa_repo                  = undef
       $workdir                   = '/var/lib/redis/'
+      $workdir_mode              = '0750'
     }
 
     'FreeBSD': {
@@ -188,6 +190,7 @@ class redis::params {
       $service_user              = 'redis'
       $ppa_repo                  = undef
       $workdir                   = '/var/db/redis/'
+      $workdir_mode              = '0750'
     }
 
     'Suse': {
@@ -218,6 +221,7 @@ class redis::params {
       $service_user              = 'redis'
       $ppa_repo                  = undef
       $workdir                   = '/var/lib/redis/'
+      $workdir_mode              = '0750'
     }
 
     default: {
