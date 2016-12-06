@@ -249,9 +249,9 @@ class redis::params {
     'Archlinux': {
       $config_dir                = '/etc/redis/'
       $config_dir_mode           = '0755'
-      $config_file               = "${config_dif}redis.conf"
+      $config_file               = '/etc/redis/redis.conf'
       $config_file_mode          = '0644'
-      $config_file_orig          = "${config_dir}redis.conf.puppet"
+      $config_file_orig          = '/etc/redis/redis.conf.puppet'
       $config_group              = 'root'
       $config_owner              = 'root'
       $daemonize                 = true
