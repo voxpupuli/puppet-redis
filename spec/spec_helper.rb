@@ -66,6 +66,12 @@ def manifest_vars
     vars[:service_name] = 'redis-server'
     vars[:config_file_orig] = '/etc/redis/redis.conf.puppet'
     vars[:ppa_repo] = 'ppa:chris-lea/redis-server'
+  when 'Archlinux'
+    vars[:package_name] = 'redis'
+    vars[:service_name] = 'redis'
+    vars[:config_file] = '/etc/redis/redis.conf'
+    vars[:config_file_orig] = '/etc/redis/redis.conf.puppet'
+    vars[:ppa_repo] = nil
   end
 
   vars
@@ -89,6 +95,13 @@ def freebsd_facts
   {
     :operatingsystem => 'FreeBSD',
     :osfamily        => 'FreeBSD',
+  }
+end
+
+def archlinux_facts
+  {
+    :operatingsystem => 'Archlinux',
+    :osfamily        => 'Archlinux',
   }
 end
 
