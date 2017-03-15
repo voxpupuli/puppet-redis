@@ -14,16 +14,16 @@
 ### Master node
 
     class { 'redis':
-      bind        => '10.0.1.1';
-      #masterauth  => 'secret';
+      bind       => '10.0.1.1',
+      #masterauth => 'secret',
     }
 
 ### Slave node
 
     class { 'redis':
-      bind        => '10.0.1.2',
-      slaveof     => '10.0.1.1 6379';
-      #masterauth  => 'secret';
+      bind       => '10.0.1.2',
+      slaveof    => '10.0.1.1 6379',
+      #masterauth => 'secret',
     }
 
 ### Redis 3.0 Clustering
@@ -62,8 +62,8 @@ With default settings:
 With adjustments:
 
     class { 'redis::sentinel':
-      master_name => 'cow',
-      redis_host  => '192.168.1.5',
+      master_name      => 'cow',
+      redis_host       => '192.168.1.5',
       failover_timeout => 30000,
     }
 
