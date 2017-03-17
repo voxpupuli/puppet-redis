@@ -1,0 +1,16 @@
+[Unit]
+Description=Redis persistent key-value database
+After=network.target
+
+[Service]
+ExecStartPre=/usr/bin/mkdir -p --mode=<%= @unixsocketperm %> <%= File.dirname(@unixsocket) %>
+ExecStartPre=/usr/bin/chown redis:redis <%= File.dirname(@unixsocket) %>
+ExecStartPre=-/usr/sbin/restorecon -Rv <%= File.dirname(@unixsocket) %>
+ExecStart=/usr/bin/redis-server /etc/redis.conf --daemonize no
+ExecStop=/usr/libexec/redis-shutdown
+User=redis
+Group=redis
+
+[Install]
+WantedBy=multi-user.target
+

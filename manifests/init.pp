@@ -60,6 +60,9 @@
 #
 #   Default: 0755
 #
+# [*service_file_orig*]
+#   The location and name of a systemd service file
+#
 # [*config_file_orig*]
 #   The location and name of a config file that provides the source
 #   of the redis config file. Two different files are needed
@@ -94,6 +97,11 @@
 #   Define which template to use.
 #
 #   Default: redis/redis.conf.erb
+#
+# [*service_template*]
+#   Define which template to use.
+#
+#   Default: redis/redis.service.erb
 #
 # [*daemonize*]
 #   Have Redis run as a daemon.
@@ -535,11 +543,13 @@ class redis (
   $auto_aof_rewrite_percentage   = $::redis::params::auto_aof_rewrite_percentage,
   $bind                          = $::redis::params::bind,
   $conf_template                 = $::redis::params::conf_template,
+  $service_template              = $::redis::params::service_template,
   $config_dir                    = $::redis::params::config_dir,
   $config_dir_mode               = $::redis::params::config_dir_mode,
   $config_file                   = $::redis::params::config_file,
   $config_file_mode              = $::redis::params::config_file_mode,
   $config_file_orig              = $::redis::params::config_file_orig,
+  $service_file_orig             = $::redis::params::service_file_orig,
   $config_group                  = $::redis::params::config_group,
   $config_owner                  = $::redis::params::config_owner,
   $daemonize                     = $::redis::params::daemonize,
