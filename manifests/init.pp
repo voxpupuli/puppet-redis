@@ -566,6 +566,7 @@ class redis (
   $maxmemory_samples             = $::redis::params::maxmemory_samples,
   $min_slaves_max_lag            = $::redis::params::min_slaves_max_lag,
   $min_slaves_to_write           = $::redis::params::min_slaves_to_write,
+  $minimum_version               = $::redis::params::minimum_version,
   $no_appendfsync_on_rewrite     = $::redis::params::no_appendfsync_on_rewrite,
   $notify_keyspace_events        = $::redis::params::notify_keyspace_events,
   $notify_service                = $::redis::params::notify_service,
@@ -618,6 +619,8 @@ class redis (
 ) inherits redis::params {
   anchor { 'redis::begin': }
   anchor { 'redis::end': }
+
+  $redis_version_real = pick($::redis_server_version, $minimum_version)
 
   include ::redis::preinstall
   include ::redis::install

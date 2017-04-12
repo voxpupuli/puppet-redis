@@ -175,8 +175,18 @@ class redis::params {
       $workdir                   = '/var/lib/redis/'
       $workdir_mode              = '0750'
 
-      # EPEL package is 2.8.19
-      $minimum_version           = '2.8.19'
+      if $::operatingsystem == 'CentOS' {
+        case $::operatingsystemmajrelease {
+          '6': {
+            # EPEL 6 package is 2.4.10
+            $minimum_version           = '2.4.10'
+          }
+          default: {
+            # EPEL package is 2.8.19
+            $minimum_version           = '2.8.19'
+          }
+        }
+      }
     }
 
     'FreeBSD': {
