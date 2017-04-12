@@ -103,7 +103,7 @@ class redis::params {
       $config_file               = '/etc/redis/redis.conf'
       $config_file_mode          = '0644'
       $config_file_orig          = '/etc/redis/redis.conf.puppet'
-      $config_group              = 'root'
+
       $config_owner              = 'redis'
       $daemonize                 = true
       $log_dir_mode              = '0755'
@@ -130,10 +130,12 @@ class redis::params {
 
       case $::operatingsystem {
         'Ubuntu': {
+          $config_group              = 'redis'
           # Latest from PPA is 3.0.7
           $minimum_version           = '3.0.7'
         }
         default: {
+          $config_group              = 'root'
           # Debian standard package is 2.4.14
           # But we have dotdeb repo which is 3.2.5
           $minimum_version           = '3.2.5'
