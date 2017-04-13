@@ -173,7 +173,8 @@ class redis::params {
       $service_user              = 'redis'
       $ppa_repo                  = undef
       $workdir                   = '/var/lib/redis/'
-      $workdir_mode              = '0750'
+      $workdir_mode              = '0755'
+
       case $::operatingsystemmajrelease {
         '6': {
           # CentOS 6 EPEL package is 2.4.10
