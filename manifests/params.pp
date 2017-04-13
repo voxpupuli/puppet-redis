@@ -166,7 +166,7 @@ class redis::params {
       $service_manage            = true
       $service_enable            = true
       $service_ensure            = 'running'
-      $service_group             = 'redis'
+      $service_group             = 'root'
       $service_hasrestart        = true
       $service_hasstatus         = true
       $service_name              = 'redis'
