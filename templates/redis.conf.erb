@@ -24,6 +24,7 @@ pidfile <%= @pid_file %>
 # If port 0 is specified Redis will not listen on a TCP socket.
 port <%= @port %>
 
+<% if scope.lookupvar('redis::redis_version_real') and (scope.function_versioncmp([scope.lookupvar('redis::redis_version_real'), '2.8.5']) >= 0) -%>
 # TCP listen() backlog.
 #
 # In high requests-per-second environments you need an high backlog in order
@@ -32,6 +33,7 @@ port <%= @port %>
 # make sure to raise both the value of somaxconn and tcp_max_syn_backlog
 # in order to get the desired effect.
 tcp-backlog <%= @tcp_backlog %>
+<% end %>
 
 # If you want you can bind a single interface, if the bind option is not
 # By default Redis listens for connections from all the network interfaces
@@ -55,6 +57,7 @@ bind <%= @bind %>
 # Close the connection after a client is idle for N seconds (0 to disable)
 timeout <%= @timeout %>
 
+<% if scope.lookupvar('redis::redis_version_real') and (scope.function_versioncmp([scope.lookupvar('redis::redis_version_real'), '2.8.0']) >= 0) -%>
 # TCP keepalive.
 #
 # If non-zero, use SO_KEEPALIVE to send TCP ACKs to clients in absence
@@ -70,6 +73,7 @@ timeout <%= @timeout %>
 #
 # A reasonable value for this option is 60 seconds.
 tcp-keepalive <%= @tcp_keepalive %>
+<% end %>
 
 # Set server verbosity to 'debug'
 # it can be one of:
@@ -128,6 +132,8 @@ databases <%= @databases %>
 save <%= seconds -%> <%= key_change -%> <%= "\n" -%>
 <%- end -%>
 <% end %>
+
+<% if scope.lookupvar('redis::redis_version_real') and (scope.function_versioncmp([scope.lookupvar('redis::redis_version_real'), '2.6.0']) >= 0) -%>
 # By default Redis will stop accepting writes if RDB snapshots are enabled
 # (at least one save point) and the latest background save failed.
 # This will make the user aware (in a hard way) that data is not persisting
@@ -142,6 +148,7 @@ save <%= seconds -%> <%= key_change -%> <%= "\n" -%>
 # continue to work as usual even if there are problems with disk,
 # permissions, and so forth.
 stop-writes-on-bgsave-error <% if @stop_writes_on_bgsave_error -%>yes<% else -%>no<% end %>
+<% end %>
 
 # Compress string objects using LZF when dump .rdb databases?
 # For default that's set to 'yes' as it's almost always a win.
@@ -149,6 +156,7 @@ stop-writes-on-bgsave-error <% if @stop_writes_on_bgsave_error -%>yes<% else -%>
 # the dataset will likely be bigger if you have compressible values or keys.
 rdbcompression <% if @rdbcompression -%>yes<% else -%>no<% end %>
 
+<% if scope.lookupvar('redis::redis_version_real') and (scope.function_versioncmp([scope.lookupvar('redis::redis_version_real'), '2.6.0']) >= 0) -%>
 # Since version 5 of RDB a CRC64 checksum is placed at the end of the file.
 # This makes the format more resistant to corruption but there is a performance
 # hit to pay (around 10%) when saving and loading RDB files, so you can disable it
@@ -157,6 +165,7 @@ rdbcompression <% if @rdbcompression -%>yes<% else -%>no<% end %>
 # RDB files created with checksum disabled have a checksum of zero that will
 # tell the loading code to skip the check.
 rdbchecksum yes
+<% end %>
 
 # The filename where to dump the DB
 <% if @dbfilename %>dbfilename <%= @dbfilename %><% else %># dbfilename dump.rdb<% end %>
@@ -171,6 +180,7 @@ rdbchecksum yes
 # Note that you must specify a directory here, not a file name.
 dir <%= @workdir %>
 
+<% if scope.lookupvar('redis::redis_version_real') and (scope.function_versioncmp([scope.lookupvar('redis::redis_version_real'), '2.6.0']) >= 0) -%>
 ################################# REPLICATION #################################
 
 # Master-Slave replication. Use slaveof to make a Redis instance a copy of
@@ -320,6 +330,7 @@ slave-priority <%= @slave_priority %>
 # min-slaves-max-lag is set to 10.
 min-slaves-to-write <%= @min_slaves_to_write %>
 min-slaves-max-lag <%= @min_slaves_max_lag %>
+<% end %>
 
 ################################## SECURITY ###################################
 
@@ -521,6 +532,7 @@ no-appendfsync-on-rewrite <% if @no_appendfsync_on_rewrite -%>yes<% else -%>no<%
 auto-aof-rewrite-percentage <%= @auto_aof_rewrite_percentage %>
 auto-aof-rewrite-min-size   <%= @auto_aof_rewrite_min_size %>
 
+<% if scope.lookupvar('redis::redis_version_real') and (scope.function_versioncmp([scope.lookupvar('redis::redis_version_real'), '2.8.15']) >= 0) -%>
 # An AOF file may be found to be truncated at the end during the Redis
 # startup process, when the AOF data gets loaded back into memory.
 # This may happen when the system where Redis is running
@@ -544,9 +556,11 @@ auto-aof-rewrite-min-size   <%= @auto_aof_rewrite_min_size %>
 # Redis will try to read more data from the AOF file but not enough bytes
 # will be found.
 aof-load-truncated <% if @aof_load_truncated -%>yes<% else -%>no<% end -%>
+<% end %>
 
 ################################ LUA SCRIPTING  ###############################
 
+<% if scope.lookupvar('redis::redis_version_real') and (scope.function_versioncmp([scope.lookupvar('redis::redis_version_real'), '2.8.0']) >= 0) -%>
 # Max execution time of a Lua script in milliseconds.
 #
 # If the maximum execution time is reached Redis will log that a script is
@@ -562,7 +576,9 @@ aof-load-truncated <% if @aof_load_truncated -%>yes<% else -%>no<% end -%>
 #
 # Set it to 0 or a negative value for unlimited execution without warnings.
 lua-time-limit 5000
+<% end %>
 
+<% if scope.lookupvar('redis::redis_version_real') and (scope.function_versioncmp([scope.lookupvar('redis::redis_version_real'), '3.0']) >= 0) -%>
 ################################ REDIS CLUSTER  ###############################
 #
 # ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -576,6 +592,10 @@ lua-time-limit 5000
 # cluster node enable the cluster support uncommenting the following:
 #
 # cluster-enabled yes
+# Redis Cluster Settings
+<% if @cluster_enabled -%>
+cluster-enabled yes
+<% end -%>
 
 # Every cluster node has a cluster configuration file. This file is not
 # intended to be edited by hand. It is created and updated by Redis nodes.
@@ -584,12 +604,18 @@ lua-time-limit 5000
 # overlapping cluster configuration file names.
 #
 # cluster-config-file nodes-6379.conf
+<% if @cluster_config_file -%>
+cluster-config-file <%= @cluster_config_file %>
+<% end -%>
 
 # Cluster node timeout is the amount of milliseconds a node must be unreachable
 # for it to be considered in failure state.
 # Most other internal time limits are multiple of the node timeout.
 #
 # cluster-node-timeout 15000
+<% if @cluster_node_timeout -%>
+cluster-node-timeout <%= @cluster_node_timeout %>
+<% end -%>
 
 # A slave of a failing master will avoid to start a failover if its data
 # looks too old.
@@ -635,6 +661,9 @@ lua-time-limit 5000
 # the cluster will always be able to continue.
 #
 # cluster-slave-validity-factor 10
+<% if @cluster_slave_validity_factor -%>
+cluster-slave-validity-factor <%= @cluster_slave_validity_factor %>
+<% end -%>
 
 # Cluster slaves are able to migrate to orphaned masters, that are masters
 # that are left without working slaves. This improves the cluster ability
@@ -654,6 +683,9 @@ lua-time-limit 5000
 # in production.
 #
 # cluster-migration-barrier 1
+<% if @cluster_migration_barrier -%>
+cluster-migration-barrier <%= @cluster_migration_barrier %>
+<% end -%>
 
 # By default Redis Cluster nodes stop accepting queries if they detect there
 # is at least an hash slot uncovered (no available node is serving it).
@@ -667,10 +699,13 @@ lua-time-limit 5000
 # option to no.
 #
 # cluster-require-full-coverage yes
+<% if @cluster_require_full_coverage -%>
+cluster-require-full-coverage <%= @cluster_require_full_coverage %>
+<% end %>
 
 # In order to setup your cluster make sure to read the documentation
 # available at http://redis.io web site.
-
+<% end -%>
 ################################## SLOW LOG ###################################
 
 # The Redis Slow Log is a system to log queries that exceeded a specified
@@ -695,6 +730,7 @@ slowlog-log-slower-than <%= @slowlog_log_slower_than %>
 # You can reclaim memory used by the slow log with SLOWLOG RESET.
 slowlog-max-len <%= @slowlog_max_len %>
 
+<% if scope.lookupvar('redis::redis_version_real') and (scope.function_versioncmp([scope.lookupvar('redis::redis_version_real'), '2.8.13']) >= 0) -%>
 ################################ LATENCY MONITOR ##############################
 
 # The Redis latency monitoring subsystem samples different operations
@@ -715,7 +751,9 @@ slowlog-max-len <%= @slowlog_max_len %>
 # monitoring can easily be enabled at runtime using the command
 # "CONFIG SET latency-monitor-threshold <milliseconds>" if needed.
 latency-monitor-threshold <%= @latency_monitor_threshold %>
+<% end %>
 
+<% if scope.lookupvar('redis::redis_version_real') and (scope.function_versioncmp([scope.lookupvar('redis::redis_version_real'), '2.8.0']) >= 0) -%>
 ############################# EVENT NOTIFICATION ##############################
 
 # Redis can notify Pub/Sub clients about events happening in the key space.
@@ -761,9 +799,11 @@ latency-monitor-threshold <%= @latency_monitor_threshold %>
 #  this feature and the feature has some overhead. Note that if you don't
 #  specify at least one of K or E, no events will be delivered.
 notify-keyspace-events <% if @notify_keyspace_events -%><%= @notify_keyspace_events %><% else -%>""<% end -%>
+<% end %>
 
 ############################### ADVANCED CONFIG ###############################
 
+<% if scope.lookupvar('redis::redis_version_real') and (scope.function_versioncmp([scope.lookupvar('redis::redis_version_real'), '2.8.0']) >= 0) -%>
 # Hashes are encoded using a memory efficient data structure when they have a
 # small number of entries, and the biggest entry does not exceed a given
 # threshold. These thresholds can be configured using the following directives.
@@ -789,6 +829,9 @@ set-max-intset-entries <%= @set_max_intset_entries %>
 zset-max-ziplist-entries <%= @zset_max_ziplist_entries %>
 zset-max-ziplist-value <%= @zset_max_ziplist_value %>
 
+<% end -%>
+
+<% if scope.lookupvar('redis::redis_version_real') and (scope.function_versioncmp([scope.lookupvar('redis::redis_version_real'), '2.8.9']) >= 0) -%>
 # HyperLogLog sparse representation bytes limit. The limit includes the
 # 16 bytes header. When an HyperLogLog using the sparse representation crosses
 # this limit, it is converted into the dense representation.
@@ -802,6 +845,7 @@ zset-max-ziplist-value <%= @zset_max_ziplist_value %>
 # ~ 10000 when CPU is not a concern, but space is, and the data set is
 # composed of many HyperLogLogs with cardinality in the 0 - 15000 range.
 hll-sparse-max-bytes <%= @hll_sparse_max_bytes %>
+<% end %>
 
 # Active rehashing uses 1 millisecond every 100 milliseconds of CPU time in
 # order to help rehashing the main Redis hash table (the one mapping top-level
@@ -823,6 +867,7 @@ hll-sparse-max-bytes <%= @hll_sparse_max_bytes %>
 # want to free memory asap when possible.
 activerehashing <% if @activerehashing -%>yes<% else -%>no<% end -%>
 
+<% if scope.lookupvar('redis::redis_version_real') and (scope.function_versioncmp([scope.lookupvar('redis::redis_version_real'), '2.6.0']) >= 0) -%>
 # The client output buffer limits can be used to force disconnection of clients
 # that are not reading data from the server fast enough for some reason (a
 # common reason is that a Pub/Sub client can't consume messages as fast as the
@@ -859,7 +904,9 @@ activerehashing <% if @activerehashing -%>yes<% else -%>no<% end -%>
 client-output-buffer-limit normal 0 0 0
 client-output-buffer-limit slave 256mb 64mb 60
 client-output-buffer-limit pubsub 32mb 8mb 60
+<% end %>
 
+<% if scope.lookupvar('redis::redis_version_real') and (scope.function_versioncmp([scope.lookupvar('redis::redis_version_real'), '2.8.0']) >= 0) -%>
 # Redis calls an internal function to perform many background tasks, like
 # closing connections of clients in timeout, purging expired keys that are
 # never requested, and so forth.
@@ -876,20 +923,15 @@ client-output-buffer-limit pubsub 32mb 8mb 60
 # a good idea. Most users should use the default of 10 and raise this up to
 # 100 only in environments where very low latency is required.
 hz <%= @hz %>
+<% end %>
 
+<% if scope.lookupvar('redis::redis_version_real') and (scope.function_versioncmp([scope.lookupvar('redis::redis_version_real'), '2.8.0']) >= 0) -%>
 # When a child rewrites the AOF file, if the following option is enabled
 # the file will be fsync-ed every 32 MB of data generated. This is useful
 # in order to commit the file to the disk more incrementally and avoid
 # big latency spikes.
 aof-rewrite-incremental-fsync <% if @aof_rewrite_incremental_fsync -%>yes<% else -%>no<% end -%>
-
-# Redis Cluster Settings
-<% if @cluster_enabled -%>
-cluster-enabled yes
-cluster-config-file <%= @cluster_config_file %>
-cluster-node-timeout <%= @cluster_node_timeout %>
-<% end -%>
-
+<% end %>
 
 ################################## INCLUDES ###################################
 
