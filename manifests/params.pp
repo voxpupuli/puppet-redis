@@ -174,9 +174,20 @@ class redis::params {
       $ppa_repo                  = undef
       $workdir                   = '/var/lib/redis/'
       $workdir_mode              = '0750'
+      case $::operatingsystemmajrelease {
+        '6': {
+          # CentOS 6 EPEL package is 2.4.10
+          $minimum_version           = '2.4.10'
+        }
+        '7': {
+          # CentOS 7 EPEL package is 2.8.19
+          $minimum_version           = '2.8.19'
+        }
+        default: {
+          fail("Not sure what Redis version is avaliable upstream on your release: ${operatingsystemmajrelease}")
+        }
+      }
 
-      # EPEL package is 2.8.19
-      $minimum_version           = '2.8.19'
     }
 
     'FreeBSD': {
