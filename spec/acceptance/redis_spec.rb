@@ -24,6 +24,17 @@ describe 'redis' do
     apply_manifest(pp, :catch_changes => true)
   end
 
+  it 'should return a fact' do
+    pp = <<-EOS
+    notify{"Redis Version: ${::redis_server_version}":}
+    EOS
+
+    # Check output for fact string
+    apply_manifest(pp, :catch_failures => true) do |r|
+      expect(r.stdout).to match(/Redis Version: [\d+.]+/)
+    end
+  end
+
   describe package(redis_name) do
     it { should be_installed }
   end
