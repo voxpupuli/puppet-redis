@@ -620,7 +620,7 @@ class redis (
   anchor { 'redis::begin': }
   anchor { 'redis::end': }
 
-  $redis_version_real = pick($::redis_server_version, $minimum_version)
+  $redis_version_real = pick($facts['redis_server_version'], $minimum_version)
 
   include ::redis::preinstall
   include ::redis::install
