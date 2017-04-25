@@ -1,6 +1,11 @@
 require 'spec_helper_acceptance'
 
 describe 'redis' do
+
+  context 'set show_diff' do
+    shell('puppet config set show_diff true', { :acceptable_exit_codes => [0,1] })
+  end
+
   case fact('osfamily')
   when 'Debian'
     redis_name = 'redis-server'

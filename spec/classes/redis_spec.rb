@@ -4,7 +4,11 @@ describe 'redis', :type => :class do
 
   on_supported_os.each do |os, facts|
     context "on #{os}" do
-      let(:facts) { facts }
+      let(:facts) {
+        facts.merge({
+          :redis_server_version => '3.2.3',
+        })
+      }
 
       let(:package_name) { manifest_vars[:package_name] }
       let(:service_name) { manifest_vars[:service_name] }
@@ -1060,8 +1064,8 @@ describe 'redis', :type => :class do
           }
         }
 
-        it { should_not contain_file(config_file_orig).with(
-            'content' => /cluster-enabled/
+        it { is_expected.to contain_file(config_file_orig).without(
+            'content' => /^cluster-enabled/
           )
         }
       end
