@@ -156,7 +156,7 @@ class redis::params {
       $log_dir_mode              = '0755'
       $package_ensure            = 'present'
       $package_name              = 'redis'
-      $pid_file                  = '/var/run/redis/redis-server.pid'
+      $pid_file                  = '/var/run/redis/redis.pid'
       $sentinel_config_file      = '/etc/redis-sentinel.conf'
       $sentinel_config_file_orig = '/etc/redis-sentinel.conf.puppet'
       $sentinel_daemonize        = false
@@ -166,17 +166,31 @@ class redis::params {
       $service_manage            = true
       $service_enable            = true
       $service_ensure            = 'running'
-      $service_group             = 'redis'
       $service_hasrestart        = true
       $service_hasstatus         = true
       $service_name              = 'redis'
       $service_user              = 'redis'
       $ppa_repo                  = undef
       $workdir                   = '/var/lib/redis/'
-      $workdir_mode              = '0750'
+      $workdir_mode              = '0755'
 
-      # EPEL package is 2.8.19
-      $minimum_version           = '2.8.19'
+      case $::operatingsystemmajrelease {
+        '6': {
+          # CentOS 6 EPEL package is 2.4.10
+          $minimum_version           = '2.4.10'
+
+          $service_group             = 'root'
+        }
+        '7': {
+          # CentOS 7 EPEL package is 3.2.3
+          $minimum_version           = '3.2.3'
+
+          $service_group             = 'redis'
+        }
+        default: {
+          fail("Not sure what Redis version is avaliable upstream on your release: ${::operatingsystemmajrelease}")
+        }
+      }
     }
 
     'FreeBSD': {
