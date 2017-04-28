@@ -42,7 +42,7 @@ describe 'redis', :type => :class do
                 :ensure => 'directory',
                 :owner  => 'redis',
                 :group  => 'root',
-                :mode   => '0755',
+                :mode   => '2775',
               })
             end
 
