@@ -190,11 +190,7 @@ class redis::sentinel (
   $client_reconfig_script = $::redis::params::sentinel_client_reconfig_script,
 ) inherits redis::params {
 
-  unless defined(Package[$package_name]) {
-    ensure_resource('package', $package_name, {
-      'ensure' => $package_ensure
-    })
-  }
+  include ::redis
 
   file {
     $config_file_orig:
