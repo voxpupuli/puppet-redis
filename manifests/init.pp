@@ -616,28 +616,19 @@ class redis (
   $cluster_config_file           = $::redis::params::cluster_config_file,
   $cluster_node_timeout          = $::redis::params::cluster_node_timeout,
 ) inherits redis::params {
-  anchor { 'redis::begin': }
-  anchor { 'redis::end': }
 
   include ::redis::preinstall
   include ::redis::install
   include ::redis::config
   include ::redis::service
 
+  Class['redis::preinstall']
+  -> Class['redis::install']
+  -> Class['redis::config']
+
   if $::redis::notify_service {
-    Anchor['redis::begin']
-    -> Class['redis::preinstall']
-    -> Class['redis::install']
-    -> Class['redis::config']
+    Class['redis::config']
     ~> Class['redis::service']
-    -> Anchor['redis::end']
-  } else {
-    Anchor['redis::begin']
-    -> Class['redis::preinstall']
-    -> Class['redis::install']
-    -> Class['redis::config']
-    -> Class['redis::service']
-    -> Anchor['redis::end']
   }
 
   # Sanity check
