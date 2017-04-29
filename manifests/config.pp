@@ -67,48 +67,40 @@ class redis::config {
   $zset_max_ziplist_entries      = $::redis::zset_max_ziplist_entries
   $zset_max_ziplist_value        = $::redis::zset_max_ziplist_value
 
-  if $::redis::notify_service {
-    File {
-      owner  => $::redis::config_owner,
-      group  => $::redis::config_group,
-      mode   => $::redis::config_file_mode,
-      notify => Service[$::redis::service_name],
-    }
-  } else {
-    File {
-      owner => $::redis::config_owner,
-      group => $::redis::config_group,
-      mode  => $::redis::config_file_mode,
-    }
+  File {
+    owner  => $::redis::config_owner,
+    group  => $::redis::config_group,
+    mode   => $::redis::config_file_mode,
   }
 
-  file {
-    $::redis::config_dir:
-      ensure => directory,
-      mode   => $::redis::config_dir_mode;
-
-    $::redis::config_file_orig:
-      ensure  => present,
-      content => template($::redis::conf_template);
-
-    $::redis::log_dir:
-      ensure => directory,
-      group  => $::redis::service_group,
-      mode   => $::redis::log_dir_mode,
-      owner  => $::redis::service_user;
-
-    $::redis::workdir:
-      ensure => directory,
-      group  => $::redis::service_group,
-      mode   => $::redis::workdir_mode,
-      owner  => $::redis::service_user;
+  file { $::redis::config_dir:
+    ensure => directory,
+    mode   => $::redis::config_dir_mode,
   }
 
-  exec {
-    "cp -p ${::redis::config_file_orig} ${::redis::config_file}":
-      path        => '/usr/bin:/bin',
-      subscribe   => File[$::redis::config_file_orig],
-      refreshonly => true;
+  file {$::redis::config_file_orig:
+    ensure  => present,
+    content => template($::redis::conf_template),
+  }
+
+  file {$::redis::log_dir:
+    ensure => directory,
+    group  => $::redis::service_group,
+    mode   => $::redis::log_dir_mode,
+    owner  => $::redis::service_user,
+  }
+
+  file {$::redis::workdir:
+    ensure => directory,
+    group  => $::redis::service_group,
+    mode   => $::redis::workdir_mode,
+    owner  => $::redis::service_user,
+  }
+
+  exec {"cp -p ${::redis::config_file_orig} ${::redis::config_file}":
+    path        => '/usr/bin:/bin',
+    subscribe   => File[$::redis::config_file_orig],
+    refreshonly => true;
   } ~> Service <| title == $::redis::service_name |>
 
   # Adjust /etc/default/redis-server on Debian systems
