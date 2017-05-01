@@ -18,7 +18,7 @@ describe 'redis::sentinel' do
     class { 'redis':
       manage_repo => true,
     }
-    ->
+
     class { 'redis::sentinel':
       master_name      => $master_name,
       redis_host       => $redis_master,
