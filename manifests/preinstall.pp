@@ -11,7 +11,7 @@ class redis::preinstall {
       }
 
       'Debian': {
-        include ::apt
+        contain ::apt
         apt::source { 'dotdeb':
           location => 'http://packages.dotdeb.org/',
           release  =>  $::lsbdistcodename,
@@ -21,13 +21,22 @@ class redis::preinstall {
             source => 'http://www.dotdeb.org/dotdeb.gpg',
           },
           include  => { 'src' => true },
+          before   => [
+            Class['apt::update'],
+            Package[$::redis::package_name],
+          ],
         }
 
       }
 
       'Ubuntu': {
-        include ::apt
-        apt::ppa { $::redis::ppa_repo: }
+        contain ::apt
+        apt::ppa { $::redis::ppa_repo:
+          before   => [
+            Class['apt::update'],
+            Package[$::redis::package_name],
+          ],
+        }
       }
 
       default: {
