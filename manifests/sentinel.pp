@@ -190,7 +190,7 @@ class redis::sentinel (
   $client_reconfig_script = $::redis::params::sentinel_client_reconfig_script,
 ) inherits redis::params {
 
-  include ::redis
+  require ::redis
 
   # Debian flavour machines have a dedicated redis-sentinel package
   # See https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=775414 for context
