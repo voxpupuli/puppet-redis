@@ -221,7 +221,7 @@ class redis::sentinel (
 
   if ( $facts['service_provider'] == 'systemd' ) {
     file {
-      "${systemd_override_dir}/redis-sentinel.service":
+      "${::redis::params::systemd_override_dir}/redis-sentinel.service":
         ensure  => present,
         owner   => 'root',
         group   => 'root',
