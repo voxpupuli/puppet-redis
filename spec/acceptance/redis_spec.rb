@@ -3,9 +3,11 @@ require 'spec_helper_acceptance'
 describe 'redis' do
   case fact('osfamily')
   when 'Debian'
-    redis_name = 'redis-server'
+    redis_name  = 'redis-server'
+    manage_repo = false
   else
-    redis_name = 'redis'
+    redis_name  = 'redis'
+    manage_repo = true
   end
 
   it 'should run successfully' do
@@ -15,7 +17,7 @@ describe 'redis' do
     }
 
     class { '::redis':
-      manage_repo => true,
+      manage_repo => #{manage_repo},
     }
     EOS
 

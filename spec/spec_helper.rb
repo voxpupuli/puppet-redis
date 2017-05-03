@@ -107,6 +107,14 @@ def centos_6_facts
   }
 end
 
+def ubuntu_1404_facts
+  {
+    :operatingsystem           => 'Ubuntu',
+    :osfamily                  => 'Debian',
+    :operatingsystemmajrelease => '14.04',
+  }
+end
+
 def archlinux_facts
   {
     :operatingsystem => 'Archlinux',
