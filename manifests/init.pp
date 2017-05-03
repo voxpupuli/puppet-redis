@@ -641,6 +641,6 @@ class redis (
   exec { 'systemd-reload-redis':
     command     => 'systemctl daemon-reload',
     refreshonly => true,
-    path        => '/bin:/usr/bin:/usr/local/bin'
+    path        => '/bin:/usr/bin:/usr/local/bin',
   }
 }
