@@ -86,8 +86,9 @@ end
 
 def debian_facts
   {
-    :operatingsystem => 'Debian',
-    :osfamily        => 'Debian',
+    :operatingsystem           => 'Debian',
+    :osfamily                  => 'Debian',
+    :operatingsystemmajrelease => '8',
   }
 end
 

@@ -192,11 +192,14 @@ class redis::sentinel (
 
   require ::redis
 
-  # Debian flavour machines have a dedicated redis-sentinel package
-  # See https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=775414 for context
   if $::osfamily == 'Debian' {
-    package { $package_name:
-      ensure => $package_ensure,
+    # Debian flavour machines have a dedicated redis-sentinel package
+    # This is default in Xenial onwards, unstable debian or PPA/other upstream
+    # See https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=775414 for context
+    if (versioncmp($::operatingsystemmajrelease, '16.04') >= 0 or $::redis::manage_repo) {
+      package { $package_name:
+        ensure => $package_ensure,
+      }
     }
   }
 
