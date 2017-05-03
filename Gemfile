@@ -32,6 +32,8 @@ group :test do
   gem 'puppet-syntax',                                              :require => false, git: 'https://github.com/gds-operations/puppet-syntax.git'
   gem 'pry'
   gem 'rb-readline'
+  gem 'redis',                                                      :require => false
+  gem 'mock_redis',                                                 :require => false
 end
 
 group :system_tests do

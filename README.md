@@ -67,6 +67,17 @@ With adjustments:
       failover_timeout => 30000,
     }
 
+## `redisget()` function
+
+`redisget()` takes two arguments that are strings. The first is the key
+to be looked up and the second is the URL to the Redis service.
+
+```puppet
+$version = redisget('version.myapp', 'redis://redis.example.com:6379')
+```
+
+You must have the 'redis' gem installed on your puppet master.
+
 ## Unit testing
 
 Plain RSpec:
