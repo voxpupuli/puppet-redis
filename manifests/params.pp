@@ -29,6 +29,7 @@ class redis::params {
   $list_max_ziplist_entries        = 512
   $list_max_ziplist_value          = 64
   $log_dir                         = '/var/log/redis'
+  $systemd_override_dir            = '/etc/systemd/system'
   $log_file                        = '/var/log/redis/redis.log'
   $log_level                       = 'notice'
   $maxclients                      = 10000
@@ -58,7 +59,9 @@ class redis::params {
   $sentinel_service_name           = 'redis-sentinel'
   $sentinel_working_dir            = '/tmp'
   $sentinel_init_template          = 'redis/redis-sentinel.init.erb'
+  $sentinel_systemd_template       = 'redis/redis-sentinel.service.erb'
   $sentinel_pid_file               = '/var/run/redis/redis-sentinel.pid'
+  $sentinel_pid_dir                = regsubst($sentinel_pid_file,'^(.*)/[0-9a-z\-_.]+$','\1')
   $sentinel_notification_script    = undef
   $sentinel_client_reconfig_script = undef
   $service_provider                = undef
@@ -110,6 +113,7 @@ class redis::params {
       $package_ensure            = 'present'
       $package_name              = 'redis-server'
       $pid_file                  = '/var/run/redis/redis-server.pid'
+      $pid_dir                   = regsubst($pid_file,'^(.*)/[0-9a-z\-_.]+$','\1')
       $sentinel_config_file      = '/etc/redis/redis-sentinel.conf'
       $sentinel_config_file_orig = '/etc/redis/redis-sentinel.conf.puppet'
       $sentinel_daemonize        = true

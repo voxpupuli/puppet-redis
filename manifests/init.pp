@@ -637,4 +637,10 @@ class redis (
       fail "Replication is not possible when binding to ${::redis::bind}."
     }
   }
+
+  exec { 'systemd-reload-redis':
+    command     => 'systemctl daemon-reload',
+    refreshonly => true,
+    path        => '/bin:/usr/bin:/usr/local/bin',
+  }
 }

@@ -170,6 +170,7 @@ class redis::sentinel (
   $failover_timeout       = $::redis::params::sentinel_failover_timeout,
   $init_script            = $::redis::params::sentinel_init_script,
   $init_template          = $::redis::params::sentinel_init_template,
+  $systemd_template       = $::redis::params::sentinel_systemd_template,
   $log_file               = $::redis::params::log_file,
   $master_name            = $::redis::params::sentinel_master_name,
   $redis_host             = $::redis::params::bind,
@@ -216,6 +217,19 @@ class redis::sentinel (
       subscribe   => File[$config_file_orig],
       notify      => Service[$service_name],
       refreshonly => true;
+  }
+
+  if ( $facts['service_provider'] == 'systemd' ) {
+    file {
+      "${::redis::params::systemd_override_dir}/redis-sentinel.service":
+        ensure  => present,
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0444',
+        content => template($systemd_template),
+        notify  => Exec['systemd-reload-redis'],
+        require => Package[$package_name];
+    }
   }
 
   if $init_script {
