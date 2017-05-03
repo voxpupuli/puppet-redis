@@ -110,7 +110,7 @@ class redis::params {
       $package_ensure            = 'present'
       $package_name              = 'redis-server'
       $pid_file                  = '/var/run/redis/redis-server.pid'
-      $sentinel_config_file      = '/etc/redis/redis-sentinel.conf'
+      $sentinel_config_file      = '/etc/redis/sentinel.conf'
       $sentinel_config_file_orig = '/etc/redis/redis-sentinel.conf.puppet'
       $sentinel_daemonize        = true
       $sentinel_init_script      = '/etc/init.d/redis-sentinel'
