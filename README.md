@@ -8,64 +8,97 @@
 
 ### Standalone
 
-    class { 'redis':
-    }
+```puppet
+include ::redis
+```
 
 ### Master node
 
-    class { 'redis':
-      bind       => '10.0.1.1',
-      #masterauth => 'secret',
-    }
+```puppet
+class { '::redis':
+  bind => '10.0.1.1',
+}
+```
+
+With authentication
+
+```puppet
+class { '::redis':
+  bind       => '10.0.1.1',
+  masterauth => 'secret',
+}
+```
 
 ### Slave node
 
-    class { 'redis':
-      bind       => '10.0.1.2',
-      slaveof    => '10.0.1.1 6379',
-      #masterauth => 'secret',
-    }
+```puppet
+class { '::redis':
+  bind    => '10.0.1.2',
+  slaveof => '10.0.1.1 6379',
+}
+```
+
+With authentication
+
+```puppet
+class { '::redis':
+  bind       => '10.0.1.2',
+  slaveof    => '10.0.1.1 6379',
+  masterauth => 'secret',
+}
+```
 
 ### Redis 3.0 Clustering
 
-    class { 'redis':
-      bind                 => '10.0.1.2',
-      appendonly           => true,
-      cluster_enabled      => true,
-      cluster_config_file  => 'nodes.conf',
-      cluster_node_timeout => 5000,
-    }
+```puppet
+class { '::redis':
+  bind                 => '10.0.1.2',
+  appendonly           => true,
+  cluster_enabled      => true,
+  cluster_config_file  => 'nodes.conf',
+  cluster_node_timeout => 5000,
+}
+```
 
 ### Manage repositories
 
 Disabled by default but if you really want the module to manage the required
 repositories you can use this snippet:
 
-    class { 'redis':
-      manage_repo => true,
-    }
+```puppet
+class { '::redis':
+  manage_repo => true,
+}
+```
 
 On Ubuntu, "chris-lea/redis-server" ppa repo will be added. You can change it by using ppa_repo parameter:
 
-    class { 'redis':
-      manage_repo => true,
-      ppa_repo    => 'ppa:rwky/redis',
-    }
+```puppet
+class { '::redis':
+  manage_repo => true,
+  ppa_repo    => 'ppa:rwky/redis',
+}
+```
+
 ### Redis Sentinel
 
 Optionally install and configuration a redis-sentinel server.
 
 With default settings:
 
-    class { 'redis::sentinel':}
+```puppet
+include ::redis::sentinel
+```
 
 With adjustments:
 
-    class { 'redis::sentinel':
-      master_name      => 'cow',
-      redis_host       => '192.168.1.5',
-      failover_timeout => 30000,
-    }
+```puppet
+class { '::redis::sentinel':
+  master_name      => 'cow',
+  redis_host       => '192.168.1.5',
+  failover_timeout => 30000,
+}
+```
 
 ## `redisget()` function
 
@@ -91,7 +124,7 @@ Using bundle:
 Test against a specific Puppet or Facter version:
 
     $ PUPPET_VERSION=3.2.1  bundle update && bundle exec rake spec
-    $ PUPPET_VERSION=2.7.19 bundle update && bundle exec rake spec
+    $ PUPPET_VERSION=4.10.0 bundle update && bundle exec rake spec
     $ FACTER_VERSION=1.6.8  bundle update && bundle exec rake spec
 
 ## Contributing
