@@ -35,6 +35,7 @@ class redis::config {
   $maxmemory_samples             = $::redis::maxmemory_samples
   $min_slaves_max_lag            = $::redis::min_slaves_max_lag
   $min_slaves_to_write           = $::redis::min_slaves_to_write
+  $minimum_version               = $::redis::minimum_version
   $no_appendfsync_on_rewrite     = $::redis::no_appendfsync_on_rewrite
   $notify_keyspace_events        = $::redis::notify_keyspace_events
   $pid_file                      = $::redis::pid_file
@@ -79,8 +80,22 @@ class redis::config {
   }
 
   file {$::redis::config_file_orig:
-    ensure  => present,
-    content => template($::redis::conf_template),
+    ensure  => file,
+  }
+
+  $redis_version_real = pick(getvar_emptystring('redis_server_version'), $minimum_version)
+
+  if ($redis_version_real and $::redis::conf_template == 'redis/redis.conf.erb') {
+    case $redis_version_real {
+      /^2.4./: {
+        File[$::redis::config_file_orig] { content => template('redis/redis.conf.2.4.10.erb') }
+      }
+      default: {
+        File[$::redis::config_file_orig] { content => template($::redis::conf_template) }
+      }
+    }
+  } else {
+    File[$::redis::config_file_orig] { content => template($::redis::conf_template) }
   }
 
   file {$::redis::log_dir:

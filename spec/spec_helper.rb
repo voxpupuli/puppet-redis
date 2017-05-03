@@ -98,6 +98,14 @@ def freebsd_facts
   }
 end
 
+def centos_6_facts
+  {
+    :operatingsystem => 'CentOS',
+    :osfamily        => 'RedHat',
+    :operatingsystemmajrelease => '6',
+  }
+end
+
 def archlinux_facts
   {
     :operatingsystem => 'Archlinux',
