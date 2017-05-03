@@ -131,8 +131,21 @@ class redis::params {
       case $::operatingsystem {
         'Ubuntu': {
           $config_group              = 'redis'
-          # Latest from PPA is 3.0.7
-          $minimum_version           = '3.0.7'
+
+          case $::operatingsystemmajrelease {
+            '14.04': {
+              # upstream package is 2.8.4
+              $minimum_version           = '2.8.4'
+            }
+            '16.04': {
+              # upstream package is 3.0.3
+              $minimum_version           = '3.0.3'
+            }
+            default: {
+              warning("Ubuntu release ${::operatingsystemmajrelease} isn't 'officially' supported by module, but will git it a shot")
+              $minimum_version           = '2.8.5'
+            }
+          }
         }
         default: {
           $config_group              = 'root'
