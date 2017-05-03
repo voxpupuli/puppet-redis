@@ -85,4 +85,73 @@ describe 'redis::sentinel', :type => :class do
     }
   end
 
+  describe 'on a systemd system' do
+    context 'Debian' do
+      let(:facts) {
+        debian_facts.merge({
+          :service_provider          => 'systemd',
+          :operatingsystemmajrelease => '8',
+        })
+      }
+
+      let (:params) {
+        {
+          :auth_pass              => 'password',
+          :sentinel_bind          => '1.2.3.4',
+          :master_name            => 'cow',
+          :down_after             => 6000,
+          :log_file               => '/tmp/barn-sentinel.log',
+          :failover_timeout       => 28000,
+          :notification_script    => 'bar.sh',
+          :client_reconfig_script => 'foo.sh'
+        }
+      }
+
+      it { should create_class('redis::sentinel') }
+
+      it { should contain_file('/etc/systemd/system/redis-sentinel.service').with(
+          'content' => /ExecStop=\/bin\/kill -s TERM \$MAINPID/
+        )
+      }
+
+      it { should contain_file('/etc/systemd/system/redis-sentinel.service').with(
+          'content' => /ExecStartPre=-\/bin\/run-parts --verbose \/etc\/redis\/redis-sentinel.pre-up.d/
+        )
+      }
+    end
+    context 'CentOS' do
+      let(:facts) {
+        centos_facts.merge({
+          :service_provider          => 'systemd',
+          :operatingsystemmajrelease => '7',
+        })
+      }
+
+      let (:params) {
+        {
+          :auth_pass              => 'password',
+          :sentinel_bind          => '1.2.3.4',
+          :master_name            => 'cow',
+          :down_after             => 6000,
+          :log_file               => '/tmp/barn-sentinel.log',
+          :failover_timeout       => 28000,
+          :notification_script    => 'bar.sh',
+          :client_reconfig_script => 'foo.sh'
+        }
+      }
+
+      it { should create_class('redis::sentinel') }
+
+      it { should contain_file('/etc/systemd/system/redis-sentinel.service').with(
+          'content' => /ExecStop=\/bin\/kill -s TERM \$MAINPID/
+        )
+      }
+
+      it { should contain_file('/etc/systemd/system/redis-sentinel.service').without(
+          'content' => /ExecStartPre=-\/bin\/run-parts --verbose \/etc\/redis\/redis-sentinel.pre-up.d/
+        )
+      }
+    end
+  end
+
 end
