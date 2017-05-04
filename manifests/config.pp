@@ -119,7 +119,7 @@ class redis::config {
     path        => '/usr/bin:/bin',
     subscribe   => File[$::redis::config_file_orig],
     refreshonly => true;
-  } ~> Service <| title == $::redis::service_name |>
+  }
 
   # Adjust /etc/default/redis-server on Debian systems
   case $::osfamily {
