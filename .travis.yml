@@ -2,19 +2,21 @@
 language: ruby
 bundler_args: --without system_tests
 script: 'SPEC_OPTS="--format documentation" bundle exec rake validate lint spec'
+before_install:
+  - gem install bundler # -v x.x.x if a specific version is needed
 matrix:
   fast_finish: true
   include:
   - sudo: required
-    dist: precise
+    dist: trusty
     rvm: 2.0.0
     env: PUPPET_GEM_VERSION="~> 3.0" FUTURE_PARSER="yes" ORDERING="random"
   - sudo: required
-    dist: precise
+    dist: trusty
     rvm: 2.0.0
     env: PUPPET_GEM_VERSION="~> 3.0" STRICT_VARIABLES="yes" ORDERING="random"
   - sudo: required
-    dist: precise
+    dist: trusty
     rvm: 2.1.9
     env: PUPPET_GEM_VERSION="~> 4.0" STRICT_VARIABLES="yes" ORDERING="random"
   - sudo: required
