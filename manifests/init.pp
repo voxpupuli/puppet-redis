@@ -175,10 +175,17 @@
 #
 #   Default: false
 #
+#
 # [*manage_package*]
 #   Enable/disable management of package
 #
 #   Default: true
+#
+# [managed_by_cluster_manager]
+#   Choose if redis will be managed by a cluster manager
+#   such as pacemaker or rgmanager
+#
+#   Default: false
 #
 # [*masterauth*]
 #   If the master is password protected (using the "requirepass" configuration
@@ -569,6 +576,7 @@ class redis (
   $no_appendfsync_on_rewrite     = $::redis::params::no_appendfsync_on_rewrite,
   $notify_keyspace_events        = $::redis::params::notify_keyspace_events,
   $notify_service                = $::redis::params::notify_service,
+  $managed_by_cluster_manager    = $::redis::params::managed_by_cluster_manager,
   $package_ensure                = $::redis::params::package_ensure,
   $package_name                  = $::redis::params::package_name,
   $pid_file                      = $::redis::params::pid_file,
@@ -637,4 +645,11 @@ class redis (
       fail "Replication is not possible when binding to ${::redis::bind}."
     }
   }
+
+  exec { 'systemd-reload-redis':
+    command     => 'systemctl daemon-reload',
+    refreshonly => true,
+    path        => '/bin:/usr/bin:/usr/local/bin',
+  }
+
 }

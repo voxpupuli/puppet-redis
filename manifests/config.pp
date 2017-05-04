@@ -115,6 +115,10 @@ class redis::config {
     owner  => $::redis::service_user,
   }
 
+  if $::redis::ulimit {
+    contain ::redis::ulimit
+  }
+
   exec {"cp -p ${::redis::config_file_orig} ${::redis::config_file}":
     path        => '/usr/bin:/bin',
     subscribe   => File[$::redis::config_file_orig],
@@ -147,12 +151,6 @@ class redis::config {
         mode   => $var_run_redis_mode,
       }
 
-      if $::redis::ulimit {
-        augeas { 'redis ulimit' :
-          context => '/files/etc/default/redis-server',
-          changes => "set ULIMIT ${::redis::ulimit}",
-        }
-      }
     }
 
     default: {
