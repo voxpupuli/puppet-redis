@@ -4,8 +4,9 @@
 #
 class redis::params {
   # Generic
-  $manage_repo = false
-  $manage_package = true
+  $manage_repo                = false
+  $manage_package             = true
+  $managed_by_cluster_manager = false
 
   # redis.conf.erb
   $activerehashing                 = true
