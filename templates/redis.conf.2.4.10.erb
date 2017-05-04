@@ -84,7 +84,7 @@ databases <%= @databases %>
 #
 #   Note: you can disable saving at all commenting all the "save" lines.
 <% if @save_db_to_disk %>
-<%- @save_db_to_disk_interval.sort_by{}.each do |seconds, key_change| -%>
+<%- @save_db_to_disk_interval.sort_by{|k,v|k}.each do |seconds, key_change| -%>
 save <%= seconds -%> <%= key_change -%> <%= "\n" -%>
 <%- end -%>
 <% end %>
