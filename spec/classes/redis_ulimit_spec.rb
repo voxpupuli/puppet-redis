@@ -16,6 +16,36 @@ describe 'redis::ulimit' do
         }'
       ]
     end
+    it { should compile.with_all_deps }
+    it do
+      is_expected.to contain_file("/etc/security/limits.d/redis.conf").with(
+        {
+          "ensure"  => "file",
+          "owner"   => "root",
+          "group"   => "root",
+          "mode"    => "0644",
+          "content" => "redis soft nofile 65536\nredis hard nofile 65536\n",
+        }
+      )
+    end
+  end
+
+  context 'with managed_by_cluster_manager true but not managing service' do
+    let(:facts) {
+      debian_facts.merge({
+        :service_provider => 'systemd',
+      })
+    }
+    let :pre_condition do
+      [
+        'class { "redis":
+          managed_by_cluster_manager => true,
+          service_manage             => false,
+          notify_service             => false,
+        }'
+      ]
+    end
+    it { should compile.with_all_deps }
     it do
       is_expected.to contain_file("/etc/security/limits.d/redis.conf").with(
         {
@@ -42,6 +72,7 @@ describe 'redis::ulimit' do
         }'
       ]
     end
+    it { should compile.with_all_deps }
     it do
       is_expected.to contain_file("/etc/systemd/system/redis-server.service.d/limit.conf").with(
       {
@@ -65,7 +96,6 @@ describe 'redis::ulimit' do
         ],
         'notify'   => [
           'Exec[systemd-reload-redis]',
-          'Service[redis-server]'
           ],
         }
         )
@@ -86,6 +116,7 @@ describe 'redis::ulimit' do
           }'
         ]
       end
+      it { should compile.with_all_deps }
       it do
         is_expected.not_to contain_file('/etc/systemd/system/redis-server.service.d/limit.conf')
       end
@@ -113,6 +144,7 @@ describe 'redis::ulimit' do
           }'
         ]
       end
+      it { should compile.with_all_deps }
       it do
         is_expected.not_to contain_file('/etc/systemd/system/redis-server.service.d/limit.conf')
       end

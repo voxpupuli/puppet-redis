@@ -50,7 +50,6 @@ class redis::ulimit {
         "set \$nofile/value \"${::redis::ulimit}\""],
       notify  => [
         Exec['systemd-reload-redis'],
-        Service[$::redis::service_name]
       ],
     }
   } else {
