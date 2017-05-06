@@ -19,6 +19,7 @@ class redis::params {
   $auto_aof_rewrite_percentage     = 100
   $bind                            = '127.0.0.1'
   $conf_template                   = 'redis/redis.conf.erb'
+  $default_install                 = true
   $databases                       = 16
   $dbfilename                      = 'dump.rdb'
   $extra_config_file               = undef
@@ -32,6 +33,7 @@ class redis::params {
   $log_dir                         = '/var/log/redis'
   $log_file                        = '/var/log/redis/redis.log'
   $log_level                       = 'notice'
+  $manage_service_file             = false
   $maxclients                      = 10000
   $maxmemory                       = undef
   $maxmemory_policy                = undef

@@ -27,6 +27,7 @@
 # @param [String] config_owner   Adjust filesystem owner for config files.
 # @param [String] conf_template   Define which template to use.
 # @param [String] daemonize   Have Redis run as a daemon.
+# @param [String] default_install  Configure a default install of redis
 # @param [String] databases   Set the number of databases.
 # @param [String] dbfilename   The filename where to dump the DB
 # @param [String] extra_config_file   Description
@@ -152,6 +153,7 @@ class redis (
   $config_owner                  = $::redis::params::config_owner,
   $daemonize                     = $::redis::params::daemonize,
   $databases                     = $::redis::params::databases,
+  $default_install               = $::redis::params::default_install,
   $dbfilename                    = $::redis::params::dbfilename,
   $extra_config_file             = $::redis::params::extra_config_file,
   $hash_max_ziplist_entries      = $::redis::params::hash_max_ziplist_entries,

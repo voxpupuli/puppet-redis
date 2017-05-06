@@ -111,11 +111,29 @@ def centos_6_facts
   }
 end
 
+def centos_7_facts
+  {
+    :operatingsystem => 'CentOS',
+    :osfamily        => 'RedHat',
+    :operatingsystemmajrelease => '7',
+    :puppetversion   => '4.5.2',
+  }
+end
+
 def ubuntu_1404_facts
   {
     :operatingsystem           => 'Ubuntu',
     :osfamily                  => 'Debian',
     :operatingsystemmajrelease => '14.04',
+    :puppetversion             => '4.5.2'
+  }
+end
+
+def ubuntu_1604_facts
+  {
+    :operatingsystem           => 'Ubuntu',
+    :osfamily                  => 'Debian',
+    :operatingsystemmajrelease => '16.04',
     :puppetversion             => '4.5.2'
   }
 end
