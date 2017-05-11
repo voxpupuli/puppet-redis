@@ -1,19 +1,83 @@
 # Change Log
 
+## [Unreleased](https://github.com/arioch/puppet-redis/tree/HEAD)
+
+[Full Changelog](https://github.com/arioch/puppet-redis/compare/v3.0.0...HEAD)
+
+**Fixed bugs:**
+
+- Sort problem in v1.2.4 template [\#195](https://github.com/arioch/puppet-redis/issues/195)
+
+## [v3.0.0](https://github.com/arioch/puppet-redis/tree/v3.0.0) (2017-05-11)
+[Full Changelog](https://github.com/arioch/puppet-redis/compare/1.2.4...v3.0.0)
+
+**Implemented enhancements:**
+
+- Ubuntu 16.04 support? [\#146](https://github.com/arioch/puppet-redis/issues/146)
+- \[Whishlist\] Extend ulimit parameter to support limits.conf and systemd [\#130](https://github.com/arioch/puppet-redis/issues/130)
+- Add overcommit.pp to deal with `Can't save in background: fork: Cannot allocate memory` ?  [\#105](https://github.com/arioch/puppet-redis/issues/105)
+
+**Fixed bugs:**
+
+- The fix for issue \#192 broke service\_managed false [\#197](https://github.com/arioch/puppet-redis/issues/197)
+- Ubuntu 16.04 changed sentinel config filename [\#175](https://github.com/arioch/puppet-redis/issues/175)
+- sentinel support broken? [\#166](https://github.com/arioch/puppet-redis/issues/166)
+- Ownership problem with Ubuntu redis-server [\#150](https://github.com/arioch/puppet-redis/issues/150)
+- Parameters not valid for older Redis in config [\#111](https://github.com/arioch/puppet-redis/issues/111)
+
+**Merged pull requests:**
+
+- Update sort to specify key [\#199](https://github.com/arioch/puppet-redis/pull/199) ([petems](https://github.com/petems))
+- Adds tests for when Redis service is unmanaged [\#198](https://github.com/arioch/puppet-redis/pull/198) ([petems](https://github.com/petems))
+- Changing Travis back to Trusty [\#194](https://github.com/arioch/puppet-redis/pull/194) ([petems](https://github.com/petems))
+- Remove service notification [\#193](https://github.com/arioch/puppet-redis/pull/193) ([petems](https://github.com/petems))
+- Improves ulimit configuration [\#192](https://github.com/arioch/puppet-redis/pull/192) ([petems](https://github.com/petems))
+- Updates metadata supported versions [\#190](https://github.com/arioch/puppet-redis/pull/190) ([petems](https://github.com/petems))
+- Adds tests for Ubuntu 1404 and Trusty package [\#189](https://github.com/arioch/puppet-redis/pull/189) ([petems](https://github.com/petems))
+- Adds redis::administration class [\#188](https://github.com/arioch/puppet-redis/pull/188) ([petems](https://github.com/petems))
+- Adds logic for managing redis-sentinel package [\#187](https://github.com/arioch/puppet-redis/pull/187) ([petems](https://github.com/petems))
+- Bump to version 3.0.0 [\#186](https://github.com/arioch/puppet-redis/pull/186) ([petems](https://github.com/petems))
+- Moves location of redis-sentinel file [\#184](https://github.com/arioch/puppet-redis/pull/184) ([petems](https://github.com/petems))
+- \(testing\) Simplify command run by TravisCI [\#183](https://github.com/arioch/puppet-redis/pull/183) ([ghoneycutt](https://github.com/ghoneycutt))
+- Style [\#182](https://github.com/arioch/puppet-redis/pull/182) ([ghoneycutt](https://github.com/ghoneycutt))
+- Adds acceptance tests for the redisget\(\) function [\#181](https://github.com/arioch/puppet-redis/pull/181) ([petems](https://github.com/petems))
+- Add redisget\(\) [\#179](https://github.com/arioch/puppet-redis/pull/179) ([ghoneycutt](https://github.com/ghoneycutt))
+- Fixes ordering of Apt repos [\#178](https://github.com/arioch/puppet-redis/pull/178) ([petems](https://github.com/petems))
+- Add 2.4.10 config file for CentOS 6 [\#177](https://github.com/arioch/puppet-redis/pull/177) ([petems](https://github.com/petems))
+- Refactoring common code patterns [\#174](https://github.com/arioch/puppet-redis/pull/174) ([petems](https://github.com/petems))
+- Changes permission on /var/run/ directory [\#173](https://github.com/arioch/puppet-redis/pull/173) ([petems](https://github.com/petems))
+- Bump Beaker Ruby versions [\#172](https://github.com/arioch/puppet-redis/pull/172) ([petems](https://github.com/petems))
+- Fixes sentinel installation on Debian flavours [\#171](https://github.com/arioch/puppet-redis/pull/171) ([petems](https://github.com/petems))
+- Adds vagrant beaker images [\#170](https://github.com/arioch/puppet-redis/pull/170) ([petems](https://github.com/petems))
+- Adds acceptance test for master/slave testing [\#168](https://github.com/arioch/puppet-redis/pull/168) ([petems](https://github.com/petems))
+- Renames spec file [\#165](https://github.com/arioch/puppet-redis/pull/165) ([petems](https://github.com/petems))
+- Adds specific versions to fixtures [\#164](https://github.com/arioch/puppet-redis/pull/164) ([petems](https://github.com/petems))
+- Changes for RHEL-ish specific configuration [\#162](https://github.com/arioch/puppet-redis/pull/162) ([petems](https://github.com/petems))
+- Changes CentOS Docker images [\#160](https://github.com/arioch/puppet-redis/pull/160) ([petems](https://github.com/petems))
+- Updates fact for CentOS 6 [\#159](https://github.com/arioch/puppet-redis/pull/159) ([petems](https://github.com/petems))
+- Fixes lint arrow errors [\#158](https://github.com/arioch/puppet-redis/pull/158) ([petems](https://github.com/petems))
+- Fixes ownership issue on Ubuntu [\#157](https://github.com/arioch/puppet-redis/pull/157) ([petems](https://github.com/petems))
+- README lint [\#155](https://github.com/arioch/puppet-redis/pull/155) ([matonb](https://github.com/matonb))
+- Archlinux: Added tests and update config\_dir parameter [\#149](https://github.com/arioch/puppet-redis/pull/149) ([bartjanssens92](https://github.com/bartjanssens92))
+- Add CHANGELOG [\#148](https://github.com/arioch/puppet-redis/pull/148) ([petems](https://github.com/petems))
+- Added Archlinux as supported OS [\#147](https://github.com/arioch/puppet-redis/pull/147) ([bartjanssens92](https://github.com/bartjanssens92))
+
 ## [1.2.4](https://github.com/arioch/puppet-redis/tree/1.2.4) (2016-12-05)
 [Full Changelog](https://github.com/arioch/puppet-redis/compare/1.2.3...1.2.4)
 
-**Closed issues:**
+**Implemented enhancements:**
+
+- Speed up Travis [\#118](https://github.com/arioch/puppet-redis/issues/118)
+
+**Fixed bugs:**
 
 - Wrong redis.conf after c45049986a7fcb1c9a0591de123c6bf97c761355 [\#142](https://github.com/arioch/puppet-redis/issues/142)
-- Speed up Travis [\#118](https://github.com/arioch/puppet-redis/issues/118)
-- Forge Release [\#110](https://github.com/arioch/puppet-redis/issues/110)
-- git submodule issue? [\#104](https://github.com/arioch/puppet-redis/issues/104)
 - powerstack.org - No longer hosted [\#103](https://github.com/arioch/puppet-redis/issues/103)
-- Add support to custom repos with RedHat [\#91](https://github.com/arioch/puppet-redis/issues/91)
+
+**Closed issues:**
+
 - redis.conf under /etc/redis.conf [\#81](https://github.com/arioch/puppet-redis/issues/81)
 - Add socket option [\#79](https://github.com/arioch/puppet-redis/issues/79)
-- Can't run multiple instances [\#78](https://github.com/arioch/puppet-redis/issues/78)
 - preinstall.pp fails on CEntOS 6.5 and Puppet Enterprise 2.7. [\#72](https://github.com/arioch/puppet-redis/issues/72)
 - How do I change from powerstack.org repo if I need to? Should I just edit manifests/preinstall.pp?  [\#68](https://github.com/arioch/puppet-redis/issues/68)
 - puppet-redis || every time when puppet runs, the service restarts [\#59](https://github.com/arioch/puppet-redis/issues/59)
@@ -49,10 +113,6 @@
 ## [1.2.3](https://github.com/arioch/puppet-redis/tree/1.2.3) (2016-09-19)
 [Full Changelog](https://github.com/arioch/puppet-redis/compare/1.2.2...1.2.3)
 
-**Closed issues:**
-
-- Could not find declared class redis [\#96](https://github.com/arioch/puppet-redis/issues/96)
-
 **Merged pull requests:**
 
 - Adds spec for unixsocket and perms [\#99](https://github.com/arioch/puppet-redis/pull/99) ([petems](https://github.com/petems))
@@ -66,7 +126,6 @@
 
 **Closed issues:**
 
-- tcp-keepalive not supported in EPEL redis [\#87](https://github.com/arioch/puppet-redis/issues/87)
 - Error 400 on SERVER: Puppet::Parser::AST::Resource failed with error ArgumentError: Invalid resource type redis [\#86](https://github.com/arioch/puppet-redis/issues/86)
 - Potential bug: `64min` should read `64mb` [\#73](https://github.com/arioch/puppet-redis/issues/73)
 - Typo on sentinel.pp on if defined [\#69](https://github.com/arioch/puppet-redis/issues/69)
@@ -234,7 +293,7 @@
 
 **Merged pull requests:**
 
-- bugfix: Added puppetlabs/apt depedency and missing class include [\#5](https://github.com/arioch/puppet-redis/pull/5) ([n1tr0g](https://github.com/n1tr0g))
+- bugfix: Added puppetlabs/apt depedency and missing class include [\#5](https://github.com/arioch/puppet-redis/pull/5) ([dgolja](https://github.com/dgolja))
 
 ## [0.0.6](https://github.com/arioch/puppet-redis/tree/0.0.6) (2013-08-07)
 [Full Changelog](https://github.com/arioch/puppet-redis/compare/0.0.5...0.0.6)
