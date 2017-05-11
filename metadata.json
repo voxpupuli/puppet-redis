@@ -1,6 +1,6 @@
 {
   "name": "arioch-redis",
-  "version": "3.0.0-RC",
+  "version": "3.0.0",
   "author": "Tom De Vylder",
   "summary": "Redis module",
   "license": "Apache-2.0",
