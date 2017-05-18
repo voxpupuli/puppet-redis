@@ -46,6 +46,19 @@ describe 'redisget() function' do
     end
   end
 
+  it 'should return a value from valid MyKey with the redisget() function while specifying a default' do
+    pp = <<-EOS
+    $mykey = redisget('mykey', 'redis://127.0.0.1:6379', 'default_value')
+
+    notify{"mykey value: ${mykey}":}
+    EOS
+
+    # Check output for fact string
+    apply_manifest(pp, :catch_failures => true) do |r|
+      expect(r.stdout).to match(/mykey value: Hello/)
+    end
+  end
+
   it 'should return an empty string when value not present with redisget() function' do
     pp = <<-EOS
     $foo_key = redisget('foo', 'redis://127.0.0.1:6379')
@@ -58,6 +71,33 @@ describe 'redisget() function' do
     # Check output for fact string
     apply_manifest(pp, :catch_failures => true) do |r|
       expect(r.stdout).to match(/foo_key value was empty string/)
+    end
+  end
+
+  it 'should return the specified default value when key not present with redisget() function' do
+    pp = <<-EOS
+    $foo_key = redisget('foo', 'redis://127.0.0.1:6379', 'default_value')
+
+    notify { $foo_key: }
+    EOS
+
+    # Check output for fact string
+    apply_manifest(pp, :catch_failures => true) do |r|
+      expect(r.stdout).to match(/default_value/)
+    end
+  end
+
+  it 'should return the specified default value when connection to redis server fails' do
+    pp = <<-EOS
+    # Bogus port for redis server
+    $foo_key = redisget('foo', 'redis://127.0.0.1:12345', 'default_value')
+
+    notify { $foo_key: }
+    EOS
+
+    # Check output for fact string
+    apply_manifest(pp, :catch_failures => true) do |r|
+      expect(r.stdout).to match(/default_value/)
     end
   end
 
