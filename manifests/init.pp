@@ -520,6 +520,11 @@
 #
 #   Default: 5000
 #
+# [*manage_var_run_dir*]
+#   Manage /var/run/dir on debian systems.
+#
+#   Default: true
+#
 # == Actions:
 #   - Install and configure Redis
 #
@@ -623,6 +628,7 @@ class redis (
   $cluster_enabled               = $::redis::params::cluster_enabled,
   $cluster_config_file           = $::redis::params::cluster_config_file,
   $cluster_node_timeout          = $::redis::params::cluster_node_timeout,
+  $manage_var_run_dir            = $::redis::params::manage_var_run_dir,
 ) inherits redis::params {
 
   contain ::redis::preinstall

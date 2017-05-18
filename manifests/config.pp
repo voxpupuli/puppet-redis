@@ -135,20 +135,22 @@ class redis::config {
         owner  => $::redis::config_owner,
       }
 
-      case $::operatingsystem {
-        'Debian': {
-          $var_run_redis_mode = '2775'
+      if $::redis::manage_var_run_dir {
+        case $::operatingsystem {
+          'Debian': {
+            $var_run_redis_mode = '2775'
+          }
+          default: {
+            $var_run_redis_mode = '0755'
+          }
         }
-        default: {
-          $var_run_redis_mode = '0755'
-        }
-      }
 
-      file { '/var/run/redis':
-        ensure => 'directory',
-        owner  => $::redis::config_owner,
-        group  => $::redis::config_group,
-        mode   => $var_run_redis_mode,
+        file { '/var/run/redis':
+          ensure => 'directory',
+          owner  => $::redis::config_owner,
+          group  => $::redis::config_group,
+          mode   => $var_run_redis_mode,
+        }
       }
 
     }
