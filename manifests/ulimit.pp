@@ -30,9 +30,10 @@ class redis::ulimit {
   }
   if $service_provider_lookup == 'systemd' {
     file { "/etc/systemd/system/${::redis::service_name}.service.d/":
-      ensure => 'directory',
-      owner  => 'root',
-      group  => 'root',
+      ensure                  => 'directory',
+      owner                   => 'root',
+      group                   => 'root',
+      selinux_ignore_defaults => true,
     }
 
     file { "/etc/systemd/system/${::redis::service_name}.service.d/limit.conf":
