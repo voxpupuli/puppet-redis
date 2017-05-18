@@ -40,7 +40,20 @@ describe 'redisget() function' do
     notify{"mykey value: ${mykey}":}
     EOS
 
-    # Check output for fact string
+    # Check output for function return value
+    apply_manifest(pp, :catch_failures => true) do |r|
+      expect(r.stdout).to match(/mykey value: Hello/)
+    end
+  end
+
+  it 'should return a value from valid MyKey with the redisget() function while specifying a default' do
+    pp = <<-EOS
+    $mykey = redisget('mykey', 'redis://127.0.0.1:6379', 'default_value')
+
+    notify{"mykey value: ${mykey}":}
+    EOS
+
+    # Check output for function return value
     apply_manifest(pp, :catch_failures => true) do |r|
       expect(r.stdout).to match(/mykey value: Hello/)
     end
@@ -55,9 +68,50 @@ describe 'redisget() function' do
     }
     EOS
 
-    # Check output for fact string
+    # Check output for function return value
     apply_manifest(pp, :catch_failures => true) do |r|
       expect(r.stdout).to match(/foo_key value was empty string/)
+    end
+  end
+
+  it 'should return the specified default value when key not present with redisget() function' do
+    pp = <<-EOS
+    $foo_key = redisget('foo', 'redis://127.0.0.1:6379', 'default_value')
+
+    notify { $foo_key: }
+    EOS
+
+    # Check output for function return value
+    apply_manifest(pp, :catch_failures => true) do |r|
+      expect(r.stdout).to match(/default_value/)
+    end
+  end
+
+  it 'should return the specified default value when connection to redis server fails' do
+    pp = <<-EOS
+    # Bogus port for redis server
+    $foo_key = redisget('foo', 'redis://127.0.0.1:12345', 'default_value')
+
+    notify { $foo_key: }
+    EOS
+
+    # Check output for function return value
+    apply_manifest(pp, :catch_failures => true) do |r|
+      expect(r.stdout).to match(/default_value/)
+    end
+  end
+
+  it 'should return an error when specifying a non connectable redis server' do
+    pp = <<-EOS
+    # Bogus port for redis server
+    $foo_key = redisget('foo', 'redis://127.0.0.1:12345')
+
+    notify { $foo_key: }
+    EOS
+
+    # Check output for error when can't connect to bogus redis
+    apply_manifest(pp, :acceptable_exit_codes => [1]) do |r|
+      expect(r.stderr).to match(/Error connecting to Redis on 127.0.0.1:12345 \(Errno::ECONNREFUSED\)/)
     end
   end
 
