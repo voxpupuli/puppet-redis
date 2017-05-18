@@ -128,6 +128,7 @@ class redis::params {
       $ppa_repo                  = 'ppa:chris-lea/redis-server'
       $workdir                   = '/var/lib/redis/'
       $workdir_mode              = '0750'
+      $manage_var_run_dir        = true
 
       case $::operatingsystem {
         'Ubuntu': {
