@@ -102,11 +102,22 @@ class { '::redis::sentinel':
 
 ## `redisget()` function
 
-`redisget()` takes two arguments that are strings. The first is the key
-to be looked up and the second is the URL to the Redis service.
+`redisget()` takes two or three arguments that are strings. The first is the key
+to be looked up, the second is the URL to the Redis service and the
+optional third argument is a default value to use if the key is not
+found or connection to the Redis service cannot be made.
+
+Example of basic usage.
 
 ```puppet
 $version = redisget('version.myapp', 'redis://redis.example.com:6379')
+```
+
+Example with default value specified. This is useful to allow for cached
+data in case Redis is not available.
+
+```puppet
+$version = redisget('version.myapp', 'redis://redis.example.com:6379', $::myapp_version)
 ```
 
 You must have the 'redis' gem installed on your puppet master.
