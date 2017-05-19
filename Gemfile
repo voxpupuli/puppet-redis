@@ -38,6 +38,7 @@ end
 
 group :development do
   gem 'puppet-blacksmith'
+  gem 'travis'
 end
 
 group :system_tests do
