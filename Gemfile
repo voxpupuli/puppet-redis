@@ -36,6 +36,10 @@ group :test do
   gem 'mock_redis',                                                 :require => false
 end
 
+group :development do
+  gem 'puppet-blacksmith'
+end
+
 group :system_tests do
   gem "beaker", '2.41.0', :require => false
   gem "beaker-rspec", '5.6.0', :require => false

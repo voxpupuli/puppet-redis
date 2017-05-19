@@ -62,7 +62,7 @@ deploy:
   provider: puppetforge
   user: arioch
   password:
-    secure: GKs0F12bYL2YuN717PzplXvaxvFg8aHT14e7moWzkeoQGXNbZ4JOu7JmsJjWMyPH/mmGDLM3ugQMa8aIC/iM1OronLmc5qERrlQaOZ8L6ytrfqJ0Uo3N8mmqy0MinINOCT0yPjxp/CHxUxg6R+NrZApYru66UN2AsHvFtoa2TZ0=
+    secure: "GKs0F12bYL2YuN717PzplXvaxvFg8aHT14e7moWzkeoQGXNbZ4JOu7JmsJjWMyPH/mmGDLM3ugQMa8aIC/iM1OronLmc5qERrlQaOZ8L6ytrfqJ0Uo3N8mmqy0MinINOCT0yPjxp/CHxUxg6R+NrZApYru66UN2AsHvFtoa2TZ0="
   on:
     tags: true
     # all_branches is required to use tags

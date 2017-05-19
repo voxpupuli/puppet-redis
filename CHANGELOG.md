@@ -2,11 +2,27 @@
 
 ## [Unreleased](https://github.com/arioch/puppet-redis/tree/HEAD)
 
-[Full Changelog](https://github.com/arioch/puppet-redis/compare/v3.0.0...HEAD)
+[Full Changelog](https://github.com/arioch/puppet-redis/compare/v3.1.0...HEAD)
+
+## [v3.1.0](https://github.com/arioch/puppet-redis/tree/v3.1.0) (2017-05-11)
+
+[Full Changelog](https://github.com/arioch/puppet-redis/compare/3.0.0...v3.1.0)
+
+**Implemented enhancements:**
+
+- Please cut a release [\#201](https://github.com/arioch/puppet-redis/issues/201)
 
 **Fixed bugs:**
 
 - Sort problem in v1.2.4 template [\#195](https://github.com/arioch/puppet-redis/issues/195)
+
+**Merged pull requests:**
+
+- Add an optional third parameter to redisget\(\) to specify a default value [\#209](https://github.com/arioch/puppet-redis/pull/209) ([petems](https://github.com/petems))
+- Updates docs for puppet functions [\#208](https://github.com/arioch/puppet-redis/pull/208) ([petems](https://github.com/petems))
+- Add switch to manage File\[/var/run/redis\] [\#204](https://github.com/arioch/puppet-redis/pull/204) ([petems](https://github.com/petems))
+- Ignore selinux default context for /etc/systemd/system/redis.service.d [\#202](https://github.com/arioch/puppet-redis/pull/202) ([amoralej](https://github.com/amoralej))
+- Make TravisCI push to the Forge [\#191](https://github.com/arioch/puppet-redis/pull/191) ([arioch](https://github.com/arioch))
 
 ## [v3.0.0](https://github.com/arioch/puppet-redis/tree/v3.0.0) (2017-05-11)
 [Full Changelog](https://github.com/arioch/puppet-redis/compare/1.2.4...v3.0.0)
@@ -87,7 +103,7 @@
 
 - For folks that do not use redis to cache to disk [\#144](https://github.com/arioch/puppet-redis/pull/144) ([petems](https://github.com/petems))
 - Revert "Changes templates to use scope" [\#143](https://github.com/arioch/puppet-redis/pull/143) ([petems](https://github.com/petems))
-- Update sentinel.pp [\#141](https://github.com/arioch/puppet-redis/pull/141) ([denis-sorokin](https://github.com/denis-sorokin))
+- Update sentinel.pp [\#141](https://github.com/arioch/puppet-redis/pull/141) ([xprntl](https://github.com/xprntl))
 - Manage workdir and permissions [\#138](https://github.com/arioch/puppet-redis/pull/138) ([petems](https://github.com/petems))
 - Adds minimum versions parameters [\#137](https://github.com/arioch/puppet-redis/pull/137) ([petems](https://github.com/petems))
 - Adds redis-server version fact [\#136](https://github.com/arioch/puppet-redis/pull/136) ([petems](https://github.com/petems))
