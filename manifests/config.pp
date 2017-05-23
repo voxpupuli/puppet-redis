@@ -93,6 +93,9 @@ class redis::config {
       /^2.8./: {
         File[$::redis::config_file_orig] { content => template('redis/redis.conf.2.8.erb') }
       }
+      /^3.2./: {
+        File[$::redis::config_file_orig] { content => template('redis/redis.conf.3.2.erb') }
+      }
       default: {
         File[$::redis::config_file_orig] { content => template($::redis::conf_template) }
       }
