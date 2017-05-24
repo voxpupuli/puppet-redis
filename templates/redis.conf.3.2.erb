@@ -80,7 +80,7 @@ bind <%= @bind %>
 # you are sure you want clients from other hosts to connect to Redis
 # even if no authentication is configured, nor a specific set of interfaces
 # are explicitly listed using the "bind" directive.
-protected-mode yes
+protected-mode <% if @protected_mode -%>yes<% else -%>no<% end -%>
 
 # Accept connections on the specified port, default is 6379 (IANA #815344).
 # If port 0 is specified Redis will not listen on a TCP socket.
@@ -142,7 +142,7 @@ daemonize <% if @daemonize -%>yes<% else -%>no<% end -%>
 #                        UPSTART_JOB or NOTIFY_SOCKET environment variables
 # Note: these supervision methods only signal "process is ready."
 #       They do not enable continuous liveness pings back to your supervisor.
-supervised no
+supervised <%= @supervised %>
 
 # If a pid file is specified, Redis writes it where specified at startup
 # and removes it at exit.
@@ -173,7 +173,7 @@ logfile <%= @log_file %>
 syslog-enabled <% if @syslog_enabled %>yes<% else %>no<% end %>
 
 # Specify the syslog identity.
-# syslog-ident redis
+<% if @syslog_ident %>syslog-ident <%= @syslog_ident %><% else %># syslog-ident redis<% end %>
 
 # Specify the syslog facility. Must be USER or between LOCAL0-LOCAL7.
 <% if @syslog_facility %>syslog-facility <%= @syslog_facility %><% else %># syslog-facility local0<% end %>
@@ -238,7 +238,7 @@ rdbcompression <% if @rdbcompression -%>yes<% else -%>no<% end %>
 #
 # RDB files created with checksum disabled have a checksum of zero that will
 # tell the loading code to skip the check.
-rdbchecksum yes
+rdbchecksum <% if @rdbchecksum %>yes<% else %>no<% end %>
 
 # The filename where to dump the DB
 <% if @dbfilename %>dbfilename <%= @dbfilename %><% else %># dbfilename dump.rdb<% end %>
@@ -338,7 +338,7 @@ slave-read-only <% if @slave_read_only -%>yes<% else -%>no<% end %>
 #
 # With slow disks and fast (large bandwidth) networks, diskless replication
 # works better.
-repl-diskless-sync no
+repl-diskless-sync <% if @repl_diskless_sync %>yes<% else %>no<% end %>
 
 # When diskless replication is enabled, it is possible to configure the delay
 # the server waits in order to spawn the child that transfers the RDB via socket
@@ -641,7 +641,7 @@ appendfilename <%= @appendfilename %>
 appendfsync <%= @appendfsync %>
 
 # appendfsync always
-appendfsync everysec
+# appendfsync everysec
 # appendfsync no
 
 # When the AOF fsync policy is set to always or everysec, and a background
@@ -725,7 +725,7 @@ aof-load-truncated <% if @aof_load_truncated -%>yes<% else -%>no<% end -%>
 # termination of the script.
 #
 # Set it to 0 or a negative value for unlimited execution without warnings.
-lua-time-limit 5000
+lua-time-limit <%= @lua_time_limit %>
 
 ################################ REDIS CLUSTER  ###############################
 #
@@ -806,7 +806,7 @@ cluster-node-timeout <%= @cluster_node_timeout %>
 # Zero is the only value able to guarantee that when all the partitions heal
 # the cluster will always be able to continue.
 #
-# cluster-slave-validity-factor 10
+<% if @cluster_slave_validity_factor %>cluster-slave-validity-factor <%= @cluster_slave_validity_factor %><% else %># cluster-slave-validity-factor 10<% end %>
 
 # Cluster slaves are able to migrate to orphaned masters, that are masters
 # that are left without working slaves. This improves the cluster ability
@@ -825,7 +825,7 @@ cluster-node-timeout <%= @cluster_node_timeout %>
 # A value of 0 can be set but is useful only for debugging and dangerous
 # in production.
 #
-# cluster-migration-barrier 1
+<% if @cluster_migration_barrier %>cluster-migration-barrier <%= @cluster_migration_barrier %><% else %># cluster-migration-barrier 1<% end %>
 
 # By default Redis Cluster nodes stop accepting queries if they detect there
 # is at least an hash slot uncovered (no available node is serving it).
@@ -838,7 +838,7 @@ cluster-node-timeout <%= @cluster_node_timeout %>
 # covered. In order to do so, just set the cluster-require-full-coverage
 # option to no.
 #
-# cluster-require-full-coverage yes
+<% if @cluster_require_full_coverage %>cluster-require-full-coverage <%= @cluster_require_full_coverage %><% else %># cluster-require-full-coverage yes<% end %>
 
 # In order to setup your cluster make sure to read the documentation
 # available at http://redis.io web site.
@@ -961,7 +961,7 @@ list-max-ziplist-value <%= @list_max_ziplist_value %>
 # per list node.
 # The highest performing option is usually -2 (8 Kb size) or -1 (4 Kb size),
 # but if your use case is unique, adjust the settings as necessary.
-list-max-ziplist-size -2
+list-max-ziplist-size <%= @list_max_ziplist_size %>
 
 # Lists may also be compressed.
 # Compress depth is the number of quicklist ziplist nodes from *each* side of
@@ -977,7 +977,7 @@ list-max-ziplist-size -2
 #    but compress all nodes between them.
 # 3: [head]->[next]->[next]->node->node->...->node->[prev]->[prev]->[tail]
 # etc.
-list-compress-depth 0
+list-compress-depth <%= @list_compress_depth %>
 
 # Sets have a special encoding in just one case: when a set is composed
 # of just strings that happen to be integers in radix 10 in the range
@@ -1059,9 +1059,9 @@ activerehashing <% if @activerehashing -%>yes<% else -%>no<% end -%>
 # subscribers and slaves receive data in a push fashion.
 #
 # Both the hard or the soft limit can be disabled by setting them to zero.
-client-output-buffer-limit normal 0 0 0
-client-output-buffer-limit slave 256mb 64mb 60
-client-output-buffer-limit pubsub 32mb 8mb 60
+client-output-buffer-limit normal <%= @client_output_buffer_limit_normal %>
+client-output-buffer-limit slave <%= @client_output_buffer_limit_slave %>
+client-output-buffer-limit pubsub <%= @client_output_buffer_limit_pubsub %>
 
 # Redis calls an internal function to perform many background tasks, like
 # closing connections of clients in timeout, purging expired keys that are

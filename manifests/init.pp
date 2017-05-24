@@ -95,6 +95,51 @@
 #
 #   Default: redis/redis.conf.erb
 #
+# [*cluster_require_full_coverage*]
+#   Set to 'yes' to stop accepting writes if one or more hash slots are not covered.
+#
+#   Default: undef
+#
+# [*cluster_slave_validity_factor*]
+#   Set multiplier for node-timeout to increase slave failover waiting period.
+#
+#   Default: undef
+#
+# [*cluster_migration_barrier*]
+#   Set number of slaves needed on current master before a slave can migrate to a new master.
+#
+#   Default: undef
+#
+# [*client_output_buffer_limit_normal*]
+#   Set client output buffer limits for normal Redis clients.
+#   Set hard limit for immediate disconnect, soft limit for disconnecting at
+#   an amount that keeps being reached for the specified number of seconds.
+#   The syntax of every client-output-buffer-limit directive is the following:
+#
+#   client-output-buffer-limit <class> <hard limit> <soft limit> <soft seconds>
+#   
+#   Default: '0 0 0'
+#
+# [*client_output_buffer_limit_slave*]
+#   Set client output buffer limits for Redis slaves.
+#   Set hard limit for immediate disconnect, soft limit for disconnecting at
+#   an amount that keeps being reached for the specified number of seconds.
+#   The syntax of every client-output-buffer-limit directive is the following:
+#
+#   client-output-buffer-limit <class> <hard limit> <soft limit> <soft seconds>
+#   
+#   Default: '256mb 64mb 60'
+#
+# [*client_output_buffer_limit_pubsub*]
+#   Set client output buffer limits for Redis pubsub clients.
+#   Set hard limit for immediate disconnect, soft limit for disconnecting at
+#   an amount that keeps being reached for the specified number of seconds.
+#   The syntax of every client-output-buffer-limit directive is the following:
+#
+#   client-output-buffer-limit <class> <hard limit> <soft limit> <soft seconds>
+#   
+#   Default: '32mb 8mb 60'
+#
 # [*daemonize*]
 #   Have Redis run as a daemon.
 #
@@ -140,10 +185,27 @@
 #
 #   Default: 0 (disabled)
 #
+# [*list_compress_depth*]
+#   Set the number of quicklist ziplist nodes from *each* side of
+#   the list to *exclude* from compression.
+#
+#   Default: 0 (disabled)
+#
 # [*list_max_ziplist_entries*]
 #   Set max ziplist entries for lists.
 #
 #   Default: 512
+#
+# [*list_max_ziplist_size*]
+#   Set max number of elements for internal list nodes.
+#   For a fixed maximum size, use -5 through -1, meaning:
+#   -5: max size: 64 Kb  <-- not recommended for normal workloads
+#   -4: max size: 32 Kb  <-- not recommended
+#   -3: max size: 16 Kb  <-- probably not recommended
+#   -2: max size: 8 Kb   <-- good
+#   -1: max size: 4 Kb   <-- good
+#
+#   Default: '-2'
 #
 # [*list_max_ziplist_value*]
 #   Set max ziplist values for lists.
@@ -169,6 +231,12 @@
 #   Specify the server verbosity level.
 #
 #   Default: notice
+#
+# [*lua_time_limit*]
+#   Set max execution time for a Lua script in milliseconds.
+#   Set 0 or negative for unlimited execution time.
+#
+#   Default: 5000
 #
 # [*manage_repo*]
 #   Enable/disable upstream repository configuration.
@@ -276,8 +344,19 @@
 #
 #   Default: ppa:chris-lea/redis-server
 #
+# [*protected_mode*]
+#   If yes, only accept connections from loopback & Unix domain sockets.
+#   
+#   Default: true
+#   
 # [*rdbcompression*]
 #   Enable/disable compression of string objects using LZF when dumping.
+#
+#   Default: true
+#
+# [*rdbchecksum*]
+#   Enable/disable RDB checksum.
+#   Enabling entails a 10% performance hit when saving and loading RDB files.
 #
 #   Default: true
 #
@@ -293,6 +372,11 @@
 #
 # [*repl_disable_tcp_nodelay*]
 #   Enable/disable TCP_NODELAY on the slave socket after SYNC
+#
+#   Default: false
+#
+# [*repl_diskless_sync*]
+#   Enable/disable new process that writes the RDB without touching the disk.
 #
 #   Default: false
 #
@@ -430,6 +514,11 @@
 #
 #   Default: true
 #
+# [*supervised*]
+#   Interact with your supervision tree, signaling upstart or systemd.
+#
+#   Default: 'no'
+#
 # [*syslog_enabled*]
 #   Enable/disable logging to the system logger.
 #
@@ -438,6 +527,11 @@
 # [*syslog_facility*]
 #   Specify the syslog facility.
 #   Must be USER or between LOCAL0-LOCAL7.
+#
+#   Default: undef
+#
+# [*syslog_ident*]
+#   Specify the syslog identity.
 #
 #   Default: undef
 #
@@ -541,6 +635,12 @@ class redis (
   $auto_aof_rewrite_min_size     = $::redis::params::auto_aof_rewrite_min_size,
   $auto_aof_rewrite_percentage   = $::redis::params::auto_aof_rewrite_percentage,
   $bind                          = $::redis::params::bind,
+  $client_output_buffer_limit_normal = $::redis::params::client_output_buffer_limit_normal,
+  $client_output_buffer_limit_slave  = $::redis::params::client_output_buffer_limit_slave,
+  $client_output_buffer_limit_pubsub = $::redis::params::client_output_buffer_limit_pubsub,
+  $cluster_migration_barrier     = $::redis::params::cluster_migration_barrier,
+  $cluster_require_full_coverage = $::redis::params::cluster_require_full_coverage,
+  $cluster_slave_validity_factor = $::redis::params::cluster_slave_validity_factor,
   $conf_template                 = $::redis::params::conf_template,
   $config_dir                    = $::redis::params::config_dir,
   $config_dir_mode               = $::redis::params::config_dir_mode,
@@ -558,12 +658,15 @@ class redis (
   $hll_sparse_max_bytes          = $::redis::params::hll_sparse_max_bytes,
   $hz                            = $::redis::params::hz,
   $latency_monitor_threshold     = $::redis::params::latency_monitor_threshold,
+  $list_compress_depth           = $::redis::params::list_compress_depth,
   $list_max_ziplist_entries      = $::redis::params::list_max_ziplist_entries,
+  $list_max_ziplist_size         = $::redis::params::list_max_ziplist_size,
   $list_max_ziplist_value        = $::redis::params::list_max_ziplist_value,
   $log_dir                       = $::redis::params::log_dir,
   $log_dir_mode                  = $::redis::params::log_dir_mode,
   $log_file                      = $::redis::params::log_file,
   $log_level                     = $::redis::params::log_level,
+  $lua_time_limit                = $::redis::params::lua_time_limit,
   $manage_package                = $::redis::params::manage_package,
   $manage_repo                   = $::redis::params::manage_repo,
   $masterauth                    = $::redis::params::masterauth,
@@ -582,10 +685,13 @@ class redis (
   $pid_file                      = $::redis::params::pid_file,
   $port                          = $::redis::params::port,
   $ppa_repo                      = $::redis::params::ppa_repo,
+  $protected_mode                = $::redis::params::protected_mode,
   $rdbcompression                = $::redis::params::rdbcompression,
+  $rdbchecksum                   = $::redis::params::rdbchecksum,
   $repl_backlog_size             = $::redis::params::repl_backlog_size,
   $repl_backlog_ttl              = $::redis::params::repl_backlog_ttl,
   $repl_disable_tcp_nodelay      = $::redis::params::repl_disable_tcp_nodelay,
+  $repl_diskless_sync            = $::redis::params::repl_diskless_sync,
   $repl_ping_slave_period        = $::redis::params::repl_ping_slave_period,
   $repl_timeout                  = $::redis::params::repl_timeout,
   $requirepass                   = $::redis::params::requirepass,
@@ -608,8 +714,10 @@ class redis (
   $slowlog_log_slower_than       = $::redis::params::slowlog_log_slower_than,
   $slowlog_max_len               = $::redis::params::slowlog_max_len,
   $stop_writes_on_bgsave_error   = $::redis::params::stop_writes_on_bgsave_error,
+  $supervised                    = $::redis::params::supervised,
   $syslog_enabled                = $::redis::params::syslog_enabled,
   $syslog_facility               = $::redis::params::syslog_facility,
+  $syslog_ident                  = $::redis::params::syslog_ident,
   $tcp_backlog                   = $::redis::params::tcp_backlog,
   $tcp_keepalive                 = $::redis::params::tcp_keepalive,
   $timeout                       = $::redis::params::timeout,
