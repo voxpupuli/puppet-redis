@@ -3,15 +3,24 @@ require 'mock_redis'
 require 'redis'
 
 REDIS_URL='redis://localhost:6379'
-BROKEN_URL='redis://redis.example.com:1234'
+LOCAL_BROKEN_URL='redis://localhost:1234'
+REMOTE_BROKEN_URL='redis://redis.example.com:1234'
 
 describe 'redisget' do
-  context 'should error if connection to redis server cannot be made and no default is specified' do
-    it { is_expected.to run.with_params('nonexistent_key', BROKEN_URL).and_raise_error(Puppet::Error, /connection to redis server failed - getaddrinfo/) }
+  context 'should error if connection to remote redis server cannot be made and no default is specified' do
+    it { is_expected.to run.with_params('nonexistent_key', REMOTE_BROKEN_URL).and_raise_error(Puppet::Error, /connection to redis server failed - getaddrinfo/) }
   end
 
-  context 'should return default value if connection to redis server cannot be made and default is specified' do
-    it { is_expected.to run.with_params('nonexistent_key', BROKEN_URL, 'default_value').and_return('default_value') }
+  context 'should return default value if connection to remote redis server cannot be made and default is specified' do
+    it { is_expected.to run.with_params('nonexistent_key', REMOTE_BROKEN_URL, 'default_value').and_return('default_value') }
+  end
+
+  context 'should error if connection to local redis server cannot be made and no default is specified' do
+    it { is_expected.to run.with_params('nonexistent_key', LOCAL_BROKEN_URL).and_raise_error(Puppet::Error, /connection to redis server failed - Error connecting to Redis on localhost:1234/) }
+  end
+
+  context 'should return default value if connection to local redis server cannot be made and default is specified' do
+    it { is_expected.to run.with_params('nonexistent_key', LOCAL_BROKEN_URL, 'default_value').and_return('default_value') }
   end
 
   context 'should return nil if key does not exist and no default is specified' do
