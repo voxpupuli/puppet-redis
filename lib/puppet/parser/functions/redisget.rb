@@ -34,20 +34,12 @@ DOC
     raise(Puppet::ParseError, "redisget(): Wrong argument type given (#{url.class} for String) for arg2 (url)") if url.is_a?(String) == false
 
     begin
-      redis = Redis.new(:url => url)
-      returned_value = redis.get(key)
-      if returned_value == nil and defined?(default) != nil
-        default
-      else
-        returned_value
-      end
-    rescue Exception => e
-      if default
-        debug "Connection to redis failed with #{e} - Returning default value of #{default}"
-        default
-      else
-        raise(Puppet::Error, "connection to redis server failed - #{e}")
-      end
+      Redis.new(:url => url).get(key) || default
+    rescue Redis::CannotConnectError, SocketError => e
+      raise Puppet::Error, "connection to redis server failed - #{e}" unless default
+      debug "Connection to redis failed with #{e} - Returning default value of #{default}"
+      default
     end
+
   end
 end
