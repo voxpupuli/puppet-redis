@@ -1,0 +1,2045 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>
+  Puppet Class: redis
+  
+    &mdash; Documentation by YARD 0.9.9
+  
+</title>
+
+  <link rel="stylesheet" href="../css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="../css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  pathId = "puppet_classes::redis";
+  relpath = '../';
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="../js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="../js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div class="nav_wrap">
+      <iframe id="nav" src="../puppet_class_list.html?1"></iframe>
+      <div id="resizer"></div>
+    </div>
+
+    <div id="main" tabindex="-1">
+      <div id="header">
+        <div id="menu">
+  
+    <a href="../_index.html">Index (r)</a> &raquo;
+    <span class='title'><span class='object_link'>Puppet Classes</span></span>
+     &raquo; 
+    <span class="title">redis</span>
+  
+</div>
+
+        <div id="search">
+  
+    <a class="full_list_link" id="puppet_class_list_link"
+        href="../puppet_class_list.html">
+
+        <svg width="24" height="24">
+          <rect x="0" y="4" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="12" width="24" height="4" rx="1" ry="1"></rect>
+          <rect x="0" y="20" width="24" height="4" rx="1" ry="1"></rect>
+        </svg>
+    </a>
+  
+</div>
+        <div class="clear"></div>
+      </div>
+
+      <div id="content"><h1>Puppet Class: redis</h1>
+<div class="box_info">
+  
+  <dl>
+    <dt>Inherits:</dt>
+    <dd><span class='object_link'><a href="redis_3A_3Aparams.html" title="puppet_classes::redis::params (puppet_class)">redis::params</a></span></dd>
+  </dl>
+  
+  
+  <dl>
+    <dt>Defined in:</dt>
+    <dd>
+      manifests/init.pp
+    </dd>
+  </dl>
+</div>
+
+<h2>Overview</h2>
+<div class="docstring">
+  <div class="discussion">
+    
+<p>This class installs redis</p>
+
+  </div>
+</div>
+<div class="tags">
+  
+  <div class="examples">
+    <p class="tag_title">Examples:</p>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Default install</p>
+</div></p>
+      
+      <pre class="example code"><code><span class='id identifier rubyid_include'>include</span> <span class='id identifier rubyid_redis'>redis</span></code></pre>
+    
+      
+        <p class="example_title"><div class='inline'>
+<p>Slave Node</p>
+</div></p>
+      
+      <pre class="example code"><code>class { &#39;::redis&#39;:
+  bind    =&gt; &#39;10.0.1.2&#39;,
+  slaveof =&gt; &#39;10.0.1.1 6379&#39;,
+}</code></pre>
+    
+  </div>
+<p class="tag_title">Parameters:</p>
+<ul class="param">
+  
+    <li>
+      
+        <span class='name'>activerehashing</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::activerehashing</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Enable/disable active rehashing.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>aof_load_truncated</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::aof_load_truncated</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Enable/disable loading truncated AOF file</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>aof_rewrite_incremental_fsync</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::aof_rewrite_incremental_fsync</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Enable/disable fsync for AOF file</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>appendfilename</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::appendfilename</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The name of the append only file</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>appendfsync</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::appendfsync</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Adjust fsync mode. Valid options: always, everysec, no. Default: everysec</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>appendonly</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::appendonly</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Enable/disable appendonly mode.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>auto_aof_rewrite_min_size</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::auto_aof_rewrite_min_size</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Adjust minimum size for auto-aof-rewrite.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>auto_aof_rewrite_percentage</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::auto_aof_rewrite_percentage</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Adjust percentatge for auto-aof-rewrite.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>bind</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::bind</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Configure which IP address to listen on.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>config_dir</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::config_dir</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Directory containing the configuration files.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>config_dir_mode</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::config_dir_mode</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Adjust mode for directory containing configuration files.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>config_file_orig</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::config_file_orig</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The location and name of a config file that provides the source</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>config_file</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::config_file</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Adjust main configuration file.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>config_file_mode</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::config_file_mode</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Adjust permissions for configuration files.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>config_group</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::config_group</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Adjust filesystem group for config files.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>config_owner</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::config_owner</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Adjust filesystem owner for config files.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>conf_template</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::conf_template</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Define which template to use.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>daemonize</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::daemonize</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Have Redis run as a daemon.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>databases</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::databases</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Set the number of databases.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>dbfilename</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::dbfilename</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The filename where to dump the DB</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>extra_config_file</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::extra_config_file</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Description</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>hash_max_ziplist_entries</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::hash_max_ziplist_entries</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Set max ziplist entries for hashes.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>hash_max_ziplist_value</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::hash_max_ziplist_value</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Set max ziplist values for hashes.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>hll_sparse_max_bytes</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::hll_sparse_max_bytes</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>HyperLogLog sparse representation bytes limit</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>hz</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::hz</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Set redis background tasks frequency</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>latency_monitor_threshold</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::latency_monitor_threshold</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Latency monitoring threshold in milliseconds</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>list_max_ziplist_entries</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::list_max_ziplist_entries</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Set max ziplist entries for lists.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>list_max_ziplist_value</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::list_max_ziplist_value</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Set max ziplist values for lists.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>log_dir</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::log_dir</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Specify directory where to write log entries.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>log_dir_mode</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::log_dir_mode</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Adjust mode for directory containing log files.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>log_file</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::log_file</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Specify file where to write log entries.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>log_level</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::log_level</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Specify the server verbosity level.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>manage_repo</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::manage_repo</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Enable/disable upstream repository configuration.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>manage_package</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::manage_package</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Enable/disable management of package</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>managed_by_cluster_manager</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::managed_by_cluster_manager</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Choose if redis will be managed by a cluster manager such as pacemaker or
+rgmanager</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>masterauth</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::masterauth</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>If the master is password protected (using the “requirepass” configuration</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>maxclients</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::maxclients</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Set the max number of connected clients at the same time.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>maxmemory</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::maxmemory</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Don&#39;t use more memory than the specified amount of bytes.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>maxmemory_policy</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::maxmemory_policy</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>How Redis will select what to remove when maxmemory is reached.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>maxmemory_samples</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::maxmemory_samples</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Select as well the sample size to check.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>min_slaves_max_lag</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::min_slaves_max_lag</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The lag in seconds</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>min_slaves_to_write</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::min_slaves_to_write</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Minimum number of slaves to be in “online” state</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>no_appendfsync_on_rewrite</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::no_appendfsync_on_rewrite</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>If you have latency problems turn this to &#39;true&#39;. Otherwise leave
+it as</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>notify_keyspace_events</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::notify_keyspace_events</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Which events to notify Pub/Sub clients about events happening</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>notify_service</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::notify_service</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>You may disable service reloads when config files change if you</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>package_ensure</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::package_ensure</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Default action for package.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>package_name</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::package_name</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Upstream package name.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>pid_file</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::pid_file</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Where to store the pid.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>port</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::port</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Configure which port to listen on.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>ppa_repo</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::ppa_repo</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Specify upstream (Ubuntu) PPA entry.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>rdbcompression</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::rdbcompression</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Enable/disable compression of string objects using LZF when dumping.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>repl_backlog_size</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::repl_backlog_size</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The replication backlog size</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>repl_backlog_ttl</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::repl_backlog_ttl</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The number of seconds to elapse before freeing backlog buffer</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>repl_disable_tcp_nodelay</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::repl_disable_tcp_nodelay</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Enable/disable TCP_NODELAY on the slave socket after SYNC</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>repl_ping_slave_period</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::repl_ping_slave_period</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Slaves send PINGs to server in a predefined interval. It&#39;s possible</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>repl_timeout</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::repl_timeout</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Set the replication timeout for:</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>requirepass</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::requirepass</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Require clients to issue AUTH &lt;PASSWORD&gt; before processing any other
+commands.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>save_db_to_disk</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::save_db_to_disk</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Set if save db to disk.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>save_db_to_disk_interval</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::save_db_to_disk_interval</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>save the dataset every N seconds if there are at least M changes in the
+dataset</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>service_manage</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::service_manage</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Specify if the service should be part of the catalog.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>service_enable</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::service_enable</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Enable/disable daemon at boot.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>service_ensure</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::service_ensure</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Specify if the server should be running.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>service_group</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::service_group</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Specify which group to run as.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>service_hasrestart</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::service_hasrestart</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Does the init script support restart?</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>service_hasstatus</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::service_hasstatus</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Does the init script support status?</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>service_name</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::service_name</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Specify the service name for Init or Systemd.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>service_provider</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::service_provider</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Specify the service provider to use</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>service_user</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::service_user</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Specify which user to run as.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>set_max_intset_entries</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::set_max_intset_entries</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The following configuration setting sets the limit in the size of the set
+in order to use this special memory saving encoding. Default: 512</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>slave_priority</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::slave_priority</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The priority number for slave promotion by Sentinel</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>slave_read_only</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::slave_read_only</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>You can configure a slave instance to accept writes or not.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>slave_serve_stale_data</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::slave_serve_stale_data</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>When a slave loses its connection with the master, or when the replication
+is still in progress, the slave can act in two different ways: 1) if
+slave-serve-stale-data is set to &#39;yes&#39; (the default) the slave will
+still reply to client requests, possibly with out of date data, or the 
+data set may just be empty if this is the first synchronization.</p>
+
+<p>2) if slave-serve-stale-data is set to &#39;no&#39; the slave will reply
+with  an error “SYNC with master in progress” to all the kind of commands 
+but to INFO and SLAVEOF.</p>
+
+<p>Default: true</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>slaveof</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::slaveof</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Use slaveof to make a Redis instance a copy of another Redis server.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>slowlog_log_slower_than</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::slowlog_log_slower_than</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Tells Redis what is the execution time, in microseconds, to exceed in order
+for the command to get logged. Default: 10000</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>slowlog_max_len</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::slowlog_max_len</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Tells Redis what is the length to exceed in order for the command to get
+logged. Default: 1024</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>stop_writes_on_bgsave_error</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::stop_writes_on_bgsave_error</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>If false then Redis will continue to work as usual even if there are
+problems with disk, permissions, and so forth. Default: true</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>syslog_enabled</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::syslog_enabled</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Enable/disable logging to the system logger.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>syslog_facility</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::syslog_facility</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Specify the syslog facility. Must be USER or between LOCAL0-LOCAL7.
+Default: undef</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>tcp_backlog</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::tcp_backlog</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Sets the TCP backlog</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>tcp_keepalive</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::tcp_keepalive</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>TCP keepalive.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>timeout</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::timeout</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Close the connection after a client is idle for N seconds (0 to disable).</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>ulimit</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::ulimit</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Limit the use of system-wide resources.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>unixsocket</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::unixsocket</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Define unix socket path</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>unixsocketperm</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::unixsocketperm</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Define unix socket file permissions</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>workdir</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::workdir</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>The DB will be written inside this directory, with the filename specified
+above using the &#39;dbfilename&#39; configuration directive. Default:
+/var/lib/redis/</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>workdir_mode</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::workdir_mode</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Adjust mode for data directory.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>zset_max_ziplist_entries</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::zset_max_ziplist_entries</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Set max entries for sorted sets.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>zset_max_ziplist_value</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::zset_max_ziplist_value</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Set max values for sorted sets.</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>cluster_enabled</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::cluster_enabled</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Enables redis 3.0 cluster functionality</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>cluster_config_file</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::cluster_config_file</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Config file for saving cluster nodes configuration. This file is never
+touched by humans. Only set if cluster_enabled is true Default: nodes.conf</p>
+</div>
+      
+    </li>
+  
+    <li>
+      
+        <span class='name'>cluster_node_timeout</span>
+      
+      
+        <span class='type'>(<tt>String</tt>)</span>
+      
+      
+        <em class="default">(defaults to: <tt>$::redis::params::cluster_node_timeout</tt>)</em>
+      
+      
+        &mdash;
+        <div class='inline'>
+<p>Node timeout Only set if cluster_enabled is true Default: 5000</p>
+</div>
+      
+    </li>
+  
+</ul>
+
+
+</div><div class="method_details_list">
+  <table class="source_code">
+    <tr>
+      <td>
+        <pre class="lines">
+
+
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+194
+195
+196
+197
+198
+199
+200
+201
+202
+203
+204
+205
+206
+207
+208
+209
+210
+211
+212
+213
+214
+215
+216
+217
+218
+219
+220
+221
+222
+223
+224
+225
+226
+227
+228
+229
+230
+231
+232
+233
+234
+235
+236
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256</pre>
+      </td>
+      <td>
+        <pre class="code"><span class="info file"># File 'manifests/init.pp', line 135</span>
+
+class redis (
+  $activerehashing               = $::redis::params::activerehashing,
+  $aof_load_truncated            = $::redis::params::aof_load_truncated,
+  $aof_rewrite_incremental_fsync = $::redis::params::aof_rewrite_incremental_fsync,
+  $appendfilename                = $::redis::params::appendfilename,
+  $appendfsync                   = $::redis::params::appendfsync,
+  $appendonly                    = $::redis::params::appendonly,
+  $auto_aof_rewrite_min_size     = $::redis::params::auto_aof_rewrite_min_size,
+  $auto_aof_rewrite_percentage   = $::redis::params::auto_aof_rewrite_percentage,
+  $bind                          = $::redis::params::bind,
+  $conf_template                 = $::redis::params::conf_template,
+  $config_dir                    = $::redis::params::config_dir,
+  $config_dir_mode               = $::redis::params::config_dir_mode,
+  $config_file                   = $::redis::params::config_file,
+  $config_file_mode              = $::redis::params::config_file_mode,
+  $config_file_orig              = $::redis::params::config_file_orig,
+  $config_group                  = $::redis::params::config_group,
+  $config_owner                  = $::redis::params::config_owner,
+  $daemonize                     = $::redis::params::daemonize,
+  $databases                     = $::redis::params::databases,
+  $dbfilename                    = $::redis::params::dbfilename,
+  $extra_config_file             = $::redis::params::extra_config_file,
+  $hash_max_ziplist_entries      = $::redis::params::hash_max_ziplist_entries,
+  $hash_max_ziplist_value        = $::redis::params::hash_max_ziplist_value,
+  $hll_sparse_max_bytes          = $::redis::params::hll_sparse_max_bytes,
+  $hz                            = $::redis::params::hz,
+  $latency_monitor_threshold     = $::redis::params::latency_monitor_threshold,
+  $list_max_ziplist_entries      = $::redis::params::list_max_ziplist_entries,
+  $list_max_ziplist_value        = $::redis::params::list_max_ziplist_value,
+  $log_dir                       = $::redis::params::log_dir,
+  $log_dir_mode                  = $::redis::params::log_dir_mode,
+  $log_file                      = $::redis::params::log_file,
+  $log_level                     = $::redis::params::log_level,
+  $manage_package                = $::redis::params::manage_package,
+  $manage_repo                   = $::redis::params::manage_repo,
+  $masterauth                    = $::redis::params::masterauth,
+  $maxclients                    = $::redis::params::maxclients,
+  $maxmemory                     = $::redis::params::maxmemory,
+  $maxmemory_policy              = $::redis::params::maxmemory_policy,
+  $maxmemory_samples             = $::redis::params::maxmemory_samples,
+  $min_slaves_max_lag            = $::redis::params::min_slaves_max_lag,
+  $min_slaves_to_write           = $::redis::params::min_slaves_to_write,
+  $no_appendfsync_on_rewrite     = $::redis::params::no_appendfsync_on_rewrite,
+  $notify_keyspace_events        = $::redis::params::notify_keyspace_events,
+  $notify_service                = $::redis::params::notify_service,
+  $managed_by_cluster_manager    = $::redis::params::managed_by_cluster_manager,
+  $package_ensure                = $::redis::params::package_ensure,
+  $package_name                  = $::redis::params::package_name,
+  $pid_file                      = $::redis::params::pid_file,
+  $port                          = $::redis::params::port,
+  $ppa_repo                      = $::redis::params::ppa_repo,
+  $rdbcompression                = $::redis::params::rdbcompression,
+  $repl_backlog_size             = $::redis::params::repl_backlog_size,
+  $repl_backlog_ttl              = $::redis::params::repl_backlog_ttl,
+  $repl_disable_tcp_nodelay      = $::redis::params::repl_disable_tcp_nodelay,
+  $repl_ping_slave_period        = $::redis::params::repl_ping_slave_period,
+  $repl_timeout                  = $::redis::params::repl_timeout,
+  $requirepass                   = $::redis::params::requirepass,
+  $save_db_to_disk               = $::redis::params::save_db_to_disk,
+  $save_db_to_disk_interval      = $::redis::params::save_db_to_disk_interval,
+  $service_enable                = $::redis::params::service_enable,
+  $service_ensure                = $::redis::params::service_ensure,
+  $service_group                 = $::redis::params::service_group,
+  $service_hasrestart            = $::redis::params::service_hasrestart,
+  $service_hasstatus             = $::redis::params::service_hasstatus,
+  $service_manage                = $::redis::params::service_manage,
+  $service_name                  = $::redis::params::service_name,
+  $service_provider              = $::redis::params::service_provider,
+  $service_user                  = $::redis::params::service_user,
+  $set_max_intset_entries        = $::redis::params::set_max_intset_entries,
+  $slave_priority                = $::redis::params::slave_priority,
+  $slave_read_only               = $::redis::params::slave_read_only,
+  $slave_serve_stale_data        = $::redis::params::slave_serve_stale_data,
+  $slaveof                       = $::redis::params::slaveof,
+  $slowlog_log_slower_than       = $::redis::params::slowlog_log_slower_than,
+  $slowlog_max_len               = $::redis::params::slowlog_max_len,
+  $stop_writes_on_bgsave_error   = $::redis::params::stop_writes_on_bgsave_error,
+  $syslog_enabled                = $::redis::params::syslog_enabled,
+  $syslog_facility               = $::redis::params::syslog_facility,
+  $tcp_backlog                   = $::redis::params::tcp_backlog,
+  $tcp_keepalive                 = $::redis::params::tcp_keepalive,
+  $timeout                       = $::redis::params::timeout,
+  $unixsocket                    = $::redis::params::unixsocket,
+  $unixsocketperm                = $::redis::params::unixsocketperm,
+  $ulimit                        = $::redis::params::ulimit,
+  $workdir                       = $::redis::params::workdir,
+  $workdir_mode                  = $::redis::params::workdir_mode,
+  $zset_max_ziplist_entries      = $::redis::params::zset_max_ziplist_entries,
+  $zset_max_ziplist_value        = $::redis::params::zset_max_ziplist_value,
+  $cluster_enabled               = $::redis::params::cluster_enabled,
+  $cluster_config_file           = $::redis::params::cluster_config_file,
+  $cluster_node_timeout          = $::redis::params::cluster_node_timeout,
+) inherits redis::params {
+
+  contain ::redis::preinstall
+  contain ::redis::install
+  contain ::redis::config
+  contain ::redis::service
+
+  Class[&#39;redis::preinstall&#39;]
+  -&gt; Class[&#39;redis::install&#39;]
+  -&gt; Class[&#39;redis::config&#39;]
+
+  if $::redis::notify_service {
+    Class[&#39;redis::config&#39;]
+    ~&gt; Class[&#39;redis::service&#39;]
+  }
+
+  # Sanity check
+  if $::redis::slaveof {
+    if $::redis::bind =~ /^127.0.0./ {
+      fail &quot;Replication is not possible when binding to ${::redis::bind}.&quot;
+    }
+  }
+
+  exec { &#39;systemd-reload-redis&#39;:
+    command     =&gt; &#39;systemctl daemon-reload&#39;,
+    refreshonly =&gt; true,
+    path        =&gt; &#39;/bin:/usr/bin:/usr/local/bin&#39;,
+  }
+
+}</pre>
+      </td>
+    </tr>
+  </table>
+</div>
+</div>
+
+      <div id="footer">
+  Generated on Sat Jul  1 14:41:08 2017 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.9.9 (ruby-2.3.3).
+</div>
+
+    </div>
+  </body>
+</html>
