@@ -1,402 +1,90 @@
-# = Class: redis
-#
 # This class installs redis
 #
-# == Parameters:
-#
-# [*activerehashing*]
-#   Enable/disable active rehashing.
-#
-#   Default:  true
-#
-# [*aof_load_truncated*]
-#   Enable/disable loading truncated AOF file
-#
-#   Default:  true
-#
-# [*aof_rewrite_incremental_fsync*]
-#   Enable/disable fsync for AOF file
-#
-#   Default:  true
-#
-# [*appendfilename*]
-#   The name of the append only file
-#
-#   Default:  appendonly.aof
-#
-# [*appendfsync*]
-#   Adjust fsync mode.
-#   Valid options: always, everysec, no.
-#
-#   Default:  everysec
-#
-# [*appendonly*]
-#   Enable/disable appendonly mode.
-#
-#   Default:  false
-#
-# [*auto_aof_rewrite_min_size*]
-#   Adjust minimum size for auto-aof-rewrite.
-#
-#   Default: 64mb
-#
-# [*auto_aof_rewrite_percentage*]
-#   Adjust percentatge for auto-aof-rewrite.
-#
-#   Default: 100
-#
-# [*bind*]
-#   Configure which IP address to listen on.
-#
-#   Default: 127.0.0.1
-#
-# [*config_dir*]
-#   Directory containing the configuration files.
-#
-#   Default: OS dependant
-#
-# [*config_dir_mode*]
-#   Adjust mode for directory containing configuration files.
-#
-#   Default: 0755
-#
-# [*config_file_orig*]
-#   The location and name of a config file that provides the source
-#   of the redis config file. Two different files are needed
-#   because sentinel writes to the redis config file and we do
-#   not want override that when puppet is run unless there are
-#   changes from the manifests.
-#
-#   Default for deb: /etc/redis/redis.conf.puppet
-#   Default for rpm: /etc/redis.conf.puppet
-#
-# [*config_file*]
-#   Adjust main configuration file.
-#
-#   Default: OS dependant
-#
-# [*config_file_mode*]
-#   Adjust permissions for configuration files.
-#
-#   Default: 0644
-#
-# [*config_group*]
-#   Adjust filesystem group for config files.
-#
-#   Default: OS dependant
-#
-# [*config_owner*]
-#   Adjust filesystem owner for config files.
-#
-#   Default: OS dependant
-#
-# [*conf_template*]
-#   Define which template to use.
-#
-#   Default: redis/redis.conf.erb
-#
-# [*daemonize*]
-#   Have Redis run as a daemon.
-#
-#   Default: true
-#
-# [*databases*]
-#   Set the number of databases.
-#
-#   Default: 16
-#
-# [*dbfilename*]
-#   The filename where to dump the DB
-#
-#   Default: dump.rdb
-#
-# [*extra_config_file*]
-#   Description
-#
-#   Default: undef
-#
-# [*hash_max_ziplist_entries*]
-#   Set max ziplist entries for hashes.
-#
-#   Default: 512
-#
-# [*hash_max_ziplist_value*]
-#   Set max ziplist values for hashes.
-#
-#   Default: 64
-#
-# [*hll_sparse_max_bytes*]
-#   HyperLogLog sparse representation bytes limit
-#
-#   Default: 3000
-#
-# [*hz*]
-#   Set redis background tasks frequency
-#
-#   Default: 10
-#
-# [*latency_monitor_threshold*]
-#   Latency monitoring threshold in milliseconds
-#
-#   Default: 0 (disabled)
-#
-# [*list_max_ziplist_entries*]
-#   Set max ziplist entries for lists.
-#
-#   Default: 512
-#
-# [*list_max_ziplist_value*]
-#   Set max ziplist values for lists.
-#
-#   Default: 64
-#
-# [*log_dir*]
-#   Specify directory where to write log entries.
-#
-#   Default: /var/log/redis
-#
-# [*log_dir_mode*]
-#   Adjust mode for directory containing log files.
-#
-#   Default: 0755
-#
-# [*log_file*]
-#   Specify file where to write log entries.
-#
-#   Default: /var/log/redis/redis.log
-#
-# [*log_level*]
-#   Specify the server verbosity level.
-#
-#   Default: notice
-#
-# [*manage_repo*]
-#   Enable/disable upstream repository configuration.
-#
-#   Default: false
-#
-#
-# [*manage_package*]
-#   Enable/disable management of package
-#
-#   Default: true
-#
-# [managed_by_cluster_manager]
-#   Choose if redis will be managed by a cluster manager
-#   such as pacemaker or rgmanager
-#
-#   Default: false
-#
-# [*masterauth*]
-#   If the master is password protected (using the "requirepass" configuration
-#   directive below) it is possible to tell the slave to authenticate before
-#   starting the replication synchronization process, otherwise the master will
-#   refuse the slave request.
-#
-#   Default: undef
-#
-# [*maxclients*]
-#   Set the max number of connected clients at the same time.
-#
-#   Default: 10000
-#
-# [*maxmemory*]
-#   Don't use more memory than the specified amount of bytes.
-#
-#   Default: undef
-#
-# [*maxmemory_policy*]
-#   How Redis will select what to remove when maxmemory is reached.
-#   You can select among five behaviors:
-#
-#   volatile-lru -> remove the key with an expire set using an LRU algorithm
-#   allkeys-lru -> remove any key accordingly to the LRU algorithm
-#   volatile-random -> remove a random key with an expire set
-#   allkeys-random -> remove a random key, any key
-#   volatile-ttl -> remove the key with the nearest expire time (minor TTL)
-#   noeviction -> don't expire at all, just return an error on write operations
-#
-#   Default: undef
-#
-# [*maxmemory_samples*]
-#   Select as well the sample size to check.
-#
-#   Default: undef
-#
-# [*min_slaves_max_lag*]
-#   The lag in seconds
-#
-#   Default: 10
-#
-# [*min_slaves_to_write*]
-#   Minimum number of slaves to be in "online" state
-#
-#   Default: 0
-#
-# [*no_appendfsync_on_rewrite*]
-#   If you have latency problems turn this to 'true'. Otherwise leave it as
-#   'false' that is the safest pick from the point of view of durability.
-#
-#   Default: false
-#
-# [*notify_keyspace_events*]
-#   Which events to notify Pub/Sub clients about events happening
-#   in the key space
-#
-#   Default: undef
-#
-# [*notify_service*]
-#   You may disable service reloads when config files change if you
-#   have an external service (e.g. Monit) to manage it for you.
-#
-#   Default: true
-#
-# [*package_ensure*]
-#   Default action for package.
-#
-#   Default: present
-#
-# [*package_name*]
-#   Upstream package name.
-#
-#   Default: OS dependant
-#
-# [*pid_file*]
-#   Where to store the pid.
-#
-#   Default: /var/run/redis/redis-server.pid
-#
-# [*port*]
-#   Configure which port to listen on.
-#
-#   Default: 6379
-#
-# [*ppa_repo*]
-#   Specify upstream (Ubuntu) PPA entry.
-#
-#   Default: ppa:chris-lea/redis-server
-#
-# [*rdbcompression*]
-#   Enable/disable compression of string objects using LZF when dumping.
-#
-#   Default: true
-#
-# [*repl_backlog_size*]
-#   The replication backlog size
-#
-#   Default: 1mb
-#
-# [*repl_backlog_ttl*]
-#   The number of seconds to elapse before freeing backlog buffer
-#
-#   Default: 3600
-#
-# [*repl_disable_tcp_nodelay*]
-#   Enable/disable TCP_NODELAY on the slave socket after SYNC
-#
-#   Default: false
-#
-# [*repl_ping_slave_period*]
-#   Slaves send PINGs to server in a predefined interval. It's possible
-#   to change this interval with the repl_ping_slave_period option.
-#
-#   Default: 10
-#
-# [*repl_timeout*]
-#   Set the replication timeout for:
-#
-#   1) Bulk transfer I/O during SYNC, from the point of view of slave.
-#   2) Master timeout from the point of view of slaves (data, pings).
-#   3) Slave timeout from the point of view of masters (REPLCONF ACK pings).
-#
-#   Default: 60
-#
-# [*requirepass*]
-#   Require clients to issue AUTH <PASSWORD> before processing any
+# @example Default install
+#   include redis
+#
+# @example Slave Node
+#   class { '::redis':
+#     bind    => '10.0.1.2',
+#     slaveof => '10.0.1.1 6379',
+#   }
+#
+# @param [String] activerehashing   Enable/disable active rehashing.
+# @param [String] aof_load_truncated   Enable/disable loading truncated AOF file
+# @param [String] aof_rewrite_incremental_fsync   Enable/disable fsync for AOF file
+# @param [String] appendfilename   The name of the append only file
+# @param [String] appendfsync   Adjust fsync mode. Valid options: always, everysec, no. Default:  everysec
+# @param [String] appendonly   Enable/disable appendonly mode.
+# @param [String] auto_aof_rewrite_min_size   Adjust minimum size for auto-aof-rewrite.
+# @param [String] auto_aof_rewrite_percentage   Adjust percentatge for auto-aof-rewrite.
+# @param [String] bind   Configure which IP address to listen on.
+# @param [String] config_dir   Directory containing the configuration files.
+# @param [String] config_dir_mode   Adjust mode for directory containing configuration files.
+# @param [String] config_file_orig   The location and name of a config file that provides the source
+# @param [String] config_file   Adjust main configuration file.
+# @param [String] config_file_mode   Adjust permissions for configuration files.
+# @param [String] config_group   Adjust filesystem group for config files.
+# @param [String] config_owner   Adjust filesystem owner for config files.
+# @param [String] conf_template   Define which template to use.
+# @param [String] daemonize   Have Redis run as a daemon.
+# @param [String] databases   Set the number of databases.
+# @param [String] dbfilename   The filename where to dump the DB
+# @param [String] extra_config_file   Description
+# @param [String] hash_max_ziplist_entries   Set max ziplist entries for hashes.
+# @param [String] hash_max_ziplist_value   Set max ziplist values for hashes.
+# @param [String] hll_sparse_max_bytes   HyperLogLog sparse representation bytes limit
+# @param [String] hz   Set redis background tasks frequency
+# @param [String] latency_monitor_threshold   Latency monitoring threshold in milliseconds
+# @param [String] list_max_ziplist_entries   Set max ziplist entries for lists.
+# @param [String] list_max_ziplist_value   Set max ziplist values for lists.
+# @param [String] log_dir   Specify directory where to write log entries.
+# @param [String] log_dir_mode   Adjust mode for directory containing log files.
+# @param [String] log_file   Specify file where to write log entries.
+# @param [String] log_level   Specify the server verbosity level.
+# @param [String] manage_repo   Enable/disable upstream repository configuration.
+# @param [String] manage_package   Enable/disable management of package
+# @param [String] managed_by_cluster_manager Choose if redis will be managed by a cluster manager such as pacemaker or rgmanager
+# @param [String] masterauth   If the master is password protected (using the "requirepass" configuration
+# @param [String] maxclients   Set the max number of connected clients at the same time.
+# @param [String] maxmemory   Don't use more memory than the specified amount of bytes.
+# @param [String] maxmemory_policy   How Redis will select what to remove when maxmemory is reached.
+# @param [String] maxmemory_samples   Select as well the sample size to check.
+# @param [String] min_slaves_max_lag   The lag in seconds
+# @param [String] min_slaves_to_write   Minimum number of slaves to be in "online" state
+# @param [String] no_appendfsync_on_rewrite   If you have latency problems turn this to 'true'. Otherwise leave it as
+# @param [String] notify_keyspace_events   Which events to notify Pub/Sub clients about events happening
+# @param [String] notify_service   You may disable service reloads when config files change if you
+# @param [String] package_ensure   Default action for package.
+# @param [String] package_name   Upstream package name.
+# @param [String] pid_file   Where to store the pid.
+# @param [String] port   Configure which port to listen on.
+# @param [String] ppa_repo   Specify upstream (Ubuntu) PPA entry.
+# @param [String] rdbcompression   Enable/disable compression of string objects using LZF when dumping.
+# @param [String] repl_backlog_size   The replication backlog size
+# @param [String] repl_backlog_ttl   The number of seconds to elapse before freeing backlog buffer
+# @param [String] repl_disable_tcp_nodelay   Enable/disable TCP_NODELAY on the slave socket after SYNC
+# @param [String] repl_ping_slave_period   Slaves send PINGs to server in a predefined interval. It's possible
+# @param [String] repl_timeout   Set the replication timeout for:
+# @param [String] requirepass   Require clients to issue AUTH <PASSWORD> before processing any
 #   other commands.
-#
-#   Default: undef
-#
-#[*save_db_to_disk*]
-#   Set if save db to disk.
-#
-#   Default: true
-#
-#[*save_db_to_disk_interval*]
-#    save the dataset every N seconds if there are at least M changes in the dataset
-#
-#   Default: {'900' =>'1', '300' => '10', '60' => '10000'}
-#
-#   Produces in config file;
-#           save 900 1
-#           save 300 10
-#           save 60 10000
-#
-# [*service_manage*]
-#   Specify if the service should be part of the catalog.
-#
-#   Default: true
-#
-# [*service_enable*]
-#   Enable/disable daemon at boot.
-#
-#   Default: true
-#
-# [*service_ensure*]
-#   Specify if the server should be running.
-#
-#   Default: running
-#
-# [*service_group*]
-#   Specify which group to run as.
-#
-#   Default: OS dependant
-#
-# [*service_hasrestart*]
-#   Does the init script support restart?
-#
-#   Default: OS dependant
-#
-# [*service_hasstatus*]
-#   Does the init script support status?
-#
-#   Default: OS dependant
-#
-# [*service_name*]
-#   Specify the service name for Init or Systemd.
-#
-#   Default: OS dependant
-#
-# [*service_provider*]
-#   Specify the service provider to use
-#
-#   Default: undef
-#
-# [*service_user*]
-#   Specify which user to run as.
-#
-#   Default: OS dependant
-#
-# [*set_max_intset_entries*]
-#   The following configuration setting sets the limit in the size of the
+# @param [String] save_db_to_disk   Set if save db to disk.
+# @param [String] save_db_to_disk_interval    save the dataset every N seconds if there are at least M changes in the dataset
+# @param [String] service_manage   Specify if the service should be part of the catalog.
+# @param [String] service_enable   Enable/disable daemon at boot.
+# @param [String] service_ensure   Specify if the server should be running.
+# @param [String] service_group   Specify which group to run as.
+# @param [String] service_hasrestart   Does the init script support restart?
+# @param [String] service_hasstatus   Does the init script support status?
+# @param [String] service_name   Specify the service name for Init or Systemd.
+# @param [String] service_provider   Specify the service provider to use
+# @param [String] service_user   Specify which user to run as.
+# @param [String] set_max_intset_entries   The following configuration setting sets the limit in the size of the
 #   set in order to use this special memory saving encoding.
-#
 #   Default: 512
-#
-# [*slave_priority*]
-#   The priority number for slave promotion by Sentinel
-#
-#   Default: 100
-#
-# [*slave_read_only*]
-#   You can configure a slave instance to accept writes or not.
-#
-#   Default: true
-#
-# [*slave_serve_stale_data*]
-#   When a slave loses its connection with the master, or when the replication
+# @param [String] slave_priority   The priority number for slave promotion by Sentinel
+# @param [String] slave_read_only   You can configure a slave instance to accept writes or not.
+# @param [String] slave_serve_stale_data   When a slave loses its connection with the master, or when the replication
 #   is still in progress, the slave can act in two different ways:
-#
 #   1) if slave-serve-stale-data is set to 'yes' (the default) the slave will
 #      still reply to client requests, possibly with out of date data, or the
 #      data set may just be empty if this is the first synchronization.
@@ -407,130 +95,43 @@
 #
 #   Default: true
 #
-# [*slaveof*]
-#   Use slaveof to make a Redis instance a copy of another Redis server.
-#
-#   Default: undef
-#
-# [*slowlog_log_slower_than*]
-#   Tells Redis what is the execution time, in microseconds, to exceed
+# @param [String] slaveof   Use slaveof to make a Redis instance a copy of another Redis server.
+# @param [String] slowlog_log_slower_than   Tells Redis what is the execution time, in microseconds, to exceed
 #   in order for the command to get logged.
-#
 #   Default: 10000
 #
-# [*slowlog_max_len*]
-#   Tells Redis what is the length to exceed in order for the command
+# @param [String] slowlog_max_len   Tells Redis what is the length to exceed in order for the command
 #   to get logged.
-#
 #   Default: 1024
 #
-# [*stop_writes_on_bgsave_error*]
-#   If false then Redis will continue to work as usual even if there
+# @param [String] stop_writes_on_bgsave_error   If false then Redis will continue to work as usual even if there
 #   are problems with disk, permissions, and so forth.
-#
 #   Default: true
 #
-# [*syslog_enabled*]
-#   Enable/disable logging to the system logger.
-#
-#   Default: undef
-#
-# [*syslog_facility*]
-#   Specify the syslog facility.
+# @param [String] syslog_enabled   Enable/disable logging to the system logger.
+# @param [String] syslog_facility   Specify the syslog facility.
 #   Must be USER or between LOCAL0-LOCAL7.
-#
 #   Default: undef
 #
-# [*tcp_backlog*]
-#   Sets the TCP backlog
-#
-#   Default: 511
-#
-# [*tcp_keepalive*]
-#   TCP keepalive.
-#
-#   If non-zero, use SO_KEEPALIVE to send TCP ACKs to clients in absence
-#   of communication. This is useful for two reasons:
-#
-#   1) Detect dead peers.
-#   2) Take the connection alive from the point of view of network
-#      equipment in the middle.
-#
-#   On Linux, the specified value (in seconds) is the period used to send ACKs.
-#   Note that to close the connection the double of the time is needed.
-#   On other kernels the period depends on the kernel configuration.
-#
-#   A reasonable value for this option is 60 seconds.
-#
-# [*timeout*]
-#   Close the connection after a client is idle for N seconds (0 to disable).
-#
-#   Default: 0
-#
-# [*ulimit*]
-#   Limit the use of system-wide resources.
-#
-#   Default: 65536
-#
-# [*unixsocket*]
-#   Define unix socket path
-#
-#   Default: undef
-#
-# [*unixsocketperm*]
-#   Define unix socket file permissions
-#
-#   Default: undef
-#
-# [*workdir*]
-#   The DB will be written inside this directory, with the filename specified
+# @param [String] tcp_backlog   Sets the TCP backlog
+# @param [String] tcp_keepalive   TCP keepalive.
+# @param [String] timeout   Close the connection after a client is idle for N seconds (0 to disable).
+# @param [String] ulimit   Limit the use of system-wide resources.
+# @param [String] unixsocket   Define unix socket path
+# @param [String] unixsocketperm   Define unix socket file permissions
+# @param [String] workdir   The DB will be written inside this directory, with the filename specified
 #   above using the 'dbfilename' configuration directive.
-#
 #   Default: /var/lib/redis/
-#
-# [*workdir_mode*]
-#   Adjust mode for data directory.
-#
-#   Default: 0750
-#
-# [*zset_max_ziplist_entries*]
-#   Set max entries for sorted sets.
-#
-#   Default: 128
-#
-# [*zset_max_ziplist_value*]
-#   Set max values for sorted sets.
-#
-#   Default: 64
-#
-# [*cluster_enabled*]
-#   Enables redis 3.0 cluster functionality
-#
-#   Default: false
-#
-# [*cluster_config_file*]
-#   Config file for saving cluster nodes configuration. This file is never touched by humans.
+# @param [String] workdir_mode   Adjust mode for data directory.
+# @param [String] zset_max_ziplist_entries   Set max entries for sorted sets.
+# @param [String] zset_max_ziplist_value   Set max values for sorted sets.
+# @param [String] cluster_enabled   Enables redis 3.0 cluster functionality
+# @param [String] cluster_config_file   Config file for saving cluster nodes configuration. This file is never touched by humans.
 #   Only set if cluster_enabled is true
-#
 #   Default: nodes.conf
-#
-# [*cluster_node_timeout*]
-#   Node timeout
+# @param [String] cluster_node_timeout   Node timeout
 #   Only set if cluster_enabled is true
-#
 #   Default: 5000
-#
-# == Actions:
-#   - Install and configure Redis
-#
-# == Sample Usage:
-#
-#   class { 'redis': }
-#
-#   class { 'redis':
-#     manage_repo => true;
-#   }
-#
 class redis (
   $activerehashing               = $::redis::params::activerehashing,
   $aof_load_truncated            = $::redis::params::aof_load_truncated,
