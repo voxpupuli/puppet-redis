@@ -22,7 +22,7 @@ RSpec.configure do |c|
       end
       on host, puppet('module', 'install', 'puppetlabs-stdlib -v 4.11.0'), { :acceptable_exit_codes => [0] }
       on host, puppet('module', 'install', 'puppetlabs-apt -v 2.3.0'), { :acceptable_exit_codes => [0] }
-      on host, puppet('module', 'install', 'stahnma-epel -v 1.0.2'), { :acceptable_exit_codes => [0] }
+      on host, puppet('module', 'install', 'stahnma-epel -v 1.2.2'), { :acceptable_exit_codes => [0] }
       on host, puppet('module', 'install', 'herculesteam/augeasproviders_core -v 2.1.0'), { :acceptable_exit_codes => [0] }
       on host, puppet('module', 'install', 'herculesteam/augeasproviders_sysctl -v 2.1.0'), { :acceptable_exit_codes => [0] }
     end
