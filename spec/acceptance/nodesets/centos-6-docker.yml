@@ -2,7 +2,7 @@ HOSTS:
   centos-6-x64:
     platform: el-6-x86_64
     hypervisor : docker
-    image: jdeathe/centos-ssh:centos-6
+    image: petems/docker-centos-6-ssh-locale:centos-6
     docker_preserve_image: true
     docker_cmd: '["/sbin/init"]'
     docker_preserve_image: true
