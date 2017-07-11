@@ -1,16 +1,40 @@
-# Change Log
+# Change log
 
-## [Unreleased](https://github.com/arioch/puppet-redis/tree/HEAD)
+All notable changes to this project will be documented in this file.
 
-[Full Changelog](https://github.com/arioch/puppet-redis/compare/v3.1.0...HEAD)
-
-## [v3.1.0](https://github.com/arioch/puppet-redis/tree/v3.1.0) (2017-05-11)
-
-[Full Changelog](https://github.com/arioch/puppet-redis/compare/3.0.0...v3.1.0)
+## [v3.2.0](https://github.com/arioch/puppet-redis/tree/v3.2.0) (2017-07-11)
+[Full Changelog](https://github.com/arioch/puppet-redis/compare/v3.1.1...v3.2.0)
 
 **Implemented enhancements:**
 
+- Cluster Support [\#62](https://github.com/arioch/puppet-redis/issues/62)
+
+**Closed issues:**
+
+- redis\_server\_version fact fails to parse output [\#210](https://github.com/arioch/puppet-redis/issues/210)
+- Support for multi-instances per host [\#113](https://github.com/arioch/puppet-redis/issues/113)
+
+**Merged pull requests:**
+
+- updated redis systemd unit file for better use with instances [\#214](https://github.com/arioch/puppet-redis/pull/214) ([bostrowski13](https://github.com/bostrowski13))
+- Updates docker images for CentOS 6 and 7 [\#213](https://github.com/arioch/puppet-redis/pull/213) ([petems](https://github.com/petems))
+- Update EPEL module [\#212](https://github.com/arioch/puppet-redis/pull/212) ([petems](https://github.com/petems))
+- Refactor redisget\(\) method [\#211](https://github.com/arioch/puppet-redis/pull/211) ([petems](https://github.com/petems))
+- Update docs for puppet-strings [\#206](https://github.com/arioch/puppet-redis/pull/206) ([petems](https://github.com/petems))
+- Add redis::instance defined type [\#200](https://github.com/arioch/puppet-redis/pull/200) ([petems](https://github.com/petems))
+- Adding note about Puppet 3 support [\#153](https://github.com/arioch/puppet-redis/pull/153) ([petems](https://github.com/petems))
+
+## [v3.1.1](https://github.com/arioch/puppet-redis/tree/v3.1.1) (2017-05-19)
+[Full Changelog](https://github.com/arioch/puppet-redis/compare/v3.1.0...v3.1.1)
+
+## [v3.1.0](https://github.com/arioch/puppet-redis/tree/v3.1.0) (2017-05-19)
+[Full Changelog](https://github.com/arioch/puppet-redis/compare/v3.0.0...v3.1.0)
+
+**Implemented enhancements:**
+
+- Releasing v3.0.1 [\#205](https://github.com/arioch/puppet-redis/issues/205)
 - Please cut a release [\#201](https://github.com/arioch/puppet-redis/issues/201)
+- Deployment to Forge [\#185](https://github.com/arioch/puppet-redis/issues/185)
 
 **Fixed bugs:**
 
