@@ -161,6 +161,7 @@ define redis::instance(
   $no_appendfsync_on_rewrite     = $::redis::no_appendfsync_on_rewrite,
   $notify_keyspace_events        = $::redis::notify_keyspace_events,
   $managed_by_cluster_manager    = $::redis::managed_by_cluster_manager,
+  $package_ensure                = $::redis::package_ensure,
   $port                          = $::redis::port,
   $rdbcompression                = $::redis::rdbcompression,
   $repl_backlog_size             = $::redis::repl_backlog_size,
@@ -276,7 +277,11 @@ define redis::instance(
     refreshonly => true,
   }
 
-  $redis_version_real = pick(getvar_emptystring('redis_server_version'), $minimum_version)
+  if $package_ensure =~ /^[0-9]+\.[0-9]/ {
+    $redis_version_real = $package_ensure
+  } else {
+    $redis_version_real = pick(getvar_emptystring('redis_server_version'), $minimum_version)
+  }
 
   if ($redis_version_real and $conf_template == 'redis/redis.conf.erb') {
     case $redis_version_real {
