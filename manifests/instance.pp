@@ -188,20 +188,22 @@ define redis::instance(
   $unixsocket                    = $::redis::unixsocket,
   $unixsocketperm                = $::redis::unixsocketperm,
   $ulimit                        = $::redis::ulimit,
+  $workdir_mode                  = $::redis::workdir_mode,
   $zset_max_ziplist_entries      = $::redis::zset_max_ziplist_entries,
   $zset_max_ziplist_value        = $::redis::zset_max_ziplist_value,
   $cluster_enabled               = $::redis::cluster_enabled,
   $cluster_config_file           = $::redis::cluster_config_file,
   $cluster_node_timeout          = $::redis::cluster_node_timeout,
-  $workdir                       = $::redis::workdir,
   $service_ensure                = $::redis::service_ensure,
   $service_enable                = $::redis::service_enable,
+  $service_group                 = $::redis::service_group,
   $service_hasrestart            = $::redis::service_hasrestart,
   $service_hasstatus             = $::redis::service_hasstatus,
   # Defaults for redis::instance
   $manage_service_file           = true,
   $log_file                      = "/var/log/redis/redis-server-${name}.log",
   $pid_file                      = "/var/run/redis/redis-server-${name}.pid",
+  $workdir                       = "${::redis::workdir}/redis-server-${name}",
 ) {
 
   if $title == 'default' {
@@ -211,6 +213,15 @@ define redis::instance(
     $redis_config_extension    = ".${title}"
     $redis_file_name_orig      = "${config_file_orig}${redis_config_extension}"
     $redis_file_name           = "${config_file}${redis_config_extension}"
+  }
+
+  if $workdir != $::redis::workdir {
+    file { $workdir:
+      ensure => directory,
+      group  => $service_group,
+      mode   => $workdir_mode,
+      owner  => $service_user,
+    }
   }
 
   if $manage_service_file {
