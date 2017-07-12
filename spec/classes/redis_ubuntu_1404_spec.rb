@@ -36,6 +36,33 @@ describe 'redis' do
 
       end
 
+      context 'when $::redis_server_version fact is not present and package_ensure is a newer version(3:3.2.1) (older features enabled)' do
+
+        let(:facts) {
+          ubuntu_1404_facts.merge({
+            :redis_server_version => nil,
+          })
+        }
+        let (:params) { { :package_ensure => '3:3.2.1' } }
+
+        it { should contain_file('/etc/redis/redis.conf.puppet').with('content' => /^hash-max-ziplist-entries/) }
+        it { should contain_file('/etc/redis/redis.conf.puppet').with('content' => /^tcp-backlog/) }
+
+      end
+
+      context 'when $::redis_server_version fact is not present and package_ensure is a newer version(4:4.0-rc3) (older features enabled)' do
+
+        let(:facts) {
+          ubuntu_1404_facts.merge({
+            :redis_server_version => nil,
+          })
+        }
+        let (:params) { { :package_ensure => '4:4.0-rc3' } }
+
+        it { should contain_file('/etc/redis/redis.conf.puppet').with('content' => /^hash-max-ziplist-entries/) }
+        it { should contain_file('/etc/redis/redis.conf.puppet').with('content' => /^tcp-backlog/) }
+
+      end
       context 'when $::redis_server_version fact is not present and package_ensure is a newer version(4.0-rc3) (older features enabled)' do
 
         let(:facts) {

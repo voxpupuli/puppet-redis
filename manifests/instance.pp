@@ -288,8 +288,13 @@ define redis::instance(
     refreshonly => true,
   }
 
-  if $package_ensure =~ /^[0-9]+\.[0-9]/ {
-    $redis_version_real = $package_ensure
+  if $package_ensure =~ /^([0-9]+:)?[0-9]+\.[0-9]/ {
+    if ':' in $package_ensure {
+      $_redis_version_real = split($package_ensure, ':')
+      $redis_version_real = $_redis_version_real[1]
+    } else {
+      $redis_version_real = $package_ensure
+    }
   } else {
     $redis_version_real = pick(getvar_emptystring('redis_server_version'), $minimum_version)
   }
