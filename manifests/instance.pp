@@ -148,7 +148,6 @@ define redis::instance(
   $latency_monitor_threshold     = $::redis::latency_monitor_threshold,
   $list_max_ziplist_entries      = $::redis::list_max_ziplist_entries,
   $list_max_ziplist_value        = $::redis::list_max_ziplist_value,
-  $log_file                      = $::redis::log_file,
   $log_level                     = $::redis::log_level,
   $minimum_version               = $::redis::minimum_version,
   $masterauth                    = $::redis::masterauth,
@@ -201,6 +200,7 @@ define redis::instance(
   $service_hasstatus             = $::redis::service_hasstatus,
   # Defaults for redis::instance
   $manage_service_file           = true,
+  $log_file                      = "/var/log/redis/redis-server-${name}.log",
   $pid_file                      = "/var/run/redis/redis-server-${name}.pid",
 ) {
 
