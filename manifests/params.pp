@@ -128,7 +128,7 @@ class redis::params {
       $service_name              = 'redis-server'
       $service_user              = 'redis'
       $ppa_repo                  = 'ppa:chris-lea/redis-server'
-      $workdir                   = '/var/lib/redis/'
+      $workdir                   = '/var/lib/redis'
       $workdir_mode              = '0750'
 
       case $::operatingsystem {
@@ -187,7 +187,7 @@ class redis::params {
       $service_name              = 'redis'
       $service_user              = 'redis'
       $ppa_repo                  = undef
-      $workdir                   = '/var/lib/redis/'
+      $workdir                   = '/var/lib/redis'
       $workdir_mode              = '0755'
 
       case $::operatingsystemmajrelease {
@@ -237,7 +237,7 @@ class redis::params {
       $service_name              = 'redis'
       $service_user              = 'redis'
       $ppa_repo                  = undef
-      $workdir                   = '/var/db/redis/'
+      $workdir                   = '/var/db/redis'
       $workdir_mode              = '0750'
 
       # pkg version
@@ -271,7 +271,7 @@ class redis::params {
       $service_name              = 'redis'
       $service_user              = 'redis'
       $ppa_repo                  = undef
-      $workdir                   = '/var/lib/redis/'
+      $workdir                   = '/var/lib/redis'
       $workdir_mode              = '0750'
 
       # suse package version
@@ -306,7 +306,7 @@ class redis::params {
       $service_name              = 'redis'
       $service_user              = 'redis'
       $ppa_repo                  = undef
-      $workdir                   = '/var/lib/redis/'
+      $workdir                   = '/var/lib/redis'
       $workdir_mode              = '0750'
 
       # pkg version
