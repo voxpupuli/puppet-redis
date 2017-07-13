@@ -38,6 +38,8 @@
 # @param [String] latency_monitor_threshold   Latency monitoring threshold in milliseconds
 # @param [String] list_max_ziplist_entries   Set max ziplist entries for lists.
 # @param [String] list_max_ziplist_value   Set max ziplist values for lists.
+# @param [String] log_dir   Specify directory where to write log entries.
+# @param [String] log_dir_mode   Adjust mode for directory containing log files.
 # @param [String] log_file   Specify file where to write log entries.
 # @param [String] log_level   Specify the server verbosity level.
 # @param [String] masterauth   If the master is password protected (using the "requirepass" configuration
@@ -150,6 +152,8 @@ define redis::instance(
   $latency_monitor_threshold     = $::redis::latency_monitor_threshold,
   $list_max_ziplist_entries      = $::redis::list_max_ziplist_entries,
   $list_max_ziplist_value        = $::redis::list_max_ziplist_value,
+  $log_dir                       = $::redis::log_dir,
+  $log_dir_mode                  = $::redis::log_dir_mode,
   $log_level                     = $::redis::log_level,
   $minimum_version               = $::redis::minimum_version,
   $masterauth                    = $::redis::masterauth,
@@ -202,7 +206,7 @@ define redis::instance(
   $service_hasstatus             = $::redis::service_hasstatus,
   # Defaults for redis::instance
   $manage_service_file           = true,
-  $log_file                      = "/var/log/redis/redis-server-${name}.log",
+  $log_file                      = undef,
   $pid_file                      = "/var/run/redis/redis-server-${name}.pid",
   $unixsocket                    = "/var/run/redis/redis-server-${name}.sock",
   $workdir                       = "${::redis::workdir}/redis-server-${name}",
@@ -212,9 +216,23 @@ define redis::instance(
     $redis_file_name_orig = $config_file_orig
     $redis_file_name      = $config_file
   } else {
-    $redis_config_extension    = ".${title}"
-    $redis_file_name_orig      = "${config_file_orig}${redis_config_extension}"
-    $redis_file_name           = "${config_file}${redis_config_extension}"
+    $redis_server_name         = "redis-server-${name}"
+    $redis_file_name_orig      = sprintf('%s/%s.%s', dirname($config_file_orig), $redis_server_name, 'conf.puppet')
+    $redis_file_name           = sprintf('%s/%s.%s', dirname($config_file), $redis_server_name, 'conf')
+  }
+
+  if $log_dir != $::redis::log_dir {
+    file { $log_dir:
+      ensure => directory,
+      group  => $service_group,
+      mode   => $log_dir_mode,
+      owner  => $service_user,
+    }
+  }
+
+  $_real_log_file = $log_file ? {
+    undef   => "${log_dir}/redis-server-${name}.log",
+    default => $log_file,
   }
 
   if $workdir != $::redis::workdir {
