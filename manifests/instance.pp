@@ -185,7 +185,6 @@ define redis::instance(
   $tcp_backlog                   = $::redis::tcp_backlog,
   $tcp_keepalive                 = $::redis::tcp_keepalive,
   $timeout                       = $::redis::timeout,
-  $unixsocket                    = $::redis::unixsocket,
   $unixsocketperm                = $::redis::unixsocketperm,
   $ulimit                        = $::redis::ulimit,
   $workdir_mode                  = $::redis::workdir_mode,
@@ -203,6 +202,7 @@ define redis::instance(
   $manage_service_file           = true,
   $log_file                      = "/var/log/redis/redis-server-${name}.log",
   $pid_file                      = "/var/run/redis/redis-server-${name}.pid",
+  $unixsocket                    = "/var/run/redis/redis-server-${name}.sock",
   $workdir                       = "${::redis::workdir}/redis-server-${name}",
 ) {
 

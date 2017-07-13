@@ -34,6 +34,7 @@ class redis::config {
       pid_file            => $::redis::pid_file,
       log_file            => $::redis::log_file,
       manage_service_file => $::redis::manage_service_file,
+      unixsocket          => $::redis::unixsocket,
       workdir             => $::redis::workdir,
     }
   }
