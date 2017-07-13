@@ -241,6 +241,7 @@ define redis::instance(
       if $title != 'default' {
         service { $title:
           ensure     => $service_ensure,
+          enable     => $service_enable,
           hasrestart => $service_hasrestart,
           hasstatus  => $service_hasstatus,
           subscribe  => [
@@ -261,6 +262,7 @@ define redis::instance(
       if $title != 'default' {
         service { $title:
           ensure     => $service_ensure,
+          enable     => $service_enable,
           hasrestart => $service_hasrestart,
           hasstatus  => $service_hasstatus,
           subscribe  => [
