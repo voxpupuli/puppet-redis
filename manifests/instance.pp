@@ -216,9 +216,9 @@ define redis::instance(
     $redis_file_name_orig = $config_file_orig
     $redis_file_name      = $config_file
   } else {
-    $redis_server_name         = "redis-server-${name}"
-    $redis_file_name_orig      = sprintf('%s/%s.%s', dirname($config_file_orig), $redis_server_name, 'conf.puppet')
-    $redis_file_name           = sprintf('%s/%s.%s', dirname($config_file), $redis_server_name, 'conf')
+    $redis_server_name    = "redis-server-${name}"
+    $redis_file_name_orig = sprintf('%s/%s.%s', dirname($config_file_orig), $redis_server_name, 'conf.puppet')
+    $redis_file_name      = sprintf('%s/%s.%s', dirname($config_file), $redis_server_name, 'conf')
   }
 
   if $log_dir != $::redis::log_dir {
@@ -249,7 +249,7 @@ define redis::instance(
 
     if $service_provider_lookup == 'systemd' {
 
-      file { "/etc/systemd/system/${title}.service":
+      file { "/etc/systemd/system/${redis_server_name}.service":
         ensure  => file,
         owner   => 'root',
         group   => 'root',
@@ -259,13 +259,13 @@ define redis::instance(
       ~> Exec['systemd-reload-redis']
 
       if $title != 'default' {
-        service { $title:
+        service { $redis_server_name:
           ensure     => $service_ensure,
           enable     => $service_enable,
           hasrestart => $service_hasrestart,
           hasstatus  => $service_hasstatus,
           subscribe  => [
-            File["/etc/systemd/system/${title}.service"],
+            File["/etc/systemd/system/${redis_server_name}.service"],
             Exec["cp -p ${redis_file_name_orig} ${redis_file_name}"],
           ],
         }
@@ -273,20 +273,20 @@ define redis::instance(
 
     } else {
 
-      file { "/etc/init.d/${title}":
+      file { "/etc/init.d/${redis_server_name}":
         ensure  => file,
         mode    => '0755',
         content => template("redis/service_templates/redis.${::osfamily}.erb"),
       }
 
       if $title != 'default' {
-        service { $title:
+        service { $redis_server_name:
           ensure     => $service_ensure,
           enable     => $service_enable,
           hasrestart => $service_hasrestart,
           hasstatus  => $service_hasstatus,
           subscribe  => [
-            File["/etc/init.d/${title}"],
+            File["/etc/init.d/${redis_server_name}"],
             Exec["cp -p ${redis_file_name_orig} ${redis_file_name}"],
           ],
         }
