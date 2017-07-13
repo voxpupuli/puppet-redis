@@ -16,6 +16,9 @@ describe 'redis::instance', :type => :define do
           ubuntu_1404_facts
         }
         it { should contain_file('/etc/redis/redis.conf.puppet.redis2').with('content' => /^bind 127.0.0.1/) }
+        it { should contain_file('/etc/redis/redis.conf.puppet.redis2').with('content' => /^logfile \/var\/log\/redis\/redis-server-redis2.log/) }
+        it { should contain_file('/etc/redis/redis.conf.puppet.redis2').with('content' => /^dir \/var\/lib\/redis\/redis-server-redis2/) }
+        it { should contain_file('/var/lib/redis/redis-server-redis2') }
         it { should contain_service('redis2').with_ensure('running') }
         it { should contain_file('/etc/init.d/redis2').with_content(/DAEMON_ARGS=\/etc\/redis\/redis.conf.redis2/) }
         it { should contain_file('/etc/init.d/redis2').with_content(/PIDFILE=\/var\/run\/redis\/redis-server-redis2.pid/) }
@@ -27,6 +30,9 @@ describe 'redis::instance', :type => :define do
           })
         }
         it { should contain_file('/etc/redis/redis.conf.puppet.redis2').with('content' => /^bind 127.0.0.1/) }
+        it { should contain_file('/etc/redis/redis.conf.puppet.redis2').with('content' => /^logfile \/var\/log\/redis\/redis-server-redis2.log/) }
+        it { should contain_file('/etc/redis/redis.conf.puppet.redis2').with('content' => /^dir \/var\/lib\/redis\/redis-server-redis2/) }
+        it { should contain_file('/var/lib/redis/redis-server-redis2') }
         it { should contain_service('redis2').with_ensure('running') }
         it { should contain_file('/etc/systemd/system/redis2.service').with_content(/ExecStart=\/usr\/bin\/redis-server \/etc\/redis\/redis.conf.redis2/) }
       end
@@ -37,6 +43,9 @@ describe 'redis::instance', :type => :define do
           centos_6_facts
         }
         it { should contain_file('/etc/redis.conf.puppet.redis2').with('content' => /^bind 127.0.0.1/) }
+        it { should contain_file('/etc/redis.conf.puppet.redis2').with('content' => /^logfile \/var\/log\/redis\/redis-server-redis2.log/) }
+        it { should contain_file('/etc/redis.conf.puppet.redis2').with('content' => /^dir \/var\/lib\/redis\/redis-server-redis2/) }
+        it { should contain_file('/var/lib/redis/redis-server-redis2') }
         it { should contain_service('redis2').with_ensure('running') }
         it { should contain_file('/etc/init.d/redis2').with_content(/REDIS_CONFIG="\/etc\/redis.conf.redis2"/) }
         it { should contain_file('/etc/init.d/redis2').with_content(/pidfile="\/var\/run\/redis\/redis-server-redis2.pid"/) }
@@ -48,6 +57,9 @@ describe 'redis::instance', :type => :define do
           })
         }
         it { should contain_file('/etc/redis.conf.puppet.redis2').with('content' => /^bind 127.0.0.1/) }
+        it { should contain_file('/etc/redis.conf.puppet.redis2').with('content' => /^logfile \/var\/log\/redis\/redis-server-redis2.log/) }
+        it { should contain_file('/etc/redis.conf.puppet.redis2').with('content' => /^dir \/var\/lib\/redis\/redis-server-redis2/) }
+        it { should contain_file('/var/lib/redis/redis-server-redis2') }
         it { should contain_service('redis2').with_ensure('running') }
         it { should contain_file('/etc/systemd/system/redis2.service').with_content(/ExecStart=\/usr\/bin\/redis-server \/etc\/redis.conf.redis2/) }
       end
