@@ -21,6 +21,7 @@ describe 'redis::instance', :type => :define do
         it { should contain_file('/etc/redis/redis.conf.puppet.redis2').with('content' => /^unixsocket \/var\/run\/redis\/redis-server-redis2.sock/) }
         it { should contain_file('/var/lib/redis/redis-server-redis2') }
         it { should contain_service('redis2').with_ensure('running') }
+        it { should contain_service('redis2').with_enable('true') }
         it { should contain_file('/etc/init.d/redis2').with_content(/DAEMON_ARGS=\/etc\/redis\/redis.conf.redis2/) }
         it { should contain_file('/etc/init.d/redis2').with_content(/PIDFILE=\/var\/run\/redis\/redis-server-redis2.pid/) }
       end
@@ -36,6 +37,7 @@ describe 'redis::instance', :type => :define do
         it { should contain_file('/etc/redis/redis.conf.puppet.redis2').with('content' => /^unixsocket \/var\/run\/redis\/redis-server-redis2.sock/) }
         it { should contain_file('/var/lib/redis/redis-server-redis2') }
         it { should contain_service('redis2').with_ensure('running') }
+        it { should contain_service('redis2').with_enable('true') }
         it { should contain_file('/etc/systemd/system/redis2.service').with_content(/ExecStart=\/usr\/bin\/redis-server \/etc\/redis\/redis.conf.redis2/) }
       end
     end
@@ -50,6 +52,7 @@ describe 'redis::instance', :type => :define do
         it { should contain_file('/etc/redis.conf.puppet.redis2').with('content' => /^unixsocket \/var\/run\/redis\/redis-server-redis2.sock/) }
         it { should contain_file('/var/lib/redis/redis-server-redis2') }
         it { should contain_service('redis2').with_ensure('running') }
+        it { should contain_service('redis2').with_enable('true') }
         it { should contain_file('/etc/init.d/redis2').with_content(/REDIS_CONFIG="\/etc\/redis.conf.redis2"/) }
         it { should contain_file('/etc/init.d/redis2').with_content(/pidfile="\/var\/run\/redis\/redis-server-redis2.pid"/) }
       end
@@ -65,6 +68,7 @@ describe 'redis::instance', :type => :define do
         it { should contain_file('/etc/redis.conf.puppet.redis2').with('content' => /^unixsocket \/var\/run\/redis\/redis-server-redis2.sock/) }
         it { should contain_file('/var/lib/redis/redis-server-redis2') }
         it { should contain_service('redis2').with_ensure('running') }
+        it { should contain_service('redis2').with_enable('true') }
         it { should contain_file('/etc/systemd/system/redis2.service').with_content(/ExecStart=\/usr\/bin\/redis-server \/etc\/redis.conf.redis2/) }
       end
     end
