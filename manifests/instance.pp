@@ -63,6 +63,7 @@
 # @param [String] save_db_to_disk_interval    save the dataset every N seconds if there are at least M changes in the dataset
 # @param [String] service_enable   Enable/disable daemon at boot.
 # @param [String] service_ensure   Specify if the server should be running.
+# @param [String] service_group   Specify which group to run as.
 # @param [String] service_hasrestart   Does the init script support restart?
 # @param [String] service_hasstatus   Does the init script support status?
 # @param [String] service_user   Specify which user to run as.
@@ -110,6 +111,7 @@
 # @param [String] workdir   The DB will be written inside this directory, with the filename specified
 #   above using the 'dbfilename' configuration directive.
 #   Default: /var/lib/redis/
+# @param [String] workdir_mode   Adjust mode for data directory.
 # @param [String] zset_max_ziplist_entries   Set max entries for sorted sets.
 # @param [String] zset_max_ziplist_value   Set max values for sorted sets.
 # @param [String] cluster_enabled   Enables redis 3.0 cluster functionality
