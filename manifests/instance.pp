@@ -148,7 +148,6 @@ define redis::instance(
   $latency_monitor_threshold     = $::redis::latency_monitor_threshold,
   $list_max_ziplist_entries      = $::redis::list_max_ziplist_entries,
   $list_max_ziplist_value        = $::redis::list_max_ziplist_value,
-  $log_file                      = $::redis::log_file,
   $log_level                     = $::redis::log_level,
   $minimum_version               = $::redis::minimum_version,
   $masterauth                    = $::redis::masterauth,
@@ -161,6 +160,7 @@ define redis::instance(
   $no_appendfsync_on_rewrite     = $::redis::no_appendfsync_on_rewrite,
   $notify_keyspace_events        = $::redis::notify_keyspace_events,
   $managed_by_cluster_manager    = $::redis::managed_by_cluster_manager,
+  $package_ensure                = $::redis::package_ensure,
   $port                          = $::redis::port,
   $rdbcompression                = $::redis::rdbcompression,
   $repl_backlog_size             = $::redis::repl_backlog_size,
@@ -185,22 +185,25 @@ define redis::instance(
   $tcp_backlog                   = $::redis::tcp_backlog,
   $tcp_keepalive                 = $::redis::tcp_keepalive,
   $timeout                       = $::redis::timeout,
-  $unixsocket                    = $::redis::unixsocket,
   $unixsocketperm                = $::redis::unixsocketperm,
   $ulimit                        = $::redis::ulimit,
+  $workdir_mode                  = $::redis::workdir_mode,
   $zset_max_ziplist_entries      = $::redis::zset_max_ziplist_entries,
   $zset_max_ziplist_value        = $::redis::zset_max_ziplist_value,
   $cluster_enabled               = $::redis::cluster_enabled,
   $cluster_config_file           = $::redis::cluster_config_file,
   $cluster_node_timeout          = $::redis::cluster_node_timeout,
-  $workdir                       = $::redis::workdir,
   $service_ensure                = $::redis::service_ensure,
   $service_enable                = $::redis::service_enable,
+  $service_group                 = $::redis::service_group,
   $service_hasrestart            = $::redis::service_hasrestart,
   $service_hasstatus             = $::redis::service_hasstatus,
   # Defaults for redis::instance
   $manage_service_file           = true,
+  $log_file                      = "/var/log/redis/redis-server-${name}.log",
   $pid_file                      = "/var/run/redis/redis-server-${name}.pid",
+  $unixsocket                    = "/var/run/redis/redis-server-${name}.sock",
+  $workdir                       = "${::redis::workdir}/redis-server-${name}",
 ) {
 
   if $title == 'default' {
@@ -210,6 +213,15 @@ define redis::instance(
     $redis_config_extension    = ".${title}"
     $redis_file_name_orig      = "${config_file_orig}${redis_config_extension}"
     $redis_file_name           = "${config_file}${redis_config_extension}"
+  }
+
+  if $workdir != $::redis::workdir {
+    file { $workdir:
+      ensure => directory,
+      group  => $service_group,
+      mode   => $workdir_mode,
+      owner  => $service_user,
+    }
   }
 
   if $manage_service_file {
@@ -229,6 +241,7 @@ define redis::instance(
       if $title != 'default' {
         service { $title:
           ensure     => $service_ensure,
+          enable     => $service_enable,
           hasrestart => $service_hasrestart,
           hasstatus  => $service_hasstatus,
           subscribe  => [
@@ -249,6 +262,7 @@ define redis::instance(
       if $title != 'default' {
         service { $title:
           ensure     => $service_ensure,
+          enable     => $service_enable,
           hasrestart => $service_hasrestart,
           hasstatus  => $service_hasstatus,
           subscribe  => [
@@ -276,7 +290,16 @@ define redis::instance(
     refreshonly => true,
   }
 
-  $redis_version_real = pick(getvar_emptystring('redis_server_version'), $minimum_version)
+  if $package_ensure =~ /^([0-9]+:)?[0-9]+\.[0-9]/ {
+    if ':' in $package_ensure {
+      $_redis_version_real = split($package_ensure, ':')
+      $redis_version_real = $_redis_version_real[1]
+    } else {
+      $redis_version_real = $package_ensure
+    }
+  } else {
+    $redis_version_real = pick(getvar_emptystring('redis_server_version'), $minimum_version)
+  }
 
   if ($redis_version_real and $conf_template == 'redis/redis.conf.erb') {
     case $redis_version_real {

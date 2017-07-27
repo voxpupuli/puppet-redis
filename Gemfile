@@ -39,6 +39,7 @@ end
 group :development do
   gem 'puppet-blacksmith'
   gem 'travis'
+  gem 'github_changelog_generator'
 end
 
 group :system_tests do
