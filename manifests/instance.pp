@@ -251,7 +251,7 @@ define redis::instance(
         }
       }
 
-      file { '/usr/bin/redis-shutdown'}
+      file { '/usr/bin/redis-shutdown':
         ensure  => file,
         owner   => 'root',
         group   => 'root',
