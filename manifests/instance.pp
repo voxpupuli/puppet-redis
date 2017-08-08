@@ -129,6 +129,8 @@ define redis::instance(
   $auto_aof_rewrite_min_size     = $::redis::auto_aof_rewrite_min_size,
   $auto_aof_rewrite_percentage   = $::redis::auto_aof_rewrite_percentage,
   $bind                          = $::redis::bind,
+  $output_buffer_limit_slave     = $::redis::output_buffer_limit_slave,
+  $output_buffer_limit_pubsub    = $::redis::output_buffer_limit_pubsub,
   $conf_template                 = $::redis::conf_template,
   $config_dir                    = $::redis::config_dir,
   $config_dir_mode               = $::redis::config_dir_mode,

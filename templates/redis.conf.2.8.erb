@@ -713,8 +713,8 @@ activerehashing <% if @activerehashing -%>yes<% else -%>no<% end -%>
 #
 # Both the hard or the soft limit can be disabled by setting them to zero.
 client-output-buffer-limit normal 0 0 0
-client-output-buffer-limit slave 256mb 64mb 60
-client-output-buffer-limit pubsub 32mb 8mb 60
+client-output-buffer-limit slave <%= @output_buffer_limit_slave %>
+client-output-buffer-limit pubsub <%= @output_buffer_limit_pubsub %>
 
 # Redis calls an internal function to perform many background tasks, like
 # closing connections of clients in timeout, purging expired keys that are
