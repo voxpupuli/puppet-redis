@@ -911,11 +911,9 @@ describe 'redis', :type => :class do
             }
           }
 
-          it do
-            expect {
-              is_expected.to create_class('redis')
-            }.to raise_error(Puppet::Error, /Replication is not possible/)
-          end
+          it { is_expected.to contain_file(config_file_orig).with(
+            'content' => /^slaveof _VALUE_/
+          )}
         end
 
         context 'binding to external ip' do

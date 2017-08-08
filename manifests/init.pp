@@ -248,13 +248,6 @@ class redis (
     warning("Puppet 3 is EOL as of 01/01/2017, The 3.X.X releases of the module are the last that will support Puppet 3\nFor more information, see https://github.com/arioch/puppet-redis#puppet-3-support")
   }
 
-  # Sanity check
-  if $::redis::slaveof {
-    if $::redis::bind =~ /^127.0.0./ {
-      fail "Replication is not possible when binding to ${::redis::bind}."
-    }
-  }
-
   exec { 'systemd-reload-redis':
     command     => 'systemctl daemon-reload',
     refreshonly => true,
