@@ -156,6 +156,26 @@ describe 'redis', :type => :class do
         it { is_expected.to contain_file(config_file_orig).with_content(/bind.*_VALUE_/) }
       end
 
+      describe 'with parameter output_buffer_limit_slave' do
+        let (:params) {
+          {
+              :output_buffer_limit_slave => '_VALUE_'
+          }
+        }
+
+        it { is_expected.to contain_file(config_file_orig).with_content(/client-output-buffer-limit slave.*_VALUE_/) }
+      end
+
+      describe 'with parameter output_buffer_limit_pubsub' do
+        let (:params) {
+          {
+              :output_buffer_limit_pubsub => '_VALUE_'
+          }
+        }
+
+        it { is_expected.to contain_file(config_file_orig).with_content(/client-output-buffer-limit pubsub.*_VALUE_/) }
+      end
+
       describe 'with parameter: config_dir' do
         let (:params) { { :config_dir => '_VALUE_' } }
 

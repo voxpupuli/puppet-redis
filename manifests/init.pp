@@ -143,6 +143,8 @@ class redis (
   $auto_aof_rewrite_min_size     = $::redis::params::auto_aof_rewrite_min_size,
   $auto_aof_rewrite_percentage   = $::redis::params::auto_aof_rewrite_percentage,
   $bind                          = $::redis::params::bind,
+  $output_buffer_limit_slave     = $::redis::params::output_buffer_limit_slave,
+  $output_buffer_limit_pubsub    = $::redis::params::output_buffer_limit_pubsub,
   $conf_template                 = $::redis::params::conf_template,
   $config_dir                    = $::redis::params::config_dir,
   $config_dir_mode               = $::redis::params::config_dir_mode,
