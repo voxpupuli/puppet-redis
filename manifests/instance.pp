@@ -38,6 +38,8 @@
 # @param [String] latency_monitor_threshold   Latency monitoring threshold in milliseconds
 # @param [String] list_max_ziplist_entries   Set max ziplist entries for lists.
 # @param [String] list_max_ziplist_value   Set max ziplist values for lists.
+# @param [String] log_dir   Specify directory where to write log entries.
+# @param [String] log_dir_mode   Adjust mode for directory containing log files.
 # @param [String] log_file   Specify file where to write log entries.
 # @param [String] log_level   Specify the server verbosity level.
 # @param [String] masterauth   If the master is password protected (using the "requirepass" configuration
@@ -63,6 +65,7 @@
 # @param [String] save_db_to_disk_interval    save the dataset every N seconds if there are at least M changes in the dataset
 # @param [String] service_enable   Enable/disable daemon at boot.
 # @param [String] service_ensure   Specify if the server should be running.
+# @param [String] service_group   Specify which group to run as.
 # @param [String] service_hasrestart   Does the init script support restart?
 # @param [String] service_hasstatus   Does the init script support status?
 # @param [String] service_user   Specify which user to run as.
@@ -110,6 +113,7 @@
 # @param [String] workdir   The DB will be written inside this directory, with the filename specified
 #   above using the 'dbfilename' configuration directive.
 #   Default: /var/lib/redis/
+# @param [String] workdir_mode   Adjust mode for data directory.
 # @param [String] zset_max_ziplist_entries   Set max entries for sorted sets.
 # @param [String] zset_max_ziplist_value   Set max values for sorted sets.
 # @param [String] cluster_enabled   Enables redis 3.0 cluster functionality
@@ -150,6 +154,8 @@ define redis::instance(
   $latency_monitor_threshold     = $::redis::latency_monitor_threshold,
   $list_max_ziplist_entries      = $::redis::list_max_ziplist_entries,
   $list_max_ziplist_value        = $::redis::list_max_ziplist_value,
+  $log_dir                       = $::redis::log_dir,
+  $log_dir_mode                  = $::redis::log_dir_mode,
   $log_level                     = $::redis::log_level,
   $minimum_version               = $::redis::minimum_version,
   $masterauth                    = $::redis::masterauth,
@@ -202,7 +208,7 @@ define redis::instance(
   $service_hasstatus             = $::redis::service_hasstatus,
   # Defaults for redis::instance
   $manage_service_file           = true,
-  $log_file                      = "/var/log/redis/redis-server-${name}.log",
+  $log_file                      = undef,
   $pid_file                      = "/var/run/redis/redis-server-${name}.pid",
   $unixsocket                    = "/var/run/redis/redis-server-${name}.sock",
   $workdir                       = "${::redis::workdir}/redis-server-${name}",
@@ -212,9 +218,23 @@ define redis::instance(
     $redis_file_name_orig = $config_file_orig
     $redis_file_name      = $config_file
   } else {
-    $redis_config_extension    = ".${title}"
-    $redis_file_name_orig      = "${config_file_orig}${redis_config_extension}"
-    $redis_file_name           = "${config_file}${redis_config_extension}"
+    $redis_server_name    = "redis-server-${name}"
+    $redis_file_name_orig = sprintf('%s/%s.%s', dirname($config_file_orig), $redis_server_name, 'conf.puppet')
+    $redis_file_name      = sprintf('%s/%s.%s', dirname($config_file), $redis_server_name, 'conf')
+  }
+
+  if $log_dir != $::redis::log_dir {
+    file { $log_dir:
+      ensure => directory,
+      group  => $service_group,
+      mode   => $log_dir_mode,
+      owner  => $service_user,
+    }
+  }
+
+  $_real_log_file = $log_file ? {
+    undef   => "${log_dir}/redis-server-${name}.log",
+    default => $log_file,
   }
 
   if $workdir != $::redis::workdir {
@@ -231,7 +251,7 @@ define redis::instance(
 
     if $service_provider_lookup == 'systemd' {
 
-      file { "/etc/systemd/system/${title}.service":
+      file { "/etc/systemd/system/${redis_server_name}.service":
         ensure  => file,
         owner   => 'root',
         group   => 'root',
@@ -241,13 +261,13 @@ define redis::instance(
       ~> Exec['systemd-reload-redis']
 
       if $title != 'default' {
-        service { $title:
+        service { $redis_server_name:
           ensure     => $service_ensure,
           enable     => $service_enable,
           hasrestart => $service_hasrestart,
           hasstatus  => $service_hasstatus,
           subscribe  => [
-            File["/etc/systemd/system/${title}.service"],
+            File["/etc/systemd/system/${redis_server_name}.service"],
             Exec["cp -p ${redis_file_name_orig} ${redis_file_name}"],
           ],
         }
@@ -255,20 +275,20 @@ define redis::instance(
 
     } else {
 
-      file { "/etc/init.d/${title}":
+      file { "/etc/init.d/${redis_server_name}":
         ensure  => file,
         mode    => '0755',
         content => template("redis/service_templates/redis.${::osfamily}.erb"),
       }
 
       if $title != 'default' {
-        service { $title:
+        service { $redis_server_name:
           ensure     => $service_ensure,
           enable     => $service_enable,
           hasrestart => $service_hasrestart,
           hasstatus  => $service_hasstatus,
           subscribe  => [
-            File["/etc/init.d/${title}"],
+            File["/etc/init.d/${redis_server_name}"],
             Exec["cp -p ${redis_file_name_orig} ${redis_file_name}"],
           ],
         }
