@@ -13,7 +13,7 @@ describe 'redisget() function' do
     }
 
     package { 'redis-rubygem' :
-      ensure   => installed,
+      ensure   => '3.3.3',
       name     => 'redis',
       provider => 'puppet_gem',
     }
