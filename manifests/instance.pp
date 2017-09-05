@@ -251,13 +251,6 @@ define redis::instance(
         }
       }
 
-      file { '/usr/bin/redis-shutdown':
-        ensure  => file,
-        owner   => 'root',
-        group   => 'root',
-        mode    => '0755',
-        content => template('redis/redis-shutdown.erb'),
-      }
     } else {
 
       file { "/etc/init.d/${title}":

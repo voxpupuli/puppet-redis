@@ -73,6 +73,16 @@ class redis::config {
         }
       }
 
+      if $service_provider_lookup == 'systemd' {
+        file { '/usr/bin/redis-shutdown':
+          ensure  => file,
+          owner   => 'root',
+          group   => 'root',
+          mode    => '0755',
+          content => template('redis/redis-shutdown.erb'),
+        }
+      }
+
     }
 
     default: {
