@@ -9,21 +9,6 @@ describe 'redis' do
 
     context 'should set CentOS specific values' do
 
-      context 'when $::redis_server_version fact is not present (older features not enabled)' do
-
-        let(:facts) {
-          centos_6_facts.merge({
-            :redis_server_version => nil,
-            :puppetversion        => Puppet.version,
-          })
-        }
-
-        it { should contain_file('/etc/redis.conf.puppet').with('content' => /^hash-max-zipmap-entries/) }
-        it { should contain_file('/etc/redis.conf.puppet').without('content' => /^hash-max-ziplist-entries/) }
-        it { should contain_file('/etc/redis.conf.puppet').without('content' => /^tcp-backlog/) }
-
-      end
-
       context 'when $::redis_server_version fact is not present and package_ensure is a newer version(3.2.1) (older features enabled)' do
 
         let(:facts) {

@@ -194,8 +194,9 @@ class redis::params {
 
       case $::operatingsystemmajrelease {
         '6': {
-          # CentOS 6 EPEL package is 2.4.10
-          $minimum_version           = '2.4.10'
+          # CentOS 6 EPEL package is just updated to 3.2.10
+          # https://bugzilla.redhat.com/show_bug.cgi?id=923970
+          $minimum_version           = '3.2.10'
 
           $service_group             = 'root'
         }
