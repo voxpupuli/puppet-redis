@@ -17,7 +17,7 @@
 . /etc/rc.d/init.d/functions
 
 name="redis-server-<%= @name %>"
-exec="/usr/sbin/redis-server"
+exec="/usr/bin/redis-server"
 pidfile="/var/run/redis/redis-server-<%= @name %>.pid"
 REDIS_CONFIG="<%= @redis_file_name %>"
 

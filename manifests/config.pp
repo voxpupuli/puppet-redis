@@ -43,6 +43,26 @@ class redis::config {
     contain ::redis::ulimit
   }
 
+  $service_provider_lookup = pick(getvar_emptystring('service_provider'), false)
+
+  if $service_provider_lookup != 'systemd' {
+    case $::operatingsystem {
+      'Debian': {
+        $var_run_redis_mode = '2775'
+      }
+      default: {
+        $var_run_redis_mode = '0755'
+      }
+    }
+
+    file { '/var/run/redis':
+      ensure => 'directory',
+      owner  => $::redis::config_owner,
+      group  => $::redis::config_group,
+      mode   => $var_run_redis_mode,
+    }
+  }
+
   # Adjust /etc/default/redis-server on Debian systems
   case $::osfamily {
     'Debian': {
@@ -52,27 +72,6 @@ class redis::config {
         mode   => $::redis::config_file_mode,
         owner  => $::redis::config_owner,
       }
-
-      $service_provider_lookup = pick(getvar_emptystring('service_provider'), false)
-
-      if $service_provider_lookup != 'systemd' {
-        case $::operatingsystem {
-          'Debian': {
-            $var_run_redis_mode = '2775'
-          }
-          default: {
-            $var_run_redis_mode = '0755'
-          }
-        }
-
-        file { '/var/run/redis':
-          ensure => 'directory',
-          owner  => $::redis::config_owner,
-          group  => $::redis::config_group,
-          mode   => $var_run_redis_mode,
-        }
-      }
-
     }
 
     default: {
