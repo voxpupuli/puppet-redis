@@ -143,6 +143,8 @@ class redis (
   $auto_aof_rewrite_min_size     = $::redis::params::auto_aof_rewrite_min_size,
   $auto_aof_rewrite_percentage   = $::redis::params::auto_aof_rewrite_percentage,
   $bind                          = $::redis::params::bind,
+  $output_buffer_limit_slave     = $::redis::params::output_buffer_limit_slave,
+  $output_buffer_limit_pubsub    = $::redis::params::output_buffer_limit_pubsub,
   $conf_template                 = $::redis::params::conf_template,
   $config_dir                    = $::redis::params::config_dir,
   $config_dir_mode               = $::redis::params::config_dir_mode,
@@ -244,13 +246,6 @@ class redis (
 
   if $::puppetversion and versioncmp($::puppetversion, '4.0.0') < 0 {
     warning("Puppet 3 is EOL as of 01/01/2017, The 3.X.X releases of the module are the last that will support Puppet 3\nFor more information, see https://github.com/arioch/puppet-redis#puppet-3-support")
-  }
-
-  # Sanity check
-  if $::redis::slaveof {
-    if $::redis::bind =~ /^127.0.0./ {
-      fail "Replication is not possible when binding to ${::redis::bind}."
-    }
   }
 
   exec { 'systemd-reload-redis':

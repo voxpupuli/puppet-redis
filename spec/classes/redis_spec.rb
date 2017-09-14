@@ -156,6 +156,26 @@ describe 'redis', :type => :class do
         it { is_expected.to contain_file(config_file_orig).with_content(/bind.*_VALUE_/) }
       end
 
+      describe 'with parameter output_buffer_limit_slave' do
+        let (:params) {
+          {
+              :output_buffer_limit_slave => '_VALUE_'
+          }
+        }
+
+        it { is_expected.to contain_file(config_file_orig).with_content(/client-output-buffer-limit slave.*_VALUE_/) }
+      end
+
+      describe 'with parameter output_buffer_limit_pubsub' do
+        let (:params) {
+          {
+              :output_buffer_limit_pubsub => '_VALUE_'
+          }
+        }
+
+        it { is_expected.to contain_file(config_file_orig).with_content(/client-output-buffer-limit pubsub.*_VALUE_/) }
+      end
+
       describe 'with parameter: config_dir' do
         let (:params) { { :config_dir => '_VALUE_' } }
 
@@ -891,11 +911,9 @@ describe 'redis', :type => :class do
             }
           }
 
-          it do
-            expect {
-              is_expected.to create_class('redis')
-            }.to raise_error(Puppet::Error, /Replication is not possible/)
-          end
+          it { is_expected.to contain_file(config_file_orig).with(
+            'content' => /^slaveof _VALUE_/
+          )}
         end
 
         context 'binding to external ip' do

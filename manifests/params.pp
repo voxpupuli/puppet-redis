@@ -18,6 +18,8 @@ class redis::params {
   $auto_aof_rewrite_min_size       = '64mb'
   $auto_aof_rewrite_percentage     = 100
   $bind                            = '127.0.0.1'
+  $output_buffer_limit_slave       = '256mb 64mb 60'
+  $output_buffer_limit_pubsub      = '32mb 8mb 60'
   $conf_template                   = 'redis/redis.conf.erb'
   $default_install                 = true
   $databases                       = 16
@@ -192,8 +194,9 @@ class redis::params {
 
       case $::operatingsystemmajrelease {
         '6': {
-          # CentOS 6 EPEL package is 2.4.10
-          $minimum_version           = '2.4.10'
+          # CentOS 6 EPEL package is just updated to 3.2.10
+          # https://bugzilla.redhat.com/show_bug.cgi?id=923970
+          $minimum_version           = '3.2.10'
 
           $service_group             = 'root'
         }

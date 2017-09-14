@@ -4,12 +4,12 @@ require 'spec_helper_acceptance'
 describe 'redis::instance', :unless => (fact('operatingsystem') == 'Debian') do
   case fact('osfamily')
   when 'Debian'
-    config_path  = '/etc/redis/redis.conf'
+    config_path  = '/etc/redis'
     manage_repo  = false
     redis_name = 'redis-server'
   else
     redis_name = 'redis'
-    config_path  = '/etc/redis.conf'
+    config_path  = '/etc'
     manage_repo  = true
   end
 
@@ -43,19 +43,19 @@ describe 'redis::instance', :unless => (fact('operatingsystem') == 'Debian') do
     it { should be_installed }
   end
 
-  describe service('redis1') do
+  describe service('redis-server-redis1') do
     it { should be_running }
   end
 
-  describe service('redis2') do
+  describe service('redis-server-redis2') do
     it { should be_running }
   end
 
-  describe file("#{config_path}.redis1") do
+  describe file("#{config_path}/redis-server-redis1.conf") do
     its(:content) { should match /port 7777/ }
   end
 
-  describe file("#{config_path}.redis2") do
+  describe file("#{config_path}/redis-server-redis2.conf") do
     its(:content) { should match /port 8888/ }
   end
 

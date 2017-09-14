@@ -13,7 +13,7 @@ matrix:
     env: PUPPET_GEM_VERSION="~> 3.0" FUTURE_PARSER="yes" ORDERING="random"
   - sudo: required
     dist: trusty
-    rvm: 2.1.9
+    rvm: 2.2.2
     env: PUPPET_GEM_VERSION="~> 3.0" STRICT_VARIABLES="yes" ORDERING="random"
   - sudo: required
     dist: trusty

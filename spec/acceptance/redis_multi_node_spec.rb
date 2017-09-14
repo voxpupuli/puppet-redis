@@ -43,7 +43,7 @@ if hosts.length >= 3
           pp = <<-EOS
           class { 'redis':
             manage_repo => true,
-            bind        => $::ipaddress_enp0s8,
+            bind        => '127.0.0.1',
             masterauth  => 'foobared',
             slaveof     => '#{master_ip_address} 6379'
           }
