@@ -22,31 +22,31 @@ matrix:
   - sudo: required
     services: docker
     rvm: '2.3.3'
-    env: PUPPET_INSTALL_VERSION="1.5.2" PUPPET_INSTALL_TYPE=agent BEAKER_set="centos-6-docker"
+    env: PUPPET_INSTALL_VERSION="1.10.8" PUPPET_INSTALL_TYPE=agent BEAKER_set="centos-6-docker"
     script: bundle exec rake acceptance
     bundler_args: --without development
   - sudo: required
     services: docker
     rvm: '2.3.3'
-    env: PUPPET_INSTALL_VERSION="1.5.2" PUPPET_INSTALL_TYPE=agent BEAKER_set="centos-7-docker"
+    env: PUPPET_INSTALL_VERSION="1.10.8" PUPPET_INSTALL_TYPE=agent BEAKER_set="centos-7-docker"
     script: bundle exec rake acceptance
     bundler_args: --without development
   - sudo: required
     services: docker
     rvm: '2.3.3'
-    env: PUPPET_INSTALL_VERSION="1.5.2" PUPPET_INSTALL_TYPE=agent BEAKER_set="debian-8-docker"
+    env: PUPPET_INSTALL_VERSION="1.10.8" PUPPET_INSTALL_TYPE=agent BEAKER_set="debian-8-docker"
     script: bundle exec rake acceptance
     bundler_args: --without development
   - sudo: required
     services: docker
     rvm: '2.3.3'
-    env: PUPPET_INSTALL_VERSION="1.5.2" PUPPET_INSTALL_TYPE=agent BEAKER_set="ubuntu-1604-docker"
+    env: PUPPET_INSTALL_VERSION="1.10.8" PUPPET_INSTALL_TYPE=agent BEAKER_set="ubuntu-1604-docker"
     script: bundle exec rake acceptance
     bundler_args: --without development
   - sudo: required
     services: docker
     rvm: '2.3.3'
-    env: PUPPET_INSTALL_VERSION="1.5.2" PUPPET_INSTALL_TYPE=agent BEAKER_set="ubuntu-1404-docker"
+    env: PUPPET_INSTALL_VERSION="1.10.8" PUPPET_INSTALL_TYPE=agent BEAKER_set="ubuntu-1404-docker"
     script: bundle exec rake acceptance
     bundler_args: --without development
   - sudo: required
