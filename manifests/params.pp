@@ -44,6 +44,7 @@ class redis::params {
   $notify_keyspace_events          = undef
   $notify_service                  = true
   $port                            = 6379
+  $protected_mode                  = 'yes'
   $rdbcompression                  = true
   $requirepass                     = undef
   $save_db_to_disk                 = true

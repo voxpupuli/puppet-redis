@@ -53,6 +53,7 @@
 # @param [String] notify_keyspace_events   Which events to notify Pub/Sub clients about events happening
 # @param [String] pid_file   Where to store the pid.
 # @param [String] port   Configure which port to listen on.
+# @param [String] protected_mode  Whether protected mode is enabled or not.  Only applicable when no bind is set.
 # @param [String] rdbcompression   Enable/disable compression of string objects using LZF when dumping.
 # @param [String] repl_backlog_size   The replication backlog size
 # @param [String] repl_backlog_ttl   The number of seconds to elapse before freeing backlog buffer
@@ -170,6 +171,7 @@ define redis::instance(
   $managed_by_cluster_manager    = $::redis::managed_by_cluster_manager,
   $package_ensure                = $::redis::package_ensure,
   $port                          = $::redis::port,
+  $protected_mode                = $::redis::protected_mode,
   $rdbcompression                = $::redis::rdbcompression,
   $repl_backlog_size             = $::redis::repl_backlog_size,
   $repl_backlog_ttl              = $::redis::repl_backlog_ttl,
@@ -330,6 +332,9 @@ define redis::instance(
       }
       /^2.8./: {
         File[$redis_file_name_orig] { content => template('redis/redis.conf.2.8.erb') }
+      }
+      /^3.2./: {
+        File[$redis_file_name_orig] { content => template('redis/redis.conf.3.2.erb') }
       }
       default: {
         File[$redis_file_name_orig] { content => template($conf_template) }
