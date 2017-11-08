@@ -63,6 +63,11 @@
 #
 #   Default: /var/log/redis/redis.log
 #
+# [*log_level*]
+#   Specify how much we should log.
+#
+#   Default: notice
+#
 # [*master_name*]
 #   Specify the name of the master redis server.
 #   The valid charset is A-z 0-9 and the three characters ".-_".
@@ -170,6 +175,7 @@ class redis::sentinel (
   $failover_timeout       = $::redis::params::sentinel_failover_timeout,
   $init_script            = $::redis::params::sentinel_init_script,
   $init_template          = $::redis::params::sentinel_init_template,
+  $log_level              = $::redis::params::log_level,
   $log_file               = $::redis::params::log_file,
   $master_name            = $::redis::params::sentinel_master_name,
   $redis_host             = $::redis::params::bind,
