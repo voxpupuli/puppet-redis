@@ -66,6 +66,7 @@ class redis::params {
   $sentinel_pid_file               = '/var/run/redis/redis-sentinel.pid'
   $sentinel_notification_script    = undef
   $sentinel_client_reconfig_script = undef
+  $sentinel_extra_config_params    = []
   $service_provider                = undef
   $set_max_intset_entries          = 512
   $slave_priority                  = 100
@@ -82,6 +83,7 @@ class redis::params {
   $unixsocketperm                  = 755
   $zset_max_ziplist_entries        = 128
   $zset_max_ziplist_value          = 64
+  $extra_config_params             = []
 
   # redis.conf.erb - replication
   $masterauth               = undef

@@ -738,3 +738,11 @@ hz <%= @hz %>
 # in order to commit the file to the disk more incrementally and avoid
 # big latency spikes.
 aof-rewrite-incremental-fsync <% if @aof_rewrite_incremental_fsync -%>yes<% else -%>no<% end -%>
+
+#####################################
+# Extra cofnig paramaters.
+<% unless @extra_config_params.empty? -%>
+<% [@extra_config_params].flatten.each do |param| -%>
+<%= param %>
+<% end -%>
+<% end -%>
