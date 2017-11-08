@@ -127,6 +127,7 @@
 # @param [String] workdir_mode   Adjust mode for data directory.
 # @param [String] zset_max_ziplist_entries   Set max entries for sorted sets.
 # @param [String] zset_max_ziplist_value   Set max values for sorted sets.
+# @param [Array]  extra_config_params   Additional config settings to include in the config file.
 # @param [String] cluster_enabled   Enables redis 3.0 cluster functionality
 # @param [String] cluster_config_file   Config file for saving cluster nodes configuration. This file is never touched by humans.
 #   Only set if cluster_enabled is true
@@ -227,6 +228,7 @@ class redis (
   $workdir_mode                  = $::redis::params::workdir_mode,
   $zset_max_ziplist_entries      = $::redis::params::zset_max_ziplist_entries,
   $zset_max_ziplist_value        = $::redis::params::zset_max_ziplist_value,
+  $extra_config_params           = $::redis::params::extra_config_params,
   $cluster_enabled               = $::redis::params::cluster_enabled,
   $cluster_config_file           = $::redis::params::cluster_config_file,
   $cluster_node_timeout          = $::redis::params::cluster_node_timeout,

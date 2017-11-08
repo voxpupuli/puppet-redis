@@ -21,3 +21,12 @@ sentinel client-reconfig-script <%= @master_name %> <%= @client_reconfig_script 
 <% end -%>
 
 logfile <%= @log_file %>
+
+#####################################
+# Extra cofnig paramaters.
+<% if @extra_config_params -%>
+<% [@extra_config_params].flatten.each do |param| -%>
+<%= param %>       
+<% end -%>
+<% end -%>
+

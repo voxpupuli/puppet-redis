@@ -503,3 +503,11 @@ activerehashing <% if @activerehashing -%>yes<% else -%>no<% end -%>
 <% if @extra_config_file -%>
 include <%= @extra_config_file %>
 <% end -%>
+
+#####################################
+# Extra cofnig paramaters.
+<% if @extra_config_params -%>
+<% [@extra_config_params].flatten.each do |param| -%>
+<%= param %>
+<% end -%>
+<% end -%>

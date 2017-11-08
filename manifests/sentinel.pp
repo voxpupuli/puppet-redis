@@ -147,6 +147,12 @@
 #   Path to the client-reconfig script
 #
 #   Default: undef
+#
+# [*extra_config_params*]
+#   Additional config parameters
+#
+#   Default: []
+#
 # == Actions:
 #   - Install and configure Redis Sentinel
 #
@@ -188,6 +194,7 @@ class redis::sentinel (
   $working_dir            = $::redis::params::sentinel_working_dir,
   $notification_script    = $::redis::params::sentinel_notification_script,
   $client_reconfig_script = $::redis::params::sentinel_client_reconfig_script,
+  $extra_config_params    = $::redis::params::sentinel_extra_config_params,
 ) inherits redis::params {
 
   require ::redis

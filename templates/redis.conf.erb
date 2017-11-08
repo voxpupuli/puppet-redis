@@ -766,3 +766,12 @@ cluster-node-timeout <%= @cluster_node_timeout %>
 <% if @extra_config_file -%>
 include <%= @extra_config_file %>
 <% end -%>
+
+#####################################
+# Extra cofnig paramaters.
+<% if @extra_config_params -%>
+<% [@extra_config_params].flatten.each do |param| -%>
+<%= param %>
+<% end -%>
+<% end -%>
+
