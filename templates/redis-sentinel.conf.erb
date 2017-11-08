@@ -24,7 +24,7 @@ logfile <%= @log_file %>
 
 #####################################
 # Extra cofnig paramaters.
-<% unless @extra_config_params.empty? -%>
+<% if @extra_config_params -%>
 <% [@extra_config_params].flatten.each do |param| -%>
 <%= param %>       
 <% end -%>
