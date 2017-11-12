@@ -249,7 +249,7 @@ define redis::instance(
   }
 
   if $manage_service_file {
-    $service_provider_lookup = pick(getvar_emptystring('service_provider'), false)
+    $service_provider_lookup = pick(getvar('service_provider'), false)
 
     if $service_provider_lookup == 'systemd' {
 
@@ -322,7 +322,7 @@ define redis::instance(
       $redis_version_real = $package_ensure
     }
   } else {
-    $redis_version_real = pick(getvar_emptystring('redis_server_version'), $minimum_version)
+    $redis_version_real = pick(getvar('redis_server_version'), $minimum_version)
   }
 
   if ($redis_version_real and $conf_template == 'redis/redis.conf.erb') {

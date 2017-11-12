@@ -43,7 +43,7 @@ class redis::config {
     contain ::redis::ulimit
   }
 
-  $service_provider_lookup = pick(getvar_emptystring('service_provider'), false)
+  $service_provider_lookup = pick(getvar('service_provider'), false)
 
   if $service_provider_lookup != 'systemd' {
     case $::operatingsystem {
