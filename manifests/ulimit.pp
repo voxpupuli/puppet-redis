@@ -17,7 +17,7 @@
 class redis::ulimit {
   assert_private('The redis::ulimit class is only to be called from the redis::config class')
 
-  $service_provider_lookup = pick(getvar_emptystring('service_provider'), false)
+  $service_provider_lookup = pick(getvar('service_provider'), false)
 
   if $::redis::managed_by_cluster_manager {
     file { '/etc/security/limits.d/redis.conf':
