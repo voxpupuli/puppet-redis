@@ -46,6 +46,8 @@ group :system_tests do
   gem "beaker", '2.41.0', :require => false
   gem "beaker-rspec", '5.6.0', :require => false
   gem 'beaker-puppet_install_helper',  :require => false
+  gem 'beaker-module_install_helper'
+  gem 'vagrant-wrapper'
 end
 
 ENV['PUPPET_GEM_VERSION'].nil? ? puppetversion = '~> 4.0' : puppetversion = ENV['PUPPET_GEM_VERSION'].to_s

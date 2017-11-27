@@ -1,5 +1,7 @@
 HOSTS:
   ubuntu-16-04:
+    roles:
+      - master
     platform: ubuntu-16.04-amd64
     image: ubuntu:16.04
     hypervisor: docker
