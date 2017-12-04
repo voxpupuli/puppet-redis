@@ -48,7 +48,11 @@ class redis::config {
   if $service_provider_lookup != 'systemd' {
     case $::operatingsystem {
       'Debian': {
-        $var_run_redis_mode = '2775'
+        if $::lsbdistcodename == 'wheezy' {
+          $var_run_redis_mode = '2755'
+        } else {
+          $var_run_redis_mode = '2775'
+        }
       }
       default: {
         $var_run_redis_mode = '0755'
