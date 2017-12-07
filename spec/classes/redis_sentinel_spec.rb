@@ -11,6 +11,7 @@ sentinel down-after-milliseconds mymaster 30000
 sentinel parallel-syncs mymaster 1
 sentinel failover-timeout mymaster 180000
 
+loglevel notice
 logfile /var/log/redis/redis.log
 EOF
 
@@ -29,6 +30,7 @@ sentinel auth-pass cow password
 sentinel notification-script cow bar.sh
 sentinel client-reconfig-script cow foo.sh
 
+loglevel notice
 logfile /tmp/barn-sentinel.log
 EOF
 
