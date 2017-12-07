@@ -36,5 +36,3 @@ unless default['hypervisor'] =~ /docker/
     end
   end
 end
-
-
