@@ -200,9 +200,13 @@ class redis::sentinel (
 
   if $::osfamily == 'Debian' {
     # Debian flavour machines have a dedicated redis-sentinel package
-    # This is default in Xenial onwards, unstable debian or PPA/other upstream
+    # This is default in Xenial or Stretch onwards or PPA/other upstream
     # See https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=775414 for context
-    if (versioncmp($::operatingsystemmajrelease, '16.04') >= 0 or $::redis::manage_repo) {
+    if (
+      (versioncmp($::operatingsystemmajrelease, '16.04') >= 0 and $::operatingsystem == 'Ubuntu') or
+      (versioncmp($::operatingsystemmajrelease, '9') >= 0 and $::operatingsystem == 'Debian') or
+      $::redis::manage_repo
+      ) {
       package { $package_name:
         ensure => $package_ensure,
       }
