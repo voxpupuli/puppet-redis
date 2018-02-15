@@ -33,12 +33,11 @@ bind <%= @bind %>
 # incoming connections. There is no default, so Redis will not listen
 # on a unix socket when not specified.
 #
-<% if @unixsocket %>unixsocket <%= @unixsocket %><% end %>
-<% if @unixsocketperm %>unixsocketperm <%= @unixsocketperm %><% end %>
+<% if @unixsocket %>unixsocket <%= @unixsocket %><% else %># unixsocket /tmp/redis.sock<% end %>
+<% if @unixsocketperm %>unixsocketperm <%= @unixsocketperm %><% else %># unixsocketperm 755<% end %>
 
 # Close the connection after a client is idle for N seconds (0 to disable)
 timeout <%= @timeout %>
-
 
 # Set server verbosity to 'debug'
 # it can be one of:
@@ -55,7 +54,7 @@ logfile <%= @_real_log_file %>
 
 # To enable logging to the system logger, just set 'syslog-enabled' to yes,
 # and optionally update the other syslog parameters to suit your needs.
-syslog-enabled <% if @syslog_enabled %>yes<% else %>no<% end %>
+syslog-enabled <% if @syslog_enabled %>yes<% else -%>no<% end %>
 
 # Specify the syslog identity.
 # syslog-ident redis
@@ -93,9 +92,7 @@ save <%= seconds -%> <%= key_change -%> <%= "\n" -%>
 # For default that's set to 'yes' as it's almost always a win.
 # If you want to save some CPU in the saving child set it to 'no' but
 # the dataset will likely be bigger if you have compressible values or keys.
-rdbcompression yes
 rdbcompression <% if @rdbcompression -%>yes<% else -%>no<% end %>
-
 
 # The filename where to dump the DB
 <% if @dbfilename %>dbfilename <%= @dbfilename %><% else %># dbfilename dump.rdb<% end %>
@@ -117,16 +114,14 @@ dir <%= @workdir %>
 # so for example it is possible to configure the slave to save the DB with a
 # different interval, or to listen to another port, and so on.
 #
-# slaveof <masterip> <masterport>
-<% if @slaveof -%>slaveof <%= @slaveof %><% end -%>
+<% if @slaveof -%>slaveof <%= @slaveof %><% else %># slaveof <masterip> <masterport><% end -%>
 
 # If the master is password protected (using the "requirepass" configuration
 # directive below) it is possible to tell the slave to authenticate before
 # starting the replication synchronization process, otherwise the master will
 # refuse the slave request.
 #
-# masterauth <master-password>
-<% if @masterauth -%>masterauth <%= @masterauth %><% end -%>
+<% if @masterauth -%>masterauth <%= @masterauth %><% else %># masterauth <master-password><% end -%>
 
 # When a slave lost the connection with the master, or when the replication
 # is still in progress, the slave can act in two different ways:
@@ -156,7 +151,6 @@ slave-serve-stale-data <% if @slave_serve_stale_data -%>yes<% else -%>no<% end %
 #
 repl-timeout <%= @repl_timeout %>
 
-
 ################################## SECURITY ###################################
 
 # Require clients to issue AUTH <PASSWORD> before processing any other
@@ -170,7 +164,7 @@ repl-timeout <%= @repl_timeout %>
 # 150k passwords per second against a good box. This means that you should
 # use a very strong password otherwise it will be very easy to break.
 #
-<% if @requirepass -%>requirepass <%= @requirepass %><% end -%>
+<% if @requirepass -%>requirepass <%= @requirepass %><% else %># requirepass foobared<% end -%>
 
 # Command renaming.
 #
@@ -221,8 +215,7 @@ maxclients <%= @maxclients %>
 # limit for maxmemory so that there is some free RAM on the system for slave
 # output buffers (but this is not needed if the policy is 'noeviction').
 #
-# maxmemory <bytes>
-<% if @maxmemory -%>maxmemory <%= @maxmemory %><% end -%>
+<% if @maxmemory -%>maxmemory <%= @maxmemory %><% else %># maxmemory <bytes><% end -%>
 
 # MAXMEMORY POLICY: how Redis will select what to remove when maxmemory
 # is reached? You can select among five behavior:
@@ -244,7 +237,6 @@ maxclients <%= @maxclients %>
 #       getset mset msetnx exec sort
 #
 # The default is:
-#
 # maxmemory-policy volatile-lru
 <% if @maxmemory_policy -%>maxmemory-policy <%= @maxmemory_policy %><% end -%>
 
@@ -254,8 +246,7 @@ maxclients <%= @maxclients %>
 # pick the one that was used less recently, you can change the sample size
 # using the following configuration directive.
 #
-# maxmemory-samples 3
-<% if @maxmemory_samples -%>maxmemory-samples <%= @maxmemory_samples %><% end -%>
+<% if @maxmemory_samples -%>maxmemory-samples <%= @maxmemory_samples %><% else %># maxmemory-samples 3<% end -%>
 
 ############################## APPEND ONLY MODE ###############################
 
@@ -274,7 +265,6 @@ maxclients <%= @maxclients %>
 #
 # IMPORTANT: Check the BGREWRITEAOF to check how to rewrite the append
 # log file in background when it gets too big.
-
 appendonly <% if @appendonly -%>yes<% else -%>no<% end -%>
 
 # The name of the append only file (default: "appendonly.aof")
@@ -299,7 +289,6 @@ appendfilename <%= @appendfilename %>
 # everysec.
 #
 # If unsure, use "everysec".
-
 appendfsync <%= @appendfsync %>
 
 # When the AOF fsync policy is set to always or everysec, and a background
@@ -338,10 +327,8 @@ no-appendfsync-on-rewrite <% if @no_appendfsync_on_rewrite -%>yes<% else -%>no<%
 #
 # Specify a precentage of zero in order to disable the automatic AOF
 # rewrite feature.
-
 auto-aof-rewrite-percentage <%= @auto_aof_rewrite_percentage %>
 auto-aof-rewrite-min-size   <%= @auto_aof_rewrite_min_size %>
-
 
 ################################## SLOW LOG ###################################
 
@@ -444,9 +431,10 @@ vm-max-threads 4
 
 ############################### ADVANCED CONFIG ###############################
 
-# Hashes are encoded using a memory efficient data structure when they have a
-# small number of entries, and the biggest entry does not exceed a given
-# threshold. These thresholds can be configured using the following directives.
+# Hashes are encoded in a special way (much more memory efficient) when they
+# have at max a given numer of elements, and the biggest element does not
+# exceed a given threshold. You can configure this limits with the following
+# configuration directives.
 hash-max-zipmap-entries <%= @hash_max_ziplist_entries %>
 hash-max-zipmap-value <%= @hash_max_ziplist_value %>
 
@@ -469,7 +457,6 @@ set-max-intset-entries <%= @set_max_intset_entries %>
 zset-max-ziplist-entries <%= @zset_max_ziplist_entries %>
 zset-max-ziplist-value <%= @zset_max_ziplist_value %>
 
-
 # Active rehashing uses 1 millisecond every 100 milliseconds of CPU time in
 # order to help rehashing the main Redis hash table (the one mapping top-level
 # keys to values). The hash table implementation redis uses (see dict.c)
@@ -489,7 +476,6 @@ zset-max-ziplist-value <%= @zset_max_ziplist_value %>
 # use "activerehashing yes" if you don't have such hard requirements but
 # want to free memory asap when possible.
 activerehashing <% if @activerehashing -%>yes<% else -%>no<% end -%>
-
 
 ################################## INCLUDES ###################################
 

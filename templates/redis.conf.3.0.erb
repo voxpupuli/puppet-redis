@@ -38,21 +38,35 @@
 include <%= @extra_config_file %>
 <% end -%>
 
-################################ GENERAL  #####################################
+################################## NETWORK #####################################
 
-# By default Redis does not run as a daemon. Use 'yes' if you need it.
-# Note that Redis will write a pid file in /var/run/redis.pid when daemonized.
-daemonize <% if @daemonize -%>yes<% else -%>no<% end -%>
+# By default, if no "bind" configuration directive is specified, Redis listens
+# for connections from all the network interfaces available on the server.
+# It is possible to listen to just one or multiple selected interfaces using
+# the "bind" configuration directive, followed by one or more IP addresses.
+#
+# Examples:
+#
+# bind 192.168.1.100 10.0.0.1
+# bind 127.0.0.1 ::1
+#
+# ~~~ WARNING ~~~ If the computer running Redis is directly exposed to the
+# internet, binding to all the interfaces is dangerous and will expose the
+# instance to everybody on the internet. So by default we uncomment the
+# following bind directive, that will force Redis to listen only into
+# the IPv4 lookback interface address (this means Redis will be able to
+# accept connections only from clients running into the same computer it
+# is running).
+#
+# IF YOU ARE SURE YOU WANT YOUR INSTANCE TO LISTEN TO ALL THE INTERFACES
+# JUST COMMENT THE FOLLOWING LINE.
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+bind <%= @bind %>
 
-# When running daemonized, Redis writes a pid file in /var/run/redis.pid by
-# default. You can specify a custom pid file location here.
-pidfile <%= @pid_file %>
-
-# Accept connections on the specified port, default is 6379.
+# Accept connections on the specified port, default is 6379 (IANA #815344).
 # If port 0 is specified Redis will not listen on a TCP socket.
 port <%= @port %>
 
-<% if scope.lookupvar('redis_version_real') and (scope.function_versioncmp([scope.lookupvar('redis_version_real'), '2.8.5']) >= 0) -%>
 # TCP listen() backlog.
 #
 # In high requests-per-second environments you need an high backlog in order
@@ -61,25 +75,15 @@ port <%= @port %>
 # make sure to raise both the value of somaxconn and tcp_max_syn_backlog
 # in order to get the desired effect.
 tcp-backlog <%= @tcp_backlog %>
-<% end -%>
 
-# By default Redis listens for connections from all the network interfaces
-# available on the server. It is possible to listen to just one or multiple
-# interfaces using the "bind" configuration directive, followed by one or
-# more IP addresses.
+# Unix socket.
 #
-# Examples:
-#
-# bind 192.168.1.100 10.0.0.1
-# bind 127.0.0.1
-bind <%= @bind %>
-
 # Specify the path for the Unix socket that will be used to listen for
 # incoming connections. There is no default, so Redis will not listen
 # on a unix socket when not specified.
 #
-<% if @unixsocket %>unixsocket <%= @unixsocket %><% else %># unixsocket /tmp/redis.sock<% end %>
-<% if @unixsocketperm %>unixsocketperm <%= @unixsocketperm %><% else %># unixsocketperm 700<% end %>
+<% if @unixsocket %>unixsocket <%= @unixsocket %><% end %>
+<% if @unixsocketperm %>unixsocketperm <%= @unixsocketperm %><% end %>
 
 # Close the connection after a client is idle for N seconds (0 to disable)
 timeout <%= @timeout %>
@@ -97,8 +101,37 @@ timeout <%= @timeout %>
 # Note that to close the connection the double of the time is needed.
 # On other kernels the period depends on the kernel configuration.
 #
-# A reasonable value for this option is 60 seconds.
+# A reasonable value for this option is 300 seconds, which is the new
+# Redis default starting with Redis 3.2.1.
 tcp-keepalive <%= @tcp_keepalive %>
+
+################################# GENERAL #####################################
+
+# By default Redis does not run as a daemon. Use 'yes' if you need it.
+# Note that Redis will write a pid file in /var/run/redis.pid when daemonized.
+daemonize <% if @daemonize -%>yes<% else -%>no<% end -%>
+
+# If you run Redis from upstart or systemd, Redis can interact with your
+# supervision tree. Options:
+#   supervised no      - no supervision interaction
+#   supervised upstart - signal upstart by putting Redis into SIGSTOP mode
+#   supervised systemd - signal systemd by writing READY=1 to $NOTIFY_SOCKET
+#   supervised auto    - detect upstart or systemd method based on
+#                        UPSTART_JOB or NOTIFY_SOCKET environment variables
+# Note: these supervision methods only signal "process is ready."
+#       They do not enable continuous liveness pings back to your supervisor.
+supervised no
+
+# If a pid file is specified, Redis writes it where specified at startup
+# and removes it at exit.
+#
+# When the server runs non daemonized, no pid file is created if none is
+# specified in the configuration. When the server is daemonized, the pid file
+# is used even if not specified, defaulting to "/var/run/redis.pid".
+#
+# Creating a pid file is best effort: if Redis is not able to create it
+# nothing bad happens, the server will start and run normally.
+pidfile <%= @pid_file %>
 
 # Specify the server verbosity level.
 # This can be one of:
@@ -186,7 +219,7 @@ rdbcompression <% if @rdbcompression -%>yes<% else -%>no<% end %>
 rdbchecksum yes
 
 # The filename where to dump the DB
-<% if @dbfilename %>dbfilename <%= @dbfilename %><% else %># dbfilename dump.rdb<% end %>
+dbfilename <%= @dbfilename %>
 
 # The working directory.
 #
@@ -284,7 +317,7 @@ slave-read-only <% if @slave_read_only -%>yes<% else -%>no<% end %>
 repl-diskless-sync no
 
 # When diskless replication is enabled, it is possible to configure the delay
-# the server waits in order to spawn the child that trnasfers the RDB via socket
+# the server waits in order to spawn the child that transfers the RDB via socket
 # to the slaves.
 #
 # This is important since once the transfer starts, it is not possible to serve
@@ -389,6 +422,35 @@ slave-priority <%= @slave_priority %>
 min-slaves-to-write <%= @min_slaves_to_write %>
 min-slaves-max-lag <%= @min_slaves_max_lag %>
 
+# A Redis master is able to list the address and port of the attached
+# slaves in different ways. For example the "INFO replication" section
+# offers this information, which is used, among other tools, by
+# Redis Sentinel in order to discover slave instances.
+# Another place where this info is available is in the output of the
+# "ROLE" command of a masteer.
+#
+# The listed IP and address normally reported by a slave is obtained
+# in the following way:
+#
+#   IP: The address is auto detected by checking the peer address
+#   of the socket used by the slave to connect with the master.
+#
+#   Port: The port is communicated by the slave during the replication
+#   handshake, and is normally the port that the slave is using to
+#   list for connections.
+#
+# However when port forwarding or Network Address Translation (NAT) is
+# used, the slave may be actually reachable via different IP and port
+# pairs. The following two options can be used by a slave in order to
+# report to its master a specific set of IP and port, so that both INFO
+# and ROLE will report those values.
+#
+# There is no need to use both the options if you need to override just
+# the port or the IP address.
+#
+# slave-announce-ip 5.5.5.5
+# slave-announce-port 1234
+
 ################################## SECURITY ###################################
 
 # Require clients to issue AUTH <PASSWORD> before processing any other
@@ -459,8 +521,8 @@ maxclients <%= @maxclients %>
 # limit for maxmemory so that there is some free RAM on the system for slave
 # output buffers (but this is not needed if the policy is 'noeviction').
 #
-# maxmemory <bytes>
-<% if @maxmemory -%>maxmemory <%= @maxmemory %><% end -%>
+<% if @maxmemory -%>maxmemory <%= @maxmemory %><% else %># maxmemory <bytes><% end -%>
+
 
 # MAXMEMORY POLICY: how Redis will select what to remove when maxmemory
 # is reached. You can select among five behaviors:
@@ -483,16 +545,18 @@ maxclients <%= @maxclients %>
 #
 # The default is:
 #
-# maxmemory-policy volatile-lru
+# maxmemory-policy noeviction
 <% if @maxmemory_policy -%>maxmemory-policy <%= @maxmemory_policy %><% end -%>
 
 # LRU and minimal TTL algorithms are not precise algorithms but approximated
-# algorithms (in order to save memory), so you can select as well the sample
-# size to check. For instance for default Redis will check three keys and
-# pick the one that was used less recently, you can change the sample size
-# using the following configuration directive.
+# algorithms (in order to save memory), so you can tune it for speed or
+# accuracy. For default Redis will check five keys and pick the one that was
+# used less recently, you can change the sample size using the following
+# configuration directive.
 #
-# maxmemory-samples 3
+# The default of 5 produces good enough results. 10 Approximates very closely
+# true LRU but costs a bit more CPU. 3 is very fast but not very accurate.
+#
 <% if @maxmemory_samples -%>maxmemory-samples <%= @maxmemory_samples %><% end -%>
 
 ############################## APPEND ONLY MODE ###############################
@@ -604,7 +668,7 @@ auto-aof-rewrite-min-size   <%= @auto_aof_rewrite_min_size %>
 # the server will still exit with an error. This option only applies when
 # Redis will try to read more data from the AOF file but not enough bytes
 # will be found.
-aof-load-truncated yes
+aof-load-truncated <% if @aof_load_truncated -%>yes<% else -%>no<% end -%>
 
 ################################ LUA SCRIPTING  ###############################
 
@@ -623,6 +687,115 @@ aof-load-truncated yes
 #
 # Set it to 0 or a negative value for unlimited execution without warnings.
 lua-time-limit 5000
+
+################################ REDIS CLUSTER  ###############################
+#
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+# WARNING EXPERIMENTAL: Redis Cluster is considered to be stable code, however
+# in order to mark it as "mature" we need to wait for a non trivial percentage
+# of users to deploy it in production.
+# ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#
+# Normal Redis instances can't be part of a Redis Cluster
+# started as cluster nodes can. In order to start a Redis instance as a
+# cluster node enable the cluster support uncommenting the following:
+#
+<% if @cluster_enabled %>cluster-enabled yes<% else %># cluster-enabled yes<% end %>
+
+
+# Every cluster node has a cluster configuration file. This file is not
+# intended to be edited by hand. It is created and updated by Redis nodes.
+# Every Redis Cluster node requires a different cluster configuration file.
+# Make sure that instances running in the same system do not have
+# overlapping cluster configuration file names.
+#
+<% if @cluster_config_file %>cluster-config-file <%= @cluster_config_file %><% else %># cluster-config-file nodes-6379.conf<% end %>
+
+# Cluster node timeout is the amount of milliseconds a node must be unreachable
+# for it to be considered in failure state.
+# Most other internal time limits are multiple of the node timeout.
+#
+<% if @cluster_node_timeout %>cluster-node-timeout <%= @cluster_node_timeout %><% else %># cluster-node-timeout 15000<% end %>
+
+# A slave of a failing master will avoid to start a failover if its data
+# looks too old.
+#
+# There is no simple way for a slave to actually have a exact measure of
+# its "data age", so the following two checks are performed:
+#
+# 1) If there are multiple slaves able to failover, they exchange messages
+#    in order to try to give an advantage to the slave with the best
+#    replication offset (more data from the master processed).
+#    Slaves will try to get their rank by offset, and apply to the start
+#    of the failover a delay proportional to their rank.
+#
+# 2) Every single slave computes the time of the last interaction with
+#    its master. This can be the last ping or command received (if the master
+#    is still in the "connected" state), or the time that elapsed since the
+#    disconnection with the master (if the replication link is currently down).
+#    If the last interaction is too old, the slave will not try to failover
+#    at all.
+#
+# The point "2" can be tuned by user. Specifically a slave will not perform
+# the failover if, since the last interaction with the master, the time
+# elapsed is greater than:
+#
+#   (node-timeout * slave-validity-factor) + repl-ping-slave-period
+#
+# So for example if node-timeout is 30 seconds, and the slave-validity-factor
+# is 10, and assuming a default repl-ping-slave-period of 10 seconds, the
+# slave will not try to failover if it was not able to talk with the master
+# for longer than 310 seconds.
+#
+# A large slave-validity-factor may allow slaves with too old data to failover
+# a master, while a too small value may prevent the cluster from being able to
+# elect a slave at all.
+#
+# For maximum availability, it is possible to set the slave-validity-factor
+# to a value of 0, which means, that slaves will always try to failover the
+# master regardless of the last time they interacted with the master.
+# (However they'll always try to apply a delay proportional to their
+# offset rank).
+#
+# Zero is the only value able to guarantee that when all the partitions heal
+# the cluster will always be able to continue.
+#
+<% if @cluster_slave_validity_factor %>cluster-slave-validity-factor <%= @cluster_slave_validity_factor %><% else %># cluster-slave-validity-factor 10<% end %>
+
+# Cluster slaves are able to migrate to orphaned masters, that are masters
+# that are left without working slaves. This improves the cluster ability
+# to resist to failures as otherwise an orphaned master can't be failed over
+# in case of failure if it has no working slaves.
+#
+# Slaves migrate to orphaned masters only if there are still at least a
+# given number of other working slaves for their old master. This number
+# is the "migration barrier". A migration barrier of 1 means that a slave
+# will migrate only if there is at least 1 other working slave for its master
+# and so forth. It usually reflects the number of slaves you want for every
+# master in your cluster.
+#
+# Default is 1 (slaves migrate only if their masters remain with at least
+# one slave). To disable migration just set it to a very large value.
+# A value of 0 can be set but is useful only for debugging and dangerous
+# in production.
+#
+<% if @cluster_migration_barrier %>cluster-migration-barrier <%= @cluster_migration_barrier %><% else %># cluster-migration-barrier 1<% end %>
+
+# By default Redis Cluster nodes stop accepting queries if they detect there
+# is at least an hash slot uncovered (no available node is serving it).
+# This way if the cluster is partially down (for example a range of hash slots
+# are no longer covered) all the cluster becomes, eventually, unavailable.
+# It automatically returns available as soon as all the slots are covered again.
+#
+# However sometimes you want the subset of the cluster which is working,
+# to continue to accept queries for the part of the key space that is still
+# covered. In order to do so, just set the cluster-require-full-coverage
+# option to no.
+#
+<% if @cluster_require_full_coverage %>cluster-require-full-coverage <%= @cluster_require_full_coverage %><% else %># cluster-require-full-coverage yes<% end %>
+
+# In order to setup your cluster make sure to read the documentation
+# available at http://redis.io web site.
 
 ################################## SLOW LOG ###################################
 
@@ -665,11 +838,11 @@ slowlog-max-len <%= @slowlog_max_len %>
 # By default latency monitoring is disabled since it is mostly not needed
 # if you don't have latency issues, and collecting data has a performance
 # impact, that while very small, can be measured under big load. Latency
-# monitoring can easily be enalbed at runtime using the command
+# monitoring can easily be enabled at runtime using the command
 # "CONFIG SET latency-monitor-threshold <milliseconds>" if needed.
-latency-monitor-threshold 0
+latency-monitor-threshold <%= @latency_monitor_threshold %>
 
-############################# Event notification ##############################
+############################# EVENT NOTIFICATION ##############################
 
 # Redis can notify Pub/Sub clients about events happening in the key space.
 # This feature is documented at http://redis.io/topics/notifications
@@ -723,11 +896,42 @@ notify-keyspace-events <% if @notify_keyspace_events -%><%= @notify_keyspace_eve
 hash-max-ziplist-entries <%= @hash_max_ziplist_entries %>
 hash-max-ziplist-value <%= @hash_max_ziplist_value %>
 
+# Lists are also encoded in a special way to save a lot of space.
+# The number of entries allowed per internal list node can be specified
+# as a fixed maximum size or a maximum number of elements.
+# For a fixed maximum size, use -5 through -1, meaning:
+# -5: max size: 64 Kb  <-- not recommended for normal workloads
+# -4: max size: 32 Kb  <-- not recommended
+# -3: max size: 16 Kb  <-- probably not recommended
+# -2: max size: 8 Kb   <-- good
+# -1: max size: 4 Kb   <-- good
+# Positive numbers mean store up to _exactly_ that number of elements
+# per list node.
+# The highest performing option is usually -2 (8 Kb size) or -1 (4 Kb size),
+# but if your use case is unique, adjust the settings as necessary.
+list-max-ziplist-size -2
+
 # Similarly to hashes, small lists are also encoded in a special way in order
 # to save a lot of space. The special representation is only used when
 # you are under the following limits:
 list-max-ziplist-entries <%= @list_max_ziplist_entries %>
 list-max-ziplist-value <%= @list_max_ziplist_value %>
+
+# Lists may also be compressed.
+# Compress depth is the number of quicklist ziplist nodes from *each* side of
+# the list to *exclude* from compression.  The head and tail of the list
+# are always uncompressed for fast push/pop operations.  Settings are:
+# 0: disable all list compression
+# 1: depth 1 means "don't start compressing until after 1 node into the list,
+#    going from either the head or tail"
+#    So: [head]->node->node->...->node->[tail]
+#    [head], [tail] will always be uncompressed; inner nodes will compress.
+# 2: [head]->[next]->node->node->...->node->[prev]->[tail]
+#    2 here means: don't compress head or head->next or tail->prev or tail,
+#    but compress all nodes between them.
+# 3: [head]->[next]->[next]->node->node->...->node->[prev]->[prev]->[tail]
+# etc.
+list-compress-depth 0
 
 # Sets have a special encoding in just one case: when a set is composed
 # of just strings that happen to be integers in radix 10 in the range
@@ -754,7 +958,7 @@ zset-max-ziplist-value <%= @zset_max_ziplist_value %>
 # which is O(N) with the sparse encoding. The value can be raised to
 # ~ 10000 when CPU is not a concern, but space is, and the data set is
 # composed of many HyperLogLogs with cardinality in the 0 - 15000 range.
-hll-sparse-max-bytes 3000
+hll-sparse-max-bytes <%= @hll_sparse_max_bytes %>
 
 # Active rehashing uses 1 millisecond every 100 milliseconds of CPU time in
 # order to help rehashing the main Redis hash table (the one mapping top-level
