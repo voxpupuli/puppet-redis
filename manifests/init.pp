@@ -134,6 +134,16 @@
 # @param [String] cluster_node_timeout   Node timeout
 #   Only set if cluster_enabled is true
 #   Default: 5000
+# @param [String] cluster_slave_validity_factor
+#   Only set if cluster_enabled is true
+#   Default: undef
+# @param [String] cluster_migration_barrier
+#   Only set if cluster_enabled is true
+#   Default: undef
+# @param [String] cluster_require_full_coverage
+#   Only set if cluster_enabled is true
+#   Default: undef
+
 class redis (
   $activerehashing               = $::redis::params::activerehashing,
   $aof_load_truncated            = $::redis::params::aof_load_truncated,
@@ -229,6 +239,9 @@ class redis (
   $zset_max_ziplist_value        = $::redis::params::zset_max_ziplist_value,
   $cluster_enabled               = $::redis::params::cluster_enabled,
   $cluster_config_file           = $::redis::params::cluster_config_file,
+  $cluster_slave_validity_factor = $::redis::params::cluster_slave_validity_factor,
+  $cluster_migration_barrier     = $::redis::params::cluster_migration_barrier,
+  $cluster_require_full_coverage = $::redis::params::cluster_require_full_coverage,
   $cluster_node_timeout          = $::redis::params::cluster_node_timeout,
 ) inherits redis::params {
 
