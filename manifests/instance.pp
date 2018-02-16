@@ -350,7 +350,7 @@ define redis::instance(
         File[$redis_file_name_orig] { content => template('redis/redis.conf.3.2.erb') }
       }
       default: {
-        File[$redis_file_name_orig] { content => template($conf_template) }
+        File[$redis_file_name_orig] { content => template('redis/redis.conf.3.0.erb') }
       }
     }
   } else {
