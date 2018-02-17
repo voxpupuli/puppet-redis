@@ -7,6 +7,7 @@ def change_root_password
 end
 
 def install_bolt_on(hosts)
+  on(hosts, "/opt/puppetlabs/puppet/bin/gem install ffi", acceptable_exit_codes: [0]).stdout
   on(hosts, "/opt/puppetlabs/puppet/bin/gem install bolt -v '0.5.1' --no-ri --no-rdoc", acceptable_exit_codes: [0]).stdout
 end
 
@@ -77,8 +78,15 @@ RSpec.configure do |c|
         # These should be on all Deb-flavor machines by default...
         # But Docker is often more slimline
         shell('apt-get install apt-transport-https software-properties-common -y', acceptable_exit_codes: [0])
+        # requires libffi for gem install
+        install_package(host, 'libffi-dev')
       end
-      # Bolt requires gcc and make
+      if fact('osfamily') == 'RedHat'
+        # requires libffi for gem install
+        install_package(host, 'libffi-devel')
+      end
+      # Bolt requires automake, gcc and make
+      install_package(host, 'automake')
       install_package(host, 'gcc')
       install_package(host, 'make')
       install_bolt_on(host)
