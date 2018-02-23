@@ -69,6 +69,8 @@
 # @param [String] service_group   Specify which group to run as.
 # @param [String] service_hasrestart   Does the init script support restart?
 # @param [String] service_hasstatus   Does the init script support status?
+# @param [String] service_template   Override this module's service template with your own
+#   Default: undef
 # @param [String] service_user   Specify which user to run as.
 # @param [String] set_max_intset_entries   The following configuration setting sets the limit in the size of the
 #   set in order to use this special memory saving encoding.
@@ -208,6 +210,7 @@ define redis::instance(
   $service_group                 = $::redis::service_group,
   $service_hasrestart            = $::redis::service_hasrestart,
   $service_hasstatus             = $::redis::service_hasstatus,
+  $service_template              = $::redis::service_template,
   # Defaults for redis::instance
   $manage_service_file           = true,
   $log_file                      = undef,
@@ -253,12 +256,17 @@ define redis::instance(
 
     if $service_provider_lookup == 'systemd' {
 
+      $_real_service_template = $service_template ? {
+        undef   => "redis/service_templates/redis.service.erb",
+        default => $service_template,
+      }
+
       file { "/etc/systemd/system/${redis_server_name}.service":
         ensure  => file,
         owner   => 'root',
         group   => 'root',
         mode    => '0644',
-        content => template('redis/service_templates/redis.service.erb'),
+        content => template($_real_service_template),
       }
       ~> Exec['systemd-reload-redis']
 
@@ -277,10 +285,15 @@ define redis::instance(
 
     } else {
 
+      $_real_service_template = $service_template ? {
+        undef   => "redis/service_templates/redis.${::osfamily}.erb",
+        default => $service_template,
+      }
+
       file { "/etc/init.d/${redis_server_name}":
         ensure  => file,
         mode    => '0755',
-        content => template("redis/service_templates/redis.${::osfamily}.erb"),
+        content => template($_real_service_template),
       }
 
       if $title != 'default' {

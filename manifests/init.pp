@@ -79,6 +79,8 @@
 # @param [String] service_hasstatus   Does the init script support status?
 # @param [String] service_name   Specify the service name for Init or Systemd.
 # @param [String] service_provider   Specify the service provider to use
+# @param [String] service_template   Override this module's service template with your own
+#   Default: undef
 # @param [String] service_user   Specify which user to run as.
 # @param [String] set_max_intset_entries   The following configuration setting sets the limit in the size of the
 #   set in order to use this special memory saving encoding.
@@ -206,6 +208,7 @@ class redis (
   $service_manage                = $::redis::params::service_manage,
   $service_name                  = $::redis::params::service_name,
   $service_provider              = $::redis::params::service_provider,
+  $service_template              = $::redis::params::service_template,
   $service_user                  = $::redis::params::service_user,
   $set_max_intset_entries        = $::redis::params::set_max_intset_entries,
   $slave_priority                = $::redis::params::slave_priority,

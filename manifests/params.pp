@@ -7,6 +7,7 @@ class redis::params {
   $manage_repo                = false
   $manage_package             = true
   $managed_by_cluster_manager = false
+  $service_template           = undef
 
   # redis.conf.erb
   $activerehashing                 = true

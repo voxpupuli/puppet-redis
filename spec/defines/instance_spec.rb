@@ -24,6 +24,18 @@ describe 'redis::instance', :type => :define do
         it { should contain_service('redis-server-app2').with_enable('true') }
         it { should contain_file('/etc/init.d/redis-server-app2').with_content(/DAEMON_ARGS=\/etc\/redis\/redis-server-app2.conf/) }
         it { should contain_file('/etc/init.d/redis-server-app2').with_content(/PIDFILE=\/var\/run\/redis\/redis-server-app2.pid/) }
+
+        context 'when the service_template is specified' do
+          let :pre_condition do
+            'class { "redis":
+              service_template => "redis/../spec/fixtures/files/service_template.txt",
+            }'
+          end
+
+          it { is_expected.to compile.with_all_deps }
+
+          it { should contain_file("/etc/init.d/redis-server-#{title}").with_content(/this is dummy text/) }
+        end
       end
       context '16.04' do
         let(:facts) {
@@ -39,6 +51,18 @@ describe 'redis::instance', :type => :define do
         it { should contain_service('redis-server-app2').with_ensure('running') }
         it { should contain_service('redis-server-app2').with_enable('true') }
         it { should contain_file('/etc/systemd/system/redis-server-app2.service').with_content(/ExecStart=\/usr\/bin\/redis-server \/etc\/redis\/redis-server-app2.conf/) }
+
+        context 'when the service_template is specified' do
+          let :pre_condition do
+            'class { "redis":
+              service_template => "redis/../spec/fixtures/files/service_template.txt",
+            }'
+          end
+
+          it { is_expected.to compile.with_all_deps }
+
+          it { should contain_file("/etc/systemd/system/redis-server-#{title}.service").with_content(/this is dummy text/) }
+        end
       end
     end
     context "on CentOS systems" do
@@ -55,6 +79,18 @@ describe 'redis::instance', :type => :define do
         it { should contain_service('redis-server-app2').with_enable('true') }
         it { should contain_file('/etc/init.d/redis-server-app2').with_content(/REDIS_CONFIG="\/etc\/redis-server-app2.conf"/) }
         it { should contain_file('/etc/init.d/redis-server-app2').with_content(/pidfile="\/var\/run\/redis\/redis-server-app2.pid"/) }
+
+        context 'when the service_template is specified' do
+          let :pre_condition do
+            'class { "redis":
+              service_template => "redis/../spec/fixtures/files/service_template.txt",
+            }'
+          end
+
+          it { is_expected.to compile.with_all_deps }
+
+          it { should contain_file("/etc/init.d/redis-server-#{title}").with_content(/this is dummy text/) }
+        end
       end
       context '7' do
         let(:facts) {
@@ -70,6 +106,18 @@ describe 'redis::instance', :type => :define do
         it { should contain_service('redis-server-app2').with_ensure('running') }
         it { should contain_service('redis-server-app2').with_enable('true') }
         it { should contain_file('/etc/systemd/system/redis-server-app2.service').with_content(/ExecStart=\/usr\/bin\/redis-server \/etc\/redis-server-app2.conf/) }
+
+        context 'when the service_template is specified' do
+          let :pre_condition do
+            'class { "redis":
+              service_template => "redis/../spec/fixtures/files/service_template.txt",
+            }'
+          end
+
+          it { is_expected.to compile.with_all_deps }
+
+          it { should contain_file("/etc/systemd/system/redis-server-#{title}.service").with_content(/this is dummy text/) }
+        end
       end
     end
   end
