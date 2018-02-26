@@ -44,6 +44,7 @@
 # @param [String] log_level   Specify the server verbosity level.
 # @param [String] manage_repo   Enable/disable upstream repository configuration.
 # @param [String] manage_package   Enable/disable management of package
+# @param [String] manage_service_file   Enable/disable management of the service file
 # @param [String] managed_by_cluster_manager Choose if redis will be managed by a cluster manager such as pacemaker or rgmanager
 # @param [String] masterauth   If the master is password protected (using the "requirepass" configuration
 # @param [String] maxclients   Set the max number of connected clients at the same time.
@@ -174,6 +175,7 @@ class redis (
   $log_level                     = $::redis::params::log_level,
   $manage_package                = $::redis::params::manage_package,
   $manage_repo                   = $::redis::params::manage_repo,
+  $manage_service_file           = $::redis::params::manage_service_file,
   $masterauth                    = $::redis::params::masterauth,
   $maxclients                    = $::redis::params::maxclients,
   $maxmemory                     = $::redis::params::maxmemory,
