@@ -60,6 +60,7 @@ class redis::params {
   $sentinel_master_name            = 'mymaster'
   $sentinel_parallel_sync          = 1
   $sentinel_port                   = 26379
+  $sentinel_protected_mode         = 'yes'
   $sentinel_quorum                 = 2
   $sentinel_service_name           = 'redis-sentinel'
   $sentinel_working_dir            = '/tmp'

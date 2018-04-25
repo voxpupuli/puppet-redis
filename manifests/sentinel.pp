@@ -150,6 +150,8 @@
 #
 # [*client_reconfig_script*]
 #   Path to the client-reconfig script
+# [*protected_mode*]
+#   Whether protected mode is enabled or not.  Only applicable when no bind is set.
 #
 #   Default: undef
 # == Actions:
@@ -187,6 +189,7 @@ class redis::sentinel (
   $quorum                 = $::redis::params::sentinel_quorum,
   $sentinel_bind          = $::redis::params::sentinel_bind,
   $sentinel_port          = $::redis::params::sentinel_port,
+  $protected_mode         = $::redis::params::sentinel_protected_mode,
   $service_group          = $::redis::params::service_group,
   $service_name           = $::redis::params::sentinel_service_name,
   $service_ensure         = $::redis::params::service_ensure,
