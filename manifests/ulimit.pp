@@ -43,12 +43,12 @@ class redis::ulimit {
       mode   => '0444',
     }
     augeas { 'Systemd redis ulimit' :
-      incl    => "/etc/systemd/system/${::redis::service_name}.service.d/limits.conf",
+      incl    => "/etc/systemd/system/${::redis::service_name}.service.d/limit.conf",
       lens    => 'Systemd.lns',
-      context => "/etc/systemd/system/${::redis::service_name}.service.d/limits.conf",
       changes => [
         "defnode nofile Service/LimitNOFILE \"\"",
-        "set \$nofile/value \"${::redis::ulimit}\""],
+        "set \$nofile/value \"${::redis::ulimit}\""
+        ],
       notify  => [
         Exec['systemd-reload-redis'],
       ],
@@ -73,5 +73,4 @@ class redis::ulimit {
       }
     }
   }
-
 }
