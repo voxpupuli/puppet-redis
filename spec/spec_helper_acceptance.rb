@@ -7,6 +7,7 @@ def change_root_password
 end
 
 def install_bolt_on(hosts)
+  on(hosts, "/opt/puppetlabs/puppet/bin/gem install winrm-fs -v '1.1.1' --no-ri --no-rdoc", acceptable_exit_codes: [0]).stdout
   on(hosts, "/opt/puppetlabs/puppet/bin/gem install bolt -v '0.5.1' --no-ri --no-rdoc", acceptable_exit_codes: [0]).stdout
 end
 
