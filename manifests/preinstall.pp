@@ -21,12 +21,11 @@ class redis::preinstall {
             source => 'http://www.dotdeb.org/dotdeb.gpg',
           },
           include  => { 'src' => true },
-          before   => [
-            Class['apt::update'],
-            Package[$::redis::package_name],
-          ],
-        }
-
+        } -> apt::pin { $::redis::package_name:
+          packages => $::redis::package_name,
+          origin => "packages.dotdeb.org",
+          priority => 1000
+        } ~> Class['apt::update'] -> Package[$::redis::package_name]
       }
 
       'Ubuntu': {
