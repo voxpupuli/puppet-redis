@@ -46,7 +46,7 @@ class redis::config {
   $service_provider_lookup = pick(getvar('service_provider'), false)
 
   if $service_provider_lookup != 'systemd' {
-    case $::operatingsystem {
+    case $::osfamily {
       'Debian': {
         if $::lsbdistcodename == 'wheezy' {
           $var_run_redis_mode  = '2755'
