@@ -56,10 +56,10 @@ class redis::config {
           $var_run_redis_mode = '2775'
         }
       }
-     'Ubuntu': {                                     
-        $var_run_redis_group = $::redis::config_group 
-        $var_run_redis_mode = '2755'                  
-      }                                               
+     'Ubuntu': {
+        $var_run_redis_group = $::redis::config_group
+        $var_run_redis_mode = '2755'
+      }
       default: {
         $var_run_redis_mode = '0755'
         $var_run_redis_group = $::redis::config_group
