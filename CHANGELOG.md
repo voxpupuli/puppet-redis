@@ -1,6 +1,45 @@
-# Change log
+# Change Log
 
-All notable changes to this project will be documented in this file.
+## [3.3.0](https://github.com/arioch/puppet-redis/tree/3.3.0) (2018-06-19)
+[Full Changelog](https://github.com/arioch/puppet-redis/compare/v3.2.0...3.3.0)
+
+**Closed issues:**
+
+- output\_buffer\_limit\_pubsub and output\_buffer\_limit\_slave [\#263](https://github.com/arioch/puppet-redis/issues/263)
+- Can't release - Require Forge Credential Refresh [\#262](https://github.com/arioch/puppet-redis/issues/262)
+- Module v3.2.0 not published to forge [\#255](https://github.com/arioch/puppet-redis/issues/255)
+- Inconsistent sentinel\_package\_name handling on Debian [\#253](https://github.com/arioch/puppet-redis/issues/253)
+- No pidfile for sentinel [\#238](https://github.com/arioch/puppet-redis/issues/238)
+- puppet-redis requires outdated puppetlabs-apt module [\#232](https://github.com/arioch/puppet-redis/issues/232)
+- Can't use as slave bound to localhost [\#229](https://github.com/arioch/puppet-redis/issues/229)
+- \[Feature Request\] Redis::Instance - Set default unixsocket [\#226](https://github.com/arioch/puppet-redis/issues/226)
+- Travis Forge Password Changed [\#216](https://github.com/arioch/puppet-redis/issues/216)
+
+**Merged pull requests:**
+
+- Bump Version [\#266](https://github.com/arioch/puppet-redis/pull/266) ([petems](https://github.com/petems))
+- Adds logic for installing redid-sentinel package [\#254](https://github.com/arioch/puppet-redis/pull/254) ([petems](https://github.com/petems))
+- Update redis mode on wheezy [\#252](https://github.com/arioch/puppet-redis/pull/252) ([petems](https://github.com/petems))
+- Fix spec for sentinel [\#251](https://github.com/arioch/puppet-redis/pull/251) ([petems](https://github.com/petems))
+- get rid of getvar\_emptystring function [\#249](https://github.com/arioch/puppet-redis/pull/249) ([vicinus](https://github.com/vicinus))
+- Added log\_level to sentinel. [\#248](https://github.com/arioch/puppet-redis/pull/248) ([hp197](https://github.com/hp197))
+- Adds redis\_cli task [\#245](https://github.com/arioch/puppet-redis/pull/245) ([petems](https://github.com/petems))
+- Bump Puppet version for acceptance to 4.10.8 [\#244](https://github.com/arioch/puppet-redis/pull/244) ([petems](https://github.com/petems))
+- protected-mode configuration option \(Redis 3.2+\) [\#243](https://github.com/arioch/puppet-redis/pull/243) ([Dan70402](https://github.com/Dan70402))
+- Switch to using simp-beaker suites [\#241](https://github.com/arioch/puppet-redis/pull/241) ([petems](https://github.com/petems))
+- Bumped apt version dependency to version \< 5.0.0 [\#237](https://github.com/arioch/puppet-redis/pull/237) ([c4m4](https://github.com/c4m4))
+- Updates for EL6 [\#236](https://github.com/arioch/puppet-redis/pull/236) ([petems](https://github.com/petems))
+- Pin version of redis gem [\#235](https://github.com/arioch/puppet-redis/pull/235) ([petems](https://github.com/petems))
+- Added configuration options for client-output-buffer-limit [\#233](https://github.com/arioch/puppet-redis/pull/233) ([Mike-Petersen](https://github.com/Mike-Petersen))
+- Allow `slaveof` when binding to localhost [\#231](https://github.com/arioch/puppet-redis/pull/231) ([joshuaspence](https://github.com/joshuaspence))
+- Fix issues with missing locale for Debian box [\#224](https://github.com/arioch/puppet-redis/pull/224) ([petems](https://github.com/petems))
+- Instance service improvements [\#222](https://github.com/arioch/puppet-redis/pull/222) ([kwevers](https://github.com/kwevers))
+- Make sure the service is en/disabled per user request [\#221](https://github.com/arioch/puppet-redis/pull/221) ([kwevers](https://github.com/kwevers))
+- Split Redis instance socket files [\#220](https://github.com/arioch/puppet-redis/pull/220) ([kwevers](https://github.com/kwevers))
+- Split Redis workdir [\#219](https://github.com/arioch/puppet-redis/pull/219) ([kwevers](https://github.com/kwevers))
+- fix package\_ensure version on ubuntu when it is in the 3:3.2.1 format [\#218](https://github.com/arioch/puppet-redis/pull/218) ([sp-joseluis-ledesma](https://github.com/sp-joseluis-ledesma))
+- Split the redis instance logfiles by default [\#217](https://github.com/arioch/puppet-redis/pull/217) ([kwevers](https://github.com/kwevers))
+- Use package\_ensure if it specifies a version instead of the minimum\_version [\#215](https://github.com/arioch/puppet-redis/pull/215) ([sp-joseluis-ledesma](https://github.com/sp-joseluis-ledesma))
 
 ## [v3.2.0](https://github.com/arioch/puppet-redis/tree/v3.2.0) (2017-07-11)
 [Full Changelog](https://github.com/arioch/puppet-redis/compare/v3.1.1...v3.2.0)

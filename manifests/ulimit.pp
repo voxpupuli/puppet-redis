@@ -17,7 +17,7 @@
 class redis::ulimit {
   assert_private('The redis::ulimit class is only to be called from the redis::config class')
 
-  $service_provider_lookup = pick(getvar_emptystring('service_provider'), false)
+  $service_provider_lookup = pick(getvar('service_provider'), false)
 
   if $::redis::managed_by_cluster_manager {
     file { '/etc/security/limits.d/redis.conf':
@@ -43,12 +43,12 @@ class redis::ulimit {
       mode   => '0444',
     }
     augeas { 'Systemd redis ulimit' :
-      incl    => "/etc/systemd/system/${::redis::service_name}.service.d/limits.conf",
+      incl    => "/etc/systemd/system/${::redis::service_name}.service.d/limit.conf",
       lens    => 'Systemd.lns',
-      context => "/etc/systemd/system/${::redis::service_name}.service.d/limits.conf",
       changes => [
         "defnode nofile Service/LimitNOFILE \"\"",
-        "set \$nofile/value \"${::redis::ulimit}\""],
+        "set \$nofile/value \"${::redis::ulimit}\""
+        ],
       notify  => [
         Exec['systemd-reload-redis'],
       ],
@@ -73,5 +73,4 @@ class redis::ulimit {
       }
     }
   }
-
 }

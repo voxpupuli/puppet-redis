@@ -11,6 +11,7 @@ sentinel down-after-milliseconds mymaster 30000
 sentinel parallel-syncs mymaster 1
 sentinel failover-timeout mymaster 180000
 
+loglevel notice
 logfile /var/log/redis/redis.log
 EOF
 
@@ -29,6 +30,7 @@ sentinel auth-pass cow password
 sentinel notification-script cow bar.sh
 sentinel client-reconfig-script cow foo.sh
 
+loglevel notice
 logfile /tmp/barn-sentinel.log
 EOF
 
@@ -83,6 +85,28 @@ describe 'redis::sentinel', :type => :class do
         'content' => $expected_params_content
       )
     }
+  end
+
+  describe 'on Debian Jessie' do
+
+    let (:facts) { debian_facts.merge({
+      :operatingsystemmajrelease => '8',
+    }) }
+
+    it { should create_class('redis::sentinel') }
+
+    it { should_not contain_package('redis-sentinel').with_ensure('present') }
+  end
+
+  describe 'on Debian Stretch' do
+
+    let (:facts) { debian_facts.merge({
+      :operatingsystemmajrelease => '9',
+    }) }
+
+    it { should create_class('redis::sentinel') }
+
+    it { should contain_package('redis-sentinel').with_ensure('present') }
   end
 
 end
