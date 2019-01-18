@@ -1,15 +1,19 @@
 [Unit]
-Description=Advanced key-value store for <%= @title %>
+Description= Redis Advanced key-value store for instance <%= @title %>
 After=network.target
+After=network-online.target
+Wants=network-online.target
 
 [Service]
 Type=forking
-ExecStart=/usr/bin/redis-server <%= @redis_file_name %>
-ExecStop=/usr/bin/redis-shutdown <%= @service_name %>
+ExecStart=/usr/bin/redis-server <%= @redis_file_name %> --supervised systemd
+ExecStop=/usr/libexec/redis-shutdown <%= @redis_server_name %>
 TimeoutStopSec=0
 Restart=always
 User=<%= @service_user %>
 Group=<%= @service_user %>
+RuntimeDirectory=redis
+RuntimeDirectoryMode=0755
 
 [Install]
 WantedBy=multi-user.target
