@@ -14,6 +14,7 @@ User=<%= @service_user %>
 Group=<%= @service_user %>
 RuntimeDirectory=redis
 RuntimeDirectoryMode=0755
+LimitNOFILE=<%= @ulimit %>
 
 [Install]
 WantedBy=multi-user.target
