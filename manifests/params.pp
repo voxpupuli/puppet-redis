@@ -207,6 +207,11 @@ class redis::params {
 
           $service_group             = 'redis'
         }
+        '8': {
+          $minimum_version           = '3.2.3'
+
+          $service_group             = 'redis'
+        }
         default: {
           fail("Not sure what Redis version is avaliable upstream on your release: ${::operatingsystemmajrelease}")
         }
