@@ -20,4 +20,5 @@ sentinel notification-script <%= @master_name %> <%= @notification_script %>
 sentinel client-reconfig-script <%= @master_name %> <%= @client_reconfig_script %>
 <% end -%>
 
+loglevel <%= @log_level %>
 logfile <%= @log_file %>

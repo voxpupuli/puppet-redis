@@ -91,6 +91,7 @@ def debian_facts
     :osfamily                  => 'Debian',
     :operatingsystemmajrelease => '8',
     :puppetversion             => '4.5.2',
+    :lsbdistcodename           => 'jessie',
   }
 end
 
@@ -120,12 +121,23 @@ def centos_7_facts
   }
 end
 
+def debian_wheezy_facts
+  {
+    :operatingsystem           => 'Debian',
+    :osfamily                  => 'Debian',
+    :operatingsystemmajrelease => '8',
+    :puppetversion             => '4.5.2',
+    :lsbdistcodename           => 'wheezy',
+  }
+end
+
 def ubuntu_1404_facts
   {
     :operatingsystem           => 'Ubuntu',
     :osfamily                  => 'Debian',
     :operatingsystemmajrelease => '14.04',
-    :puppetversion             => '4.5.2'
+    :puppetversion             => '4.5.2',
+    :lsbdistcodename           => 'trusty',
   }
 end
 
@@ -134,7 +146,8 @@ def ubuntu_1604_facts
     :operatingsystem           => 'Ubuntu',
     :osfamily                  => 'Debian',
     :operatingsystemmajrelease => '16.04',
-    :puppetversion             => '4.5.2'
+    :puppetversion             => '4.5.2',
+    :lsbdistcodename           => 'xenial',
   }
 end
 

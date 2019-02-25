@@ -28,24 +28,27 @@ group :test do
   gem 'rubocop-rspec', '~> 1.6',                                    :require => false if RUBY_VERSION >= '2.3.0'
   gem 'json_pure', '<= 2.0.1',                                      :require => false if RUBY_VERSION < '2.0.0'
   gem 'safe_yaml', '~> 1.0.4',                                      :require => false
-  gem 'listen', '<= 3.0.6',                                         :require => false
   gem 'puppet-syntax',                                              :require => false, git: 'https://github.com/gds-operations/puppet-syntax.git'
-  gem 'pry'
-  gem 'rb-readline'
-  gem 'redis',                                                      :require => false
+  gem 'pry',                                                        :require => false
+  gem 'rb-readline',                                                :require => false
+  gem 'redis', '3.3.3',                                             :require => false
   gem 'mock_redis',                                                 :require => false
+  gem 'rack', '1.6.8',                                              :require => false
+  gem 'simp-rake-helpers', '3.6.0',                                 :require => false
 end
 
 group :development do
   gem 'puppet-blacksmith'
-  gem 'travis'
-  gem 'github_changelog_generator'
+  gem 'github_changelog_generator', '1.13.2'
 end
 
 group :system_tests do
-  gem "beaker", '2.41.0', :require => false
-  gem "beaker-rspec", '5.6.0', :require => false
+  gem "beaker"
+  gem "beaker-rspec"
   gem 'beaker-puppet_install_helper',  :require => false
+  gem 'beaker-module_install_helper'
+  gem 'vagrant-wrapper'
+  gem 'simp-beaker-helpers', :git => 'https://github.com/petems/rubygem-simp-beaker-helpers'
 end
 
 ENV['PUPPET_GEM_VERSION'].nil? ? puppetversion = '~> 4.0' : puppetversion = ENV['PUPPET_GEM_VERSION'].to_s

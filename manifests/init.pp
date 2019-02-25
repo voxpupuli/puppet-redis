@@ -59,6 +59,7 @@
 # @param [String] package_name   Upstream package name.
 # @param [String] pid_file   Where to store the pid.
 # @param [String] port   Configure which port to listen on.
+# @param [String] protected_mode  Whether protected mode is enabled or not.  Only applicable when no bind is set.
 # @param [String] ppa_repo   Specify upstream (Ubuntu) PPA entry.
 # @param [String] rdbcompression   Enable/disable compression of string objects using LZF when dumping.
 # @param [String] repl_backlog_size   The replication backlog size
@@ -186,6 +187,7 @@ class redis (
   $package_name                  = $::redis::params::package_name,
   $pid_file                      = $::redis::params::pid_file,
   $port                          = $::redis::params::port,
+  $protected_mode                = $::redis::params::protected_mode,
   $ppa_repo                      = $::redis::params::ppa_repo,
   $rdbcompression                = $::redis::params::rdbcompression,
   $repl_backlog_size             = $::redis::params::repl_backlog_size,

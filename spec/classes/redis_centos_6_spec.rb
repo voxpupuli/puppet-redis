@@ -21,6 +21,7 @@ describe 'redis' do
 
         it { should contain_file('/etc/redis.conf.puppet').without('content' => /^hash-max-zipmap-entries/) }
         it { should contain_file('/etc/redis.conf.puppet').with('content' => /^hash-max-ziplist-entries/) }
+        it { should contain_file('/etc/redis.conf.puppet').with('content' => /^protected-mode/) }
         it { should contain_file('/etc/redis.conf.puppet').with('content' => /^tcp-backlog/) }
       end
 
@@ -36,6 +37,7 @@ describe 'redis' do
 
         it { should contain_file('/etc/redis.conf.puppet').without('content' => /^hash-max-zipmap-entries/) }
         it { should contain_file('/etc/redis.conf.puppet').with('content' => /^hash-max-ziplist-entries/) }
+        it { should contain_file('/etc/redis.conf.puppet').without('content' => /^protected-mode/) }
         it { should contain_file('/etc/redis.conf.puppet').with('content' => /^tcp-backlog/) }
       end
 
@@ -50,6 +52,7 @@ describe 'redis' do
 
         it { should contain_file('/etc/redis.conf.puppet').with('content' => /^hash-max-zipmap-entries/) }
         it { should contain_file('/etc/redis.conf.puppet').without('content' => /^hash-max-ziplist-entries/) }
+        it { should contain_file('/etc/redis.conf.puppet').without('content' => /^protected-mode/) }
         it { should contain_file('/etc/redis.conf.puppet').without('content' => /^tcp-backlog/) }
 
       end
@@ -65,6 +68,7 @@ describe 'redis' do
 
         it { should contain_file('/etc/redis.conf.puppet').without('content' => /^hash-max-zipmap-entries/) }
         it { should contain_file('/etc/redis.conf.puppet').with('content' => /^hash-max-ziplist-entries/) }
+        it { should contain_file('/etc/redis.conf.puppet').with('content' => /^protected-mode/) }
         it { should contain_file('/etc/redis.conf.puppet').with('content' => /^tcp-backlog/) }
 
       end
