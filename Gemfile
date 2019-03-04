@@ -11,8 +11,8 @@ def location_for(place, fake_version = nil)
 end
 
 group :test do
-  gem 'puppetlabs_spec_helper', '~> 1.2.2',                         :require => false
-  gem 'rspec-puppet',                                               :require => false, :git => 'https://github.com/rodjek/rspec-puppet.git'
+  gem 'puppetlabs_spec_helper',                                     :require => false
+  gem 'rspec-puppet',                                               :require => false
   gem 'rspec-puppet-facts',                                         :require => false
   gem 'rspec-puppet-utils',                                         :require => false
   gem 'puppet-lint-absolute_classname-check',                       :require => false
@@ -28,13 +28,13 @@ group :test do
   gem 'rubocop-rspec', '~> 1.6',                                    :require => false if RUBY_VERSION >= '2.3.0'
   gem 'json_pure', '<= 2.0.1',                                      :require => false if RUBY_VERSION < '2.0.0'
   gem 'safe_yaml', '~> 1.0.4',                                      :require => false
-  gem 'puppet-syntax',                                              :require => false, git: 'https://github.com/gds-operations/puppet-syntax.git'
+  gem 'puppet-syntax',                                              :require => false
   gem 'pry',                                                        :require => false
   gem 'rb-readline',                                                :require => false
   gem 'redis', '3.3.3',                                             :require => false
   gem 'mock_redis',                                                 :require => false
   gem 'rack', '1.6.8',                                              :require => false
-  gem 'simp-rake-helpers', '3.6.0',                                 :require => false
+  gem 'parallel_tests',                                             :require => false
 end
 
 group :development do

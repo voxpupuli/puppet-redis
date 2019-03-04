@@ -47,7 +47,7 @@ class redis::ulimit {
       lens    => 'Systemd.lns',
       changes => [
         "defnode nofile Service/LimitNOFILE \"\"",
-        "set \$nofile/value \"${::redis::ulimit}\""
+        "set \$nofile/value \"${::redis::ulimit}\"",
         ],
       notify  => [
         Exec['systemd-reload-redis'],
