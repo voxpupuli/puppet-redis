@@ -39,29 +39,29 @@ describe 'redis', :type => :class do
         case facts[:operatingsystem]
           when 'Debian'
 
-          context 'on Debian' do
+            context 'on Debian' do
+
+              it do
+                is_expected.to contain_file('/var/run/redis').with({
+                  :ensure => 'directory',
+                  :owner  => 'redis',
+                  :group  => 'root',
+                  :mode   => '2775',
+                })
+              end
+
+            end
+
+          when 'Ubuntu'
 
             it do
               is_expected.to contain_file('/var/run/redis').with({
                 :ensure => 'directory',
                 :owner  => 'redis',
-                :group  => 'root',
+                :group  => 'redis',
                 :mode   => '2775',
               })
             end
-
-          end
-
-        when 'Ubuntu'
-
-          it do
-            is_expected.to contain_file('/var/run/redis').with({
-              :ensure => 'directory',
-              :owner  => 'redis',
-              :group  => 'redis',
-              :mode   => '0755',
-            })
-          end
 
         end
       end
