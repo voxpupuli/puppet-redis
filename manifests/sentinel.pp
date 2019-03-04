@@ -209,6 +209,10 @@ class redis::sentinel (
       ) {
       package { $package_name:
         ensure => $package_ensure,
+        before => File[$config_file_orig],
+      }
+      if $init_script {
+        Package[$package_name] -> File[$init_script]
       }
     }
   }
@@ -220,7 +224,6 @@ class redis::sentinel (
       group   => $service_group,
       mode    => $config_file_mode,
       content => template($conf_template),
-      require => Package[$package_name];
   }
 
   exec {
@@ -240,7 +243,6 @@ class redis::sentinel (
         group   => 'root',
         mode    => '0755',
         content => template($init_template),
-        require => Package[$package_name];
     }
 
     exec {
