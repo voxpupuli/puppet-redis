@@ -156,6 +156,14 @@ describe 'redis', :type => :class do
         it { is_expected.to contain_file(config_file_orig).with_content(/bind.*_VALUE_/) }
       end
 
+      describe 'without parameter bind' do
+        let (:params) {
+          {}
+        }
+
+        it { is_expected.not_to contain_file(config_file_orig).with_content(/^bind/) }
+      end
+
       describe 'with parameter output_buffer_limit_slave' do
         let (:params) {
           {
