@@ -7,11 +7,11 @@ class redis::preinstall {
   if $::redis::manage_repo {
     case $::operatingsystem {
       'RedHat', 'CentOS', 'Scientific', 'OEL', 'Amazon': {
-        require ::epel
+        require 'epel'
       }
 
       'Debian': {
-        contain ::apt
+        contain 'apt'
         apt::source { 'dotdeb':
           location => 'http://packages.dotdeb.org/',
           release  =>  $::lsbdistcodename,
@@ -30,7 +30,7 @@ class redis::preinstall {
       }
 
       'Ubuntu': {
-        contain ::apt
+        contain 'apt'
         apt::ppa { $::redis::ppa_repo:
           before   => [
             Class['apt::update'],

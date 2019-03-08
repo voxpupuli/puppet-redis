@@ -196,7 +196,7 @@ class redis::sentinel (
   $client_reconfig_script = $::redis::params::sentinel_client_reconfig_script,
 ) inherits redis::params {
 
-  require ::redis
+  require 'redis'
 
   if $::osfamily == 'Debian' {
     # Debian flavour machines have a dedicated redis-sentinel package
