@@ -373,8 +373,8 @@ describe 'redis', type: :class do
                 release: facts[:lsbdistcodename],
                 repos: 'all',
                 key: {
-                  "id"=>"6572BBEF1B5FF28B28B706837E3F070089DF5277",
-                  "source"=>"http://www.dotdeb.org/dotdeb.gpg"
+                  "id" => "6572BBEF1B5FF28B28B706837E3F070089DF5277",
+                  "source" => "http://www.dotdeb.org/dotdeb.gpg"
                 },
                 include: { 'src' => true },
               })
@@ -783,7 +783,7 @@ describe 'redis', type: :class do
             let (:params) {
               {
                 save_db_to_disk: true,
-                save_db_to_disk_interval: { '900' =>'2', '300' => '11', '60' => '10011' }
+                save_db_to_disk_interval: { '900' => '2', '300' => '11', '60' => '10011' }
               }
             }
 

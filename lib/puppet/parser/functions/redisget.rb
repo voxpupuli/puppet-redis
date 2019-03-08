@@ -20,7 +20,7 @@ fails.
 DOC
   ) do |args|
 
-    raise(Puppet::ParseError, "redisget(): Wrong number of arguments given (#{args.size} for 2 or 3)") if args.size !=2 && args.size !=3
+    raise(Puppet::ParseError, "redisget(): Wrong number of arguments given (#{args.size} for 2 or 3)") if args.size != 2 && args.size != 3
 
     key = args[0]
     url = args[1]

@@ -6,8 +6,8 @@ describe 'redis::administration' do
     it do
       is_expected.to contain_sysctl('vm.overcommit_memory').with(
         {
-          'ensure'=>'present',
-          'value'=>'1'
+          'ensure' => 'present',
+          'value' => '1'
         }
       )
     end

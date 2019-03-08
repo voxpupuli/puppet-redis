@@ -97,7 +97,7 @@ describe 'redis::ulimit' do
           "defnode nofile Service/LimitNOFILE \"\"",
           "set $nofile/value \"7777\""
         ],
-        'notify'   => [
+        'notify' => [
           'Exec[systemd-reload-redis]',
         ],
         }
