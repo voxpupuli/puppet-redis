@@ -52,7 +52,7 @@ describe 'redis::sentinel', type: :class do
       'mode'    => '0644',
       'owner'   => 'redis',
       'content' => $expected_noparams_content
-      )
+    )
     }
 
     it { should contain_service('redis-sentinel').with(
@@ -60,7 +60,7 @@ describe 'redis::sentinel', type: :class do
       'enable'     => 'true',
       'hasrestart' => 'true',
       'hasstatus'  => 'true'
-      )
+    )
     }
 
   end
@@ -83,7 +83,7 @@ describe 'redis::sentinel', type: :class do
 
     it { should contain_file('/etc/redis/redis-sentinel.conf.puppet').with(
       'content' => $expected_params_content
-      )
+    )
     }
   end
 

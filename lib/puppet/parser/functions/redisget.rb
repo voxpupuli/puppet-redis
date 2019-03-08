@@ -18,7 +18,7 @@ fails.
 @example Calling the function with a default if failure occurs
   $version = redisget('version.myapp', 'redis://redis.example.com:6379', $::myapp_version)
 DOC
-  ) do |args|
+             ) do |args|
 
     raise(Puppet::ParseError, "redisget(): Wrong number of arguments given (#{args.size} for 2 or 3)") if args.size != 2 && args.size != 3
 
