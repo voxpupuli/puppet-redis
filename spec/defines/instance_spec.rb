@@ -9,12 +9,14 @@ describe 'redis::instance', type: :define do
   let :title do
     'app2'
   end
+
   describe 'os-dependent items' do
     context "on Ubuntu systems" do
       context '14.04' do
         let(:facts) {
           ubuntu_1404_facts
         }
+
         it { should contain_file('/etc/redis/redis-server-app2.conf.puppet').with('content' => /^bind 127.0.0.1/) }
         it { should contain_file('/etc/redis/redis-server-app2.conf.puppet').with('content' => /^logfile \/var\/log\/redis\/redis-server-app2.log/) }
         it { should contain_file('/etc/redis/redis-server-app2.conf.puppet').with('content' => /^dir \/var\/lib\/redis\/redis-server-app2/) }
@@ -31,6 +33,7 @@ describe 'redis::instance', type: :define do
             service_provider: 'systemd',
           })
         }
+
         it { should contain_file('/etc/redis/redis-server-app2.conf.puppet').with('content' => /^bind 127.0.0.1/) }
         it { should contain_file('/etc/redis/redis-server-app2.conf.puppet').with('content' => /^logfile \/var\/log\/redis\/redis-server-app2.log/) }
         it { should contain_file('/etc/redis/redis-server-app2.conf.puppet').with('content' => /^dir \/var\/lib\/redis\/redis-server-app2/) }
@@ -46,6 +49,7 @@ describe 'redis::instance', type: :define do
         let(:facts) {
           centos_6_facts
         }
+
         it { should contain_file('/etc/redis-server-app2.conf.puppet').with('content' => /^bind 127.0.0.1/) }
         it { should contain_file('/etc/redis-server-app2.conf.puppet').with('content' => /^logfile \/var\/log\/redis\/redis-server-app2.log/) }
         it { should contain_file('/etc/redis-server-app2.conf.puppet').with('content' => /^dir \/var\/lib\/redis\/redis-server-app2/) }
@@ -62,6 +66,7 @@ describe 'redis::instance', type: :define do
             service_provider: 'systemd',
           })
         }
+
         it { should contain_file('/etc/redis-server-app2.conf.puppet').with('content' => /^bind 127.0.0.1/) }
         it { should contain_file('/etc/redis-server-app2.conf.puppet').with('content' => /^logfile \/var\/log\/redis\/redis-server-app2.log/) }
         it { should contain_file('/etc/redis-server-app2.conf.puppet').with('content' => /^dir \/var\/lib\/redis\/redis-server-app2/) }

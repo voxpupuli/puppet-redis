@@ -16,6 +16,7 @@ describe 'redis::ulimit' do
         }'
       ]
     end
+
     it { should compile.with_all_deps }
     it do
       is_expected.to contain_file("/etc/security/limits.d/redis.conf").with(
@@ -45,6 +46,7 @@ describe 'redis::ulimit' do
         }'
       ]
     end
+
     it { should compile.with_all_deps }
     it do
       is_expected.to contain_file("/etc/security/limits.d/redis.conf").with(
@@ -72,6 +74,7 @@ describe 'redis::ulimit' do
         }'
       ]
     end
+
     it { should compile.with_all_deps }
     it do
       is_expected.to contain_file("/etc/systemd/system/redis-server.service.d/limit.conf").with(
@@ -116,6 +119,7 @@ describe 'redis::ulimit' do
           }'
         ]
       end
+
       it { should compile.with_all_deps }
       it do
         is_expected.not_to contain_file('/etc/systemd/system/redis-server.service.d/limit.conf')
@@ -144,6 +148,7 @@ describe 'redis::ulimit' do
           }'
         ]
       end
+
       it { should compile.with_all_deps }
       it do
         is_expected.not_to contain_file('/etc/systemd/system/redis-server.service.d/limit.conf')
