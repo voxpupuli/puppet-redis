@@ -72,7 +72,7 @@ describe 'redisget' do
   end
 
   describe 'when an invalid type (non-string) is specified' do
-    before(:each) {
+    before {
       mr = MockRedis.new
       Redis.stubs(:new).returns(mr)
     }
