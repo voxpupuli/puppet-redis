@@ -59,7 +59,7 @@ describe 'redisget' do
 
   describe 'with incorrect arguments' do
     context 'with no argument specified' do
-      it { is_expected.to run.with_params().and_raise_error(Puppet::ParseError, /wrong number of arguments/i) }
+      it { is_expected.to run.with_params.and_raise_error(Puppet::ParseError, /wrong number of arguments/i) }
     end
 
     context 'with only one argument specified' do
