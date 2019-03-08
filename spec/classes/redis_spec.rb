@@ -153,7 +153,7 @@ describe 'redis', type: :class do
       describe 'with parameter output_buffer_limit_slave' do
         let (:params) {
           {
-              output_buffer_limit_slave: '_VALUE_'
+            output_buffer_limit_slave: '_VALUE_'
           }
         }
 
@@ -163,7 +163,7 @@ describe 'redis', type: :class do
       describe 'with parameter output_buffer_limit_pubsub' do
         let (:params) {
           {
-              output_buffer_limit_pubsub: '_VALUE_'
+            output_buffer_limit_pubsub: '_VALUE_'
           }
         }
 
@@ -366,9 +366,9 @@ describe 'redis', type: :class do
                                                                release: facts[:lsbdistcodename],
                                                                repos: 'all',
                                                                key: {
-                  "id" => "6572BBEF1B5FF28B28B706837E3F070089DF5277",
-                  "source" => "http://www.dotdeb.org/dotdeb.gpg"
-                },
+                                                                 "id" => "6572BBEF1B5FF28B28B706837E3F070089DF5277",
+                                                                 "source" => "http://www.dotdeb.org/dotdeb.gpg"
+                                                               },
                                                                include: { 'src' => true })
             end
 
