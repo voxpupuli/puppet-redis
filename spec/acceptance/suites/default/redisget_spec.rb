@@ -1,3 +1,4 @@
+# rubocop:disable RSpec/MultipleExpectations
 require 'spec_helper_acceptance'
 
 describe 'redisget() function' do
