@@ -47,7 +47,6 @@ def read_fixture_file(filename)
 end
 
 def manifest_vars
-
   vars = {}
 
   case facts[:osfamily].to_s
