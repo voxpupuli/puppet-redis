@@ -264,7 +264,7 @@ describe 'redis', type: :class do
           }
         }
 
-         it { is_expected.to contain_file(config_file_orig).without_content(/^dbfilename/) }
+        it { is_expected.to contain_file(config_file_orig).without_content(/^dbfilename/) }
        end
 
       describe 'with parameter hash_max_ziplist_entries' do
