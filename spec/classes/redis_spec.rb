@@ -258,14 +258,14 @@ describe 'redis', type: :class do
       end
 
       describe 'without parameter dbfilename' do
-         let(:params) {
-           {
-             dbfilename: false,
-           }
-         }
+        let(:params) {
+          {
+            dbfilename: false,
+          }
+        }
 
-         it { is_expected.to contain_file(config_file_orig).without_content(/^dbfilename/) }
-       end
+        it { is_expected.to contain_file(config_file_orig).without_content(/^dbfilename/) }
+      end
 
       describe 'with parameter hash_max_ziplist_entries' do
         let (:params) {
@@ -593,17 +593,17 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter protected-mode' do
-              let (:params) {
-                {
-                  protected_mode: '_VALUE_'
-                }
-              }
+        let (:params) {
+          {
+            protected_mode: '_VALUE_'
+          }
+        }
 
-              it { is_expected.to contain_file(config_file_orig).with(
-                  'content' => /protected-mode.*_VALUE_/
-                )
-              }
-            end
+        it { is_expected.to contain_file(config_file_orig).with(
+            'content' => /protected-mode.*_VALUE_/
+          )
+        }
+      end
 
       describe 'with parameter hll_sparse_max_bytes' do
         let (:params) {
@@ -941,7 +941,7 @@ describe 'redis', type: :class do
           it { is_expected.to contain_file(config_file_orig).with(
             'content' => /^slaveof _VALUE_/
           )
-        }
+          }
         end
       end
 
