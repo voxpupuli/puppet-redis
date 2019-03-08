@@ -2,12 +2,12 @@ require 'spec_helper_acceptance'
 
 # CentOS 6 Redis package is too old for Sentinel (2.4.10, needs 2.8+)
 describe 'redis::sentinel', unless: (fact('osfamily') == 'RedHat' && (fact('operatingsystemmajrelease') == '6')) do
-  case fact('osfamily')
+  redis_name = case fact('osfamily')
   when 'Debian'
-    redis_name = 'redis-server'
+    'redis-server'
   else
-    redis_name = 'redis'
-  end
+    'redis'
+               end
 
   it 'should run successfully' do
     pp = <<-EOS
