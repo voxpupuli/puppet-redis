@@ -254,7 +254,7 @@ describe 'redis', type: :class do
       describe 'without parameter dbfilename' do
         let(:params) {
           {
-            dbfilename: false,
+            dbfilename: false
           }
         }
 

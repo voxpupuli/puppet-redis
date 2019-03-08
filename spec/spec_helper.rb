@@ -80,7 +80,7 @@ def centos_facts
   {
     operatingsystem: 'CentOS',
     osfamily: 'RedHat',
-    puppetversion: '4.5.2',
+    puppetversion: '4.5.2'
   }
 end
 
@@ -90,7 +90,7 @@ def debian_facts
     osfamily: 'Debian',
     operatingsystemmajrelease: '8',
     puppetversion: '4.5.2',
-    lsbdistcodename: 'jessie',
+    lsbdistcodename: 'jessie'
   }
 end
 
@@ -98,7 +98,7 @@ def freebsd_facts
   {
     operatingsystem: 'FreeBSD',
     osfamily: 'FreeBSD',
-    puppetversion: '4.5.2',
+    puppetversion: '4.5.2'
   }
 end
 
@@ -107,7 +107,7 @@ def centos_6_facts
     operatingsystem: 'CentOS',
     osfamily: 'RedHat',
     operatingsystemmajrelease: '6',
-    puppetversion: '4.5.2',
+    puppetversion: '4.5.2'
   }
 end
 
@@ -116,7 +116,7 @@ def centos_7_facts
     operatingsystem: 'CentOS',
     osfamily: 'RedHat',
     operatingsystemmajrelease: '7',
-    puppetversion: '4.5.2',
+    puppetversion: '4.5.2'
   }
 end
 
@@ -126,7 +126,7 @@ def debian_wheezy_facts
     osfamily: 'Debian',
     operatingsystemmajrelease: '8',
     puppetversion: '4.5.2',
-    lsbdistcodename: 'wheezy',
+    lsbdistcodename: 'wheezy'
   }
 end
 
@@ -136,7 +136,7 @@ def ubuntu_1404_facts
     osfamily: 'Debian',
     operatingsystemmajrelease: '14.04',
     puppetversion: '4.5.2',
-    lsbdistcodename: 'trusty',
+    lsbdistcodename: 'trusty'
   }
 end
 
@@ -146,7 +146,7 @@ def ubuntu_1604_facts
     osfamily: 'Debian',
     operatingsystemmajrelease: '16.04',
     puppetversion: '4.5.2',
-    lsbdistcodename: 'xenial',
+    lsbdistcodename: 'xenial'
   }
 end
 
@@ -154,7 +154,7 @@ def archlinux_facts
   {
     operatingsystem: 'Archlinux',
     osfamily: 'Archlinux',
-    puppetversion: '4.5.2',
+    puppetversion: '4.5.2'
   }
 end
 

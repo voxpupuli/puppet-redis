@@ -87,7 +87,7 @@ describe 'redis::ulimit' do
                 "set $nofile/value \"7777\""
               ],
               'notify' => [
-                'Exec[systemd-reload-redis]',
+                'Exec[systemd-reload-redis]'
               ]
         )
     end
