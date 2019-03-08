@@ -783,7 +783,7 @@ describe 'redis', type: :class do
             let (:params) {
               {
                 save_db_to_disk: true,
-                save_db_to_disk_interval: {'900' =>'2', '300' => '11', '60' => '10011'}
+                save_db_to_disk_interval: { '900' =>'2', '300' => '11', '60' => '10011' }
               }
             }
 

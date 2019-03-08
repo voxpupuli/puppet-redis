@@ -76,7 +76,7 @@ describe 'redisget' do
       mr = MockRedis.new
       Redis.stubs(:new).returns(mr)
     }
-    [{ 'ha' => 'sh'}, true, 1, %w[an array]].each do |p|
+    [{ 'ha' => 'sh' }, true, 1, %w[an array]].each do |p|
       context "specifing first parameter as <#{p}>" do
         it { is_expected.to run.with_params(p, REDIS_URL).and_raise_error(Puppet::ParseError, /wrong argument type/i) }
       end
