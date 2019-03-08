@@ -66,7 +66,7 @@ describe 'redis::sentinel', type: :class do
   end
 
   describe 'with custom parameters' do
-    let (:params) {
+    let (:params) do
       {
         auth_pass: 'password',
         sentinel_bind: '1.2.3.4',
@@ -77,7 +77,7 @@ describe 'redis::sentinel', type: :class do
         notification_script: 'bar.sh',
         client_reconfig_script: 'foo.sh'
       }
-    }
+    end
 
     it { should create_class('redis::sentinel') }
 

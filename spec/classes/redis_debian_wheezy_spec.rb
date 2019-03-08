@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe 'redis' do
   context 'on Debian Wheezy' do
-    let(:facts) {
+    let(:facts) do
       debian_wheezy_facts
-    }
+    end
 
     context 'should set Wheezy specific values' do
       context 'should set redis rundir correctly to Wheezy requirements' do

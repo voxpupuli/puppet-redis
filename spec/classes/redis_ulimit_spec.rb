@@ -6,9 +6,9 @@ describe 'redis::ulimit' do
   # Puppet::Util::Log.newdestination(:console)
 
   context 'with managed_by_cluster_manager true' do
-    let(:facts) {
+    let(:facts) do
       debian_facts
-    }
+    end
     let :pre_condition do
       [
         'class { redis:
@@ -30,9 +30,9 @@ describe 'redis::ulimit' do
   end
 
   context 'with managed_by_cluster_manager true but not managing service' do
-    let(:facts) {
+    let(:facts) do
       debian_facts.merge(service_provider: 'systemd')
-    }
+    end
     let :pre_condition do
       [
         'class { "redis":
@@ -56,9 +56,9 @@ describe 'redis::ulimit' do
   end
 
   context 'on a systemd system' do
-    let(:facts) {
+    let(:facts) do
       debian_facts.merge(service_provider: 'systemd')
-    }
+    end
     let :pre_condition do
       [
         'class { redis:
@@ -95,9 +95,9 @@ describe 'redis::ulimit' do
 
   context 'on a non-systemd system' do
     context 'Ubuntu 1404 system' do
-      let(:facts) {
+      let(:facts) do
         ubuntu_1404_facts.merge(service_provider: 'debian')
-      }
+      end
       let :pre_condition do
         [
           'class { redis:
@@ -122,9 +122,9 @@ describe 'redis::ulimit' do
     end
 
     context 'CentOS 6 system' do
-      let(:facts) {
+      let(:facts) do
         centos_6_facts.merge(service_provider: 'redhat')
-      }
+      end
       let :pre_condition do
         [
           'class { redis:
