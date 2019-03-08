@@ -773,8 +773,8 @@ describe 'redis', type: :class do
               }
             }
 
-            it { is_expected.to contain_file(config_file_orig).with('content' => /save 900 1/)}
-            it { is_expected.to contain_file(config_file_orig).with('content' => /save 300 10/)}
+            it { is_expected.to contain_file(config_file_orig).with('content' => /save 900 1/) }
+            it { is_expected.to contain_file(config_file_orig).with('content' => /save 300 10/) }
             it { is_expected.to contain_file(config_file_orig).with('content' => /save 60 10000/)
             }
           end
@@ -787,8 +787,8 @@ describe 'redis', type: :class do
               }
             }
 
-            it { is_expected.to contain_file(config_file_orig).with('content' => /save 900 2/)}
-            it { is_expected.to contain_file(config_file_orig).with('content' => /save 300 11/)}
+            it { is_expected.to contain_file(config_file_orig).with('content' => /save 900 2/) }
+            it { is_expected.to contain_file(config_file_orig).with('content' => /save 300 11/) }
             it { is_expected.to contain_file(config_file_orig).with('content' => /save 60 10011/)
             }
           end
