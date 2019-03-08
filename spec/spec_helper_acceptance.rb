@@ -65,9 +65,6 @@ def retry_on_error_matching(max_retry_count = 3, retry_wait_interval_secs = 5, e
 end
 
 RSpec.configure do |c|
-  # Project root
-  proj_root = File.expand_path(File.join(File.dirname(__FILE__), '..'))
-
   # Readable test descriptions
   c.formatter = :documentation
 
