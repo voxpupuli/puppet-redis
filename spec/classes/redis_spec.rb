@@ -5,9 +5,7 @@ describe 'redis', type: :class do
   on_supported_os.each do |os, facts|
     context "on #{os}" do
       let(:facts) {
-        facts.merge({
-          redis_server_version: '3.2.3',
-        })
+        facts.merge(redis_server_version: '3.2.3')
       }
 
       let(:package_name) { manifest_vars[:package_name] }
@@ -42,12 +40,10 @@ describe 'redis', type: :class do
           context 'on Debian' do
 
             it do
-              is_expected.to contain_file('/var/run/redis').with({
-                ensure: 'directory',
-                owner: 'redis',
-                group: 'root',
-                mode: '2775',
-              })
+              is_expected.to contain_file('/var/run/redis').with(ensure: 'directory',
+                                                                 owner: 'redis',
+                                                                 group: 'root',
+                                                                 mode: '2775')
             end
 
           end
@@ -55,12 +51,10 @@ describe 'redis', type: :class do
         when 'Ubuntu'
 
           it do
-            is_expected.to contain_file('/var/run/redis').with({
-              ensure: 'directory',
-              owner: 'redis',
-              group: 'redis',
-              mode: '0755',
-            })
+            is_expected.to contain_file('/var/run/redis').with(ensure: 'directory',
+                                                               owner: 'redis',
+                                                               group: 'redis',
+                                                               mode: '0755')
           end
 
         end
@@ -368,16 +362,14 @@ describe 'redis', type: :class do
           context 'on Debian' do
 
             it do
-              is_expected.to create_apt__source('dotdeb').with({
-                location: 'http://packages.dotdeb.org/',
-                release: facts[:lsbdistcodename],
-                repos: 'all',
-                key: {
+              is_expected.to create_apt__source('dotdeb').with(location: 'http://packages.dotdeb.org/',
+                                                               release: facts[:lsbdistcodename],
+                                                               repos: 'all',
+                                                               key: {
                   "id" => "6572BBEF1B5FF28B28B706837E3F070089DF5277",
                   "source" => "http://www.dotdeb.org/dotdeb.gpg"
                 },
-                include: { 'src' => true },
-              })
+                                                               include: { 'src' => true })
             end
 
           end

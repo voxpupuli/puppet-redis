@@ -12,10 +12,8 @@ describe 'redis' do
       context 'when $::redis_server_version fact is not present and package_ensure is a newer version(3.2.1) (older features enabled)' do
 
         let(:facts) {
-          centos_6_facts.merge({
-            redis_server_version: nil,
-            puppetversion: Puppet.version,
-          })
+          centos_6_facts.merge(redis_server_version: nil,
+                               puppetversion: Puppet.version)
         }
         let (:params) { { package_ensure: '3.2.1' } }
 
@@ -28,10 +26,8 @@ describe 'redis' do
       context 'when $::redis_server_version fact is not present and package_ensure is a newer version(4.0-rc3) (older features enabled)' do
 
         let(:facts) {
-          centos_6_facts.merge({
-            redis_server_version: nil,
-            puppetversion: Puppet.version,
-          })
+          centos_6_facts.merge(redis_server_version: nil,
+                               puppetversion: Puppet.version)
         }
         let (:params) { { package_ensure: '4.0-rc3' } }
 
@@ -44,10 +40,8 @@ describe 'redis' do
       context 'when $::redis_server_version fact is present but the older version (older features not enabled)' do
 
         let(:facts) {
-          centos_6_facts.merge({
-            redis_server_version: '2.4.10',
-            puppetversion: Puppet.version,
-          })
+          centos_6_facts.merge(redis_server_version: '2.4.10',
+                               puppetversion: Puppet.version)
         }
 
         it { should contain_file('/etc/redis.conf.puppet').with('content' => /^hash-max-zipmap-entries/) }
@@ -60,10 +54,8 @@ describe 'redis' do
       context 'when $::redis_server_version fact is present but a newer version (older features enabled)' do
 
         let(:facts) {
-          centos_6_facts.merge({
-            redis_server_version: '3.2.1',
-            puppetversion: Puppet.version,
-          })
+          centos_6_facts.merge(redis_server_version: '3.2.1',
+                               puppetversion: Puppet.version)
         }
 
         it { should contain_file('/etc/redis.conf.puppet').without('content' => /^hash-max-zipmap-entries/) }

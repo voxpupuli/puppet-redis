@@ -89,9 +89,7 @@ describe 'redis::sentinel', type: :class do
 
   describe 'on Debian Jessie' do
 
-    let (:facts) { debian_facts.merge({
-      operatingsystemmajrelease: '8',
-    }) }
+    let (:facts) { debian_facts.merge(operatingsystemmajrelease: '8') }
 
     it { should create_class('redis::sentinel') }
 
@@ -100,9 +98,7 @@ describe 'redis::sentinel', type: :class do
 
   describe 'on Debian Stretch' do
 
-    let (:facts) { debian_facts.merge({
-      operatingsystemmajrelease: '9',
-    }) }
+    let (:facts) { debian_facts.merge(operatingsystemmajrelease: '9') }
 
     it { should create_class('redis::sentinel') }
 

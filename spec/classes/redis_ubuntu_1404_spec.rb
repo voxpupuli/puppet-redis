@@ -12,9 +12,7 @@ describe 'redis' do
       context 'when $::redis_server_version fact is not present (older features not enabled)' do
 
         let(:facts) {
-          ubuntu_1404_facts.merge({
-            redis_server_version: nil,
-          })
+          ubuntu_1404_facts.merge(redis_server_version: nil)
         }
 
         it { should contain_file('/etc/redis/redis.conf.puppet').with('content' => /^hash-max-ziplist-entries/) }
@@ -26,9 +24,7 @@ describe 'redis' do
       context 'when $::redis_server_version fact is not present and package_ensure is a newer version(3.2.1) (older features enabled)' do
 
         let(:facts) {
-          ubuntu_1404_facts.merge({
-            redis_server_version: nil,
-          })
+          ubuntu_1404_facts.merge(redis_server_version: nil)
         }
         let (:params) { { package_ensure: '3.2.1' } }
 
@@ -41,9 +37,7 @@ describe 'redis' do
       context 'when $::redis_server_version fact is not present and package_ensure is a newer version(3:3.2.1) (older features enabled)' do
 
         let(:facts) {
-          ubuntu_1404_facts.merge({
-            redis_server_version: nil,
-          })
+          ubuntu_1404_facts.merge(redis_server_version: nil)
         }
         let (:params) { { package_ensure: '3:3.2.1' } }
 
@@ -56,9 +50,7 @@ describe 'redis' do
       context 'when $::redis_server_version fact is not present and package_ensure is a newer version(4:4.0-rc3) (older features enabled)' do
 
         let(:facts) {
-          ubuntu_1404_facts.merge({
-            redis_server_version: nil,
-          })
+          ubuntu_1404_facts.merge(redis_server_version: nil)
         }
         let (:params) { { package_ensure: '4:4.0-rc3' } }
 
@@ -70,9 +62,7 @@ describe 'redis' do
       context 'when $::redis_server_version fact is not present and package_ensure is a newer version(4.0-rc3) (older features enabled)' do
 
         let(:facts) {
-          ubuntu_1404_facts.merge({
-            redis_server_version: nil,
-          })
+          ubuntu_1404_facts.merge(redis_server_version: nil)
         }
         let (:params) { { package_ensure: '4.0-rc3' } }
 
@@ -85,9 +75,7 @@ describe 'redis' do
       context 'when $::redis_server_version fact is present but the older version (older features not enabled)' do
 
         let(:facts) {
-          ubuntu_1404_facts.merge({
-            redis_server_version: '2.8.4',
-          })
+          ubuntu_1404_facts.merge(redis_server_version: '2.8.4')
         }
 
         it { should contain_file('/etc/redis/redis.conf.puppet').with('content' => /^hash-max-ziplist-entries/) }
@@ -99,9 +87,7 @@ describe 'redis' do
       context 'when $::redis_server_version fact is present but a newer version (older features enabled)' do
 
         let(:facts) {
-          ubuntu_1404_facts.merge({
-            redis_server_version: '3.2.1',
-          })
+          ubuntu_1404_facts.merge(redis_server_version: '3.2.1')
         }
 
         it { should contain_file('/etc/redis/redis.conf.puppet').with('content' => /^hash-max-ziplist-entries/) }
