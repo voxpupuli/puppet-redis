@@ -401,7 +401,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /unixsocket.*\/tmp\/redis.sock/
+            'content' => %r{unixsocket.*/tmp/redis\.sock}
           )
         }
       end

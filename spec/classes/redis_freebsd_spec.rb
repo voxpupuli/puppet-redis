@@ -7,8 +7,8 @@ describe 'redis' do
     end
 
     context 'should set FreeBSD specific values' do
-      it { is_expected.to contain_file('/usr/local/etc/redis.conf.puppet').with('content' => /dir \/var\/db\/redis/) }
-      it { is_expected.to contain_file('/usr/local/etc/redis.conf.puppet').with('content' => /pidfile \/var\/run\/redis\/redis.pid/) }
+      it { is_expected.to contain_file('/usr/local/etc/redis.conf.puppet').with('content' => %r{dir /var/db/redis}) }
+      it { is_expected.to contain_file('/usr/local/etc/redis.conf.puppet').with('content' => %r{pidfile /var/run/redis/redis\.pid}) }
     end
   end
 end
