@@ -59,7 +59,7 @@ describe 'redis::sentinel', type: :class do
         'ensure'     => 'running',
         'enable'     => 'true',
         'hasrestart' => 'true',
-        'hasstatus'  => 'true',
+        'hasstatus'  => 'true'
       )
     }
 
