@@ -29,7 +29,7 @@ def run_task(task_name:, params: nil, password: DEFAULT_PASSWORD)
 end
 
 def run_bolt_task(task_name:, params: nil, password: DEFAULT_PASSWORD)
-  on(master, "/opt/puppetlabs/puppet/bin/bolt task run #{task_name} --modules /etc/puppetlabs/code/modules/ --nodes localhost --user root --password #{password} #{params}", acceptable_exit_codes: [0, 1]).stdout # rubocop:disable Metrics/LineLength
+  on(master, "/opt/puppetlabs/puppet/bin/bolt task run #{task_name} --modules /etc/puppetlabs/code/modules/ --nodes localhost --user root --password #{password} #{params}", acceptable_exit_codes: [0, 1]).stdout
 end
 
 def expect_multiple_regexes(result:, regexes:)
