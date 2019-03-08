@@ -148,5 +148,4 @@ describe 'redis::ulimit' do
       end
     end
   end
-
 end

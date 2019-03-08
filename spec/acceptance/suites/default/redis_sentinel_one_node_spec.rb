@@ -60,5 +60,4 @@ describe 'redis::sentinel', unless: (fact('osfamily') == 'RedHat' && (fact('oper
       its(:stdout) { should match /^mymaster/ }
     end
   end
-
 end

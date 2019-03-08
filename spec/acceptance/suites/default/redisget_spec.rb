@@ -1,7 +1,6 @@
 require 'spec_helper_acceptance'
 
 describe 'redisget() function' do
-
   it 'runs successfully' do
     pp = <<-EOS
     Exec {
@@ -114,5 +113,4 @@ describe 'redisget() function' do
       expect(r.stderr).to match(/Error connecting to Redis on 127.0.0.1:12345 \(Errno::ECONNREFUSED\)/)
     end
   end
-
 end

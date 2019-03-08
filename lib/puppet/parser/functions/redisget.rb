@@ -40,6 +40,5 @@ DOC
       debug "Connection to redis failed with #{e} - Returning default value of #{default}"
       default
     end
-
   end
 end

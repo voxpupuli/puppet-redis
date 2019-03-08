@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'redis', type: :class do
-
   on_supported_os.each do |os, facts|
     context "on #{os}" do
       let(:facts) {
@@ -38,14 +37,12 @@ describe 'redis', type: :class do
         when 'Debian'
 
           context 'on Debian' do
-
             it do
               is_expected.to contain_file('/var/run/redis').with(ensure: 'directory',
                                                                  owner: 'redis',
                                                                  group: 'root',
                                                                  mode: '2775')
             end
-
           end
 
         when 'Ubuntu'
@@ -360,7 +357,6 @@ describe 'redis', type: :class do
         when 'Debian'
 
           context 'on Debian' do
-
             it do
               is_expected.to create_apt__source('dotdeb').with(location: 'http://packages.dotdeb.org/',
                                                                release: facts[:lsbdistcodename],
@@ -371,7 +367,6 @@ describe 'redis', type: :class do
                                                                },
                                                                include: { 'src' => true })
             end
-
           end
 
         when 'Ubuntu'
@@ -757,7 +752,6 @@ describe 'redis', type: :class do
 
       describe 'with parameter save_db_to_disk_interval' do
         context 'with save_db_to_disk true' do
-
           context 'default' do
             let (:params) {
               {
@@ -784,7 +778,6 @@ describe 'redis', type: :class do
             it { is_expected.to contain_file(config_file_orig).with('content' => /save 60 10011/)
             }
           end
-
         end
 
         context 'with save_db_to_disk false' do
@@ -1134,8 +1127,6 @@ describe 'redis', type: :class do
         )
         }
       end
-
     end
   end
-
 end

@@ -2,7 +2,6 @@ require 'spec_helper_acceptance'
 
 if hosts.length >= 3
   describe 'configuring master and slave redis hosts' do
-
     let(:master_ip_address) do
       # hosts_as('master').inject({}) do |memo,host|
       #   memo[host] = fact_on host, "ipaddress_enp0s8"
@@ -32,7 +31,6 @@ if hosts.length >= 3
           on host, command_to_check do
             expect(stdout).to match(/^role:master/)
           end
-
         end
       end
     end
@@ -54,7 +52,6 @@ if hosts.length >= 3
           on host, 'redis-cli -h $(facter ipaddress_enp0s8) info replication' do
             expect(stdout).to match(/^role:slave/)
           end
-
         end
       end
     end
@@ -69,10 +66,8 @@ if hosts.length >= 3
           on host, command_to_check do
             expect(stdout).to match(/^connected_slaves:2/)
           end
-
         end
       end
     end
-
   end
 end

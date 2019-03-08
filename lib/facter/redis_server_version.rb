@@ -3,7 +3,6 @@
 # Purpose: Retrieve redis-server version if installed
 #
 Facter.add(:redis_server_version) do
-
   setcode do
     if Facter::Util::Resolution.which('redis-server')
       redis_server_version_output = Facter::Util::Resolution.exec('redis-server -v')

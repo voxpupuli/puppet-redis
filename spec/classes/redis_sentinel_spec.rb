@@ -44,7 +44,6 @@ describe 'redis::sentinel', type: :class do
   end
 
   describe 'without parameters' do
-
     it { should create_class('redis::sentinel') }
 
     it { should contain_file('/etc/redis/redis-sentinel.conf.puppet').with(
@@ -62,7 +61,6 @@ describe 'redis::sentinel', type: :class do
       'hasstatus'  => 'true'
     )
     }
-
   end
 
   describe 'with custom parameters' do
@@ -88,7 +86,6 @@ describe 'redis::sentinel', type: :class do
   end
 
   describe 'on Debian Jessie' do
-
     let (:facts) { debian_facts.merge(operatingsystemmajrelease: '8') }
 
     it { should create_class('redis::sentinel') }
@@ -97,12 +94,10 @@ describe 'redis::sentinel', type: :class do
   end
 
   describe 'on Debian Stretch' do
-
     let (:facts) { debian_facts.merge(operatingsystemmajrelease: '9') }
 
     it { should create_class('redis::sentinel') }
 
     it { should contain_package('redis-sentinel').with_ensure('present') }
   end
-
 end

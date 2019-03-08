@@ -2,7 +2,6 @@
 require 'spec_helper_acceptance'
 
 describe 'redis-cli task' do
-
   it 'install redis-cli with the class' do
     pp = <<-EOS
     Exec {

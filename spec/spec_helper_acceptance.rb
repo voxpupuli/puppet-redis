@@ -72,7 +72,6 @@ RSpec.configure do |c|
   c.formatter = :documentation
 
   c.before :suite do
-
     hosts.each do |host|
       if fact('osfamily') == 'Debian'
         # These should be on all Deb-flavor machines by default...

@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe 'redis::administration' do
   context 'should set kernel and system values' do
-
     it do
       is_expected.to contain_sysctl('vm.overcommit_memory').with(
         'ensure' => 'present',
@@ -25,7 +24,5 @@ describe 'redis::administration' do
         'value' => '65535'
       )
     end
-
   end
-
 end
