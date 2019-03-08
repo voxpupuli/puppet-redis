@@ -11,7 +11,7 @@ describe 'redis::instance', type: :define do
   end
 
   describe 'os-dependent items' do
-    context "on Ubuntu systems" do
+    context 'on Ubuntu systems' do
       context '14.04' do
         let(:facts) {
           ubuntu_1404_facts
@@ -42,7 +42,7 @@ describe 'redis::instance', type: :define do
         it { should contain_file('/etc/systemd/system/redis-server-app2.service').with_content(/ExecStart=\/usr\/bin\/redis-server \/etc\/redis\/redis-server-app2.conf/) }
       end
     end
-    context "on CentOS systems" do
+    context 'on CentOS systems' do
       context '6' do
         let(:facts) {
           centos_6_facts

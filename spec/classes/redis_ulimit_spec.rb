@@ -19,12 +19,12 @@ describe 'redis::ulimit' do
 
     it { should compile.with_all_deps }
     it do
-      is_expected.to contain_file("/etc/security/limits.d/redis.conf").with(
-                  "ensure"  => "file",
-                  "owner"   => "root",
-                  "group"   => "root",
-                  "mode"    => "0644",
-                  "content" => "redis soft nofile 65536\nredis hard nofile 65536\n"
+      is_expected.to contain_file('/etc/security/limits.d/redis.conf').with(
+                  'ensure'  => 'file',
+                  'owner'   => 'root',
+                  'group'   => 'root',
+                  'mode'    => '0644',
+                  'content' => "redis soft nofile 65536\nredis hard nofile 65536\n"
       )
     end
   end
@@ -45,12 +45,12 @@ describe 'redis::ulimit' do
 
     it { should compile.with_all_deps }
     it do
-      is_expected.to contain_file("/etc/security/limits.d/redis.conf").with(
-                  "ensure"  => "file",
-                  "owner"   => "root",
-                  "group"   => "root",
-                  "mode"    => "0644",
-                  "content" => "redis soft nofile 65536\nredis hard nofile 65536\n"
+      is_expected.to contain_file('/etc/security/limits.d/redis.conf').with(
+                  'ensure'  => 'file',
+                  'owner'   => 'root',
+                  'group'   => 'root',
+                  'mode'    => '0644',
+                  'content' => "redis soft nofile 65536\nredis hard nofile 65536\n"
       )
     end
   end
@@ -69,22 +69,22 @@ describe 'redis::ulimit' do
 
     it { should compile.with_all_deps }
     it do
-      is_expected.to contain_file("/etc/systemd/system/redis-server.service.d/limit.conf").with(
-              "ensure" => "file",
-              "owner"  => "root",
-              "group"  => "root",
-              "mode"   => "0444"
+      is_expected.to contain_file('/etc/systemd/system/redis-server.service.d/limit.conf').with(
+              'ensure' => 'file',
+              'owner'  => 'root',
+              'group'  => 'root',
+              'mode'   => '0444'
       )
     end
 
     it do
-      is_expected.to contain_augeas("Systemd redis ulimit").with(
+      is_expected.to contain_augeas('Systemd redis ulimit').with(
               'incl' => '/etc/systemd/system/redis-server.service.d/limits.conf',
               'lens'     => 'Systemd.lns',
               'context'  => '/etc/systemd/system/redis-server.service.d/limits.conf',
               'changes'  => [
-                "defnode nofile Service/LimitNOFILE \"\"",
-                "set $nofile/value \"7777\""
+                'defnode nofile Service/LimitNOFILE ""',
+                'set $nofile/value "7777"'
               ],
               'notify' => [
                 'Exec[systemd-reload-redis]'

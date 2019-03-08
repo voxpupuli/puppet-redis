@@ -4,7 +4,7 @@ require 'open3'
 require 'puppet'
 
 def redis_cli(command)
-  stdout, stderr, status = Open3.capture3("redis-cli", command)
+  stdout, stderr, status = Open3.capture3('redis-cli', command)
   raise Puppet::Error, stderr if status != 0
   { status: stdout.strip }
 end

@@ -1,7 +1,7 @@
 require 'spec_helper_acceptance'
 
 if hosts.length >= 3
-  describe "configuring master and slave redis hosts" do
+  describe 'configuring master and slave redis hosts' do
 
     let(:master_ip_address) do
       # hosts_as('master').inject({}) do |memo,host|
