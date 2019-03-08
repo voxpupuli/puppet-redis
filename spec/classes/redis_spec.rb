@@ -1143,7 +1143,6 @@ describe 'redis', type: :class do
         }
       end
 
-
     end
   end
 
