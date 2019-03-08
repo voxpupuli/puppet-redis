@@ -1,3 +1,4 @@
+# rubocop:disable RSpec/MultipleExpectations
 require 'spec_helper_acceptance'
 
 # systcl settings are untestable in docker

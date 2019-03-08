@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-$expected_noparams_content = <<EOF
+expected_noparams_content = <<EOF
 port 26379
 dir /tmp
 daemonize yes
@@ -15,7 +15,7 @@ loglevel notice
 logfile /var/log/redis/redis.log
 EOF
 
-$expected_params_content = <<EOF
+expected_params_content = <<EOF
 bind 1.2.3.4
 port 26379
 dir /tmp
@@ -35,7 +35,7 @@ logfile /tmp/barn-sentinel.log
 EOF
 
 describe 'redis::sentinel', type: :class do
-  let (:facts) { debian_facts }
+  let(:facts) { debian_facts }
 
   let :pre_condition do
     [
@@ -51,7 +51,7 @@ describe 'redis::sentinel', type: :class do
         'ensure'  => 'present',
         'mode'    => '0644',
         'owner'   => 'redis',
-        'content' => $expected_noparams_content
+        'content' => expected_noparams_content
       )
     }
 
@@ -66,7 +66,7 @@ describe 'redis::sentinel', type: :class do
   end
 
   describe 'with custom parameters' do
-    let (:params) do
+    let(:params) do
       {
         auth_pass: 'password',
         sentinel_bind: '1.2.3.4',
@@ -83,13 +83,13 @@ describe 'redis::sentinel', type: :class do
 
     it {
       is_expected.to contain_file('/etc/redis/redis-sentinel.conf.puppet').with(
-        'content' => $expected_params_content
+        'content' => expected_params_content
       )
     }
   end
 
   describe 'on Debian Jessie' do
-    let (:facts) { debian_facts.merge(operatingsystemmajrelease: '8') }
+    let(:facts) { debian_facts.merge(operatingsystemmajrelease: '8') }
 
     it { is_expected.to create_class('redis::sentinel') }
 
@@ -97,7 +97,7 @@ describe 'redis::sentinel', type: :class do
   end
 
   describe 'on Debian Stretch' do
-    let (:facts) { debian_facts.merge(operatingsystemmajrelease: '9') }
+    let(:facts) { debian_facts.merge(operatingsystemmajrelease: '9') }
 
     it { is_expected.to create_class('redis::sentinel') }
 

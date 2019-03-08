@@ -40,7 +40,7 @@ class redis::config {
   }
 
   if $::redis::ulimit {
-    contain ::redis::ulimit
+    contain redis::ulimit
   }
 
   $service_provider_lookup = pick(getvar('service_provider'), false)

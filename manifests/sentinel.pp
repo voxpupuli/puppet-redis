@@ -196,7 +196,7 @@ class redis::sentinel (
   $client_reconfig_script = $::redis::params::sentinel_client_reconfig_script,
 ) inherits redis::params {
 
-  require ::redis
+  require 'redis'
 
   if $::osfamily == 'Debian' {
     # Debian flavour machines have a dedicated redis-sentinel package
@@ -209,44 +209,43 @@ class redis::sentinel (
       ) {
       package { $package_name:
         ensure => $package_ensure,
+        before => File[$config_file_orig],
+      }
+
+      if $init_script {
+        Package[$package_name] -> File[$init_script]
       }
     }
   }
 
-  file {
-    $config_file_orig:
-      ensure  => present,
-      owner   => $service_user,
-      group   => $service_group,
-      mode    => $config_file_mode,
-      content => template($conf_template),
-      require => Package[$package_name];
+  file { $config_file_orig:
+    ensure  => present,
+    owner   => $service_user,
+    group   => $service_group,
+    mode    => $config_file_mode,
+    content => template($conf_template),
   }
 
-  exec {
-    "cp -p ${config_file_orig} ${config_file}":
-      path        => '/usr/bin:/bin',
-      subscribe   => File[$config_file_orig],
-      notify      => Service[$service_name],
-      refreshonly => true;
+  exec { "cp -p ${config_file_orig} ${config_file}":
+    path        => '/usr/bin:/bin',
+    subscribe   => File[$config_file_orig],
+    notify      => Service[$service_name],
+    refreshonly => true,
   }
 
   if $init_script {
 
-    file {
-      $init_script:
-        ensure  => present,
-        owner   => 'root',
-        group   => 'root',
-        mode    => '0755',
-        content => template($init_template),
-        require => Package[$package_name];
+    file { $init_script:
+      ensure  => present,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0755',
+      content => template($init_template),
     }
 
-    exec {
-      '/usr/sbin/update-rc.d redis-sentinel defaults':
-        subscribe   => File[$init_script],
-        refreshonly => true;
+    exec { '/usr/sbin/update-rc.d redis-sentinel defaults':
+      subscribe   => File[$init_script],
+      refreshonly => true,
     }
 
   }

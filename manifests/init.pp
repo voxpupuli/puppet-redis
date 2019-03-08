@@ -232,10 +232,10 @@ class redis (
   $cluster_node_timeout          = $::redis::params::cluster_node_timeout,
 ) inherits redis::params {
 
-  contain ::redis::preinstall
-  contain ::redis::install
-  contain ::redis::config
-  contain ::redis::service
+  contain redis::preinstall
+  contain redis::install
+  contain redis::config
+  contain redis::service
 
   Class['redis::preinstall']
   -> Class['redis::install']

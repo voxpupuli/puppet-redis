@@ -51,14 +51,14 @@ describe 'redis', type: :class do
             is_expected.to contain_file('/var/run/redis').with(ensure: 'directory',
                                                                owner: 'redis',
                                                                group: 'redis',
-                                                               mode: '0755')
+                                                               mode: '2775')
           end
 
         end
       end
 
       describe 'with parameter activerehashing' do
-        let (:params) do
+        let(:params) do
           {
             activerehashing: true
           }
@@ -68,7 +68,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter aof_load_truncated' do
-        let (:params) do
+        let(:params) do
           {
             aof_load_truncated: true
           }
@@ -78,7 +78,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter aof_rewrite_incremental_fsync' do
-        let (:params) do
+        let(:params) do
           {
             aof_rewrite_incremental_fsync: true
           }
@@ -88,7 +88,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter appendfilename' do
-        let (:params) do
+        let(:params) do
           {
             appendfilename: '_VALUE_'
           }
@@ -98,7 +98,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter appendfsync' do
-        let (:params) do
+        let(:params) do
           {
             appendfsync: '_VALUE_'
           }
@@ -108,7 +108,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter appendonly' do
-        let (:params) do
+        let(:params) do
           {
             appendonly: true
           }
@@ -118,7 +118,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter auto_aof_rewrite_min_size' do
-        let (:params) do
+        let(:params) do
           {
             auto_aof_rewrite_min_size: '_VALUE_'
           }
@@ -128,7 +128,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter auto_aof_rewrite_percentage' do
-        let (:params) do
+        let(:params) do
           {
             auto_aof_rewrite_percentage: '_VALUE_'
           }
@@ -138,7 +138,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter bind' do
-        let (:params) do
+        let(:params) do
           {
             bind: '_VALUE_'
           }
@@ -148,7 +148,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter output_buffer_limit_slave' do
-        let (:params) do
+        let(:params) do
           {
             output_buffer_limit_slave: '_VALUE_'
           }
@@ -158,7 +158,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter output_buffer_limit_pubsub' do
-        let (:params) do
+        let(:params) do
           {
             output_buffer_limit_pubsub: '_VALUE_'
           }
@@ -168,49 +168,49 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter: config_dir' do
-        let (:params) { { config_dir: '_VALUE_' } }
+        let(:params) { { config_dir: '_VALUE_' } }
 
         it { is_expected.to contain_file('_VALUE_').with_ensure('directory') }
       end
 
       describe 'with parameter: config_dir_mode' do
-        let (:params) { { config_dir_mode: '_VALUE_' } }
+        let(:params) { { config_dir_mode: '_VALUE_' } }
 
         it { is_expected.to contain_file('/etc/redis').with_mode('_VALUE_') }
       end
 
       describe 'with parameter: log_dir_mode' do
-        let (:params) { { log_dir_mode: '_VALUE_' } }
+        let(:params) { { log_dir_mode: '_VALUE_' } }
 
         it { is_expected.to contain_file('/var/log/redis').with_mode('_VALUE_') }
       end
 
       describe 'with parameter: config_file_orig' do
-        let (:params) { { config_file_orig: '_VALUE_' } }
+        let(:params) { { config_file_orig: '_VALUE_' } }
 
         it { is_expected.to contain_file('_VALUE_') }
       end
 
       describe 'with parameter: config_file_mode' do
-        let (:params) { { config_file_mode: '_VALUE_' } }
+        let(:params) { { config_file_mode: '_VALUE_' } }
 
         it { is_expected.to contain_file(config_file_orig).with_mode('_VALUE_') }
       end
 
       describe 'with parameter: config_group' do
-        let (:params) { { config_group: '_VALUE_' } }
+        let(:params) { { config_group: '_VALUE_' } }
 
         it { is_expected.to contain_file('/etc/redis').with_group('_VALUE_') }
       end
 
       describe 'with parameter: config_owner' do
-        let (:params) { { config_owner: '_VALUE_' } }
+        let(:params) { { config_owner: '_VALUE_' } }
 
         it { is_expected.to contain_file('/etc/redis').with_owner('_VALUE_') }
       end
 
       describe 'with parameter daemonize' do
-        let (:params) do
+        let(:params) do
           {
             daemonize: true
           }
@@ -224,7 +224,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter databases' do
-        let (:params) do
+        let(:params) do
           {
             databases: '_VALUE_'
           }
@@ -238,7 +238,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter dbfilename' do
-        let (:params) do
+        let(:params) do
           {
             dbfilename: '_VALUE_'
           }
@@ -262,7 +262,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter hash_max_ziplist_entries' do
-        let (:params) do
+        let(:params) do
           {
             hash_max_ziplist_entries: '_VALUE_'
           }
@@ -276,7 +276,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter hash_max_ziplist_value' do
-        let (:params) do
+        let(:params) do
           {
             hash_max_ziplist_value: '_VALUE_'
           }
@@ -290,7 +290,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter list_max_ziplist_entries' do
-        let (:params) do
+        let(:params) do
           {
             list_max_ziplist_entries: '_VALUE_'
           }
@@ -304,7 +304,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter list_max_ziplist_value' do
-        let (:params) do
+        let(:params) do
           {
             list_max_ziplist_value: '_VALUE_'
           }
@@ -318,7 +318,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter log_dir' do
-        let (:params) do
+        let(:params) do
           {
             log_dir: '_VALUE_'
           }
@@ -332,7 +332,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter log_file' do
-        let (:params) do
+        let(:params) do
           {
             log_file: '_VALUE_'
           }
@@ -346,7 +346,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter log_level' do
-        let (:params) do
+        let(:params) do
           {
             log_level: '_VALUE_'
           }
@@ -360,7 +360,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter: manage_repo' do
-        let (:params) { { manage_repo: true } }
+        let(:params) { { manage_repo: true } }
 
         case facts[:operatingsystem]
 
@@ -393,7 +393,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter unixsocket' do
-        let (:params) do
+        let(:params) do
           {
             unixsocket: '/tmp/redis.sock'
           }
@@ -401,13 +401,13 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /unixsocket.*\/tmp\/redis.sock/
+            'content' => %r{unixsocket.*/tmp/redis\.sock}
           )
         }
       end
 
       describe 'with parameter unixsocketperm' do
-        let (:params) do
+        let(:params) do
           {
             unixsocketperm: '777'
           }
@@ -421,7 +421,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter masterauth' do
-        let (:params) do
+        let(:params) do
           {
             masterauth: '_VALUE_'
           }
@@ -435,7 +435,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter maxclients' do
-        let (:params) do
+        let(:params) do
           {
             maxclients: '_VALUE_'
           }
@@ -449,7 +449,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter maxmemory' do
-        let (:params) do
+        let(:params) do
           {
             maxmemory: '_VALUE_'
           }
@@ -463,7 +463,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter maxmemory_policy' do
-        let (:params) do
+        let(:params) do
           {
             maxmemory_policy: '_VALUE_'
           }
@@ -477,7 +477,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter maxmemory_samples' do
-        let (:params) do
+        let(:params) do
           {
             maxmemory_samples: '_VALUE_'
           }
@@ -491,7 +491,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter min_slaves_max_lag' do
-        let (:params) do
+        let(:params) do
           {
             min_slaves_max_lag: '_VALUE_'
           }
@@ -505,7 +505,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter min_slaves_to_write' do
-        let (:params) do
+        let(:params) do
           {
             min_slaves_to_write: '_VALUE_'
           }
@@ -519,7 +519,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter notify_keyspace_events' do
-        let (:params) do
+        let(:params) do
           {
             notify_keyspace_events: '_VALUE_'
           }
@@ -533,7 +533,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter notify_service' do
-        let (:params) do
+        let(:params) do
           {
             notify_service: true
           }
@@ -545,7 +545,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter no_appendfsync_on_rewrite' do
-        let (:params) do
+        let(:params) do
           {
             no_appendfsync_on_rewrite: true
           }
@@ -559,7 +559,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter: package_ensure' do
-        let (:params) { { package_ensure: '_VALUE_' } }
+        let(:params) { { package_ensure: '_VALUE_' } }
         let(:package_name) { manifest_vars[:package_name] }
 
         it {
@@ -570,13 +570,13 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter: package_name' do
-        let (:params) { { package_name: '_VALUE_' } }
+        let(:params) { { package_name: '_VALUE_' } }
 
         it { is_expected.to contain_package('_VALUE_') }
       end
 
       describe 'with parameter pid_file' do
-        let (:params) do
+        let(:params) do
           {
             pid_file: '_VALUE_'
           }
@@ -590,7 +590,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter port' do
-        let (:params) do
+        let(:params) do
           {
             port: '_VALUE_'
           }
@@ -604,7 +604,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter protected-mode' do
-        let (:params) do
+        let(:params) do
           {
             protected_mode: '_VALUE_'
           }
@@ -618,7 +618,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter hll_sparse_max_bytes' do
-        let (:params) do
+        let(:params) do
           {
             hll_sparse_max_bytes: '_VALUE_'
           }
@@ -632,7 +632,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter hz' do
-        let (:params) do
+        let(:params) do
           {
             hz: '_VALUE_'
           }
@@ -646,7 +646,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter latency_monitor_threshold' do
-        let (:params) do
+        let(:params) do
           {
             latency_monitor_threshold: '_VALUE_'
           }
@@ -660,7 +660,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter rdbcompression' do
-        let (:params) do
+        let(:params) do
           {
             rdbcompression: true
           }
@@ -674,7 +674,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter repl_backlog_size' do
-        let (:params) do
+        let(:params) do
           {
             repl_backlog_size: '_VALUE_'
           }
@@ -688,7 +688,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter repl_backlog_ttl' do
-        let (:params) do
+        let(:params) do
           {
             repl_backlog_ttl: '_VALUE_'
           }
@@ -702,7 +702,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter repl_disable_tcp_nodelay' do
-        let (:params) do
+        let(:params) do
           {
             repl_disable_tcp_nodelay: true
           }
@@ -716,7 +716,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter repl_ping_slave_period' do
-        let (:params) do
+        let(:params) do
           {
             repl_ping_slave_period: 1
           }
@@ -730,7 +730,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter repl_timeout' do
-        let (:params) do
+        let(:params) do
           {
             repl_timeout: 1
           }
@@ -744,7 +744,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter requirepass' do
-        let (:params) do
+        let(:params) do
           {
             requirepass: '_VALUE_'
           }
@@ -759,7 +759,7 @@ describe 'redis', type: :class do
 
       describe 'with parameter save_db_to_disk' do
         context 'true' do
-          let (:params) do
+          let(:params) do
             {
               save_db_to_disk: true
             }
@@ -773,7 +773,7 @@ describe 'redis', type: :class do
         end
 
         context 'false' do
-          let (:params) do
+          let(:params) do
             {
               save_db_to_disk: false
             }
@@ -790,7 +790,7 @@ describe 'redis', type: :class do
       describe 'with parameter save_db_to_disk_interval' do
         context 'with save_db_to_disk true' do
           context 'default' do
-            let (:params) do
+            let(:params) do
               {
                 save_db_to_disk: true
               }
@@ -804,7 +804,7 @@ describe 'redis', type: :class do
           end
 
           context 'default' do
-            let (:params) do
+            let(:params) do
               {
                 save_db_to_disk: true,
                 save_db_to_disk_interval: { '900' => '2', '300' => '11', '60' => '10011' }
@@ -821,7 +821,7 @@ describe 'redis', type: :class do
 
         context 'with save_db_to_disk false' do
           context 'default' do
-            let (:params) do
+            let(:params) do
               {
                 save_db_to_disk: false
               }
@@ -835,60 +835,60 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter: service_manage (set to false)' do
-        let (:params) { { service_manage: false } }
+        let(:params) { { service_manage: false } }
         let(:package_name) { manifest_vars[:package_name] }
 
         it { is_expected.not_to contain_service(package_name) }
       end
 
       describe 'with parameter: service_enable' do
-        let (:params) { { service_enable: true } }
+        let(:params) { { service_enable: true } }
         let(:package_name) { manifest_vars[:package_name] }
 
         it { is_expected.to contain_service(package_name).with_enable(true) }
       end
 
       describe 'with parameter: service_ensure' do
-        let (:params) { { service_ensure: '_VALUE_' } }
+        let(:params) { { service_ensure: '_VALUE_' } }
         let(:package_name) { manifest_vars[:package_name] }
 
         it { is_expected.to contain_service(package_name).with_ensure('_VALUE_') }
       end
 
       describe 'with parameter: service_group' do
-        let (:params) { { service_group: '_VALUE_' } }
+        let(:params) { { service_group: '_VALUE_' } }
 
         it { is_expected.to contain_file('/var/log/redis').with_group('_VALUE_') }
       end
 
       describe 'with parameter: service_hasrestart' do
-        let (:params) { { service_hasrestart: true } }
+        let(:params) { { service_hasrestart: true } }
         let(:package_name) { manifest_vars[:package_name] }
 
         it { is_expected.to contain_service(package_name).with_hasrestart(true) }
       end
 
       describe 'with parameter: service_hasstatus' do
-        let (:params) { { service_hasstatus: true } }
+        let(:params) { { service_hasstatus: true } }
         let(:package_name) { manifest_vars[:package_name] }
 
         it { is_expected.to contain_service(package_name).with_hasstatus(true) }
       end
 
       describe 'with parameter: service_name' do
-        let (:params) { { service_name: '_VALUE_' } }
+        let(:params) { { service_name: '_VALUE_' } }
 
         it { is_expected.to contain_service('_VALUE_').with_name('_VALUE_') }
       end
 
       describe 'with parameter: service_user' do
-        let (:params) { { service_user: '_VALUE_' } }
+        let(:params) { { service_user: '_VALUE_' } }
 
         it { is_expected.to contain_file('/var/log/redis').with_owner('_VALUE_') }
       end
 
       describe 'with parameter set_max_intset_entries' do
-        let (:params) do
+        let(:params) do
           {
             set_max_intset_entries: '_VALUE_'
           }
@@ -902,7 +902,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter slave_priority' do
-        let (:params) do
+        let(:params) do
           {
             slave_priority: '_VALUE_'
           }
@@ -916,7 +916,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter slave_read_only' do
-        let (:params) do
+        let(:params) do
           {
             slave_read_only: true
           }
@@ -930,7 +930,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter slave_serve_stale_data' do
-        let (:params) do
+        let(:params) do
           {
             slave_serve_stale_data: true
           }
@@ -945,7 +945,7 @@ describe 'redis', type: :class do
 
       describe 'with parameter: slaveof' do
         context 'binding to localhost' do
-          let (:params) do
+          let(:params) do
             {
               bind: '127.0.0.1',
               slaveof: '_VALUE_'
@@ -960,7 +960,7 @@ describe 'redis', type: :class do
         end
 
         context 'binding to external ip' do
-          let (:params) do
+          let(:params) do
             {
               bind: '10.0.0.1',
               slaveof: '_VALUE_'
@@ -976,7 +976,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter slowlog_log_slower_than' do
-        let (:params) do
+        let(:params) do
           {
             slowlog_log_slower_than: '_VALUE_'
           }
@@ -990,7 +990,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter slowlog_max_len' do
-        let (:params) do
+        let(:params) do
           {
             slowlog_max_len: '_VALUE_'
           }
@@ -1004,7 +1004,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter stop_writes_on_bgsave_error' do
-        let (:params) do
+        let(:params) do
           {
             stop_writes_on_bgsave_error: true
           }
@@ -1018,7 +1018,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter syslog_enabled' do
-        let (:params) do
+        let(:params) do
           {
             syslog_enabled: true
           }
@@ -1032,7 +1032,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter syslog_facility' do
-        let (:params) do
+        let(:params) do
           {
             syslog_enabled: true,
             syslog_facility: '_VALUE_'
@@ -1047,7 +1047,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter tcp_backlog' do
-        let (:params) do
+        let(:params) do
           {
             tcp_backlog: '_VALUE_'
           }
@@ -1061,7 +1061,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter tcp_keepalive' do
-        let (:params) do
+        let(:params) do
           {
             tcp_keepalive: '_VALUE_'
           }
@@ -1075,7 +1075,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter timeout' do
-        let (:params) do
+        let(:params) do
           {
             timeout: '_VALUE_'
           }
@@ -1089,7 +1089,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter workdir' do
-        let (:params) do
+        let(:params) do
           {
             workdir: '_VALUE_'
           }
@@ -1103,7 +1103,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter zset_max_ziplist_entries' do
-        let (:params) do
+        let(:params) do
           {
             zset_max_ziplist_entries: '_VALUE_'
           }
@@ -1117,7 +1117,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter zset_max_ziplist_value' do
-        let (:params) do
+        let(:params) do
           {
             zset_max_ziplist_value: '_VALUE_'
           }
@@ -1131,7 +1131,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter cluster_enabled-false' do
-        let (:params) do
+        let(:params) do
           {
             cluster_enabled: false
           }
@@ -1145,7 +1145,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter cluster_enabled-true' do
-        let (:params) do
+        let(:params) do
           {
             cluster_enabled: true
           }
@@ -1159,7 +1159,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter cluster_config_file' do
-        let (:params) do
+        let(:params) do
           {
             cluster_enabled: true,
             cluster_config_file: '_VALUE_'
@@ -1174,7 +1174,7 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter cluster_config_file' do
-        let (:params) do
+        let(:params) do
           {
             cluster_enabled: true,
             cluster_node_timeout: '_VALUE_'
