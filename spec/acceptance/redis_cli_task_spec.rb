@@ -2,7 +2,6 @@
 require 'spec_helper_acceptance'
 
 describe 'redis-cli task' do
-
   it 'install redis-cli with the class' do
     pp = <<-EOS
     Exec {
@@ -15,7 +14,7 @@ describe 'redis-cli task' do
     EOS
 
     # Apply twice to ensure no errors the second time.
-    apply_manifest(pp, :catch_failures => true)
+    apply_manifest(pp, catch_failures: true)
   end
 
   describe 'ping' do

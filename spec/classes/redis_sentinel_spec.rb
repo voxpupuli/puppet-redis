@@ -34,20 +34,20 @@ loglevel notice
 logfile /tmp/barn-sentinel.log
 EOF
 
-describe 'redis::sentinel', :type => :class do
+describe 'redis::sentinel', type: :class do
   let (:facts) { debian_facts }
 
   let :pre_condition do
     [
-     'class { redis: }'
+      'class { redis: }'
     ]
   end
 
   describe 'without parameters' do
+    it { is_expected.to create_class('redis::sentinel') }
 
-    it { should create_class('redis::sentinel') }
-
-    it { should contain_file('/etc/redis/redis-sentinel.conf.puppet').with(
+    it {
+      is_expected.to contain_file('/etc/redis/redis-sentinel.conf.puppet').with(
         'ensure'  => 'present',
         'mode'    => '0644',
         'owner'   => 'redis',
@@ -55,58 +55,52 @@ describe 'redis::sentinel', :type => :class do
       )
     }
 
-    it { should contain_service('redis-sentinel').with(
+    it {
+      is_expected.to contain_service('redis-sentinel').with(
         'ensure'     => 'running',
         'enable'     => 'true',
         'hasrestart' => 'true',
-        'hasstatus'  => 'true',
+        'hasstatus'  => 'true'
       )
     }
-
   end
 
   describe 'with custom parameters' do
-    let (:params) {
+    let (:params) do
       {
-        :auth_pass              => 'password',
-        :sentinel_bind          => '1.2.3.4',
-        :master_name            => 'cow',
-        :down_after             => 6000,
-        :log_file               => '/tmp/barn-sentinel.log',
-        :failover_timeout       => 28000,
-        :notification_script    => 'bar.sh',
-        :client_reconfig_script => 'foo.sh'
+        auth_pass: 'password',
+        sentinel_bind: '1.2.3.4',
+        master_name: 'cow',
+        down_after: 6000,
+        log_file: '/tmp/barn-sentinel.log',
+        failover_timeout: 28_000,
+        notification_script: 'bar.sh',
+        client_reconfig_script: 'foo.sh'
       }
-    }
+    end
 
-    it { should create_class('redis::sentinel') }
+    it { is_expected.to create_class('redis::sentinel') }
 
-    it { should contain_file('/etc/redis/redis-sentinel.conf.puppet').with(
+    it {
+      is_expected.to contain_file('/etc/redis/redis-sentinel.conf.puppet').with(
         'content' => $expected_params_content
       )
     }
   end
 
   describe 'on Debian Jessie' do
+    let (:facts) { debian_facts.merge(operatingsystemmajrelease: '8') }
 
-    let (:facts) { debian_facts.merge({
-      :operatingsystemmajrelease => '8',
-    }) }
+    it { is_expected.to create_class('redis::sentinel') }
 
-    it { should create_class('redis::sentinel') }
-
-    it { should_not contain_package('redis-sentinel').with_ensure('present') }
+    it { is_expected.not_to contain_package('redis-sentinel').with_ensure('present') }
   end
 
   describe 'on Debian Stretch' do
+    let (:facts) { debian_facts.merge(operatingsystemmajrelease: '9') }
 
-    let (:facts) { debian_facts.merge({
-      :operatingsystemmajrelease => '9',
-    }) }
+    it { is_expected.to create_class('redis::sentinel') }
 
-    it { should create_class('redis::sentinel') }
-
-    it { should contain_package('redis-sentinel').with_ensure('present') }
+    it { is_expected.to contain_package('redis-sentinel').with_ensure('present') }
   end
-
 end

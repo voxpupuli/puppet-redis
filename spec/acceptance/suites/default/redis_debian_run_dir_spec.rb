@@ -2,8 +2,8 @@ require 'spec_helper_acceptance'
 
 # since this test polutes others, we'll only run it if specifically asked
 if ENV['RUN_BACKPORT_TEST'] == 'yes'
-  describe 'redis', :if => (fact('operatingsystem') == 'Debian') do
-    it 'should run with newer Debian package' do
+  describe 'redis', if: (fact('operatingsystem') == 'Debian') do
+    it 'runs with newer Debian package' do
       pp = <<-EOS
 
       include ::apt
@@ -28,27 +28,27 @@ if ENV['RUN_BACKPORT_TEST'] == 'yes'
       }
       EOS
 
-      apply_manifest(pp, :catch_failures => true)
-      apply_manifest(pp, :catch_change   => true)
+      apply_manifest(pp, catch_failures: true)
+      apply_manifest(pp, catch_change: true)
     end
 
     describe package('redis-server') do
-      it { should be_installed }
+      it { is_expected.to be_installed }
     end
 
     describe service('redis-server') do
-      it { should be_running }
+      it { is_expected.to be_running }
     end
 
     context 'redis should respond to ping command' do
       describe command('redis-cli ping') do
-        its(:stdout) { should match /PONG/ }
+        its(:stdout) { is_expected.to match %r{PONG} }
       end
     end
 
     context 'redis log should be clean' do
       describe command('journalctl --no-pager') do
-        its(:stdout) { should_not match /Failed at step RUNTIME_DIRECTORY/ }
+        its(:stdout) { is_expected.not_to match %r{Failed at step RUNTIME_DIRECTORY} }
       end
     end
   end

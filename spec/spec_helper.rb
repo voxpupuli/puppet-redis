@@ -7,7 +7,7 @@ require 'puppet/indirector/catalog/compiler'
 
 # Magic to add a catalog.exported_resources accessor
 class Puppet::Resource::Catalog::Compiler
-  alias_method :filter_exclude_exported_resources, :filter
+  alias filter_exclude_exported_resources filter
   def filter(catalog)
     filter_exclude_exported_resources(catalog).tap do |filtered|
       # Every time we filter a catalog, add a .exported_resources to it.
@@ -33,21 +33,20 @@ end
 def get_spec_fixtures_dir
   spec_dir = File.expand_path(File.dirname(__FILE__) + '/fixtures')
 
-  raise "The directory #{spec_dir} does not exist" unless Dir.exists? spec_dir
+  raise "The directory #{spec_dir} does not exist" unless Dir.exist? spec_dir
 
   spec_dir
 end
 
-def read_fixture_file filename
+def read_fixture_file(filename)
   filename = get_spec_fixtures_dir + "/#{filename}"
 
-  raise "The fixture file #{filename} doesn't exist" unless File.exists? filename
+  raise "The fixture file #{filename} doesn't exist" unless File.exist? filename
 
   File.read(filename)
 end
 
 def manifest_vars
-
   vars = {}
 
   case facts[:osfamily].to_s
@@ -79,83 +78,83 @@ end
 
 def centos_facts
   {
-    :operatingsystem => 'CentOS',
-    :osfamily        => 'RedHat',
-    :puppetversion   => '4.5.2',
+    operatingsystem: 'CentOS',
+    osfamily: 'RedHat',
+    puppetversion: '4.5.2'
   }
 end
 
 def debian_facts
   {
-    :operatingsystem           => 'Debian',
-    :osfamily                  => 'Debian',
-    :operatingsystemmajrelease => '8',
-    :puppetversion             => '4.5.2',
-    :lsbdistcodename           => 'jessie',
+    operatingsystem: 'Debian',
+    osfamily: 'Debian',
+    operatingsystemmajrelease: '8',
+    puppetversion: '4.5.2',
+    lsbdistcodename: 'jessie'
   }
 end
 
 def freebsd_facts
   {
-    :operatingsystem => 'FreeBSD',
-    :osfamily        => 'FreeBSD',
-    :puppetversion   => '4.5.2',
+    operatingsystem: 'FreeBSD',
+    osfamily: 'FreeBSD',
+    puppetversion: '4.5.2'
   }
 end
 
 def centos_6_facts
   {
-    :operatingsystem => 'CentOS',
-    :osfamily        => 'RedHat',
-    :operatingsystemmajrelease => '6',
-    :puppetversion   => '4.5.2',
+    operatingsystem: 'CentOS',
+    osfamily: 'RedHat',
+    operatingsystemmajrelease: '6',
+    puppetversion: '4.5.2'
   }
 end
 
 def centos_7_facts
   {
-    :operatingsystem => 'CentOS',
-    :osfamily        => 'RedHat',
-    :operatingsystemmajrelease => '7',
-    :puppetversion   => '4.5.2',
+    operatingsystem: 'CentOS',
+    osfamily: 'RedHat',
+    operatingsystemmajrelease: '7',
+    puppetversion: '4.5.2'
   }
 end
 
 def debian_wheezy_facts
   {
-    :operatingsystem           => 'Debian',
-    :osfamily                  => 'Debian',
-    :operatingsystemmajrelease => '8',
-    :puppetversion             => '4.5.2',
-    :lsbdistcodename           => 'wheezy',
+    operatingsystem: 'Debian',
+    osfamily: 'Debian',
+    operatingsystemmajrelease: '8',
+    puppetversion: '4.5.2',
+    lsbdistcodename: 'wheezy'
   }
 end
 
 def ubuntu_1404_facts
   {
-    :operatingsystem           => 'Ubuntu',
-    :osfamily                  => 'Debian',
-    :operatingsystemmajrelease => '14.04',
-    :puppetversion             => '4.5.2',
-    :lsbdistcodename           => 'trusty',
+    operatingsystem: 'Ubuntu',
+    osfamily: 'Debian',
+    operatingsystemmajrelease: '14.04',
+    puppetversion: '4.5.2',
+    lsbdistcodename: 'trusty'
   }
 end
 
 def ubuntu_1604_facts
   {
-    :operatingsystem           => 'Ubuntu',
-    :osfamily                  => 'Debian',
-    :operatingsystemmajrelease => '16.04',
-    :puppetversion             => '4.5.2',
-    :lsbdistcodename           => 'xenial',
+    operatingsystem: 'Ubuntu',
+    osfamily: 'Debian',
+    operatingsystemmajrelease: '16.04',
+    puppetversion: '4.5.2',
+    lsbdistcodename: 'xenial'
   }
 end
 
 def archlinux_facts
   {
-    :operatingsystem => 'Archlinux',
-    :osfamily        => 'Archlinux',
-    :puppetversion   => '4.5.2',
+    operatingsystem: 'Archlinux',
+    osfamily: 'Archlinux',
+    puppetversion: '4.5.2'
   }
 end
 
