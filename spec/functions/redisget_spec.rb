@@ -2,9 +2,9 @@ require 'spec_helper'
 require 'mock_redis'
 require 'redis'
 
-REDIS_URL='redis://localhost:6379'
-LOCAL_BROKEN_URL='redis://localhost:1234'
-REMOTE_BROKEN_URL='redis://redis.example.com:1234'
+REDIS_URL='redis://localhost:6379'.freeze
+LOCAL_BROKEN_URL='redis://localhost:1234'.freeze
+REMOTE_BROKEN_URL='redis://redis.example.com:1234'.freeze
 
 describe 'redisget' do
   context 'should error if connection to remote redis server cannot be made and no default is specified' do
