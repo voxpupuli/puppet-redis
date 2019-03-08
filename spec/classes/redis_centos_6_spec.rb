@@ -12,7 +12,7 @@ describe 'redis' do
           centos_6_facts.merge(redis_server_version: nil,
                                puppetversion: Puppet.version)
         end
-        let (:params) { { package_ensure: '3.2.1' } }
+        let(:params) { { package_ensure: '3.2.1' } }
 
         it { is_expected.to contain_file('/etc/redis.conf.puppet').without('content' => %r{^hash-max-zipmap-entries}) }
         it { is_expected.to contain_file('/etc/redis.conf.puppet').with('content' => %r{^hash-max-ziplist-entries}) }
@@ -25,7 +25,7 @@ describe 'redis' do
           centos_6_facts.merge(redis_server_version: nil,
                                puppetversion: Puppet.version)
         end
-        let (:params) { { package_ensure: '4.0-rc3' } }
+        let(:params) { { package_ensure: '4.0-rc3' } }
 
         it { is_expected.to contain_file('/etc/redis.conf.puppet').without('content' => %r{^hash-max-zipmap-entries}) }
         it { is_expected.to contain_file('/etc/redis.conf.puppet').with('content' => %r{^hash-max-ziplist-entries}) }

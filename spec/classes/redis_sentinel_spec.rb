@@ -35,7 +35,7 @@ logfile /tmp/barn-sentinel.log
 EOF
 
 describe 'redis::sentinel', type: :class do
-  let (:facts) { debian_facts }
+  let(:facts) { debian_facts }
 
   let :pre_condition do
     [
@@ -66,7 +66,7 @@ describe 'redis::sentinel', type: :class do
   end
 
   describe 'with custom parameters' do
-    let (:params) do
+    let(:params) do
       {
         auth_pass: 'password',
         sentinel_bind: '1.2.3.4',
@@ -89,7 +89,7 @@ describe 'redis::sentinel', type: :class do
   end
 
   describe 'on Debian Jessie' do
-    let (:facts) { debian_facts.merge(operatingsystemmajrelease: '8') }
+    let(:facts) { debian_facts.merge(operatingsystemmajrelease: '8') }
 
     it { is_expected.to create_class('redis::sentinel') }
 
@@ -97,7 +97,7 @@ describe 'redis::sentinel', type: :class do
   end
 
   describe 'on Debian Stretch' do
-    let (:facts) { debian_facts.merge(operatingsystemmajrelease: '9') }
+    let(:facts) { debian_facts.merge(operatingsystemmajrelease: '9') }
 
     it { is_expected.to create_class('redis::sentinel') }
 
