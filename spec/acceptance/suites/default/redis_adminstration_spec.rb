@@ -10,8 +10,8 @@ unless default['hypervisor'] =~ /docker/
       EOS
 
       # Apply twice to ensure no errors the second time.
-      apply_manifest(pp, :catch_failures => true)
-      apply_manifest(pp, :catch_changes => true)
+      apply_manifest(pp, catch_failures: true)
+      apply_manifest(pp, catch_changes: true)
     end
     it 'should set overcommit_memory to 1 in a seperate sysctl file' do
       shell('/bin/cat /proc/sys/vm/overcommit_memory') do |result|
@@ -29,7 +29,7 @@ unless default['hypervisor'] =~ /docker/
       end
     end
     it 'should show no warnings about kernel settings in logs' do
-      shell('timeout 1s redis-server --port 7777 --loglevel verbose', { :acceptable_exit_codes => [0,124] }) do |result|
+      shell('timeout 1s redis-server --port 7777 --loglevel verbose', { acceptable_exit_codes: [0,124] }) do |result|
         expect(result.stdout).not_to match(/WARNING/)
         expect(result.exit_code).to match(124)
       end

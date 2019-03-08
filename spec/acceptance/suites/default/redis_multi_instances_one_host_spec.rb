@@ -1,7 +1,7 @@
 require 'spec_helper_acceptance'
 
 # Cant get this to work on Debian, add exception for now
-describe 'redis::instance', :unless => (fact('operatingsystem') == 'Debian') do
+describe 'redis::instance', unless: (fact('operatingsystem') == 'Debian') do
   case fact('osfamily')
   when 'Debian'
     config_path  = '/etc/redis'
@@ -35,8 +35,8 @@ describe 'redis::instance', :unless => (fact('operatingsystem') == 'Debian') do
     EOS
 
     # Apply twice to ensure no errors the second time.
-    apply_manifest(pp, :catch_failures => true)
-    apply_manifest(pp, :catch_changes => true)
+    apply_manifest(pp, catch_failures: true)
+    apply_manifest(pp, catch_changes: true)
   end
 
   describe package(redis_name) do

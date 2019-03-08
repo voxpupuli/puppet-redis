@@ -15,7 +15,7 @@ describe 'redis-cli task' do
     EOS
 
     # Apply twice to ensure no errors the second time.
-    apply_manifest(pp, :catch_failures => true)
+    apply_manifest(pp, catch_failures: true)
   end
 
   describe 'ping' do

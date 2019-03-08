@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'redis::instance', :type => :define do
+describe 'redis::instance', type: :define do
   let :pre_condition do
     'class { "redis":
       default_install => false,
@@ -28,7 +28,7 @@ describe 'redis::instance', :type => :define do
       context '16.04' do
         let(:facts) {
           ubuntu_1604_facts.merge({
-            :service_provider => 'systemd',
+            service_provider: 'systemd',
           })
         }
         it { should contain_file('/etc/redis/redis-server-app2.conf.puppet').with('content' => /^bind 127.0.0.1/) }
@@ -59,7 +59,7 @@ describe 'redis::instance', :type => :define do
       context '7' do
         let(:facts) {
           centos_7_facts.merge({
-            :service_provider => 'systemd',
+            service_provider: 'systemd',
           })
         }
         it { should contain_file('/etc/redis-server-app2.conf.puppet').with('content' => /^bind 127.0.0.1/) }

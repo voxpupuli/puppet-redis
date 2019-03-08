@@ -13,7 +13,7 @@ describe 'redis' do
 
         let(:facts) {
           ubuntu_1404_facts.merge({
-            :redis_server_version => nil,
+            redis_server_version: nil,
           })
         }
 
@@ -27,10 +27,10 @@ describe 'redis' do
 
         let(:facts) {
           ubuntu_1404_facts.merge({
-            :redis_server_version => nil,
+            redis_server_version: nil,
           })
         }
-        let (:params) { { :package_ensure => '3.2.1' } }
+        let (:params) { { package_ensure: '3.2.1' } }
 
         it { should contain_file('/etc/redis/redis.conf.puppet').with('content' => /^hash-max-ziplist-entries/) }
         it { should contain_file('/etc/redis/redis.conf.puppet').with('content' => /^protected-mode/) }
@@ -42,10 +42,10 @@ describe 'redis' do
 
         let(:facts) {
           ubuntu_1404_facts.merge({
-            :redis_server_version => nil,
+            redis_server_version: nil,
           })
         }
-        let (:params) { { :package_ensure => '3:3.2.1' } }
+        let (:params) { { package_ensure: '3:3.2.1' } }
 
         it { should contain_file('/etc/redis/redis.conf.puppet').with('content' => /^hash-max-ziplist-entries/) }
         it { should contain_file('/etc/redis/redis.conf.puppet').with('content' => /^protected-mode/) }
@@ -57,10 +57,10 @@ describe 'redis' do
 
         let(:facts) {
           ubuntu_1404_facts.merge({
-            :redis_server_version => nil,
+            redis_server_version: nil,
           })
         }
-        let (:params) { { :package_ensure => '4:4.0-rc3' } }
+        let (:params) { { package_ensure: '4:4.0-rc3' } }
 
         it { should contain_file('/etc/redis/redis.conf.puppet').with('content' => /^hash-max-ziplist-entries/) }
         it { should contain_file('/etc/redis/redis.conf.puppet').without('content' => /^protected-mode/) }
@@ -71,10 +71,10 @@ describe 'redis' do
 
         let(:facts) {
           ubuntu_1404_facts.merge({
-            :redis_server_version => nil,
+            redis_server_version: nil,
           })
         }
-        let (:params) { { :package_ensure => '4.0-rc3' } }
+        let (:params) { { package_ensure: '4.0-rc3' } }
 
         it { should contain_file('/etc/redis/redis.conf.puppet').with('content' => /^hash-max-ziplist-entries/) }
         it { should contain_file('/etc/redis/redis.conf.puppet').without('content' => /^protected-mode/) }
@@ -86,7 +86,7 @@ describe 'redis' do
 
         let(:facts) {
           ubuntu_1404_facts.merge({
-            :redis_server_version => '2.8.4',
+            redis_server_version: '2.8.4',
           })
         }
 
@@ -100,7 +100,7 @@ describe 'redis' do
 
         let(:facts) {
           ubuntu_1404_facts.merge({
-            :redis_server_version => '3.2.1',
+            redis_server_version: '3.2.1',
           })
         }
 

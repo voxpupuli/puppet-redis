@@ -34,7 +34,7 @@ loglevel notice
 logfile /tmp/barn-sentinel.log
 EOF
 
-describe 'redis::sentinel', :type => :class do
+describe 'redis::sentinel', type: :class do
   let (:facts) { debian_facts }
 
   let :pre_condition do
@@ -68,14 +68,14 @@ describe 'redis::sentinel', :type => :class do
   describe 'with custom parameters' do
     let (:params) {
       {
-        :auth_pass              => 'password',
-        :sentinel_bind          => '1.2.3.4',
-        :master_name            => 'cow',
-        :down_after             => 6000,
-        :log_file               => '/tmp/barn-sentinel.log',
-        :failover_timeout       => 28000,
-        :notification_script    => 'bar.sh',
-        :client_reconfig_script => 'foo.sh'
+        auth_pass: 'password',
+        sentinel_bind: '1.2.3.4',
+        master_name: 'cow',
+        down_after: 6000,
+        log_file: '/tmp/barn-sentinel.log',
+        failover_timeout: 28000,
+        notification_script: 'bar.sh',
+        client_reconfig_script: 'foo.sh'
       }
     }
 
@@ -90,7 +90,7 @@ describe 'redis::sentinel', :type => :class do
   describe 'on Debian Jessie' do
 
     let (:facts) { debian_facts.merge({
-      :operatingsystemmajrelease => '8',
+      operatingsystemmajrelease: '8',
     }) }
 
     it { should create_class('redis::sentinel') }
@@ -101,7 +101,7 @@ describe 'redis::sentinel', :type => :class do
   describe 'on Debian Stretch' do
 
     let (:facts) { debian_facts.merge({
-      :operatingsystemmajrelease => '9',
+      operatingsystemmajrelease: '9',
     }) }
 
     it { should create_class('redis::sentinel') }

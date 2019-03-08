@@ -2,7 +2,7 @@ require 'spec_helper_acceptance'
 
 # since this test polutes others, we'll only run it if specifically asked
 if ENV['RUN_BACKPORT_TEST'] == 'yes'
-  describe 'redis', :if => (fact('operatingsystem') == 'Debian') do
+  describe 'redis', if: (fact('operatingsystem') == 'Debian') do
     it 'should run with newer Debian package' do
       pp = <<-EOS
 
@@ -28,8 +28,8 @@ if ENV['RUN_BACKPORT_TEST'] == 'yes'
       }
       EOS
 
-      apply_manifest(pp, :catch_failures => true)
-      apply_manifest(pp, :catch_change   => true)
+      apply_manifest(pp, catch_failures: true)
+      apply_manifest(pp, catch_change: true)
     end
 
     describe package('redis-server') do

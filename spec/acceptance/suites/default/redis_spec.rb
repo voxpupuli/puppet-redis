@@ -22,8 +22,8 @@ describe 'redis' do
     EOS
 
     # Apply twice to ensure no errors the second time.
-    apply_manifest(pp, :catch_failures => true)
-    apply_manifest(pp, :catch_changes => true)
+    apply_manifest(pp, catch_failures: true)
+    apply_manifest(pp, catch_changes: true)
   end
 
   it 'should return a fact' do
@@ -32,7 +32,7 @@ describe 'redis' do
     EOS
 
     # Check output for fact string
-    apply_manifest(pp, :catch_failures => true) do |r|
+    apply_manifest(pp, catch_failures: true) do |r|
       expect(r.stdout).to match(/Redis Version: [\d+.]+/)
     end
   end

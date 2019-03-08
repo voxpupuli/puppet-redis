@@ -21,8 +21,8 @@ describe 'redisget() function' do
     EOS
 
     # Apply twice to ensure no errors the second time.
-    apply_manifest(pp, :catch_failures => true)
-    apply_manifest(pp, :catch_changes => true)
+    apply_manifest(pp, catch_failures: true)
+    apply_manifest(pp, catch_changes: true)
 
     shell('redis-cli SET mykey "Hello"') do |result|
       expect(result.stdout).to match('OK')
@@ -41,7 +41,7 @@ describe 'redisget() function' do
     EOS
 
     # Check output for function return value
-    apply_manifest(pp, :catch_failures => true) do |r|
+    apply_manifest(pp, catch_failures: true) do |r|
       expect(r.stdout).to match(/mykey value: Hello/)
     end
   end
@@ -54,7 +54,7 @@ describe 'redisget() function' do
     EOS
 
     # Check output for function return value
-    apply_manifest(pp, :catch_failures => true) do |r|
+    apply_manifest(pp, catch_failures: true) do |r|
       expect(r.stdout).to match(/mykey value: Hello/)
     end
   end
@@ -69,7 +69,7 @@ describe 'redisget() function' do
     EOS
 
     # Check output for function return value
-    apply_manifest(pp, :catch_failures => true) do |r|
+    apply_manifest(pp, catch_failures: true) do |r|
       expect(r.stdout).to match(/foo_key value was empty string/)
     end
   end
@@ -82,7 +82,7 @@ describe 'redisget() function' do
     EOS
 
     # Check output for function return value
-    apply_manifest(pp, :catch_failures => true) do |r|
+    apply_manifest(pp, catch_failures: true) do |r|
       expect(r.stdout).to match(/default_value/)
     end
   end
@@ -96,7 +96,7 @@ describe 'redisget() function' do
     EOS
 
     # Check output for function return value
-    apply_manifest(pp, :catch_failures => true) do |r|
+    apply_manifest(pp, catch_failures: true) do |r|
       expect(r.stdout).to match(/default_value/)
     end
   end
@@ -110,7 +110,7 @@ describe 'redisget() function' do
     EOS
 
     # Check output for error when can't connect to bogus redis
-    apply_manifest(pp, :acceptable_exit_codes => [1]) do |r|
+    apply_manifest(pp, acceptable_exit_codes: [1]) do |r|
       expect(r.stderr).to match(/Error connecting to Redis on 127.0.0.1:12345 \(Errno::ECONNREFUSED\)/)
     end
   end

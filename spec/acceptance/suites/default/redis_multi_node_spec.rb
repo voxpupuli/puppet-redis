@@ -25,7 +25,7 @@ if hosts.length >= 3
             requirepass => 'foobared',
           }
           EOS
-          apply_manifest_on(host, pp, :catch_failures => true)
+          apply_manifest_on(host, pp, catch_failures: true)
 
           command_to_check = "redis-cli -h #{master_ip_address} -a foobared info replication"
 
@@ -49,7 +49,7 @@ if hosts.length >= 3
           }
 
           EOS
-          apply_manifest_on(host, pp, :catch_failures => true)
+          apply_manifest_on(host, pp, catch_failures: true)
 
           on host, 'redis-cli -h $(facter ipaddress_enp0s8) info replication' do
             expect(stdout).to match(/^role:slave/)

@@ -33,7 +33,7 @@ describe 'redis::ulimit' do
   context 'with managed_by_cluster_manager true but not managing service' do
     let(:facts) {
       debian_facts.merge({
-        :service_provider => 'systemd',
+        service_provider: 'systemd',
       })
     }
     let :pre_condition do
@@ -62,7 +62,7 @@ describe 'redis::ulimit' do
   context 'on a systemd system' do
     let(:facts) {
       debian_facts.merge({
-        :service_provider => 'systemd',
+        service_provider: 'systemd',
       })
     }
     let :pre_condition do
@@ -106,7 +106,7 @@ describe 'redis::ulimit' do
     context 'Ubuntu 1404 system' do
       let(:facts) {
         ubuntu_1404_facts.merge({
-          :service_provider => 'debian',
+          service_provider: 'debian',
         })
       }
       let :pre_condition do
@@ -134,7 +134,7 @@ describe 'redis::ulimit' do
     context 'CentOS 6 system' do
       let(:facts) {
         centos_6_facts.merge({
-          :service_provider => 'redhat',
+          service_provider: 'redhat',
         })
       }
       let :pre_condition do

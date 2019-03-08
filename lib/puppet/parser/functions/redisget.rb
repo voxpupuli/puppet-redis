@@ -1,7 +1,7 @@
 require 'redis'
 
 module Puppet::Parser::Functions
-  newfunction(:redisget, :type => :rvalue, :doc => <<-DOC
+  newfunction(:redisget, type: :rvalue, doc: <<-DOC
 Returns the value of the key being looked up or nil if the key does not
 exist. Takes two arguments with an optional third. The first being a string
 value of the key to be looked up, the second is the URL to the Redis service
@@ -34,7 +34,7 @@ DOC
     raise(Puppet::ParseError, "redisget(): Wrong argument type given (#{url.class} for String) for arg2 (url)") if url.is_a?(String) == false
 
     begin
-      Redis.new(:url => url).get(key) || default
+      Redis.new(url: url).get(key) || default
     rescue Redis::CannotConnectError, SocketError => e
       raise Puppet::Error, "connection to redis server failed - #{e}" unless default
       debug "Connection to redis failed with #{e} - Returning default value of #{default}"
