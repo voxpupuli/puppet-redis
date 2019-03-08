@@ -33,7 +33,7 @@ describe 'redis' do
 
     # Check output for fact string
     apply_manifest(pp, catch_failures: true) do |r|
-      expect(r.stdout).to match(/Redis Version: [\d+.]+/)
+      expect(r.stdout).to match(%r{Redis Version: [\d+.]+})
     end
   end
 
@@ -47,7 +47,7 @@ describe 'redis' do
 
   context 'redis should respond to ping command' do
     describe command('redis-cli ping') do
-      its(:stdout) { is_expected.to match /PONG/ }
+      its(:stdout) { is_expected.to match %r{PONG} }
     end
   end
 end

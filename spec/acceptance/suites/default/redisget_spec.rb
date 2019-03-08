@@ -41,7 +41,7 @@ describe 'redisget() function' do
 
     # Check output for function return value
     apply_manifest(pp, catch_failures: true) do |r|
-      expect(r.stdout).to match(/mykey value: Hello/)
+      expect(r.stdout).to match(%r{mykey value: Hello})
     end
   end
 
@@ -54,7 +54,7 @@ describe 'redisget() function' do
 
     # Check output for function return value
     apply_manifest(pp, catch_failures: true) do |r|
-      expect(r.stdout).to match(/mykey value: Hello/)
+      expect(r.stdout).to match(%r{mykey value: Hello})
     end
   end
 
@@ -69,7 +69,7 @@ describe 'redisget() function' do
 
     # Check output for function return value
     apply_manifest(pp, catch_failures: true) do |r|
-      expect(r.stdout).to match(/foo_key value was empty string/)
+      expect(r.stdout).to match(%r{foo_key value was empty string})
     end
   end
 
@@ -82,7 +82,7 @@ describe 'redisget() function' do
 
     # Check output for function return value
     apply_manifest(pp, catch_failures: true) do |r|
-      expect(r.stdout).to match(/default_value/)
+      expect(r.stdout).to match(%r{default_value})
     end
   end
 
@@ -96,7 +96,7 @@ describe 'redisget() function' do
 
     # Check output for function return value
     apply_manifest(pp, catch_failures: true) do |r|
-      expect(r.stdout).to match(/default_value/)
+      expect(r.stdout).to match(%r{default_value})
     end
   end
 
@@ -110,7 +110,7 @@ describe 'redisget() function' do
 
     # Check output for error when can't connect to bogus redis
     apply_manifest(pp, acceptable_exit_codes: [1]) do |r|
-      expect(r.stderr).to match(/Error connecting to Redis on 127.0.0.1:12345 \(Errno::ECONNREFUSED\)/)
+      expect(r.stderr).to match(%r{Error connecting to Redis on 127.0.0.1:12345 \(Errno::ECONNREFUSED\)})
     end
   end
 end

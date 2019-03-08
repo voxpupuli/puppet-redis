@@ -29,7 +29,7 @@ if hosts.length >= 3
           command_to_check = "redis-cli -h #{master_ip_address} -a foobared info replication"
 
           on host, command_to_check do
-            expect(stdout).to match(/^role:master/)
+            expect(stdout).to match(%r{^role:master})
           end
         end
       end
@@ -50,7 +50,7 @@ if hosts.length >= 3
           apply_manifest_on(host, pp, catch_failures: true)
 
           on host, 'redis-cli -h $(facter ipaddress_enp0s8) info replication' do
-            expect(stdout).to match(/^role:slave/)
+            expect(stdout).to match(%r{^role:slave})
           end
         end
       end
@@ -64,7 +64,7 @@ if hosts.length >= 3
           sleep(5)
 
           on host, command_to_check do
-            expect(stdout).to match(/^connected_slaves:2/)
+            expect(stdout).to match(%r{^connected_slaves:2})
           end
         end
       end

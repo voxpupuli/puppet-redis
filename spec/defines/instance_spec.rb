@@ -17,7 +17,7 @@ describe 'redis::instance', type: :define do
           ubuntu_1404_facts
         end
 
-        it { is_expected.to contain_file('/etc/redis/redis-server-app2.conf.puppet').with('content' => /^bind 127.0.0.1/) }
+        it { is_expected.to contain_file('/etc/redis/redis-server-app2.conf.puppet').with('content' => %r{^bind 127.0.0.1}) }
         it { is_expected.to contain_file('/etc/redis/redis-server-app2.conf.puppet').with('content' => /^logfile \/var\/log\/redis\/redis-server-app2.log/) }
         it { is_expected.to contain_file('/etc/redis/redis-server-app2.conf.puppet').with('content' => /^dir \/var\/lib\/redis\/redis-server-app2/) }
         it { is_expected.to contain_file('/etc/redis/redis-server-app2.conf.puppet').with('content' => /^unixsocket \/var\/run\/redis\/redis-server-app2.sock/) }
@@ -32,7 +32,7 @@ describe 'redis::instance', type: :define do
           ubuntu_1604_facts.merge(service_provider: 'systemd')
         end
 
-        it { is_expected.to contain_file('/etc/redis/redis-server-app2.conf.puppet').with('content' => /^bind 127.0.0.1/) }
+        it { is_expected.to contain_file('/etc/redis/redis-server-app2.conf.puppet').with('content' => %r{^bind 127.0.0.1}) }
         it { is_expected.to contain_file('/etc/redis/redis-server-app2.conf.puppet').with('content' => /^logfile \/var\/log\/redis\/redis-server-app2.log/) }
         it { is_expected.to contain_file('/etc/redis/redis-server-app2.conf.puppet').with('content' => /^dir \/var\/lib\/redis\/redis-server-app2/) }
         it { is_expected.to contain_file('/etc/redis/redis-server-app2.conf.puppet').with('content' => /^unixsocket \/var\/run\/redis\/redis-server-app2.sock/) }
@@ -48,7 +48,7 @@ describe 'redis::instance', type: :define do
           centos_6_facts
         end
 
-        it { is_expected.to contain_file('/etc/redis-server-app2.conf.puppet').with('content' => /^bind 127.0.0.1/) }
+        it { is_expected.to contain_file('/etc/redis-server-app2.conf.puppet').with('content' => %r{^bind 127.0.0.1}) }
         it { is_expected.to contain_file('/etc/redis-server-app2.conf.puppet').with('content' => /^logfile \/var\/log\/redis\/redis-server-app2.log/) }
         it { is_expected.to contain_file('/etc/redis-server-app2.conf.puppet').with('content' => /^dir \/var\/lib\/redis\/redis-server-app2/) }
         it { is_expected.to contain_file('/etc/redis-server-app2.conf.puppet').with('content' => /^unixsocket \/var\/run\/redis\/redis-server-app2.sock/) }
@@ -63,7 +63,7 @@ describe 'redis::instance', type: :define do
           centos_7_facts.merge(service_provider: 'systemd')
         end
 
-        it { is_expected.to contain_file('/etc/redis-server-app2.conf.puppet').with('content' => /^bind 127.0.0.1/) }
+        it { is_expected.to contain_file('/etc/redis-server-app2.conf.puppet').with('content' => %r{^bind 127.0.0.1}) }
         it { is_expected.to contain_file('/etc/redis-server-app2.conf.puppet').with('content' => /^logfile \/var\/log\/redis\/redis-server-app2.log/) }
         it { is_expected.to contain_file('/etc/redis-server-app2.conf.puppet').with('content' => /^dir \/var\/lib\/redis\/redis-server-app2/) }
         it { is_expected.to contain_file('/etc/redis-server-app2.conf.puppet').with('content' => /^unixsocket \/var\/run\/redis\/redis-server-app2.sock/) }

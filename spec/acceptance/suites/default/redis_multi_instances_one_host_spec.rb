@@ -52,20 +52,20 @@ describe 'redis::instance', unless: (fact('operatingsystem') == 'Debian') do
   end
 
   describe file("#{config_path}/redis-server-redis1.conf") do
-    its(:content) { is_expected.to match /port 7777/ }
+    its(:content) { is_expected.to match %r{port 7777} }
   end
 
   describe file("#{config_path}/redis-server-redis2.conf") do
-    its(:content) { is_expected.to match /port 8888/ }
+    its(:content) { is_expected.to match %r{port 8888} }
   end
 
   context 'redis should respond to ping command' do
     describe command('redis-cli -h 127.0.0.1 -p 7777 ping') do
-      its(:stdout) { is_expected.to match /PONG/ }
+      its(:stdout) { is_expected.to match %r{PONG} }
     end
 
     describe command('redis-cli -h 127.0.0.1 -p 8888 ping') do
-      its(:stdout) { is_expected.to match /PONG/ }
+      its(:stdout) { is_expected.to match %r{PONG} }
     end
   end
 end

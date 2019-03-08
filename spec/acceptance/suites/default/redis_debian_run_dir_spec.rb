@@ -42,13 +42,13 @@ if ENV['RUN_BACKPORT_TEST'] == 'yes'
 
     context 'redis should respond to ping command' do
       describe command('redis-cli ping') do
-        its(:stdout) { is_expected.to match /PONG/ }
+        its(:stdout) { is_expected.to match %r{PONG} }
       end
     end
 
     context 'redis log should be clean' do
       describe command('journalctl --no-pager') do
-        its(:stdout) { is_expected.not_to match /Failed at step RUNTIME_DIRECTORY/ }
+        its(:stdout) { is_expected.not_to match %r{Failed at step RUNTIME_DIRECTORY} }
       end
     end
   end

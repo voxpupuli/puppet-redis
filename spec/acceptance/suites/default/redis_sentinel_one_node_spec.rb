@@ -51,13 +51,13 @@ describe 'redis::sentinel', unless: (fact('osfamily') == 'RedHat' && (fact('oper
 
   context 'redis should respond to ping command' do
     describe command('redis-cli ping') do
-      its(:stdout) { is_expected.to match /PONG/ }
+      its(:stdout) { is_expected.to match %r{PONG} }
     end
   end
 
   context 'redis-sentinel should return correct sentinel master' do
     describe command('redis-cli -p 26379 SENTINEL masters') do
-      its(:stdout) { is_expected.to match /^mymaster/ }
+      its(:stdout) { is_expected.to match %r{^mymaster} }
     end
   end
 end

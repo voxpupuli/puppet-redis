@@ -22,7 +22,7 @@ describe 'redis', type: :class do
 
         it { is_expected.to contain_file(config_file_orig).with_ensure('file') }
 
-        it { is_expected.to contain_file(config_file_orig).without_content(/undef/) }
+        it { is_expected.to contain_file(config_file_orig).without_content(%r{undef}) }
 
         it do
           is_expected.to contain_service(service_name).with(
@@ -64,7 +64,7 @@ describe 'redis', type: :class do
           }
         end
 
-        it { is_expected.to contain_file(config_file_orig).with_content(/activerehashing.*yes/) }
+        it { is_expected.to contain_file(config_file_orig).with_content(%r{activerehashing.*yes}) }
       end
 
       describe 'with parameter aof_load_truncated' do
@@ -74,7 +74,7 @@ describe 'redis', type: :class do
           }
         end
 
-        it { is_expected.to contain_file(config_file_orig).with_content(/aof-load-truncated.*yes/) }
+        it { is_expected.to contain_file(config_file_orig).with_content(%r{aof-load-truncated.*yes}) }
       end
 
       describe 'with parameter aof_rewrite_incremental_fsync' do
@@ -84,7 +84,7 @@ describe 'redis', type: :class do
           }
         end
 
-        it { is_expected.to contain_file(config_file_orig).with_content(/aof-rewrite-incremental-fsync.*yes/) }
+        it { is_expected.to contain_file(config_file_orig).with_content(%r{aof-rewrite-incremental-fsync.*yes}) }
       end
 
       describe 'with parameter appendfilename' do
@@ -94,7 +94,7 @@ describe 'redis', type: :class do
           }
         end
 
-        it { is_expected.to contain_file(config_file_orig).with_content(/appendfilename.*_VALUE_/) }
+        it { is_expected.to contain_file(config_file_orig).with_content(%r{appendfilename.*_VALUE_}) }
       end
 
       describe 'with parameter appendfsync' do
@@ -104,7 +104,7 @@ describe 'redis', type: :class do
           }
         end
 
-        it { is_expected.to contain_file(config_file_orig).with_content(/appendfsync.*_VALUE_/) }
+        it { is_expected.to contain_file(config_file_orig).with_content(%r{appendfsync.*_VALUE_}) }
       end
 
       describe 'with parameter appendonly' do
@@ -114,7 +114,7 @@ describe 'redis', type: :class do
           }
         end
 
-        it { is_expected.to contain_file(config_file_orig).with_content(/appendonly.*yes/) }
+        it { is_expected.to contain_file(config_file_orig).with_content(%r{appendonly.*yes}) }
       end
 
       describe 'with parameter auto_aof_rewrite_min_size' do
@@ -124,7 +124,7 @@ describe 'redis', type: :class do
           }
         end
 
-        it { is_expected.to contain_file(config_file_orig).with_content(/auto-aof-rewrite-min-size.*_VALUE_/) }
+        it { is_expected.to contain_file(config_file_orig).with_content(%r{auto-aof-rewrite-min-size.*_VALUE_}) }
       end
 
       describe 'with parameter auto_aof_rewrite_percentage' do
@@ -134,7 +134,7 @@ describe 'redis', type: :class do
           }
         end
 
-        it { is_expected.to contain_file(config_file_orig).with_content(/auto-aof-rewrite-percentage.*_VALUE_/) }
+        it { is_expected.to contain_file(config_file_orig).with_content(%r{auto-aof-rewrite-percentage.*_VALUE_}) }
       end
 
       describe 'with parameter bind' do
@@ -144,7 +144,7 @@ describe 'redis', type: :class do
           }
         end
 
-        it { is_expected.to contain_file(config_file_orig).with_content(/bind.*_VALUE_/) }
+        it { is_expected.to contain_file(config_file_orig).with_content(%r{bind.*_VALUE_}) }
       end
 
       describe 'with parameter output_buffer_limit_slave' do
@@ -154,7 +154,7 @@ describe 'redis', type: :class do
           }
         end
 
-        it { is_expected.to contain_file(config_file_orig).with_content(/client-output-buffer-limit slave.*_VALUE_/) }
+        it { is_expected.to contain_file(config_file_orig).with_content(%r{client-output-buffer-limit slave.*_VALUE_}) }
       end
 
       describe 'with parameter output_buffer_limit_pubsub' do
@@ -164,7 +164,7 @@ describe 'redis', type: :class do
           }
         end
 
-        it { is_expected.to contain_file(config_file_orig).with_content(/client-output-buffer-limit pubsub.*_VALUE_/) }
+        it { is_expected.to contain_file(config_file_orig).with_content(%r{client-output-buffer-limit pubsub.*_VALUE_}) }
       end
 
       describe 'with parameter: config_dir' do
@@ -218,7 +218,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /daemonize.*yes/
+            'content' => %r{daemonize.*yes}
           )
         }
       end
@@ -232,7 +232,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /databases.*_VALUE_/
+            'content' => %r{databases.*_VALUE_}
           )
         }
       end
@@ -246,7 +246,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /dbfilename.*_VALUE_/
+            'content' => %r{dbfilename.*_VALUE_}
           )
         }
       end
@@ -258,7 +258,7 @@ describe 'redis', type: :class do
           }
         end
 
-        it { is_expected.to contain_file(config_file_orig).without_content(/^dbfilename/) }
+        it { is_expected.to contain_file(config_file_orig).without_content(%r{^dbfilename}) }
       end
 
       describe 'with parameter hash_max_ziplist_entries' do
@@ -270,7 +270,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /hash-max-ziplist-entries.*_VALUE_/
+            'content' => %r{hash-max-ziplist-entries.*_VALUE_}
           )
         }
       end
@@ -284,7 +284,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /hash-max-ziplist-value.*_VALUE_/
+            'content' => %r{hash-max-ziplist-value.*_VALUE_}
           )
         }
       end
@@ -298,7 +298,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /list-max-ziplist-entries.*_VALUE_/
+            'content' => %r{list-max-ziplist-entries.*_VALUE_}
           )
         }
       end
@@ -312,7 +312,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /list-max-ziplist-value.*_VALUE_/
+            'content' => %r{list-max-ziplist-value.*_VALUE_}
           )
         }
       end
@@ -340,7 +340,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /logfile.*_VALUE_/
+            'content' => %r{logfile.*_VALUE_}
           )
         }
       end
@@ -354,7 +354,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /loglevel.*_VALUE_/
+            'content' => %r{loglevel.*_VALUE_}
           )
         }
       end
@@ -415,7 +415,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /unixsocketperm.*777/
+            'content' => %r{unixsocketperm.*777}
           )
         }
       end
@@ -429,7 +429,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /masterauth.*_VALUE_/
+            'content' => %r{masterauth.*_VALUE_}
           )
         }
       end
@@ -443,7 +443,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /maxclients.*_VALUE_/
+            'content' => %r{maxclients.*_VALUE_}
           )
         }
       end
@@ -457,7 +457,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /maxmemory.*_VALUE_/
+            'content' => %r{maxmemory.*_VALUE_}
           )
         }
       end
@@ -471,7 +471,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /maxmemory-policy.*_VALUE_/
+            'content' => %r{maxmemory-policy.*_VALUE_}
           )
         }
       end
@@ -485,7 +485,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /maxmemory-samples.*_VALUE_/
+            'content' => %r{maxmemory-samples.*_VALUE_}
           )
         }
       end
@@ -499,7 +499,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /min-slaves-max-lag.*_VALUE_/
+            'content' => %r{min-slaves-max-lag.*_VALUE_}
           )
         }
       end
@@ -513,7 +513,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /min-slaves-to-write.*_VALUE_/
+            'content' => %r{min-slaves-to-write.*_VALUE_}
           )
         }
       end
@@ -527,7 +527,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /notify-keyspace-events.*_VALUE_/
+            'content' => %r{notify-keyspace-events.*_VALUE_}
           )
         }
       end
@@ -553,7 +553,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /no-appendfsync-on-rewrite.*yes/
+            'content' => %r{no-appendfsync-on-rewrite.*yes}
           )
         }
       end
@@ -584,7 +584,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /pidfile.*_VALUE_/
+            'content' => %r{pidfile.*_VALUE_}
           )
         }
       end
@@ -598,7 +598,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /port.*_VALUE_/
+            'content' => %r{port.*_VALUE_}
           )
         }
       end
@@ -612,7 +612,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /protected-mode.*_VALUE_/
+            'content' => %r{protected-mode.*_VALUE_}
           )
         }
       end
@@ -626,7 +626,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /hll-sparse-max-bytes.*_VALUE_/
+            'content' => %r{hll-sparse-max-bytes.*_VALUE_}
           )
         }
       end
@@ -640,7 +640,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /hz.*_VALUE_/
+            'content' => %r{hz.*_VALUE_}
           )
         }
       end
@@ -654,7 +654,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /latency-monitor-threshold.*_VALUE_/
+            'content' => %r{latency-monitor-threshold.*_VALUE_}
           )
         }
       end
@@ -668,7 +668,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /rdbcompression.*yes/
+            'content' => %r{rdbcompression.*yes}
           )
         }
       end
@@ -682,7 +682,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /repl-backlog-size.*_VALUE_/
+            'content' => %r{repl-backlog-size.*_VALUE_}
           )
         }
       end
@@ -696,7 +696,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /repl-backlog-ttl.*_VALUE_/
+            'content' => %r{repl-backlog-ttl.*_VALUE_}
           )
         }
       end
@@ -710,7 +710,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /repl-disable-tcp-nodelay.*yes/
+            'content' => %r{repl-disable-tcp-nodelay.*yes}
           )
         }
       end
@@ -724,7 +724,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /repl-ping-slave-period.*1/
+            'content' => %r{repl-ping-slave-period.*1}
           )
         }
       end
@@ -738,7 +738,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /repl-timeout.*1/
+            'content' => %r{repl-timeout.*1}
           )
         }
       end
@@ -752,7 +752,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /requirepass.*_VALUE_/
+            'content' => %r{requirepass.*_VALUE_}
           )
         }
       end
@@ -767,7 +767,7 @@ describe 'redis', type: :class do
 
           it {
             is_expected.to contain_file(config_file_orig).with(
-              'content' => /^save/
+              'content' => %r{^save}
             )
           }
         end
@@ -781,7 +781,7 @@ describe 'redis', type: :class do
 
           it {
             is_expected.to contain_file(config_file_orig).with(
-              'content' => /^(?!save)/
+              'content' => %r{^(?!save)}
             )
           }
         end
@@ -796,10 +796,10 @@ describe 'redis', type: :class do
               }
             end
 
-            it { is_expected.to contain_file(config_file_orig).with('content' => /save 900 1/) }
-            it { is_expected.to contain_file(config_file_orig).with('content' => /save 300 10/) }
+            it { is_expected.to contain_file(config_file_orig).with('content' => %r{save 900 1}) }
+            it { is_expected.to contain_file(config_file_orig).with('content' => %r{save 300 10}) }
             it {
-              is_expected.to contain_file(config_file_orig).with('content' => /save 60 10000/)
+              is_expected.to contain_file(config_file_orig).with('content' => %r{save 60 10000})
             }
           end
 
@@ -811,10 +811,10 @@ describe 'redis', type: :class do
               }
             end
 
-            it { is_expected.to contain_file(config_file_orig).with('content' => /save 900 2/) }
-            it { is_expected.to contain_file(config_file_orig).with('content' => /save 300 11/) }
+            it { is_expected.to contain_file(config_file_orig).with('content' => %r{save 900 2}) }
+            it { is_expected.to contain_file(config_file_orig).with('content' => %r{save 300 11}) }
             it {
-              is_expected.to contain_file(config_file_orig).with('content' => /save 60 10011/)
+              is_expected.to contain_file(config_file_orig).with('content' => %r{save 60 10011})
             }
           end
         end
@@ -827,9 +827,9 @@ describe 'redis', type: :class do
               }
             end
 
-            it { is_expected.to contain_file(config_file_orig).without('content' => /save 900 1/) }
-            it { is_expected.to contain_file(config_file_orig).without('content' => /save 300 10/) }
-            it { is_expected.to contain_file(config_file_orig).without('content' => /save 60 10000/) }
+            it { is_expected.to contain_file(config_file_orig).without('content' => %r{save 900 1}) }
+            it { is_expected.to contain_file(config_file_orig).without('content' => %r{save 300 10}) }
+            it { is_expected.to contain_file(config_file_orig).without('content' => %r{save 60 10000}) }
           end
         end
       end
@@ -896,7 +896,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /set-max-intset-entries.*_VALUE_/
+            'content' => %r{set-max-intset-entries.*_VALUE_}
           )
         }
       end
@@ -910,7 +910,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /slave-priority.*_VALUE_/
+            'content' => %r{slave-priority.*_VALUE_}
           )
         }
       end
@@ -924,7 +924,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /slave-read-only.*yes/
+            'content' => %r{slave-read-only.*yes}
           )
         }
       end
@@ -938,7 +938,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /slave-serve-stale-data.*yes/
+            'content' => %r{slave-serve-stale-data.*yes}
           )
         }
       end
@@ -954,7 +954,7 @@ describe 'redis', type: :class do
 
           it {
             is_expected.to contain_file(config_file_orig).with(
-              'content' => /^slaveof _VALUE_/
+              'content' => %r{^slaveof _VALUE_}
             )
           }
         end
@@ -969,7 +969,7 @@ describe 'redis', type: :class do
 
           it {
             is_expected.to contain_file(config_file_orig).with(
-              'content' => /^slaveof _VALUE_/
+              'content' => %r{^slaveof _VALUE_}
             )
           }
         end
@@ -984,7 +984,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /slowlog-log-slower-than.*_VALUE_/
+            'content' => %r{slowlog-log-slower-than.*_VALUE_}
           )
         }
       end
@@ -998,7 +998,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /slowlog-max-len.*_VALUE_/
+            'content' => %r{slowlog-max-len.*_VALUE_}
           )
         }
       end
@@ -1012,7 +1012,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /stop-writes-on-bgsave-error.*yes/
+            'content' => %r{stop-writes-on-bgsave-error.*yes}
           )
         }
       end
@@ -1026,7 +1026,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /syslog-enabled yes/
+            'content' => %r{syslog-enabled yes}
           )
         }
       end
@@ -1041,7 +1041,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /syslog-facility.*_VALUE_/
+            'content' => %r{syslog-facility.*_VALUE_}
           )
         }
       end
@@ -1055,7 +1055,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /tcp-backlog.*_VALUE_/
+            'content' => %r{tcp-backlog.*_VALUE_}
           )
         }
       end
@@ -1069,7 +1069,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /tcp-keepalive.*_VALUE_/
+            'content' => %r{tcp-keepalive.*_VALUE_}
           )
         }
       end
@@ -1083,7 +1083,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /timeout.*_VALUE_/
+            'content' => %r{timeout.*_VALUE_}
           )
         }
       end
@@ -1097,7 +1097,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /dir.*_VALUE_/
+            'content' => %r{dir.*_VALUE_}
           )
         }
       end
@@ -1111,7 +1111,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /zset-max-ziplist-entries.*_VALUE_/
+            'content' => %r{zset-max-ziplist-entries.*_VALUE_}
           )
         }
       end
@@ -1125,7 +1125,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /zset-max-ziplist-value.*_VALUE_/
+            'content' => %r{zset-max-ziplist-value.*_VALUE_}
           )
         }
       end
@@ -1139,7 +1139,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.not_to contain_file(config_file_orig).with(
-            'content' => /cluster-enabled/
+            'content' => %r{cluster-enabled}
           )
         }
       end
@@ -1153,7 +1153,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /cluster-enabled.*yes/
+            'content' => %r{cluster-enabled.*yes}
           )
         }
       end
@@ -1168,7 +1168,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /cluster-config-file.*_VALUE_/
+            'content' => %r{cluster-config-file.*_VALUE_}
           )
         }
       end
@@ -1183,7 +1183,7 @@ describe 'redis', type: :class do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => /cluster-node-timeout.*_VALUE_/
+            'content' => %r{cluster-node-timeout.*_VALUE_}
           )
         }
       end
