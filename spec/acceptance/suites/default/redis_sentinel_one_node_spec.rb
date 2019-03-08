@@ -9,7 +9,7 @@ describe 'redis::sentinel', unless: (fact('osfamily') == 'RedHat' && (fact('oper
                  'redis'
                end
 
-  it 'should run successfully' do
+  it 'runs successfully' do
     pp = <<-EOS
 
     $master_name      = 'mymaster'

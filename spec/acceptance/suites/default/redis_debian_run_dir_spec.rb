@@ -3,7 +3,7 @@ require 'spec_helper_acceptance'
 # since this test polutes others, we'll only run it if specifically asked
 if ENV['RUN_BACKPORT_TEST'] == 'yes'
   describe 'redis', if: (fact('operatingsystem') == 'Debian') do
-    it 'should run with newer Debian package' do
+    it 'runs with newer Debian package' do
       pp = <<-EOS
 
       include ::apt

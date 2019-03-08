@@ -10,7 +10,7 @@ describe 'redis' do
     manage_repo = true
   end
 
-  it 'should run successfully' do
+  it 'runs successfully' do
     pp = <<-EOS
     Exec {
       path => [ '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin', ]
@@ -26,7 +26,7 @@ describe 'redis' do
     apply_manifest(pp, catch_changes: true)
   end
 
-  it 'should return a fact' do
+  it 'returns a fact' do
     pp = <<-EOS
     notify{"Redis Version: ${::redis_server_version}":}
     EOS

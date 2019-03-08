@@ -2,7 +2,7 @@ require 'spec_helper_acceptance'
 
 describe 'redisget() function' do
 
-  it 'should run successfully' do
+  it 'runs successfully' do
     pp = <<-EOS
     Exec {
       path => [ '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin', ]
@@ -33,7 +33,7 @@ describe 'redisget() function' do
     end
   end
 
-  it 'should return a value from MyKey with the redisget() function' do
+  it 'returns a value from MyKey with the redisget() function' do
     pp = <<-EOS
     $mykey = redisget('mykey', 'redis://127.0.0.1:6379')
 
@@ -46,7 +46,7 @@ describe 'redisget() function' do
     end
   end
 
-  it 'should return a value from valid MyKey with the redisget() function while specifying a default' do
+  it 'returns a value from valid MyKey with the redisget() function while specifying a default' do
     pp = <<-EOS
     $mykey = redisget('mykey', 'redis://127.0.0.1:6379', 'default_value')
 
@@ -59,7 +59,7 @@ describe 'redisget() function' do
     end
   end
 
-  it 'should return an empty string when value not present with redisget() function' do
+  it 'returns an empty string when value not present with redisget() function' do
     pp = <<-EOS
     $foo_key = redisget('foo', 'redis://127.0.0.1:6379')
 
@@ -74,7 +74,7 @@ describe 'redisget() function' do
     end
   end
 
-  it 'should return the specified default value when key not present with redisget() function' do
+  it 'returns the specified default value when key not present with redisget() function' do
     pp = <<-EOS
     $foo_key = redisget('foo', 'redis://127.0.0.1:6379', 'default_value')
 
@@ -87,7 +87,7 @@ describe 'redisget() function' do
     end
   end
 
-  it 'should return the specified default value when connection to redis server fails' do
+  it 'returns the specified default value when connection to redis server fails' do
     pp = <<-EOS
     # Bogus port for redis server
     $foo_key = redisget('foo', 'redis://127.0.0.1:12345', 'default_value')
@@ -101,7 +101,7 @@ describe 'redisget() function' do
     end
   end
 
-  it 'should return an error when specifying a non connectable redis server' do
+  it 'returns an error when specifying a non connectable redis server' do
     pp = <<-EOS
     # Bogus port for redis server
     $foo_key = redisget('foo', 'redis://127.0.0.1:12345')

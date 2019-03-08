@@ -13,7 +13,7 @@ describe 'redis::instance', unless: (fact('operatingsystem') == 'Debian') do
     manage_repo  = true
   end
 
-  it 'should run successfully' do
+  it 'runs successfully' do
     pp = <<-EOS
     Exec {
       path => [ '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin', ]

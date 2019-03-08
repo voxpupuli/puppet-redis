@@ -12,7 +12,7 @@ if hosts.length >= 3
 
     hosts_as('master').each do |host|
       context "should be able to configure a host as master on #{host}" do
-        it 'should work idempotently with no errors' do
+        it 'works idempotently with no errors' do
           pp = <<-EOS
           # Stop firewall so we can easily connect
           service {'firewalld':
@@ -39,7 +39,7 @@ if hosts.length >= 3
 
     hosts_as('slave').each do |host|
       context "should be able to configure a host as master on #{host}" do
-        it 'should work idempotently with no errors' do
+        it 'works idempotently with no errors' do
           pp = <<-EOS
           class { 'redis':
             manage_repo => true,
@@ -61,7 +61,7 @@ if hosts.length >= 3
 
     hosts_as('master').each do |host|
       context "should be able to configure a host as master on #{host}" do
-        it 'should work idempotently with no errors' do
+        it 'works idempotently with no errors' do
           command_to_check = "redis-cli -h #{master_ip_address} -a foobared info replication"
 
           sleep(5)
