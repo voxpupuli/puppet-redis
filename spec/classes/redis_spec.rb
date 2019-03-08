@@ -37,7 +37,7 @@ describe 'redis', type: :class do
         end
 
         case facts[:operatingsystem]
-          when 'Debian'
+        when 'Debian'
 
           context 'on Debian' do
 
