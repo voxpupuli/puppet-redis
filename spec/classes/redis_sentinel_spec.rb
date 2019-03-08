@@ -48,18 +48,18 @@ describe 'redis::sentinel', type: :class do
     it { should create_class('redis::sentinel') }
 
     it { should contain_file('/etc/redis/redis-sentinel.conf.puppet').with(
-        'ensure'  => 'present',
-        'mode'    => '0644',
-        'owner'   => 'redis',
-        'content' => $expected_noparams_content
+      'ensure'  => 'present',
+      'mode'    => '0644',
+      'owner'   => 'redis',
+      'content' => $expected_noparams_content
       )
     }
 
     it { should contain_service('redis-sentinel').with(
-        'ensure'     => 'running',
-        'enable'     => 'true',
-        'hasrestart' => 'true',
-        'hasstatus'  => 'true'
+      'ensure'     => 'running',
+      'enable'     => 'true',
+      'hasrestart' => 'true',
+      'hasstatus'  => 'true'
       )
     }
 
@@ -82,7 +82,7 @@ describe 'redis::sentinel', type: :class do
     it { should create_class('redis::sentinel') }
 
     it { should contain_file('/etc/redis/redis-sentinel.conf.puppet').with(
-        'content' => $expected_params_content
+      'content' => $expected_params_content
       )
     }
   end
