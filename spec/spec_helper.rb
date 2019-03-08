@@ -38,7 +38,7 @@ def get_spec_fixtures_dir
   spec_dir
 end
 
-def read_fixture_file filename
+def read_fixture_file(filename)
   filename = get_spec_fixtures_dir + "/#{filename}"
 
   raise "The fixture file #{filename} doesn't exist" unless File.exists? filename
