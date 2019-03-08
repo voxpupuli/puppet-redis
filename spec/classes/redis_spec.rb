@@ -51,7 +51,7 @@ describe 'redis', type: :class do
             is_expected.to contain_file('/var/run/redis').with(ensure: 'directory',
                                                                owner: 'redis',
                                                                group: 'redis',
-                                                               mode: '0755')
+                                                               mode: '2775')
           end
 
         end
