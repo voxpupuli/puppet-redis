@@ -31,33 +31,33 @@ describe 'redis::sentinel', unless: (fact('osfamily') == 'RedHat' && (fact('oper
   end
 
   describe package(redis_name) do
-    it { should be_installed }
+    it { is_expected.to be_installed }
   end
 
   describe service(redis_name) do
-    it { should be_running }
+    it { is_expected.to be_running }
   end
 
   describe service('redis-sentinel') do
-    it { should be_running }
+    it { is_expected.to be_running }
   end
 
   case fact('osfamily')
   when 'Debian'
     describe package('redis-sentinel') do
-      it { should be_installed }
+      it { is_expected.to be_installed }
     end
   end
 
   context 'redis should respond to ping command' do
     describe command('redis-cli ping') do
-      its(:stdout) { should match /PONG/ }
+      its(:stdout) { is_expected.to match /PONG/ }
     end
   end
 
   context 'redis-sentinel should return correct sentinel master' do
     describe command('redis-cli -p 26379 SENTINEL masters') do
-      its(:stdout) { should match /^mymaster/ }
+      its(:stdout) { is_expected.to match /^mymaster/ }
     end
   end
 end

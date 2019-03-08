@@ -838,7 +838,7 @@ describe 'redis', type: :class do
         let (:params) { { service_manage: false } }
         let(:package_name) { manifest_vars[:package_name] }
 
-        it { should_not contain_service(package_name) }
+        it { is_expected.not_to contain_service(package_name) }
       end
 
       describe 'with parameter: service_enable' do
@@ -1138,7 +1138,7 @@ describe 'redis', type: :class do
         end
 
         it {
-          should_not contain_file(config_file_orig).with(
+          is_expected.not_to contain_file(config_file_orig).with(
             'content' => /cluster-enabled/
           )
         }

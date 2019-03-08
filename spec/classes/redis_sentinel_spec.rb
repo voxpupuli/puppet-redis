@@ -44,10 +44,10 @@ describe 'redis::sentinel', type: :class do
   end
 
   describe 'without parameters' do
-    it { should create_class('redis::sentinel') }
+    it { is_expected.to create_class('redis::sentinel') }
 
     it {
-      should contain_file('/etc/redis/redis-sentinel.conf.puppet').with(
+      is_expected.to contain_file('/etc/redis/redis-sentinel.conf.puppet').with(
         'ensure'  => 'present',
         'mode'    => '0644',
         'owner'   => 'redis',
@@ -56,7 +56,7 @@ describe 'redis::sentinel', type: :class do
     }
 
     it {
-      should contain_service('redis-sentinel').with(
+      is_expected.to contain_service('redis-sentinel').with(
         'ensure'     => 'running',
         'enable'     => 'true',
         'hasrestart' => 'true',
@@ -79,10 +79,10 @@ describe 'redis::sentinel', type: :class do
       }
     end
 
-    it { should create_class('redis::sentinel') }
+    it { is_expected.to create_class('redis::sentinel') }
 
     it {
-      should contain_file('/etc/redis/redis-sentinel.conf.puppet').with(
+      is_expected.to contain_file('/etc/redis/redis-sentinel.conf.puppet').with(
         'content' => $expected_params_content
       )
     }
@@ -91,16 +91,16 @@ describe 'redis::sentinel', type: :class do
   describe 'on Debian Jessie' do
     let (:facts) { debian_facts.merge(operatingsystemmajrelease: '8') }
 
-    it { should create_class('redis::sentinel') }
+    it { is_expected.to create_class('redis::sentinel') }
 
-    it { should_not contain_package('redis-sentinel').with_ensure('present') }
+    it { is_expected.not_to contain_package('redis-sentinel').with_ensure('present') }
   end
 
   describe 'on Debian Stretch' do
     let (:facts) { debian_facts.merge(operatingsystemmajrelease: '9') }
 
-    it { should create_class('redis::sentinel') }
+    it { is_expected.to create_class('redis::sentinel') }
 
-    it { should contain_package('redis-sentinel').with_ensure('present') }
+    it { is_expected.to contain_package('redis-sentinel').with_ensure('present') }
   end
 end

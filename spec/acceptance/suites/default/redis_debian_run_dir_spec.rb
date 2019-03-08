@@ -33,22 +33,22 @@ if ENV['RUN_BACKPORT_TEST'] == 'yes'
     end
 
     describe package('redis-server') do
-      it { should be_installed }
+      it { is_expected.to be_installed }
     end
 
     describe service('redis-server') do
-      it { should be_running }
+      it { is_expected.to be_running }
     end
 
     context 'redis should respond to ping command' do
       describe command('redis-cli ping') do
-        its(:stdout) { should match /PONG/ }
+        its(:stdout) { is_expected.to match /PONG/ }
       end
     end
 
     context 'redis log should be clean' do
       describe command('journalctl --no-pager') do
-        its(:stdout) { should_not match /Failed at step RUNTIME_DIRECTORY/ }
+        its(:stdout) { is_expected.not_to match /Failed at step RUNTIME_DIRECTORY/ }
       end
     end
   end

@@ -14,10 +14,10 @@ describe 'redis' do
         end
         let (:params) { { package_ensure: '3.2.1' } }
 
-        it { should contain_file('/etc/redis.conf.puppet').without('content' => /^hash-max-zipmap-entries/) }
-        it { should contain_file('/etc/redis.conf.puppet').with('content' => /^hash-max-ziplist-entries/) }
-        it { should contain_file('/etc/redis.conf.puppet').with('content' => /^protected-mode/) }
-        it { should contain_file('/etc/redis.conf.puppet').with('content' => /^tcp-backlog/) }
+        it { is_expected.to contain_file('/etc/redis.conf.puppet').without('content' => /^hash-max-zipmap-entries/) }
+        it { is_expected.to contain_file('/etc/redis.conf.puppet').with('content' => /^hash-max-ziplist-entries/) }
+        it { is_expected.to contain_file('/etc/redis.conf.puppet').with('content' => /^protected-mode/) }
+        it { is_expected.to contain_file('/etc/redis.conf.puppet').with('content' => /^tcp-backlog/) }
       end
 
       context 'when $::redis_server_version fact is not present and package_ensure is a newer version(4.0-rc3) (older features enabled)' do
@@ -27,10 +27,10 @@ describe 'redis' do
         end
         let (:params) { { package_ensure: '4.0-rc3' } }
 
-        it { should contain_file('/etc/redis.conf.puppet').without('content' => /^hash-max-zipmap-entries/) }
-        it { should contain_file('/etc/redis.conf.puppet').with('content' => /^hash-max-ziplist-entries/) }
-        it { should contain_file('/etc/redis.conf.puppet').without('content' => /^protected-mode/) }
-        it { should contain_file('/etc/redis.conf.puppet').with('content' => /^tcp-backlog/) }
+        it { is_expected.to contain_file('/etc/redis.conf.puppet').without('content' => /^hash-max-zipmap-entries/) }
+        it { is_expected.to contain_file('/etc/redis.conf.puppet').with('content' => /^hash-max-ziplist-entries/) }
+        it { is_expected.to contain_file('/etc/redis.conf.puppet').without('content' => /^protected-mode/) }
+        it { is_expected.to contain_file('/etc/redis.conf.puppet').with('content' => /^tcp-backlog/) }
       end
 
       context 'when $::redis_server_version fact is present but the older version (older features not enabled)' do
@@ -39,10 +39,10 @@ describe 'redis' do
                                puppetversion: Puppet.version)
         end
 
-        it { should contain_file('/etc/redis.conf.puppet').with('content' => /^hash-max-zipmap-entries/) }
-        it { should contain_file('/etc/redis.conf.puppet').without('content' => /^hash-max-ziplist-entries/) }
-        it { should contain_file('/etc/redis.conf.puppet').without('content' => /^protected-mode/) }
-        it { should contain_file('/etc/redis.conf.puppet').without('content' => /^tcp-backlog/) }
+        it { is_expected.to contain_file('/etc/redis.conf.puppet').with('content' => /^hash-max-zipmap-entries/) }
+        it { is_expected.to contain_file('/etc/redis.conf.puppet').without('content' => /^hash-max-ziplist-entries/) }
+        it { is_expected.to contain_file('/etc/redis.conf.puppet').without('content' => /^protected-mode/) }
+        it { is_expected.to contain_file('/etc/redis.conf.puppet').without('content' => /^tcp-backlog/) }
       end
 
       context 'when $::redis_server_version fact is present but a newer version (older features enabled)' do
@@ -51,10 +51,10 @@ describe 'redis' do
                                puppetversion: Puppet.version)
         end
 
-        it { should contain_file('/etc/redis.conf.puppet').without('content' => /^hash-max-zipmap-entries/) }
-        it { should contain_file('/etc/redis.conf.puppet').with('content' => /^hash-max-ziplist-entries/) }
-        it { should contain_file('/etc/redis.conf.puppet').with('content' => /^protected-mode/) }
-        it { should contain_file('/etc/redis.conf.puppet').with('content' => /^tcp-backlog/) }
+        it { is_expected.to contain_file('/etc/redis.conf.puppet').without('content' => /^hash-max-zipmap-entries/) }
+        it { is_expected.to contain_file('/etc/redis.conf.puppet').with('content' => /^hash-max-ziplist-entries/) }
+        it { is_expected.to contain_file('/etc/redis.conf.puppet').with('content' => /^protected-mode/) }
+        it { is_expected.to contain_file('/etc/redis.conf.puppet').with('content' => /^tcp-backlog/) }
       end
     end
   end
