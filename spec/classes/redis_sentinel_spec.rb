@@ -39,7 +39,7 @@ describe 'redis::sentinel', type: :class do
 
   let :pre_condition do
     [
-     'class { redis: }'
+      'class { redis: }'
     ]
   end
 

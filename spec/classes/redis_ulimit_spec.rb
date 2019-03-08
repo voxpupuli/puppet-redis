@@ -96,7 +96,7 @@ describe 'redis::ulimit' do
         ],
         'notify'   => [
           'Exec[systemd-reload-redis]',
-          ],
+        ],
         }
         )
     end
