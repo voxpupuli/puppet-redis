@@ -258,13 +258,13 @@ describe 'redis', type: :class do
       end
 
       describe 'without parameter dbfilename' do
-        let(:params) {
-          {
-            dbfilename: false,
-          }
-        }
+         let(:params) {
+           {
+             dbfilename: false,
+           }
+         }
 
-        it { is_expected.to contain_file(config_file_orig).without_content(/^dbfilename/) }
+         it { is_expected.to contain_file(config_file_orig).without_content(/^dbfilename/) }
        end
 
       describe 'with parameter hash_max_ziplist_entries' do
