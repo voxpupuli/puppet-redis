@@ -7,7 +7,7 @@ require 'puppet/indirector/catalog/compiler'
 
 # Magic to add a catalog.exported_resources accessor
 class Puppet::Resource::Catalog::Compiler
-  alias_method :filter_exclude_exported_resources, :filter
+  alias filter_exclude_exported_resources filter
   def filter(catalog)
     filter_exclude_exported_resources(catalog).tap do |filtered|
       # Every time we filter a catalog, add a .exported_resources to it.
