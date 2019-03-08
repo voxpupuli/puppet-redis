@@ -73,7 +73,7 @@ describe 'redis::sentinel', type: :class do
         master_name: 'cow',
         down_after: 6000,
         log_file: '/tmp/barn-sentinel.log',
-        failover_timeout: 28000,
+        failover_timeout: 28_000,
         notification_script: 'bar.sh',
         client_reconfig_script: 'foo.sh'
       }
