@@ -1,12 +1,12 @@
 {
-  "name": "arioch-redis",
-  "version": "3.3.0",
-  "author": "Tom De Vylder",
+  "name": "puppet-redis",
+  "version": "4.0.0-rc0",
+  "author": "Vox Pupuli",
   "summary": "Redis module",
   "license": "Apache-2.0",
-  "source": "https://github.com/arioch/puppet-redis",
-  "project_page": "http://arioch.github.io/puppet-redis/",
-  "issues_url": "https://github.com/arioch/puppet-redis/issues",
+  "source": "https://github.com/voxpupuli/puppet-redis.git",
+  "project_page": "http://github.com/voxpupuli/puppet-redis",
+  "issues_url": "https://github.com/voxpupuli/puppet-redis/issues",
   "dependencies": [
     {
       "name":"puppetlabs/apt",
@@ -29,7 +29,6 @@
       "version_requirement": ">= 2.1.0 < 3.0.0"
     }
   ],
-  "data_provider": null,
   "description": "Redis module with cluster support",
   "tags": [
     "cluster",
