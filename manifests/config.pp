@@ -45,28 +45,12 @@ class redis::config {
 
   $service_provider_lookup = pick(getvar('service_provider'), false)
 
-  if $service_provider_lookup != 'systemd' {
-    case $::osfamily {
-      'Debian': {
-        if $::lsbdistcodename == 'wheezy' {
-          $var_run_redis_mode  = '2755'
-          $var_run_redis_group = 'redis'
-        } else {
-          $var_run_redis_group = $::redis::config_group
-          $var_run_redis_mode = '2775'
-        }
-      }
-      default: {
-        $var_run_redis_mode = '0755'
-        $var_run_redis_group = $::redis::config_group
-      }
-    }
-
+  unless $facts['osfamily'] == 'Debian' or $service_provider_lookup == 'systemd' {
     file { '/var/run/redis':
       ensure => 'directory',
       owner  => $::redis::config_owner,
-      group  => $var_run_redis_group,
-      mode   => $var_run_redis_mode,
+      group  => $::redis::config_group,
+      mode   => '0755',
     }
   }
 
