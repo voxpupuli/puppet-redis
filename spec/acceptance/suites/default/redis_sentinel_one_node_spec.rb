@@ -16,6 +16,13 @@ describe 'redis::sentinel', unless: (fact('osfamily') == 'RedHat' && (fact('oper
     $redis_master     = '127.0.0.1'
     $failover_timeout = '10000'
 
+    # We're testing with `manage_repo` true.  In redis-sentinel 5, the daemon has its own rundir
+    if $::operatingsystem == 'Ubuntu' and $::operatingsystemmajrelease == '16.04' {
+      $pidfile = '/var/run/sentinel/redis-sentinel.pid'
+    } else {
+      $pidfile = undef
+    }
+
     class { 'redis':
       manage_repo => true,
     }
@@ -24,6 +31,7 @@ describe 'redis::sentinel', unless: (fact('osfamily') == 'RedHat' && (fact('oper
       master_name      => $master_name,
       redis_host       => $redis_master,
       failover_timeout => $failover_timeout,
+      pid_file         => $pidfile,
     }
     EOS
 

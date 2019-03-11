@@ -27,10 +27,10 @@ describe 'redis-cli task' do
   describe 'security' do
     it 'stops script injections and escapes' do
       result = run_task(task_name: 'redis::redis_cli', params: 'command="ping; cat /etc/passwd"')
-      expect_multiple_regexes(result: result, regexes: [%r{{"status":"ERR unknown command 'ping; cat /etc/passwd'"}}, %r{Ran on 1 node in .+ seconds}])
+      expect_multiple_regexes(result: result, regexes: [%r!{"status":"ERR unknown command ('|`)ping; cat /etc/passwd('|`)!, %r{Ran on 1 node in .+ seconds}])
 
       result = run_task(task_name: 'redis::redis_cli', params: 'command="ping && cat /etc/passwd"')
-      expect_multiple_regexes(result: result, regexes: [%r{{"status":"ERR unknown command 'ping && cat /etc/passwd'"}}, %r{Ran on 1 node in .+ seconds}])
+      expect_multiple_regexes(result: result, regexes: [%r!{"status":"ERR unknown command ('|`)ping && cat /etc/passwd('|`)!, %r{Ran on 1 node in .+ seconds}])
     end
   end
 end

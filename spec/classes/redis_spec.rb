@@ -32,29 +32,6 @@ describe 'redis', type: :class do
             'hasstatus'  => 'true'
           )
         end
-
-        case facts[:operatingsystem]
-        when 'Debian'
-
-          context 'on Debian' do
-            it do
-              is_expected.to contain_file('/var/run/redis').with(ensure: 'directory',
-                                                                 owner: 'redis',
-                                                                 group: 'root',
-                                                                 mode: '2775')
-            end
-          end
-
-        when 'Ubuntu'
-
-          it do
-            is_expected.to contain_file('/var/run/redis').with(ensure: 'directory',
-                                                               owner: 'redis',
-                                                               group: 'redis',
-                                                               mode: '2775')
-          end
-
-        end
       end
 
       describe 'with parameter activerehashing' do
