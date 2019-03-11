@@ -47,10 +47,8 @@ Run_parts () {
 case "$1" in
   start)
   echo -n "Starting $DESC: "
-  mkdir -p $RUNDIR
   touch $PIDFILE
-  chown redis:redis $RUNDIR $PIDFILE
-  chmod 755 $RUNDIR
+  chown redis:redis $PIDFILE
 
   if [ -n "$ULIMIT" ]
   then
