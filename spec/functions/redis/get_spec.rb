@@ -6,7 +6,7 @@ REDIS_URL = 'redis://localhost:6379'.freeze
 LOCAL_BROKEN_URL = 'redis://localhost:1234'.freeze
 REMOTE_BROKEN_URL = 'redis://redis.example.com:1234'.freeze
 
-describe 'redisget' do
+describe 'redis::get' do
   context 'should error if connection to remote redis server cannot be made and no default is specified' do
     it { is_expected.to run.with_params('nonexistent_key', REMOTE_BROKEN_URL).and_raise_error(Puppet::Error, %r{connection to redis server failed - Error connecting to Redis on redis.example.com:1234 \(SocketError\)}) }
   end
@@ -59,15 +59,15 @@ describe 'redisget' do
 
   describe 'with incorrect arguments' do
     context 'with no argument specified' do
-      it { is_expected.to run.with_params.and_raise_error(Puppet::ParseError, %r{wrong number of arguments}i) }
+      it { is_expected.to run.with_params.and_raise_error(ArgumentError) }
     end
 
     context 'with only one argument specified' do
-      it { is_expected.to run.with_params('some_key').and_raise_error(Puppet::ParseError, %r{wrong number of arguments}i) }
+      it { is_expected.to run.with_params('some_key').and_raise_error(ArgumentError) }
     end
 
     context 'with more than three arguments specified' do
-      it { is_expected.to run.with_params('way', 'too', 'many', 'args').and_raise_error(Puppet::ParseError, %r{wrong number of arguments}i) }
+      it { is_expected.to run.with_params('way', 'too', 'many', 'args').and_raise_error(ArgumentError) }
     end
   end
 
@@ -78,15 +78,15 @@ describe 'redisget' do
     end
     [{ 'ha' => 'sh' }, true, 1, %w[an array]].each do |p|
       context "specifing first parameter as <#{p}>" do
-        it { is_expected.to run.with_params(p, REDIS_URL).and_raise_error(Puppet::ParseError, %r{wrong argument type}i) }
+        it { is_expected.to run.with_params(p, REDIS_URL).and_raise_error(ArgumentError) }
       end
 
       context "specifing second parameter as <#{p}>" do
-        it { is_expected.to run.with_params('valid', p).and_raise_error(Puppet::ParseError, %r{wrong argument type}i) }
+        it { is_expected.to run.with_params('valid', p).and_raise_error(ArgumentError) }
       end
 
       context "specifing third parameter as <#{p}>" do
-        it { is_expected.to run.with_params('valid', p).and_raise_error(Puppet::ParseError, %r{wrong argument type}i) }
+        it { is_expected.to run.with_params('valid', p).and_raise_error(ArgumentError) }
       end
     end
   end

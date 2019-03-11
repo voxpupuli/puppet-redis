@@ -1,14 +1,14 @@
 # rubocop:disable RSpec/MultipleExpectations
 require 'spec_helper_acceptance'
 
-describe 'redisget() function' do
+describe 'redis::get() function' do
   it 'runs successfully' do
     pp = <<-EOS
     Exec {
       path => [ '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin', ]
     }
 
-    class { '::redis':
+    class { 'redis':
       manage_repo => true,
     }
 
@@ -33,9 +33,9 @@ describe 'redisget() function' do
     end
   end
 
-  it 'returns a value from MyKey with the redisget() function' do
+  it 'returns a value from MyKey with the redis::get() function' do
     pp = <<-EOS
-    $mykey = redisget('mykey', 'redis://127.0.0.1:6379')
+    $mykey = redis::get('mykey', 'redis://127.0.0.1:6379')
 
     notify{"mykey value: ${mykey}":}
     EOS
@@ -46,9 +46,9 @@ describe 'redisget() function' do
     end
   end
 
-  it 'returns a value from valid MyKey with the redisget() function while specifying a default' do
+  it 'returns a value from valid MyKey with the redis::get() function while specifying a default' do
     pp = <<-EOS
-    $mykey = redisget('mykey', 'redis://127.0.0.1:6379', 'default_value')
+    $mykey = redis::get('mykey', 'redis://127.0.0.1:6379', 'default_value')
 
     notify{"mykey value: ${mykey}":}
     EOS
@@ -59,9 +59,9 @@ describe 'redisget() function' do
     end
   end
 
-  it 'returns an empty string when value not present with redisget() function' do
+  it 'returns an empty string when value not present with redis::get() function' do
     pp = <<-EOS
-    $foo_key = redisget('foo', 'redis://127.0.0.1:6379')
+    $foo_key = redis::get('foo', 'redis://127.0.0.1:6379')
 
     if empty($foo_key){
       notify{"foo_key value was empty string":}
@@ -74,9 +74,9 @@ describe 'redisget() function' do
     end
   end
 
-  it 'returns the specified default value when key not present with redisget() function' do
+  it 'returns the specified default value when key not present with redis::get() function' do
     pp = <<-EOS
-    $foo_key = redisget('foo', 'redis://127.0.0.1:6379', 'default_value')
+    $foo_key = redis::get('foo', 'redis://127.0.0.1:6379', 'default_value')
 
     notify { $foo_key: }
     EOS
@@ -90,7 +90,7 @@ describe 'redisget() function' do
   it 'returns the specified default value when connection to redis server fails' do
     pp = <<-EOS
     # Bogus port for redis server
-    $foo_key = redisget('foo', 'redis://127.0.0.1:12345', 'default_value')
+    $foo_key = redis::get('foo', 'redis://127.0.0.1:12345', 'default_value')
 
     notify { $foo_key: }
     EOS
@@ -104,7 +104,7 @@ describe 'redisget() function' do
   it 'returns an error when specifying a non connectable redis server' do
     pp = <<-EOS
     # Bogus port for redis server
-    $foo_key = redisget('foo', 'redis://127.0.0.1:12345')
+    $foo_key = redis::get('foo', 'redis://127.0.0.1:12345')
 
     notify { $foo_key: }
     EOS
