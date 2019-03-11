@@ -246,6 +246,7 @@ class redis::sentinel (
     exec { '/usr/sbin/update-rc.d redis-sentinel defaults':
       subscribe   => File[$init_script],
       refreshonly => true,
+      notify      => Service[$service_name],
     }
 
   }
