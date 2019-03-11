@@ -114,14 +114,41 @@ describe 'redis', type: :class do
         it { is_expected.to contain_file(config_file_orig).with_content(%r{auto-aof-rewrite-percentage.*_VALUE_}) }
       end
 
-      describe 'with parameter bind' do
-        let(:params) do
-          {
-            bind: '_VALUE_'
-          }
+      describe 'parameter bind' do
+        context 'by default' do
+          it 'binds to localhost' do
+            is_expected.to contain_file(config_file_orig).with_content(%r{bind 127\.0\.0\.1$})
+          end
         end
+        context 'with a single IP address' do
+          let(:params) { { bind: '10.0.0.1' } }
 
-        it { is_expected.to contain_file(config_file_orig).with_content(%r{bind.*_VALUE_}) }
+          it { is_expected.to contain_file(config_file_orig).with_content(%r{bind 10\.0\.0\.1$}) }
+        end
+        context 'with array of IP addresses' do
+          let(:params) do
+            {
+              bind: ['127.0.0.1', '::1']
+            }
+          end
+
+          it { is_expected.to contain_file(config_file_orig).with_content(%r{bind 127\.0\.0\.1 ::1}) }
+        end
+        context 'with empty array' do
+          let(:params) { { bind: [] } }
+
+          it { is_expected.not_to contain_file(config_file_orig).with_content(%r{^bind}) }
+        end
+        context 'with multiple IP addresses on redis 2.4' do
+          let(:params) do
+            {
+              package_ensure: '2.4.10',
+              bind: ['127.0.0.1', '::1']
+            }
+          end
+
+          it { is_expected.to compile.and_raise_error(%r{Redis 2\.4 doesn't support binding to multiple IPs}) }
+        end
       end
 
       describe 'with parameter output_buffer_limit_slave' do
