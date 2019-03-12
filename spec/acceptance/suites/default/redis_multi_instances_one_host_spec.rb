@@ -25,11 +25,11 @@ describe 'redis::instance', unless: (fact('operatingsystem') == 'Debian') do
     }
 
     redis::instance {'redis1':
-      port                => '7777',
+      port                => 7777,
     }
 
     redis::instance {'redis2':
-      port                => '8888',
+      port                => 8888,
     }
 
     EOS
