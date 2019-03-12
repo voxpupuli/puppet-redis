@@ -1,6 +1,6 @@
 {
   "name": "puppet-redis",
-  "version": "4.0.0",
+  "version": "4.0.1-rc0",
   "author": "Vox Pupuli",
   "summary": "Redis module",
   "license": "Apache-2.0",
@@ -9,16 +9,16 @@
   "issues_url": "https://github.com/voxpupuli/puppet-redis/issues",
   "dependencies": [
     {
-      "name":"puppetlabs/apt",
-      "version_requirement":">= 2.3.0 < 7.0.0"
+      "name": "puppetlabs/apt",
+      "version_requirement": ">= 2.3.0 < 7.0.0"
     },
     {
       "name": "puppetlabs/stdlib",
       "version_requirement": ">= 4.25.0 < 6.0.0"
     },
     {
-      "name":"stahnma/epel",
-      "version_requirement":">= 1.2.2 < 2.0.0"
+      "name": "stahnma/epel",
+      "version_requirement": ">= 1.2.2 < 2.0.0"
     },
     {
       "name": "herculesteam/augeasproviders_sysctl",
