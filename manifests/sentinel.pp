@@ -178,7 +178,7 @@ class redis::sentinel (
   $log_level              = $::redis::params::log_level,
   $log_file               = $::redis::params::log_file,
   $master_name            = $::redis::params::sentinel_master_name,
-  $redis_host             = $::redis::params::bind,
+  Stdlib::Host $redis_host = $::redis::params::sentinel_redis_host,
   $redis_port             = $::redis::params::port,
   $package_name           = $::redis::params::sentinel_package_name,
   $package_ensure         = $::redis::params::sentinel_package_ensure,

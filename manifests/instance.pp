@@ -18,7 +18,7 @@
 # @param [String] appendonly   Enable/disable appendonly mode.
 # @param [String] auto_aof_rewrite_min_size   Adjust minimum size for auto-aof-rewrite.
 # @param [String] auto_aof_rewrite_percentage   Adjust percentatge for auto-aof-rewrite.
-# @param [String] bind   Configure which IP address to listen on.
+# @param bind Configure which IP address(es) to listen on. To bind on all interfaces, use an empty array.
 # @param [String] config_dir   Directory containing the configuration files.
 # @param [String] config_dir_mode   Adjust mode for directory containing configuration files.
 # @param [String] config_file_orig   The location and name of a config file that provides the source
@@ -133,7 +133,7 @@ define redis::instance(
   $appendonly                    = $::redis::appendonly,
   $auto_aof_rewrite_min_size     = $::redis::auto_aof_rewrite_min_size,
   $auto_aof_rewrite_percentage   = $::redis::auto_aof_rewrite_percentage,
-  $bind                          = $::redis::bind,
+  Variant[Stdlib::IP::Address, Array[Stdlib::IP::Address]] $bind = $::redis::bind,
   $output_buffer_limit_slave     = $::redis::output_buffer_limit_slave,
   $output_buffer_limit_pubsub    = $::redis::output_buffer_limit_pubsub,
   $conf_template                 = $::redis::conf_template,
@@ -314,6 +314,8 @@ define redis::instance(
     refreshonly => true,
   }
 
+  $bind_arr = [$bind].flatten
+
   if $package_ensure =~ /^([0-9]+:)?[0-9]+\.[0-9]/ {
     if ':' in $package_ensure {
       $_redis_version_real = split($package_ensure, ':')
@@ -328,6 +330,7 @@ define redis::instance(
   if ($redis_version_real and $conf_template == 'redis/redis.conf.erb') {
     case $redis_version_real {
       /^2.4./: {
+        if $bind_arr.length > 1 { fail('Redis 2.4 doesn\'t support binding to multiple IPs') }
         File[$redis_file_name_orig] { content => template('redis/redis.conf.2.4.10.erb') }
       }
       /^2.8./: {

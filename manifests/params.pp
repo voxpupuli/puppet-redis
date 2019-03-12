@@ -17,7 +17,7 @@ class redis::params {
   $appendonly                      = false
   $auto_aof_rewrite_min_size       = '64mb'
   $auto_aof_rewrite_percentage     = 100
-  $bind                            = '127.0.0.1'
+  $bind                            = ['127.0.0.1']
   $output_buffer_limit_slave       = '256mb 64mb 60'
   $output_buffer_limit_pubsub      = '32mb 8mb 60'
   $conf_template                   = 'redis/redis.conf.erb'
@@ -61,6 +61,7 @@ class redis::params {
   $sentinel_parallel_sync          = 1
   $sentinel_port                   = 26379
   $sentinel_quorum                 = 2
+  $sentinel_redis_host             = '127.0.0.1'
   $sentinel_service_name           = 'redis-sentinel'
   $sentinel_working_dir            = '/tmp'
   $sentinel_init_template          = 'redis/redis-sentinel.init.erb'

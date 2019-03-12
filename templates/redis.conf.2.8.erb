@@ -63,6 +63,7 @@ port <%= @port %>
 tcp-backlog <%= @tcp_backlog %>
 <% end -%>
 
+<% unless @bind_arr.empty? -%>
 # By default Redis listens for connections from all the network interfaces
 # available on the server. It is possible to listen to just one or multiple
 # interfaces using the "bind" configuration directive, followed by one or
@@ -72,7 +73,8 @@ tcp-backlog <%= @tcp_backlog %>
 #
 # bind 192.168.1.100 10.0.0.1
 # bind 127.0.0.1
-bind <%= @bind %>
+bind <%= @bind_arr.join(' ') %>
+<% end -%>
 
 # Specify the path for the Unix socket that will be used to listen for
 # incoming connections. There is no default, so Redis will not listen

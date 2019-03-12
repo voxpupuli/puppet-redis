@@ -9,6 +9,16 @@
 #     slaveof => '10.0.1.1 6379',
 #   }
 #
+# @example Binding on multiple interfaces
+#   class { 'redis':
+#     bind => ['127.0.0.1', '10.0.0.1', '10.1.0.1'],
+#   }
+#
+# @example Binding on all interfaces
+#   class { 'redis':
+#     bind => [],
+#   }
+#
 # @param [String] activerehashing   Enable/disable active rehashing.
 # @param [String] aof_load_truncated   Enable/disable loading truncated AOF file
 # @param [String] aof_rewrite_incremental_fsync   Enable/disable fsync for AOF file
@@ -17,7 +27,7 @@
 # @param [String] appendonly   Enable/disable appendonly mode.
 # @param [String] auto_aof_rewrite_min_size   Adjust minimum size for auto-aof-rewrite.
 # @param [String] auto_aof_rewrite_percentage   Adjust percentatge for auto-aof-rewrite.
-# @param [String] bind   Configure which IP address to listen on.
+# @param bind Configure which IP address(es) to listen on. To bind on all interfaces, use an empty array.
 # @param [String] config_dir   Directory containing the configuration files.
 # @param [String] config_dir_mode   Adjust mode for directory containing configuration files.
 # @param [String] config_file_orig   The location and name of a config file that provides the source
@@ -143,7 +153,7 @@ class redis (
   $appendonly                    = $::redis::params::appendonly,
   $auto_aof_rewrite_min_size     = $::redis::params::auto_aof_rewrite_min_size,
   $auto_aof_rewrite_percentage   = $::redis::params::auto_aof_rewrite_percentage,
-  $bind                          = $::redis::params::bind,
+  Variant[Stdlib::IP::Address, Array[Stdlib::IP::Address]] $bind = $::redis::params::bind,
   $output_buffer_limit_slave     = $::redis::params::output_buffer_limit_slave,
   $output_buffer_limit_pubsub    = $::redis::params::output_buffer_limit_pubsub,
   $conf_template                 = $::redis::params::conf_template,
