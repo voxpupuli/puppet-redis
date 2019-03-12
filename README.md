@@ -127,18 +127,6 @@ Test against a specific Puppet or Facter version:
     $ PUPPET_VERSION=4.10.0 bundle update && bundle exec rake spec
     $ FACTER_VERSION=1.6.8  bundle update && bundle exec rake spec
 
-## Puppet 3 Support
-
-Puppet 3 is EOL as-of January 2017. The last release of this module that will
-support Puppet 3.X and earlier will be the 3.X.X module releases.
-
-Module versions from 4.X.X onwards will use Puppet 4 only features and will not work with
-earlier versions.
-
-We would recommend upgrading your Puppet agent to the latest release, as Puppet 4 comes with a load of awesome new features.
-
-If you're stuck with older Puppet, you could also fork the module from 3.0.0 and use your fork as a Puppet 3 supported version.
-
 ## Contributing
 
 * Fork it
