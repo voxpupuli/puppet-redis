@@ -77,11 +77,11 @@ describe 'redis', type: :class do
       describe 'with parameter appendfsync' do
         let(:params) do
           {
-            appendfsync: '_VALUE_'
+            appendfsync: 'no'
           }
         end
 
-        it { is_expected.to contain_file(config_file_orig).with_content(%r{appendfsync.*_VALUE_}) }
+        it { is_expected.to contain_file(config_file_orig).with_content(%r{^appendfsync no$}) }
       end
 
       describe 'with parameter appendonly' do
@@ -172,21 +172,21 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter: config_dir' do
-        let(:params) { { config_dir: '_VALUE_' } }
+        let(:params) { { config_dir: '/etc/config_dir' } }
 
-        it { is_expected.to contain_file('_VALUE_').with_ensure('directory') }
+        it { is_expected.to contain_file('/etc/config_dir').with_ensure('directory') }
       end
 
       describe 'with parameter: config_dir_mode' do
-        let(:params) { { config_dir_mode: '_VALUE_' } }
+        let(:params) { { config_dir_mode: '0700' } }
 
-        it { is_expected.to contain_file('/etc/redis').with_mode('_VALUE_') }
+        it { is_expected.to contain_file('/etc/redis').with_mode('0700') }
       end
 
       describe 'with parameter: log_dir_mode' do
-        let(:params) { { log_dir_mode: '_VALUE_' } }
+        let(:params) { { log_dir_mode: '0660' } }
 
-        it { is_expected.to contain_file('/var/log/redis').with_mode('_VALUE_') }
+        it { is_expected.to contain_file('/var/log/redis').with_mode('0660') }
       end
 
       describe 'with parameter: config_file_orig' do
@@ -196,9 +196,9 @@ describe 'redis', type: :class do
       end
 
       describe 'with parameter: config_file_mode' do
-        let(:params) { { config_file_mode: '_VALUE_' } }
+        let(:params) { { config_file_mode: '0600' } }
 
-        it { is_expected.to contain_file(config_file_orig).with_mode('_VALUE_') }
+        it { is_expected.to contain_file(config_file_orig).with_mode('0600') }
       end
 
       describe 'with parameter: config_group' do
@@ -324,12 +324,12 @@ describe 'redis', type: :class do
       describe 'with parameter log_dir' do
         let(:params) do
           {
-            log_dir: '_VALUE_'
+            log_dir: '/var/log/redis'
           }
         end
 
         it {
-          is_expected.to contain_file('_VALUE_').with(
+          is_expected.to contain_file('/var/log/redis').with(
             'ensure' => 'directory'
           )
         }
@@ -338,13 +338,13 @@ describe 'redis', type: :class do
       describe 'with parameter log_file' do
         let(:params) do
           {
-            log_file: '_VALUE_'
+            log_file: '/var/log/redis/redis.log'
           }
         end
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{logfile.*_VALUE_}
+            'content' => %r{^logfile /var/log/redis/redis\.log$}
           )
         }
       end
@@ -596,13 +596,13 @@ describe 'redis', type: :class do
       describe 'with parameter port' do
         let(:params) do
           {
-            port: '_VALUE_'
+            port: 6666
           }
         end
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{port.*_VALUE_}
+            'content' => %r{^port 6666$}
           )
         }
       end
@@ -1095,13 +1095,13 @@ describe 'redis', type: :class do
       describe 'with parameter workdir' do
         let(:params) do
           {
-            workdir: '_VALUE_'
+            workdir: '/var/workdir'
           }
         end
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{dir.*_VALUE_}
+            'content' => %r{^dir /var/workdir$}
           )
         }
       end

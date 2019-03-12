@@ -7,23 +7,23 @@
 #
 # @example
 #   redis::instance {'6380':
-#     port => '6380',
+#     port => 6380,
 #   }
 #
 # @param [String] activerehashing   Enable/disable active rehashing.
 # @param [String] aof_load_truncated   Enable/disable loading truncated AOF file
 # @param [String] aof_rewrite_incremental_fsync   Enable/disable fsync for AOF file
 # @param [String] appendfilename   The name of the append only file
-# @param [String] appendfsync   Adjust fsync mode. Valid options: always, everysec, no. Default:  everysec
+# @param appendfsync Adjust fsync mode. Valid options: always, everysec, no. Default:  everysec
 # @param [String] appendonly   Enable/disable appendonly mode.
 # @param [String] auto_aof_rewrite_min_size   Adjust minimum size for auto-aof-rewrite.
 # @param [String] auto_aof_rewrite_percentage   Adjust percentatge for auto-aof-rewrite.
 # @param bind Configure which IP address(es) to listen on. To bind on all interfaces, use an empty array.
-# @param [String] config_dir   Directory containing the configuration files.
-# @param [String] config_dir_mode   Adjust mode for directory containing configuration files.
+# @param config_dir Directory containing the configuration files.
+# @param config_dir_mode Adjust mode for directory containing configuration files.
 # @param [String] config_file_orig   The location and name of a config file that provides the source
 # @param [String] config_file   Adjust main configuration file.
-# @param [String] config_file_mode   Adjust permissions for configuration files.
+# @param config_file_mode Adjust permissions for configuration files.
 # @param [String] config_group   Adjust filesystem group for config files.
 # @param [String] config_owner   Adjust filesystem owner for config files.
 # @param [String] conf_template   Define which template to use.
@@ -38,9 +38,9 @@
 # @param [String] latency_monitor_threshold   Latency monitoring threshold in milliseconds
 # @param [String] list_max_ziplist_entries   Set max ziplist entries for lists.
 # @param [String] list_max_ziplist_value   Set max ziplist values for lists.
-# @param [String] log_dir   Specify directory where to write log entries.
-# @param [String] log_dir_mode   Adjust mode for directory containing log files.
-# @param [String] log_file   Specify file where to write log entries.
+# @param log_dir Specify directory where to write log entries.
+# @param log_dir_mode Adjust mode for directory containing log files.
+# @param log_file Specify file where to write log entries.
 # @param [String] log_level   Specify the server verbosity level.
 # @param [String] masterauth   If the master is password protected (using the "requirepass" configuration
 # @param [String] maxclients   Set the max number of connected clients at the same time.
@@ -52,7 +52,7 @@
 # @param [String] no_appendfsync_on_rewrite   If you have latency problems turn this to 'true'. Otherwise leave it as
 # @param [String] notify_keyspace_events   Which events to notify Pub/Sub clients about events happening
 # @param [String] pid_file   Where to store the pid.
-# @param [String] port   Configure which port to listen on.
+# @param port Configure which port to listen on.
 # @param [String] protected_mode  Whether protected mode is enabled or not.  Only applicable when no bind is set.
 # @param [String] rdbcompression   Enable/disable compression of string objects using LZF when dumping.
 # @param [String] repl_backlog_size   The replication backlog size
@@ -111,13 +111,13 @@
 # @param [String] ulimit   Limit the use of system-wide resources.
 # @param [String] unixsocket   Define unix socket path
 # @param [String] unixsocketperm   Define unix socket file permissions
-# @param [String] workdir   The DB will be written inside this directory, with the filename specified
+# @param workdir The DB will be written inside this directory, with the filename specified
 #   above using the 'dbfilename' configuration directive.
 #   Default: /var/lib/redis/
-# @param [String] workdir_mode   Adjust mode for data directory.
+# @param workdir_mode   Adjust mode for data directory.
 # @param [String] zset_max_ziplist_entries   Set max entries for sorted sets.
 # @param [String] zset_max_ziplist_value   Set max values for sorted sets.
-# @param [String] cluster_enabled   Enables redis 3.0 cluster functionality
+# @param cluster_enabled Enables redis 3.0 cluster functionality
 # @param [String] cluster_config_file   Config file for saving cluster nodes configuration. This file is never touched by humans.
 #   Only set if cluster_enabled is true
 #   Default: nodes.conf
@@ -129,7 +129,7 @@ define redis::instance(
   $aof_load_truncated            = $::redis::aof_load_truncated,
   $aof_rewrite_incremental_fsync = $::redis::aof_rewrite_incremental_fsync,
   $appendfilename                = $::redis::appendfilename,
-  $appendfsync                   = $::redis::appendfsync,
+  Enum['no','always','everysec'] $appendfsync = $::redis::appendfsync,
   $appendonly                    = $::redis::appendonly,
   $auto_aof_rewrite_min_size     = $::redis::auto_aof_rewrite_min_size,
   $auto_aof_rewrite_percentage   = $::redis::auto_aof_rewrite_percentage,
@@ -137,10 +137,10 @@ define redis::instance(
   $output_buffer_limit_slave     = $::redis::output_buffer_limit_slave,
   $output_buffer_limit_pubsub    = $::redis::output_buffer_limit_pubsub,
   $conf_template                 = $::redis::conf_template,
-  $config_dir                    = $::redis::config_dir,
-  $config_dir_mode               = $::redis::config_dir_mode,
+  Stdlib::Absolutepath $config_dir = $::redis::config_dir,
+  Stdlib::Filemode $config_dir_mode = $::redis::config_dir_mode,
   $config_file                   = $::redis::config_file,
-  $config_file_mode              = $::redis::config_file_mode,
+  Stdlib::Filemode $config_file_mode = $::redis::config_file_mode,
   $config_file_orig              = $::redis::config_file_orig,
   $config_group                  = $::redis::config_group,
   $config_owner                  = $::redis::config_owner,
@@ -155,8 +155,8 @@ define redis::instance(
   $latency_monitor_threshold     = $::redis::latency_monitor_threshold,
   $list_max_ziplist_entries      = $::redis::list_max_ziplist_entries,
   $list_max_ziplist_value        = $::redis::list_max_ziplist_value,
-  $log_dir                       = $::redis::log_dir,
-  $log_dir_mode                  = $::redis::log_dir_mode,
+  Stdlib::Absolutepath $log_dir = $::redis::log_dir,
+  Stdlib::Filemode $log_dir_mode = $::redis::log_dir_mode,
   $log_level                     = $::redis::log_level,
   $minimum_version               = $::redis::minimum_version,
   $masterauth                    = $::redis::masterauth,
@@ -170,7 +170,7 @@ define redis::instance(
   $notify_keyspace_events        = $::redis::notify_keyspace_events,
   $managed_by_cluster_manager    = $::redis::managed_by_cluster_manager,
   $package_ensure                = $::redis::package_ensure,
-  $port                          = $::redis::port,
+  Stdlib::Port $port             = $::redis::port,
   $protected_mode                = $::redis::protected_mode,
   $rdbcompression                = $::redis::rdbcompression,
   $repl_backlog_size             = $::redis::repl_backlog_size,
@@ -197,10 +197,10 @@ define redis::instance(
   $timeout                       = $::redis::timeout,
   $unixsocketperm                = $::redis::unixsocketperm,
   $ulimit                        = $::redis::ulimit,
-  $workdir_mode                  = $::redis::workdir_mode,
+  Stdlib::Filemode $workdir_mode = $::redis::workdir_mode,
   $zset_max_ziplist_entries      = $::redis::zset_max_ziplist_entries,
   $zset_max_ziplist_value        = $::redis::zset_max_ziplist_value,
-  $cluster_enabled               = $::redis::cluster_enabled,
+  Boolean $cluster_enabled       = $::redis::cluster_enabled,
   $cluster_config_file           = $::redis::cluster_config_file,
   $cluster_node_timeout          = $::redis::cluster_node_timeout,
   $service_ensure                = $::redis::service_ensure,
@@ -210,10 +210,10 @@ define redis::instance(
   $service_hasstatus             = $::redis::service_hasstatus,
   # Defaults for redis::instance
   $manage_service_file           = true,
-  $log_file                      = undef,
+  Optional[Stdlib::Absolutepath] $log_file = undef,
   $pid_file                      = "/var/run/redis/redis-server-${name}.pid",
   $unixsocket                    = "/var/run/redis/redis-server-${name}.sock",
-  $workdir                       = "${::redis::workdir}/redis-server-${name}",
+  Stdlib::Absolutepath $workdir  = "${::redis::workdir}/redis-server-${name}",
 ) {
 
   if $title == 'default' {
