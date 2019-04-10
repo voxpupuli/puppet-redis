@@ -195,7 +195,7 @@ class redis::sentinel (
   $service_group          = $::redis::params::service_group,
   $service_name           = $::redis::params::sentinel_service_name,
   $service_ensure         = $::redis::params::service_ensure,
-  $service_enable         = $::redis::params::service_enable,
+  Boolean $service_enable = $::redis::params::service_enable,
   $service_user           = $::redis::params::service_user,
   $working_dir            = $::redis::params::sentinel_working_dir,
   $notification_script    = $::redis::params::sentinel_notification_script,
