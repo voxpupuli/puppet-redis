@@ -137,6 +137,11 @@
 #
 #   Default: redis
 #
+# [*service_enable*]
+#   Enable the service at boot time.
+#
+#   Default: true
+#
 # [*working_dir*]
 #   The directory into which sentinel will change to avoid mount
 #   conflicts.
@@ -190,6 +195,7 @@ class redis::sentinel (
   $service_group          = $::redis::params::service_group,
   $service_name           = $::redis::params::sentinel_service_name,
   $service_ensure         = $::redis::params::service_ensure,
+  Boolean $service_enable = $::redis::params::service_enable,
   $service_user           = $::redis::params::service_user,
   $working_dir            = $::redis::params::sentinel_working_dir,
   $notification_script    = $::redis::params::sentinel_notification_script,
@@ -253,7 +259,7 @@ class redis::sentinel (
 
   service { $service_name:
     ensure     => $service_ensure,
-    enable     => $::redis::params::service_enable,
+    enable     => $service_enable,
     hasrestart => $::redis::params::service_hasrestart,
     hasstatus  => $::redis::params::service_hasstatus,
   }
