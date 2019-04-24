@@ -76,12 +76,17 @@ def manifest_vars
   vars
 end
 
-def centos_facts
-  {
-    operatingsystem: 'CentOS',
-    osfamily: 'RedHat',
-    puppetversion: '4.5.2'
-  }
+def redis_service_file(service_name: manifest_vars[:service_name], service_provider: nil)
+  if service_name != manifest_vars[:service_name]
+    service_name = "#{manifest_vars[:service_name]}-#{service_name}"
+  end
+
+  case service_provider
+  when 'systemd'
+    "/etc/systemd/system/#{service_name}.service"
+  else
+    "/etc/init.d/#{service_name}"
+  end
 end
 
 def debian_facts

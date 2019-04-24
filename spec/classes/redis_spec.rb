@@ -1191,6 +1191,31 @@ describe 'redis', type: :class do
           )
         }
       end
+
+      describe 'with parameter manage_service_file' do
+        if facts[:operatingsystem] == 'Archlinux'
+          let(:params) do
+            {
+              manage_service_file: true,
+              service_provider: 'systemd'
+            }
+          end
+
+          it {
+            is_expected.to contain_file("/etc/systemd/system/#{service_name}.service")
+          }
+        else
+          let(:params) do
+            {
+              manage_service_file: true
+            }
+          end
+
+          it {
+            is_expected.to contain_file("/etc/init.d/#{service_name}")
+          }
+        end
+      end
     end
   end
 end
