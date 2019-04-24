@@ -180,6 +180,7 @@ class redis (
   Stdlib::Filemode $log_dir_mode = $::redis::params::log_dir_mode,
   Stdlib::Absolutepath $log_file = $::redis::params::log_file,
   $log_level                     = $::redis::params::log_level,
+  Boolean $manage_service_file   = $::redis::params::manage_service_file,
   Boolean $manage_package        = $::redis::params::manage_package,
   Boolean $manage_repo           = $::redis::params::manage_repo,
   $masterauth                    = $::redis::params::masterauth,
