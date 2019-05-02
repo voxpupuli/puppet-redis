@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v4.1.0](https://github.com/voxpupuli/puppet-redis/tree/v4.1.0) (2019-04-30)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v4.0.0...v4.1.0)
+
+**Implemented enhancements:**
+
+- Add service\_enable parameter to sentinel.pp [\#307](https://github.com/voxpupuli/puppet-redis/pull/307) ([rschemm](https://github.com/rschemm))
+
+**Closed issues:**
+
+- Please release v3.3.2 due to Ubuntu 18.04 / systemd fix. [\#283](https://github.com/voxpupuli/puppet-redis/issues/283)
+
+**Merged pull requests:**
+
+- Allow puppetlabs/apt 7.x [\#312](https://github.com/voxpupuli/puppet-redis/pull/312) ([dhoppe](https://github.com/dhoppe))
+
 ## [v4.0.0](https://github.com/voxpupuli/puppet-redis/tree/v4.0.0) (2019-03-12)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v3.3.1...v4.0.0)
