@@ -217,6 +217,7 @@ define redis::instance(
 ) {
 
   if $title == 'default' {
+    $redis_server_name    = $::redis::service_name
     $redis_file_name_orig = $config_file_orig
     $redis_file_name      = $config_file
   } else {

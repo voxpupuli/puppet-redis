@@ -9,6 +9,8 @@ describe 'redis::instance', type: :define do
   let :title do
     'app2'
   end
+  let(:service_name) { redis_service_name(service_name: title) }
+  let(:service_file) { redis_service_file(service_name: service_name, service_provider: facts[:service_provider]) }
 
   describe 'os-dependent items' do
     context 'on Ubuntu systems' do
@@ -26,6 +28,12 @@ describe 'redis::instance', type: :define do
         it { is_expected.to contain_service('redis-server-app2').with_enable('true') }
         it { is_expected.to contain_file('/etc/init.d/redis-server-app2').with_content(%r{DAEMON_ARGS=/etc/redis/redis-server-app2\.conf}) }
         it { is_expected.to contain_file('/etc/init.d/redis-server-app2').with_content(%r{PIDFILE=/var/run/redis/redis-server-app2\.pid}) }
+
+        context 'with default title' do
+          let(:title) { 'default' }
+
+          it { is_expected.to contain_file(service_file).with_content(%r{DAEMON_ARGS=/etc/redis/redis.conf}) }
+        end
       end
       context '16.04' do
         let(:facts) do
@@ -40,6 +48,12 @@ describe 'redis::instance', type: :define do
         it { is_expected.to contain_service('redis-server-app2').with_ensure('running') }
         it { is_expected.to contain_service('redis-server-app2').with_enable('true') }
         it { is_expected.to contain_file('/etc/systemd/system/redis-server-app2.service').with_content(%r{ExecStart=/usr/bin/redis-server /etc/redis/redis-server-app2\.conf}) }
+
+        context 'with default title' do
+          let(:title) { 'default' }
+
+          it { is_expected.to contain_file(service_file).with_content(%r{ExecStart=/usr/bin/redis-server /etc/redis/redis.conf}) }
+        end
       end
     end
     context 'on CentOS systems' do
@@ -57,6 +71,12 @@ describe 'redis::instance', type: :define do
         it { is_expected.to contain_service('redis-server-app2').with_enable('true') }
         it { is_expected.to contain_file('/etc/init.d/redis-server-app2').with_content(%r{REDIS_CONFIG="/etc/redis-server-app2\.conf"}) }
         it { is_expected.to contain_file('/etc/init.d/redis-server-app2').with_content(%r{pidfile="/var/run/redis/redis-server-app2\.pid"}) }
+
+        context 'with default title' do
+          let(:title) { 'default' }
+
+          it { is_expected.to contain_file(service_file).with_content(%r{REDIS_CONFIG="/etc/redis.conf"}) }
+        end
       end
       context '7' do
         let(:facts) do
@@ -71,6 +91,12 @@ describe 'redis::instance', type: :define do
         it { is_expected.to contain_service('redis-server-app2').with_ensure('running') }
         it { is_expected.to contain_service('redis-server-app2').with_enable('true') }
         it { is_expected.to contain_file('/etc/systemd/system/redis-server-app2.service').with_content(%r{ExecStart=/usr/bin/redis-server /etc/redis-server-app2\.conf}) }
+
+        context 'with default title' do
+          let(:title) { 'default' }
+
+          it { is_expected.to contain_file(service_file).with_content(%r{ExecStart=/usr/bin/redis-server /etc/redis.conf}) }
+        end
       end
     end
   end
