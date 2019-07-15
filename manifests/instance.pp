@@ -127,6 +127,9 @@
 # @param [String] cluster_slave_validity_factor   Control variable to disable promoting slave in case of disconnection from master
 #   Only set if cluster_enabled is true
 #   Default: 0
+# @param [Boolean] cluster_require_full_coverage   If false Redis Cluster will server queries even if requests about a subset of keys can be processed
+#   Only set if cluster_enabled is true
+#   Default: true
 define redis::instance(
   $activerehashing               = $::redis::activerehashing,
   $aof_load_truncated            = $::redis::aof_load_truncated,
@@ -207,6 +210,7 @@ define redis::instance(
   $cluster_config_file           = $::redis::cluster_config_file,
   $cluster_node_timeout          = $::redis::cluster_node_timeout,
   $cluster_slave_validity_factor = $::redis::cluster_slave_validity_factor,
+  Boolean $cluster_require_full_coverage = $::redis::cluster_require_full_coverage,
   $service_ensure                = $::redis::service_ensure,
   $service_enable                = $::redis::service_enable,
   $service_group                 = $::redis::service_group,

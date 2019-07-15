@@ -774,6 +774,7 @@ cluster-enabled yes
 cluster-config-file <%= @cluster_config_file %>
 cluster-node-timeout <%= @cluster_node_timeout %>
 cluster-slave-validity-factor <%= @cluster_slave_validity_factor %>
+cluster-require-full-coverage <% if @cluster_require_full_coverage -%>yes<% else -%>no<% end %>
 <% end -%>
 
 
