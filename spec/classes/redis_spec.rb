@@ -1245,6 +1245,21 @@ describe 'redis', type: :class do
         }
       end
 
+      describe 'with parameter cluster_config_file' do
+        let(:params) do
+          {
+            cluster_enabled: true,
+            cluster_migration_barrier: '_VALUE_'
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{cluster-migration-barrier.*_VALUE_}
+          )
+        }
+      end
+
       describe 'with parameter manage_service_file' do
         let(:params) do
           {

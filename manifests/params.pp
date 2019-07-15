@@ -104,6 +104,7 @@ class redis::params {
   $cluster_node_timeout   = 5000
   $cluster_slave_validity_factor = 0
   $cluster_require_full_coverage = true
+  $cluster_migration_barrier = 1
 
   case $::osfamily {
     'Debian': {

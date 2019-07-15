@@ -150,6 +150,9 @@
 # @param [Boolean] cluster_require_full_coverage   If false Redis Cluster will server queries even if requests about a subset of keys can be processed
 #   Only set if cluster_enabled is true
 #   Default: true
+# @param [String] cluster_migration_barrier    Minimum number of slaves master will remain connected with, for another slave to migrate to a  master which is no longer covered by any slave
+#   Only set if cluster_enabled is true
+#   Default: 1
 class redis (
   $activerehashing               = $::redis::params::activerehashing,
   $aof_load_truncated            = $::redis::params::aof_load_truncated,
@@ -249,6 +252,7 @@ class redis (
   $cluster_node_timeout          = $::redis::params::cluster_node_timeout,
   $cluster_slave_validity_factor = $::redis::params::cluster_slave_validity_factor,
   Boolean $cluster_require_full_coverage = $::redis::params::cluster_require_full_coverage,
+  $cluster_migration_barrier     = $::redis::params::cluster_migration_barrier
 ) inherits redis::params {
 
   contain redis::preinstall
