@@ -753,6 +753,7 @@ aof-rewrite-incremental-fsync <% if @aof_rewrite_incremental_fsync -%>yes<% else
 cluster-enabled yes
 cluster-config-file <%= @cluster_config_file %>
 cluster-node-timeout <%= @cluster_node_timeout %>
+cluster-slave-validity-factor <%= @cluster_slave_validity_factor %>
 <% end -%>
 
 

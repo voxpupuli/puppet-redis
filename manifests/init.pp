@@ -144,6 +144,9 @@
 # @param [String] cluster_node_timeout   Node timeout
 #   Only set if cluster_enabled is true
 #   Default: 5000
+# @param [String] cluster_slave_validity_factor   Control variable to disable promoting slave in case of disconnection from master
+#   Only set if cluster_enabled is true
+#   Default: 0
 class redis (
   $activerehashing               = $::redis::params::activerehashing,
   $aof_load_truncated            = $::redis::params::aof_load_truncated,
@@ -241,6 +244,7 @@ class redis (
   Boolean $cluster_enabled       = $::redis::params::cluster_enabled,
   $cluster_config_file           = $::redis::params::cluster_config_file,
   $cluster_node_timeout          = $::redis::params::cluster_node_timeout,
+  $cluster_slave_validity_factor = $::redis::params::cluster_slave_validity_factor,
 ) inherits redis::params {
 
   contain redis::preinstall

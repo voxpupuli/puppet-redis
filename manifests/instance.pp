@@ -124,6 +124,9 @@
 # @param [String] cluster_node_timeout   Node timeout
 #   Only set if cluster_enabled is true
 #   Default: 5000
+# @param [String] cluster_slave_validity_factor   Control variable to disable promoting slave in case of disconnection from master
+#   Only set if cluster_enabled is true
+#   Default: 0
 define redis::instance(
   $activerehashing               = $::redis::activerehashing,
   $aof_load_truncated            = $::redis::aof_load_truncated,
@@ -203,6 +206,7 @@ define redis::instance(
   Boolean $cluster_enabled       = $::redis::cluster_enabled,
   $cluster_config_file           = $::redis::cluster_config_file,
   $cluster_node_timeout          = $::redis::cluster_node_timeout,
+  $cluster_slave_validity_factor = $::redis::cluster_slave_validity_factor,
   $service_ensure                = $::redis::service_ensure,
   $service_enable                = $::redis::service_enable,
   $service_group                 = $::redis::service_group,

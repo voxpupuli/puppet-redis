@@ -102,6 +102,7 @@ class redis::params {
   $cluster_enabled        = false
   $cluster_config_file    = 'nodes.conf'
   $cluster_node_timeout   = 5000
+  $cluster_slave_validity_factor = 0
 
   case $::osfamily {
     'Debian': {

@@ -1200,6 +1200,21 @@ describe 'redis', type: :class do
         }
       end
 
+      describe 'with parameter cluster_config_file' do
+        let(:params) do
+          {
+            cluster_enabled: true,
+            cluster_slave_validity_factor: '_VALUE_'
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{cluster-slave-validity-factor.*_VALUE_}
+          )
+        }
+      end
+
       describe 'with parameter manage_service_file' do
         let(:params) do
           {
