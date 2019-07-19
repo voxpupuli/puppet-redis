@@ -1204,13 +1204,13 @@ describe 'redis', type: :class do
         let(:params) do
           {
             cluster_enabled: true,
-            cluster_slave_validity_factor: '_VALUE_'
+            cluster_slave_validity_factor: 1
           }
         end
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{cluster-slave-validity-factor.*_VALUE_}
+            'content' => %r{cluster-slave-validity-factor.*1}
           )
         }
       end
@@ -1249,13 +1249,13 @@ describe 'redis', type: :class do
         let(:params) do
           {
             cluster_enabled: true,
-            cluster_migration_barrier: '_VALUE_'
+            cluster_migration_barrier: 1
           }
         end
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{cluster-migration-barrier.*_VALUE_}
+            'content' => %r{cluster-migration-barrier.*1}
           )
         }
       end

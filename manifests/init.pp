@@ -144,13 +144,13 @@
 # @param [String] cluster_node_timeout   Node timeout
 #   Only set if cluster_enabled is true
 #   Default: 5000
-# @param [String] cluster_slave_validity_factor   Control variable to disable promoting slave in case of disconnection from master
+# @param [Integer] cluster_slave_validity_factor   Control variable to disable promoting slave in case of disconnection from master
 #   Only set if cluster_enabled is true
 #   Default: 0
 # @param [Boolean] cluster_require_full_coverage   If false Redis Cluster will server queries even if requests about a subset of keys can be processed
 #   Only set if cluster_enabled is true
 #   Default: true
-# @param [String] cluster_migration_barrier    Minimum number of slaves master will remain connected with, for another slave to migrate to a  master which is no longer covered by any slave
+# @param [Integer] cluster_migration_barrier    Minimum number of slaves master will remain connected with, for another slave to migrate to a  master which is no longer covered by any slave
 #   Only set if cluster_enabled is true
 #   Default: 1
 class redis (
@@ -250,9 +250,9 @@ class redis (
   Boolean $cluster_enabled       = $::redis::params::cluster_enabled,
   $cluster_config_file           = $::redis::params::cluster_config_file,
   $cluster_node_timeout          = $::redis::params::cluster_node_timeout,
-  $cluster_slave_validity_factor = $::redis::params::cluster_slave_validity_factor,
+  Integer $cluster_slave_validity_factor = $::redis::params::cluster_slave_validity_factor,
   Boolean $cluster_require_full_coverage = $::redis::params::cluster_require_full_coverage,
-  $cluster_migration_barrier     = $::redis::params::cluster_migration_barrier
+  Integer $cluster_migration_barrier     = $::redis::params::cluster_migration_barrier
 ) inherits redis::params {
 
   contain redis::preinstall
