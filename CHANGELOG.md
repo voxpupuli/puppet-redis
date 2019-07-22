@@ -4,7 +4,25 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
-## [v4.1.0](https://github.com/voxpupuli/puppet-redis/tree/v4.1.0) (2019-04-30)
+## [v4.2.0](https://github.com/voxpupuli/puppet-redis/tree/v4.2.0) (2019-07-22)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v4.1.0...v4.2.0)
+
+**Implemented enhancements:**
+
+- Adding support for more redis cluster params  [\#316](https://github.com/voxpupuli/puppet-redis/pull/316) ([dom-nie](https://github.com/dom-nie))
+
+**Closed issues:**
+
+- Fix systemd service filename [\#310](https://github.com/voxpupuli/puppet-redis/issues/310)
+- Fix manage\_service\_file variable [\#308](https://github.com/voxpupuli/puppet-redis/issues/308)
+
+**Merged pull requests:**
+
+- Allow `puppetlabs/stdlib` 6.x [\#314](https://github.com/voxpupuli/puppet-redis/pull/314) ([alexjfisher](https://github.com/alexjfisher))
+- Fix manage\_service\_file variable [\#309](https://github.com/voxpupuli/puppet-redis/pull/309) ([CallumBanbery](https://github.com/CallumBanbery))
+
+## [v4.1.0](https://github.com/voxpupuli/puppet-redis/tree/v4.1.0) (2019-05-02)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v4.0.0...v4.1.0)
 
@@ -40,14 +58,14 @@ This is the first release since the module was migrated to the Vox Pupuli `puppe
 
 **Closed issues:**
 
-- Get acceptance tests running again [\#292](https://github.com/voxpupuli/puppet-redis/issues/292)
-- Convert function to API v4 ruby function [\#291](https://github.com/voxpupuli/puppet-redis/issues/291)
 - Transparent Huge Pages \(THP\) Not Disabled on RHEL [\#278](https://github.com/voxpupuli/puppet-redis/issues/278)
 - Looking for maintainer \[Help needed\] [\#277](https://github.com/voxpupuli/puppet-redis/issues/277)
 - Travis Credential issues... still :\( [\#267](https://github.com/voxpupuli/puppet-redis/issues/267)
 - Outdated dependency puppetlabs-apt \< 3.0.0 [\#264](https://github.com/voxpupuli/puppet-redis/issues/264)
 - cannot bind ipv4 and ipv6 [\#257](https://github.com/voxpupuli/puppet-redis/issues/257)
 - Deprecate Puppet 3.X Support [\#152](https://github.com/voxpupuli/puppet-redis/issues/152)
+- Get acceptance tests running again [\#292](https://github.com/voxpupuli/puppet-redis/issues/292)
+- Convert function to API v4 ruby function [\#291](https://github.com/voxpupuli/puppet-redis/issues/291)
 
 **Merged pull requests:**
 
