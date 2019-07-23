@@ -75,7 +75,7 @@
 # @param [String] repl_backlog_size   The replication backlog size
 # @param [String] repl_backlog_ttl   The number of seconds to elapse before freeing backlog buffer
 # @param [String] repl_disable_tcp_nodelay   Enable/disable TCP_NODELAY on the slave socket after SYNC
-# @param [String] repl_ping_slave_period   Slaves send PINGs to server in a predefined interval. It's possible
+# @param [Integer] repl_ping_slave_period   Slaves send PINGs to server in a predefined interval. It's possible
 # @param [String] repl_timeout   Set the replication timeout for:
 # @param [String] requirepass   Require clients to issue AUTH <PASSWORD> before processing any
 #   other commands.
@@ -213,7 +213,7 @@ class redis (
   $repl_backlog_size                                             = $::redis::params::repl_backlog_size,
   $repl_backlog_ttl                                              = $::redis::params::repl_backlog_ttl,
   $repl_disable_tcp_nodelay                                      = $::redis::params::repl_disable_tcp_nodelay,
-  $repl_ping_slave_period                                        = $::redis::params::repl_ping_slave_period,
+  Integer[1] $repl_ping_slave_period                             = $::redis::params::repl_ping_slave_period,
   $repl_timeout                                                  = $::redis::params::repl_timeout,
   $requirepass                                                   = $::redis::params::requirepass,
   $save_db_to_disk                                               = $::redis::params::save_db_to_disk,
