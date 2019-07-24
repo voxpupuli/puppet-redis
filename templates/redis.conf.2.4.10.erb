@@ -147,7 +147,7 @@ slave-serve-stale-data <% if @slave_serve_stale_data -%>yes<% else -%>no<% end %
 # this interval with the repl_ping_slave_period option. The default value is 10
 # seconds.
 #
-# repl-ping-slave-period 10
+repl-ping-slave-period <%= @repl_ping_slave_period %>
 
 # The following option sets a timeout for both Bulk transfer I/O timeout and
 # master data or ping response timeout. The default value is 60 seconds.

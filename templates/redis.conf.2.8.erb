@@ -261,7 +261,7 @@ slave-read-only <% if @slave_read_only -%>yes<% else -%>no<% end %>
 # this interval with the repl_ping_slave_period option. The default value is 10
 # seconds.
 #
-# repl-ping-slave-period 10
+repl-ping-slave-period <%= @repl_ping_slave_period %>
 
 # The following option sets the replication timeout for:
 #

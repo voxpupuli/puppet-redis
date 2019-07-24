@@ -730,13 +730,13 @@ describe 'redis', type: :class do
       describe 'with parameter repl_ping_slave_period' do
         let(:params) do
           {
-            repl_ping_slave_period: 1
+            repl_ping_slave_period: 42
           }
         end
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{repl-ping-slave-period.*1}
+            'content' => %r{^repl-ping-slave-period 42}
           )
         }
       end
