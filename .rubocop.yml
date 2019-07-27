@@ -1,6 +1,6 @@
 require: rubocop-rspec
 AllCops:
-  TargetRubyVersion: 2.1
+  TargetRubyVersion: 1.9
   Include:
     - ./**/*.rb
   Exclude:
