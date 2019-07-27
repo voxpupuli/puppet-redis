@@ -170,36 +170,36 @@
 #   }
 #
 class redis::sentinel (
-  $auth_pass              = $::redis::params::sentinel_auth_pass,
-  $config_file            = $::redis::params::sentinel_config_file,
-  $config_file_orig       = $::redis::params::sentinel_config_file_orig,
-  Stdlib::Filemode $config_file_mode = $::redis::params::sentinel_config_file_mode,
-  $conf_template          = $::redis::params::sentinel_conf_template,
-  $daemonize              = $::redis::params::sentinel_daemonize,
-  $down_after             = $::redis::params::sentinel_down_after,
-  $failover_timeout       = $::redis::params::sentinel_failover_timeout,
-  $init_script            = $::redis::params::sentinel_init_script,
-  $init_template          = $::redis::params::sentinel_init_template,
-  $log_level              = $::redis::params::log_level,
-  $log_file               = $::redis::params::log_file,
-  $master_name            = $::redis::params::sentinel_master_name,
-  Stdlib::Host $redis_host = $::redis::params::sentinel_redis_host,
-  Stdlib::Port $redis_port = $::redis::params::port,
-  $package_name           = $::redis::params::sentinel_package_name,
-  $package_ensure         = $::redis::params::sentinel_package_ensure,
-  $parallel_sync          = $::redis::params::sentinel_parallel_sync,
-  $pid_file               = $::redis::params::sentinel_pid_file,
-  $quorum                 = $::redis::params::sentinel_quorum,
-  $sentinel_bind          = $::redis::params::sentinel_bind,
-  Stdlib::Port $sentinel_port = $::redis::params::sentinel_port,
-  $service_group          = $::redis::params::service_group,
-  $service_name           = $::redis::params::sentinel_service_name,
-  $service_ensure         = $::redis::params::service_ensure,
-  Boolean $service_enable = $::redis::params::service_enable,
-  $service_user           = $::redis::params::service_user,
-  $working_dir            = $::redis::params::sentinel_working_dir,
-  $notification_script    = $::redis::params::sentinel_notification_script,
-  $client_reconfig_script = $::redis::params::sentinel_client_reconfig_script,
+  $auth_pass              = $redis::params::sentinel_auth_pass,
+  $config_file            = $redis::params::sentinel_config_file,
+  $config_file_orig       = $redis::params::sentinel_config_file_orig,
+  Stdlib::Filemode $config_file_mode = $redis::params::sentinel_config_file_mode,
+  $conf_template          = $redis::params::sentinel_conf_template,
+  $daemonize              = $redis::params::sentinel_daemonize,
+  $down_after             = $redis::params::sentinel_down_after,
+  $failover_timeout       = $redis::params::sentinel_failover_timeout,
+  $init_script            = $redis::params::sentinel_init_script,
+  $init_template          = $redis::params::sentinel_init_template,
+  $log_level              = $redis::params::log_level,
+  $log_file               = $redis::params::log_file,
+  $master_name            = $redis::params::sentinel_master_name,
+  Stdlib::Host $redis_host = $redis::params::sentinel_redis_host,
+  Stdlib::Port $redis_port = $redis::params::port,
+  $package_name           = $redis::params::sentinel_package_name,
+  $package_ensure         = $redis::params::sentinel_package_ensure,
+  $parallel_sync          = $redis::params::sentinel_parallel_sync,
+  $pid_file               = $redis::params::sentinel_pid_file,
+  $quorum                 = $redis::params::sentinel_quorum,
+  $sentinel_bind          = $redis::params::sentinel_bind,
+  Stdlib::Port $sentinel_port = $redis::params::sentinel_port,
+  $service_group          = $redis::params::service_group,
+  $service_name           = $redis::params::sentinel_service_name,
+  $service_ensure         = $redis::params::service_ensure,
+  Boolean $service_enable = $redis::params::service_enable,
+  $service_user           = $redis::params::service_user,
+  $working_dir            = $redis::params::sentinel_working_dir,
+  $notification_script    = $redis::params::sentinel_notification_script,
+  $client_reconfig_script = $redis::params::sentinel_client_reconfig_script,
 ) inherits redis::params {
 
   require 'redis'
@@ -211,7 +211,7 @@ class redis::sentinel (
     if (
       (versioncmp($::operatingsystemmajrelease, '16.04') >= 0 and $::operatingsystem == 'Ubuntu') or
       (versioncmp($::operatingsystemmajrelease, '9') >= 0 and $::operatingsystem == 'Debian') or
-      $::redis::manage_repo
+      $redis::manage_repo
       ) {
       package { $package_name:
         ensure => $package_ensure,
@@ -260,8 +260,8 @@ class redis::sentinel (
   service { $service_name:
     ensure     => $service_ensure,
     enable     => $service_enable,
-    hasrestart => $::redis::params::service_hasrestart,
-    hasstatus  => $::redis::params::service_hasstatus,
+    hasrestart => $redis::params::service_hasrestart,
+    hasstatus  => $redis::params::service_hasstatus,
   }
 
 }
