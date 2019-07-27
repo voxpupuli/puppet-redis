@@ -19,35 +19,35 @@ class redis::ulimit {
 
   $service_provider_lookup = pick(getvar('service_provider'), false)
 
-  if $::redis::managed_by_cluster_manager {
+  if $redis::managed_by_cluster_manager {
     file { '/etc/security/limits.d/redis.conf':
       ensure  => 'file',
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      content => "redis soft nofile ${::redis::ulimit}\nredis hard nofile ${::redis::ulimit}\n",
+      content => "redis soft nofile ${redis::ulimit}\nredis hard nofile ${redis::ulimit}\n",
     }
   }
   if $service_provider_lookup == 'systemd' {
-    file { "/etc/systemd/system/${::redis::service_name}.service.d/":
+    file { "/etc/systemd/system/${redis::service_name}.service.d/":
       ensure                  => 'directory',
       owner                   => 'root',
       group                   => 'root',
       selinux_ignore_defaults => true,
     }
 
-    file { "/etc/systemd/system/${::redis::service_name}.service.d/limit.conf":
+    file { "/etc/systemd/system/${redis::service_name}.service.d/limit.conf":
       ensure => file,
       owner  => 'root',
       group  => 'root',
       mode   => '0444',
     }
     augeas { 'Systemd redis ulimit' :
-      incl    => "/etc/systemd/system/${::redis::service_name}.service.d/limit.conf",
+      incl    => "/etc/systemd/system/${redis::service_name}.service.d/limit.conf",
       lens    => 'Systemd.lns',
       changes => [
         "defnode nofile Service/LimitNOFILE \"\"",
-        "set \$nofile/value \"${::redis::ulimit}\"",
+        "set \$nofile/value \"${redis::ulimit}\"",
       ],
       notify  => [
         Exec['systemd-reload-redis'],
@@ -55,7 +55,7 @@ class redis::ulimit {
     }
   } else {
     augeas { 'redis ulimit':
-      changes => "set ULIMIT ${::redis::ulimit}",
+      changes => "set ULIMIT ${redis::ulimit}",
     }
     case $::osfamily {
       'Debian': {
@@ -69,7 +69,7 @@ class redis::ulimit {
         }
       }
       default: {
-        warning("Not sure how to set ULIMIT on non-systemd OSFamily ${::osfamily}, PR's welcome")
+        warning("Not sure how to set ULIMIT on non-systemd OSFamily ${facts['osfamily']}, PR's welcome")
       }
     }
   }

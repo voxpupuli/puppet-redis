@@ -4,7 +4,7 @@
 # Such as package repositories.
 #
 class redis::preinstall {
-  if $::redis::manage_repo {
+  if $redis::manage_repo {
     case $::operatingsystem {
       'RedHat', 'CentOS', 'Scientific', 'OEL', 'Amazon': {
         require 'epel'
@@ -23,7 +23,7 @@ class redis::preinstall {
           include  => { 'src' => true },
           before   => [
             Class['apt::update'],
-            Package[$::redis::package_name],
+            Package[$redis::package_name],
           ],
         }
 
@@ -31,10 +31,10 @@ class redis::preinstall {
 
       'Ubuntu': {
         contain 'apt'
-        apt::ppa { $::redis::ppa_repo:
+        apt::ppa { $redis::ppa_repo:
           before   => [
             Class['apt::update'],
-            Package[$::redis::package_name],
+            Package[$redis::package_name],
           ],
         }
       }
