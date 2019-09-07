@@ -152,7 +152,7 @@ class redis::params {
               $minimum_version           = '3.0.3'
             }
             default: {
-              warning("Ubuntu release ${::operatingsystemmajrelease} isn't 'officially' supported by module, but will git it a shot")
+              warning("Ubuntu release ${::operatingsystemmajrelease} isn't 'officially' supported by module, but will give it a shot")
               $minimum_version           = '2.8.5'
             }
           }
