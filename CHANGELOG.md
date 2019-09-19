@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v4.2.1](https://github.com/voxpupuli/puppet-redis/tree/v4.2.1) (2019-09-19)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v4.2.0...v4.2.1)
+
+**Fixed bugs:**
+
+- Fixing repl\_ping\_slave\_period not being managed with params [\#318](https://github.com/voxpupuli/puppet-redis/pull/318) ([dom-nie](https://github.com/dom-nie))
+
+**Merged pull requests:**
+
+- Spelling fix [\#323](https://github.com/voxpupuli/puppet-redis/pull/323) ([tetsuo13](https://github.com/tetsuo13))
+
 ## [v4.2.0](https://github.com/voxpupuli/puppet-redis/tree/v4.2.0) (2019-07-22)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v4.1.0...v4.2.0)

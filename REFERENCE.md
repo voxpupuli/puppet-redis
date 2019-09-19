@@ -3,9 +3,2187 @@
 
 ## Table of Contents
 
+**Classes**
+
+_Public Classes_
+
+* [`redis`](#redis): This class installs redis
+* [`redis::administration`](#redisadministration): Allows various adminstrative settings for Redis As documented in the FAQ and https://redis.io/topics/admin
+* [`redis::config`](#redisconfig): = Class: redis::config  This class provides configuration for Redis.
+* [`redis::install`](#redisinstall): = Class: redis::install  This class installs the application.
+* [`redis::params`](#redisparams): = Class: redis::params  This class provides a number of parameters.
+* [`redis::preinstall`](#redispreinstall): = Class: redis::preinstall  This class provides anything required by the install class. Such as package repositories.
+* [`redis::sentinel`](#redissentinel): = Class: redis::sentinel  This class installs redis-sentinel  == Parameters:   [*auth_pass*]   The password to use to authenticate with the m
+* [`redis::service`](#redisservice): = Class: redis::service  This class manages the Redis daemon.
+
+_Private Classes_
+
+* `redis::ulimit`: Redis class for configuring ulimit Used to DRY up the config class, and move the logic for ulimit changes all into one place.  Parameters are
+
+**Defined types**
+
+* [`redis::instance`](#redisinstance): Allows the configuration of multiple redis configurations on one machine
+
 **Functions**
 
 * [`redis::get`](#redisget): Returns the value of the key being looked up or `undef` if the key does not exist. Takes two arguments with an optional third. The first bein
+
+**Data types**
+
+* [`Redis::RedisUrl`](#redisredisurl): 
+
+**Tasks**
+
+* [`redis_cli`](#redis_cli): Executes a redis-cli command on the target system
+
+## Classes
+
+### redis
+
+This class installs redis
+
+#### Examples
+
+##### Default install
+
+```puppet
+include redis
+```
+
+##### Slave Node
+
+```puppet
+class { '::redis':
+  bind    => '10.0.1.2',
+  slaveof => '10.0.1.1 6379',
+}
+```
+
+##### Binding on multiple interfaces
+
+```puppet
+class { 'redis':
+  bind => ['127.0.0.1', '10.0.0.1', '10.1.0.1'],
+}
+```
+
+##### Binding on all interfaces
+
+```puppet
+class { 'redis':
+  bind => [],
+}
+```
+
+#### Parameters
+
+The following parameters are available in the `redis` class.
+
+##### `activerehashing`
+
+Data type: `String`
+
+Enable/disable active rehashing.
+
+Default value: $redis::params::activerehashing
+
+##### `aof_load_truncated`
+
+Data type: `String`
+
+Enable/disable loading truncated AOF file
+
+Default value: $redis::params::aof_load_truncated
+
+##### `aof_rewrite_incremental_fsync`
+
+Data type: `String`
+
+Enable/disable fsync for AOF file
+
+Default value: $redis::params::aof_rewrite_incremental_fsync
+
+##### `appendfilename`
+
+Data type: `String`
+
+The name of the append only file
+
+Default value: $redis::params::appendfilename
+
+##### `appendfsync`
+
+Data type: `Enum['no', 'always', 'everysec']`
+
+Adjust fsync mode. Default: `everysec`
+
+Default value: $redis::params::appendfsync
+
+##### `appendonly`
+
+Data type: `String`
+
+Enable/disable appendonly mode.
+
+Default value: $redis::params::appendonly
+
+##### `auto_aof_rewrite_min_size`
+
+Data type: `String`
+
+Adjust minimum size for auto-aof-rewrite.
+
+Default value: $redis::params::auto_aof_rewrite_min_size
+
+##### `auto_aof_rewrite_percentage`
+
+Data type: `String`
+
+Adjust percentatge for auto-aof-rewrite.
+
+Default value: $redis::params::auto_aof_rewrite_percentage
+
+##### `bind`
+
+Data type: `Variant[Stdlib::IP::Address, Array[Stdlib::IP::Address]]`
+
+Configure which IP address(es) to listen on. To bind on all interfaces, use an empty array.
+
+Default value: $redis::params::bind
+
+##### `config_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+Directory containing the configuration files.
+
+Default value: $redis::params::config_dir
+
+##### `config_dir_mode`
+
+Data type: `Stdlib::Filemode`
+
+Adjust mode for directory containing configuration files.
+
+Default value: $redis::params::config_dir_mode
+
+##### `config_file_orig`
+
+Data type: `String`
+
+The location and name of a config file that provides the source
+
+Default value: $redis::params::config_file_orig
+
+##### `config_file`
+
+Data type: `String`
+
+Adjust main configuration file.
+
+Default value: $redis::params::config_file
+
+##### `config_file_mode`
+
+Data type: `Stdlib::Filemode`
+
+Adjust permissions for configuration files.
+
+Default value: $redis::params::config_file_mode
+
+##### `config_group`
+
+Data type: `String`
+
+Adjust filesystem group for config files.
+
+Default value: $redis::params::config_group
+
+##### `config_owner`
+
+Data type: `String`
+
+Adjust filesystem owner for config files.
+
+Default value: $redis::params::config_owner
+
+##### `conf_template`
+
+Data type: `String`
+
+Define which template to use.
+
+Default value: $redis::params::conf_template
+
+##### `daemonize`
+
+Data type: `String`
+
+Have Redis run as a daemon.
+
+Default value: $redis::params::daemonize
+
+##### `default_install`
+
+Data type: `Boolean`
+
+Configure a default install of redis.
+
+Default value: $redis::params::default_install
+
+##### `databases`
+
+Data type: `String`
+
+Set the number of databases.
+
+Default value: $redis::params::databases
+
+##### `dbfilename`
+
+Data type: `String`
+
+The filename where to dump the DB
+
+Default value: $redis::params::dbfilename
+
+##### `extra_config_file`
+
+Data type: `String`
+
+Description
+
+Default value: $redis::params::extra_config_file
+
+##### `hash_max_ziplist_entries`
+
+Data type: `String`
+
+Set max ziplist entries for hashes.
+
+Default value: $redis::params::hash_max_ziplist_entries
+
+##### `hash_max_ziplist_value`
+
+Data type: `String`
+
+Set max ziplist values for hashes.
+
+Default value: $redis::params::hash_max_ziplist_value
+
+##### `hll_sparse_max_bytes`
+
+Data type: `String`
+
+HyperLogLog sparse representation bytes limit
+
+Default value: $redis::params::hll_sparse_max_bytes
+
+##### `hz`
+
+Data type: `String`
+
+Set redis background tasks frequency
+
+Default value: $redis::params::hz
+
+##### `latency_monitor_threshold`
+
+Data type: `String`
+
+Latency monitoring threshold in milliseconds
+
+Default value: $redis::params::latency_monitor_threshold
+
+##### `list_max_ziplist_entries`
+
+Data type: `String`
+
+Set max ziplist entries for lists.
+
+Default value: $redis::params::list_max_ziplist_entries
+
+##### `list_max_ziplist_value`
+
+Data type: `String`
+
+Set max ziplist values for lists.
+
+Default value: $redis::params::list_max_ziplist_value
+
+##### `log_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+Specify directory where to write log entries.
+
+Default value: $redis::params::log_dir
+
+##### `log_dir_mode`
+
+Data type: `Stdlib::Filemode`
+
+Adjust mode for directory containing log files.
+
+Default value: $redis::params::log_dir_mode
+
+##### `log_file`
+
+Data type: `Stdlib::Absolutepath`
+
+Specify file where to write log entries.
+
+Default value: $redis::params::log_file
+
+##### `log_level`
+
+Data type: `String`
+
+Specify the server verbosity level.
+
+Default value: $redis::params::log_level
+
+##### `manage_repo`
+
+Data type: `Boolean`
+
+Enable/disable upstream repository configuration.
+
+Default value: $redis::params::manage_repo
+
+##### `manage_package`
+
+Data type: `Boolean`
+
+Enable/disable management of package
+
+Default value: $redis::params::manage_package
+
+##### `managed_by_cluster_manager`
+
+Data type: `String`
+
+Choose if redis will be managed by a cluster manager such as pacemaker or rgmanager
+
+Default value: $redis::params::managed_by_cluster_manager
+
+##### `masterauth`
+
+Data type: `String`
+
+If the master is password protected (using the "requirepass" configuration
+
+Default value: $redis::params::masterauth
+
+##### `maxclients`
+
+Data type: `String`
+
+Set the max number of connected clients at the same time.
+
+Default value: $redis::params::maxclients
+
+##### `maxmemory`
+
+Data type: `String`
+
+Don't use more memory than the specified amount of bytes.
+
+Default value: $redis::params::maxmemory
+
+##### `maxmemory_policy`
+
+Data type: `String`
+
+How Redis will select what to remove when maxmemory is reached.
+
+Default value: $redis::params::maxmemory_policy
+
+##### `maxmemory_samples`
+
+Data type: `String`
+
+Select as well the sample size to check.
+
+Default value: $redis::params::maxmemory_samples
+
+##### `min_slaves_max_lag`
+
+Data type: `String`
+
+The lag in seconds
+
+Default value: $redis::params::min_slaves_max_lag
+
+##### `min_slaves_to_write`
+
+Data type: `String`
+
+Minimum number of slaves to be in "online" state
+
+Default value: $redis::params::min_slaves_to_write
+
+##### `no_appendfsync_on_rewrite`
+
+Data type: `String`
+
+If you have latency problems turn this to 'true'. Otherwise leave it as
+
+Default value: $redis::params::no_appendfsync_on_rewrite
+
+##### `notify_keyspace_events`
+
+Data type: `String`
+
+Which events to notify Pub/Sub clients about events happening
+
+Default value: $redis::params::notify_keyspace_events
+
+##### `notify_service`
+
+Data type: `String`
+
+You may disable service reloads when config files change if you
+
+Default value: $redis::params::notify_service
+
+##### `package_ensure`
+
+Data type: `String`
+
+Default action for package.
+
+Default value: $redis::params::package_ensure
+
+##### `package_name`
+
+Data type: `String`
+
+Upstream package name.
+
+Default value: $redis::params::package_name
+
+##### `pid_file`
+
+Data type: `String`
+
+Where to store the pid.
+
+Default value: $redis::params::pid_file
+
+##### `port`
+
+Data type: `Stdlib::Port`
+
+Configure which port to listen on.
+
+Default value: $redis::params::port
+
+##### `protected_mode`
+
+Data type: `String`
+
+Whether protected mode is enabled or not.  Only applicable when no bind is set.
+
+Default value: $redis::params::protected_mode
+
+##### `ppa_repo`
+
+Data type: `String`
+
+Specify upstream (Ubuntu) PPA entry.
+
+Default value: $redis::params::ppa_repo
+
+##### `rdbcompression`
+
+Data type: `String`
+
+Enable/disable compression of string objects using LZF when dumping.
+
+Default value: $redis::params::rdbcompression
+
+##### `repl_backlog_size`
+
+Data type: `String`
+
+The replication backlog size
+
+Default value: $redis::params::repl_backlog_size
+
+##### `repl_backlog_ttl`
+
+Data type: `String`
+
+The number of seconds to elapse before freeing backlog buffer
+
+Default value: $redis::params::repl_backlog_ttl
+
+##### `repl_disable_tcp_nodelay`
+
+Data type: `String`
+
+Enable/disable TCP_NODELAY on the slave socket after SYNC
+
+Default value: $redis::params::repl_disable_tcp_nodelay
+
+##### `repl_ping_slave_period`
+
+Data type: `Integer[1]`
+
+Slaves send PINGs to server in a predefined interval. It's possible
+
+Default value: $redis::params::repl_ping_slave_period
+
+##### `repl_timeout`
+
+Data type: `String`
+
+Set the replication timeout for:
+
+Default value: $redis::params::repl_timeout
+
+##### `requirepass`
+
+Data type: `String`
+
+Require clients to issue AUTH <PASSWORD> before processing any
+other commands.
+
+Default value: $redis::params::requirepass
+
+##### `save_db_to_disk`
+
+Data type: `String`
+
+Set if save db to disk.
+
+Default value: $redis::params::save_db_to_disk
+
+##### `save_db_to_disk_interval`
+
+Data type: `String`
+
+save the dataset every N seconds if there are at least M changes in the dataset
+
+Default value: $redis::params::save_db_to_disk_interval
+
+##### `service_manage`
+
+Data type: `Boolean`
+
+Specify if the service should be part of the catalog.
+
+Default value: $redis::params::service_manage
+
+##### `service_enable`
+
+Data type: `String`
+
+Enable/disable daemon at boot.
+
+Default value: $redis::params::service_enable
+
+##### `service_ensure`
+
+Data type: `String`
+
+Specify if the server should be running.
+
+Default value: $redis::params::service_ensure
+
+##### `service_group`
+
+Data type: `String`
+
+Specify which group to run as.
+
+Default value: $redis::params::service_group
+
+##### `service_hasrestart`
+
+Data type: `String`
+
+Does the init script support restart?
+
+Default value: $redis::params::service_hasrestart
+
+##### `service_hasstatus`
+
+Data type: `String`
+
+Does the init script support status?
+
+Default value: $redis::params::service_hasstatus
+
+##### `service_name`
+
+Data type: `String`
+
+Specify the service name for Init or Systemd.
+
+Default value: $redis::params::service_name
+
+##### `service_provider`
+
+Data type: `String`
+
+Specify the service provider to use
+
+Default value: $redis::params::service_provider
+
+##### `service_user`
+
+Data type: `String`
+
+Specify which user to run as.
+
+Default value: $redis::params::service_user
+
+##### `set_max_intset_entries`
+
+Data type: `String`
+
+The following configuration setting sets the limit in the size of the
+set in order to use this special memory saving encoding.
+Default: 512
+
+Default value: $redis::params::set_max_intset_entries
+
+##### `slave_priority`
+
+Data type: `String`
+
+The priority number for slave promotion by Sentinel
+
+Default value: $redis::params::slave_priority
+
+##### `slave_read_only`
+
+Data type: `String`
+
+You can configure a slave instance to accept writes or not.
+
+Default value: $redis::params::slave_read_only
+
+##### `slave_serve_stale_data`
+
+Data type: `String`
+
+When a slave loses its connection with the master, or when the replication
+is still in progress, the slave can act in two different ways:
+1) if slave-serve-stale-data is set to 'yes' (the default) the slave will
+   still reply to client requests, possibly with out of date data, or the
+   data set may just be empty if this is the first synchronization.
+
+2) if slave-serve-stale-data is set to 'no' the slave will reply with
+   an error "SYNC with master in progress" to all the kind of commands
+   but to INFO and SLAVEOF.
+
+Default: true
+
+Default value: $redis::params::slave_serve_stale_data
+
+##### `slaveof`
+
+Data type: `String`
+
+Use slaveof to make a Redis instance a copy of another Redis server.
+
+Default value: $redis::params::slaveof
+
+##### `slowlog_log_slower_than`
+
+Data type: `String`
+
+Tells Redis what is the execution time, in microseconds, to exceed
+in order for the command to get logged.
+Default: 10000
+
+Default value: $redis::params::slowlog_log_slower_than
+
+##### `slowlog_max_len`
+
+Data type: `String`
+
+Tells Redis what is the length to exceed in order for the command
+to get logged.
+Default: 1024
+
+Default value: $redis::params::slowlog_max_len
+
+##### `stop_writes_on_bgsave_error`
+
+Data type: `String`
+
+If false then Redis will continue to work as usual even if there
+are problems with disk, permissions, and so forth.
+Default: true
+
+Default value: $redis::params::stop_writes_on_bgsave_error
+
+##### `syslog_enabled`
+
+Data type: `String`
+
+Enable/disable logging to the system logger.
+
+Default value: $redis::params::syslog_enabled
+
+##### `syslog_facility`
+
+Data type: `String`
+
+Specify the syslog facility.
+Must be USER or between LOCAL0-LOCAL7.
+Default: undef
+
+Default value: $redis::params::syslog_facility
+
+##### `tcp_backlog`
+
+Data type: `String`
+
+Sets the TCP backlog
+
+Default value: $redis::params::tcp_backlog
+
+##### `tcp_keepalive`
+
+Data type: `String`
+
+TCP keepalive.
+
+Default value: $redis::params::tcp_keepalive
+
+##### `timeout`
+
+Data type: `String`
+
+Close the connection after a client is idle for N seconds (0 to disable).
+
+Default value: $redis::params::timeout
+
+##### `ulimit`
+
+Data type: `String`
+
+Limit the use of system-wide resources.
+
+Default value: $redis::params::ulimit
+
+##### `unixsocket`
+
+Data type: `String`
+
+Define unix socket path
+
+Default value: $redis::params::unixsocket
+
+##### `unixsocketperm`
+
+Data type: `String`
+
+Define unix socket file permissions
+
+Default value: $redis::params::unixsocketperm
+
+##### `workdir`
+
+Data type: `Stdlib::Absolutepath`
+
+The DB will be written inside this directory, with the filename specified
+above using the 'dbfilename' configuration directive.
+Default: /var/lib/redis/
+
+Default value: $redis::params::workdir
+
+##### `workdir_mode`
+
+Data type: `Stdlib::Filemode`
+
+Adjust mode for data directory.
+
+Default value: $redis::params::workdir_mode
+
+##### `zset_max_ziplist_entries`
+
+Data type: `String`
+
+Set max entries for sorted sets.
+
+Default value: $redis::params::zset_max_ziplist_entries
+
+##### `zset_max_ziplist_value`
+
+Data type: `String`
+
+Set max values for sorted sets.
+
+Default value: $redis::params::zset_max_ziplist_value
+
+##### `cluster_enabled`
+
+Data type: `Boolean`
+
+Enables redis 3.0 cluster functionality
+
+Default value: $redis::params::cluster_enabled
+
+##### `cluster_config_file`
+
+Data type: `String`
+
+Config file for saving cluster nodes configuration. This file is never touched by humans.
+Only set if cluster_enabled is true
+Default: nodes.conf
+
+Default value: $redis::params::cluster_config_file
+
+##### `cluster_node_timeout`
+
+Data type: `String`
+
+Node timeout
+Only set if cluster_enabled is true
+Default: 5000
+
+Default value: $redis::params::cluster_node_timeout
+
+##### `cluster_slave_validity_factor`
+
+Data type: `Integer[0]`
+
+Control variable to disable promoting slave in case of disconnection from master
+Only set if cluster_enabled is true
+Default: 0
+
+Default value: $redis::params::cluster_slave_validity_factor
+
+##### `cluster_require_full_coverage`
+
+Data type: `Boolean`
+
+If false Redis Cluster will server queries even if requests about a subset of keys can be processed
+Only set if cluster_enabled is true
+Default: true
+
+Default value: $redis::params::cluster_require_full_coverage
+
+##### `cluster_migration_barrier`
+
+Data type: `Integer[0]`
+
+Minimum number of slaves master will remain connected with, for another slave to migrate to a  master which is no longer covered by any slave
+Only set if cluster_enabled is true
+Default: 1
+
+Default value: $redis::params::cluster_migration_barrier
+
+##### `output_buffer_limit_slave`
+
+Data type: `Any`
+
+
+
+Default value: $redis::params::output_buffer_limit_slave
+
+##### `output_buffer_limit_pubsub`
+
+Data type: `Any`
+
+
+
+Default value: $redis::params::output_buffer_limit_pubsub
+
+##### `manage_service_file`
+
+Data type: `Boolean`
+
+
+
+Default value: $redis::params::manage_service_file
+
+### redis::administration
+
+Allows various adminstrative settings for Redis
+As documented in the FAQ and https://redis.io/topics/admin
+
+#### Examples
+
+##### 
+
+```puppet
+include redis::administration
+```
+
+##### 
+
+```puppet
+class {'redis::administration':
+  disable_thp => false,
+}
+```
+
+#### Parameters
+
+The following parameters are available in the `redis::administration` class.
+
+##### `enable_overcommit_memory`
+
+Data type: `Boolean`
+
+Enable the overcommit memory setting (Defaults to true)
+
+Default value: `true`
+
+##### `disable_thp`
+
+Data type: `Boolean`
+
+Disable Transparent Huge Pages (Defaults to true)
+
+Default value: `true`
+
+##### `somaxconn`
+
+Data type: `String`
+
+Set somaxconn value (Defaults to '65535')
+
+Default value: '65535'
+
+### redis::config
+
+= Class: redis::config
+
+This class provides configuration for Redis.
+
+### redis::install
+
+= Class: redis::install
+
+This class installs the application.
+
+### redis::params
+
+= Class: redis::params
+
+This class provides a number of parameters.
+
+### redis::preinstall
+
+= Class: redis::preinstall
+
+This class provides anything required by the install class.
+Such as package repositories.
+
+### redis::sentinel
+
+= Class: redis::sentinel
+
+This class installs redis-sentinel
+
+== Parameters:
+
+
+[*auth_pass*]
+  The password to use to authenticate with the master and slaves.
+
+  Default: undef
+
+[*config_file*]
+  The location and name of the sentinel config file.
+
+  Default for deb: /etc/redis/redis-sentinel.conf
+  Default for rpm: /etc/redis-sentinel.conf
+
+[*config_file_orig*]
+  The location and name of a config file that provides the source
+  of the sentinel config file. Two different files are needed
+  because sentinel itself writes to its own config file and we do
+  not want override that when puppet is run unless there are
+  changes from the manifests.
+
+  Default for deb: /etc/redis/redis-sentinel.conf.puppet
+  Default for rpm: /etc/redis-sentinel.conf.puppet
+
+[*config_file_mode*]
+  Permissions of config file.
+
+  Default: 0644
+
+[*conf_template*]
+  Define which template to use.
+
+  Default: redis/redis-sentinel.conf.erb
+
+[*daemonize*]
+  Have Redis sentinel run as a daemon.
+
+  Default: true
+
+[*down_after*]
+  Number of milliseconds the master (or any attached slave or sentinel)
+  should be unreachable (as in, not acceptable reply to PING, continuously,
+  for the specified period) in order to consider it in S_DOWN state.
+
+  Default: 30000
+
+[*failover_timeout*]
+  Specify the failover timeout in milliseconds.
+
+  Default: 180000
+
+[*init_script*]
+  Specifiy the init script that will be created for sentinel.
+
+  Default: undef on rpm, /etc/init.d/redis-sentinel on apt.
+
+[*log_file*]
+  Specify where to write log entries.
+
+  Default: /var/log/redis/redis.log
+
+[*log_level*]
+  Specify how much we should log.
+
+  Default: notice
+
+[*master_name*]
+  Specify the name of the master redis server.
+  The valid charset is A-z 0-9 and the three characters ".-_".
+
+  Default: mymaster
+
+[*redis_host*]
+  Specify the bound host of the master redis server.
+
+  Default: 127.0.0.1
+
+[*redis_port*]
+  Specify the port of the master redis server.
+
+  Default: 6379
+
+[*package_name*]
+  The name of the package that installs sentinel.
+
+  Default: 'redis-server' on apt, 'redis' on rpm
+
+[*package_ensure*]
+  Do we ensure this package.
+
+  Default: 'present'
+
+[*parallel_sync*]
+  How many slaves can be reconfigured at the same time to use a
+  new master after a failover.
+
+  Default: 1
+
+[*pid_file*]
+  If sentinel is daemonized it will write its pid at this location.
+
+  Default: /var/run/redis/redis-sentinel.pid
+
+[*quorum*]
+  Number of sentinels that must agree that a master is down to
+  signal sdown state.
+
+  Default: 2
+
+[*sentinel_bind*]
+  Allow optional sentinel server ip binding.  Can help overcome
+  issues arising from protect-mode added Redis 3.2
+
+  Default: undef
+
+[*sentinel_port*]
+  The port of sentinel server.
+
+  Default: 26379
+
+[*service_group*]
+  The group of the config file.
+
+  Default: redis
+
+[*service_name*]
+  The name of the service (for puppet to manage).
+
+  Default: redis-sentinel
+
+[*service_owner*]
+  The owner of the config file.
+
+  Default: redis
+
+[*service_enable*]
+  Enable the service at boot time.
+
+  Default: true
+
+[*working_dir*]
+  The directory into which sentinel will change to avoid mount
+  conflicts.
+
+  Default: /tmp
+
+[*notification_script*]
+  Path to the notification script
+
+  Default: undef
+
+[*client_reconfig_script*]
+  Path to the client-reconfig script
+
+  Default: undef
+== Actions:
+  - Install and configure Redis Sentinel
+
+== Sample Usage:
+
+  class { 'redis::sentinel': }
+
+  class {'redis::sentinel':
+    down_after => 80000,
+    log_file => '/var/log/redis/sentinel.log',
+  }
+
+#### Parameters
+
+The following parameters are available in the `redis::sentinel` class.
+
+##### `auth_pass`
+
+Data type: `Any`
+
+
+
+Default value: $redis::params::sentinel_auth_pass
+
+##### `config_file`
+
+Data type: `Any`
+
+
+
+Default value: $redis::params::sentinel_config_file
+
+##### `config_file_orig`
+
+Data type: `Any`
+
+
+
+Default value: $redis::params::sentinel_config_file_orig
+
+##### `config_file_mode`
+
+Data type: `Stdlib::Filemode`
+
+
+
+Default value: $redis::params::sentinel_config_file_mode
+
+##### `conf_template`
+
+Data type: `Any`
+
+
+
+Default value: $redis::params::sentinel_conf_template
+
+##### `daemonize`
+
+Data type: `Any`
+
+
+
+Default value: $redis::params::sentinel_daemonize
+
+##### `down_after`
+
+Data type: `Any`
+
+
+
+Default value: $redis::params::sentinel_down_after
+
+##### `failover_timeout`
+
+Data type: `Any`
+
+
+
+Default value: $redis::params::sentinel_failover_timeout
+
+##### `init_script`
+
+Data type: `Any`
+
+
+
+Default value: $redis::params::sentinel_init_script
+
+##### `init_template`
+
+Data type: `Any`
+
+
+
+Default value: $redis::params::sentinel_init_template
+
+##### `log_level`
+
+Data type: `Any`
+
+
+
+Default value: $redis::params::log_level
+
+##### `log_file`
+
+Data type: `Any`
+
+
+
+Default value: $redis::params::log_file
+
+##### `master_name`
+
+Data type: `Any`
+
+
+
+Default value: $redis::params::sentinel_master_name
+
+##### `redis_host`
+
+Data type: `Stdlib::Host`
+
+
+
+Default value: $redis::params::sentinel_redis_host
+
+##### `redis_port`
+
+Data type: `Stdlib::Port`
+
+
+
+Default value: $redis::params::port
+
+##### `package_name`
+
+Data type: `Any`
+
+
+
+Default value: $redis::params::sentinel_package_name
+
+##### `package_ensure`
+
+Data type: `Any`
+
+
+
+Default value: $redis::params::sentinel_package_ensure
+
+##### `parallel_sync`
+
+Data type: `Any`
+
+
+
+Default value: $redis::params::sentinel_parallel_sync
+
+##### `pid_file`
+
+Data type: `Any`
+
+
+
+Default value: $redis::params::sentinel_pid_file
+
+##### `quorum`
+
+Data type: `Any`
+
+
+
+Default value: $redis::params::sentinel_quorum
+
+##### `sentinel_bind`
+
+Data type: `Any`
+
+
+
+Default value: $redis::params::sentinel_bind
+
+##### `sentinel_port`
+
+Data type: `Stdlib::Port`
+
+
+
+Default value: $redis::params::sentinel_port
+
+##### `service_group`
+
+Data type: `Any`
+
+
+
+Default value: $redis::params::service_group
+
+##### `service_name`
+
+Data type: `Any`
+
+
+
+Default value: $redis::params::sentinel_service_name
+
+##### `service_ensure`
+
+Data type: `Any`
+
+
+
+Default value: $redis::params::service_ensure
+
+##### `service_enable`
+
+Data type: `Boolean`
+
+
+
+Default value: $redis::params::service_enable
+
+##### `service_user`
+
+Data type: `Any`
+
+
+
+Default value: $redis::params::service_user
+
+##### `working_dir`
+
+Data type: `Any`
+
+
+
+Default value: $redis::params::sentinel_working_dir
+
+##### `notification_script`
+
+Data type: `Any`
+
+
+
+Default value: $redis::params::sentinel_notification_script
+
+##### `client_reconfig_script`
+
+Data type: `Any`
+
+
+
+Default value: $redis::params::sentinel_client_reconfig_script
+
+### redis::service
+
+= Class: redis::service
+
+This class manages the Redis daemon.
+
+## Defined types
+
+### redis::instance
+
+redis::instance
+
+This is an defined type to allow the configuration of
+multiple redis instances on one machine without conflicts
+
+#### Examples
+
+##### 
+
+```puppet
+redis::instance {'6380':
+  port => 6380,
+}
+```
+
+#### Parameters
+
+The following parameters are available in the `redis::instance` defined type.
+
+##### `activerehashing`
+
+Data type: `String`
+
+Enable/disable active rehashing.
+
+Default value: $redis::activerehashing
+
+##### `aof_load_truncated`
+
+Data type: `String`
+
+Enable/disable loading truncated AOF file
+
+Default value: $redis::aof_load_truncated
+
+##### `aof_rewrite_incremental_fsync`
+
+Data type: `String`
+
+Enable/disable fsync for AOF file
+
+Default value: $redis::aof_rewrite_incremental_fsync
+
+##### `appendfilename`
+
+Data type: `String`
+
+The name of the append only file
+
+Default value: $redis::appendfilename
+
+##### `appendfsync`
+
+Data type: `Enum['no', 'always', 'everysec']`
+
+Adjust fsync mode. Valid options: always, everysec, no. Default:  everysec
+
+Default value: $redis::appendfsync
+
+##### `appendonly`
+
+Data type: `String`
+
+Enable/disable appendonly mode.
+
+Default value: $redis::appendonly
+
+##### `auto_aof_rewrite_min_size`
+
+Data type: `String`
+
+Adjust minimum size for auto-aof-rewrite.
+
+Default value: $redis::auto_aof_rewrite_min_size
+
+##### `auto_aof_rewrite_percentage`
+
+Data type: `String`
+
+Adjust percentatge for auto-aof-rewrite.
+
+Default value: $redis::auto_aof_rewrite_percentage
+
+##### `bind`
+
+Data type: `Variant[Stdlib::IP::Address, Array[Stdlib::IP::Address]]`
+
+Configure which IP address(es) to listen on. To bind on all interfaces, use an empty array.
+
+Default value: $redis::bind
+
+##### `config_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+Directory containing the configuration files.
+
+Default value: $redis::config_dir
+
+##### `config_dir_mode`
+
+Data type: `Stdlib::Filemode`
+
+Adjust mode for directory containing configuration files.
+
+Default value: $redis::config_dir_mode
+
+##### `config_file_orig`
+
+Data type: `String`
+
+The location and name of a config file that provides the source
+
+Default value: $redis::config_file_orig
+
+##### `config_file`
+
+Data type: `String`
+
+Adjust main configuration file.
+
+Default value: $redis::config_file
+
+##### `config_file_mode`
+
+Data type: `Stdlib::Filemode`
+
+Adjust permissions for configuration files.
+
+Default value: $redis::config_file_mode
+
+##### `config_group`
+
+Data type: `String`
+
+Adjust filesystem group for config files.
+
+Default value: $redis::config_group
+
+##### `config_owner`
+
+Data type: `String`
+
+Adjust filesystem owner for config files.
+
+Default value: $redis::config_owner
+
+##### `conf_template`
+
+Data type: `String`
+
+Define which template to use.
+
+Default value: $redis::conf_template
+
+##### `daemonize`
+
+Data type: `String`
+
+Have Redis run as a daemon.
+
+Default value: $redis::daemonize
+
+##### `databases`
+
+Data type: `String`
+
+Set the number of databases.
+
+Default value: $redis::databases
+
+##### `dbfilename`
+
+Data type: `String`
+
+The filename where to dump the DB
+
+Default value: $redis::dbfilename
+
+##### `extra_config_file`
+
+Data type: `String`
+
+Description
+
+Default value: $redis::extra_config_file
+
+##### `hash_max_ziplist_entries`
+
+Data type: `String`
+
+Set max ziplist entries for hashes.
+
+Default value: $redis::hash_max_ziplist_entries
+
+##### `hash_max_ziplist_value`
+
+Data type: `String`
+
+Set max ziplist values for hashes.
+
+Default value: $redis::hash_max_ziplist_value
+
+##### `hll_sparse_max_bytes`
+
+Data type: `String`
+
+HyperLogLog sparse representation bytes limit
+
+Default value: $redis::hll_sparse_max_bytes
+
+##### `hz`
+
+Data type: `String`
+
+Set redis background tasks frequency
+
+Default value: $redis::hz
+
+##### `latency_monitor_threshold`
+
+Data type: `String`
+
+Latency monitoring threshold in milliseconds
+
+Default value: $redis::latency_monitor_threshold
+
+##### `list_max_ziplist_entries`
+
+Data type: `String`
+
+Set max ziplist entries for lists.
+
+Default value: $redis::list_max_ziplist_entries
+
+##### `list_max_ziplist_value`
+
+Data type: `String`
+
+Set max ziplist values for lists.
+
+Default value: $redis::list_max_ziplist_value
+
+##### `log_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+Specify directory where to write log entries.
+
+Default value: $redis::log_dir
+
+##### `log_dir_mode`
+
+Data type: `Stdlib::Filemode`
+
+Adjust mode for directory containing log files.
+
+Default value: $redis::log_dir_mode
+
+##### `log_file`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+Specify file where to write log entries.
+
+Default value: `undef`
+
+##### `log_level`
+
+Data type: `String`
+
+Specify the server verbosity level.
+
+Default value: $redis::log_level
+
+##### `masterauth`
+
+Data type: `String`
+
+If the master is password protected (using the "requirepass" configuration
+
+Default value: $redis::masterauth
+
+##### `maxclients`
+
+Data type: `String`
+
+Set the max number of connected clients at the same time.
+
+Default value: $redis::maxclients
+
+##### `maxmemory`
+
+Data type: `String`
+
+Don't use more memory than the specified amount of bytes.
+
+Default value: $redis::maxmemory
+
+##### `maxmemory_policy`
+
+Data type: `String`
+
+How Redis will select what to remove when maxmemory is reached.
+
+Default value: $redis::maxmemory_policy
+
+##### `maxmemory_samples`
+
+Data type: `String`
+
+Select as well the sample size to check.
+
+Default value: $redis::maxmemory_samples
+
+##### `min_slaves_max_lag`
+
+Data type: `String`
+
+The lag in seconds
+
+Default value: $redis::min_slaves_max_lag
+
+##### `min_slaves_to_write`
+
+Data type: `String`
+
+Minimum number of slaves to be in "online" state
+
+Default value: $redis::min_slaves_to_write
+
+##### `no_appendfsync_on_rewrite`
+
+Data type: `String`
+
+If you have latency problems turn this to 'true'. Otherwise leave it as
+
+Default value: $redis::no_appendfsync_on_rewrite
+
+##### `notify_keyspace_events`
+
+Data type: `String`
+
+Which events to notify Pub/Sub clients about events happening
+
+Default value: $redis::notify_keyspace_events
+
+##### `pid_file`
+
+Data type: `String`
+
+Where to store the pid.
+
+Default value: "/var/run/redis/redis-server-${name}.pid"
+
+##### `port`
+
+Data type: `Stdlib::Port`
+
+Configure which port to listen on.
+
+Default value: $redis::port
+
+##### `protected_mode`
+
+Data type: `String`
+
+Whether protected mode is enabled or not.  Only applicable when no bind is set.
+
+Default value: $redis::protected_mode
+
+##### `rdbcompression`
+
+Data type: `String`
+
+Enable/disable compression of string objects using LZF when dumping.
+
+Default value: $redis::rdbcompression
+
+##### `repl_backlog_size`
+
+Data type: `String`
+
+The replication backlog size
+
+Default value: $redis::repl_backlog_size
+
+##### `repl_backlog_ttl`
+
+Data type: `String`
+
+The number of seconds to elapse before freeing backlog buffer
+
+Default value: $redis::repl_backlog_ttl
+
+##### `repl_disable_tcp_nodelay`
+
+Data type: `String`
+
+Enable/disable TCP_NODELAY on the slave socket after SYNC
+
+Default value: $redis::repl_disable_tcp_nodelay
+
+##### `repl_ping_slave_period`
+
+Data type: `Integer[1]`
+
+Slaves send PINGs to server in a predefined interval. It's possible
+
+Default value: $redis::repl_ping_slave_period
+
+##### `repl_timeout`
+
+Data type: `String`
+
+Set the replication timeout for:
+
+Default value: $redis::repl_timeout
+
+##### `requirepass`
+
+Data type: `String`
+
+Require clients to issue AUTH <PASSWORD> before processing any
+other commands.
+
+Default value: $redis::requirepass
+
+##### `save_db_to_disk`
+
+Data type: `String`
+
+Set if save db to disk.
+
+Default value: $redis::save_db_to_disk
+
+##### `save_db_to_disk_interval`
+
+Data type: `String`
+
+save the dataset every N seconds if there are at least M changes in the dataset
+
+Default value: $redis::save_db_to_disk_interval
+
+##### `service_enable`
+
+Data type: `String`
+
+Enable/disable daemon at boot.
+
+Default value: $redis::service_enable
+
+##### `service_ensure`
+
+Data type: `String`
+
+Specify if the server should be running.
+
+Default value: $redis::service_ensure
+
+##### `service_group`
+
+Data type: `String`
+
+Specify which group to run as.
+
+Default value: $redis::service_group
+
+##### `service_hasrestart`
+
+Data type: `String`
+
+Does the init script support restart?
+
+Default value: $redis::service_hasrestart
+
+##### `service_hasstatus`
+
+Data type: `String`
+
+Does the init script support status?
+
+Default value: $redis::service_hasstatus
+
+##### `service_user`
+
+Data type: `String`
+
+Specify which user to run as.
+
+Default value: $redis::service_user
+
+##### `set_max_intset_entries`
+
+Data type: `String`
+
+The following configuration setting sets the limit in the size of the
+set in order to use this special memory saving encoding.
+Default: 512
+
+Default value: $redis::set_max_intset_entries
+
+##### `slave_priority`
+
+Data type: `String`
+
+The priority number for slave promotion by Sentinel
+
+Default value: $redis::slave_priority
+
+##### `slave_read_only`
+
+Data type: `String`
+
+You can configure a slave instance to accept writes or not.
+
+Default value: $redis::slave_read_only
+
+##### `slave_serve_stale_data`
+
+Data type: `String`
+
+When a slave loses its connection with the master, or when the replication
+is still in progress, the slave can act in two different ways:
+1) if slave-serve-stale-data is set to 'yes' (the default) the slave will
+   still reply to client requests, possibly with out of date data, or the
+   data set may just be empty if this is the first synchronization.
+
+2) if slave-serve-stale-data is set to 'no' the slave will reply with
+   an error "SYNC with master in progress" to all the kind of commands
+   but to INFO and SLAVEOF.
+
+Default: true
+
+Default value: $redis::slave_serve_stale_data
+
+##### `slaveof`
+
+Data type: `String`
+
+Use slaveof to make a Redis instance a copy of another Redis server.
+
+Default value: $redis::slaveof
+
+##### `slowlog_log_slower_than`
+
+Data type: `String`
+
+Tells Redis what is the execution time, in microseconds, to exceed
+in order for the command to get logged.
+Default: 10000
+
+Default value: $redis::slowlog_log_slower_than
+
+##### `slowlog_max_len`
+
+Data type: `String`
+
+Tells Redis what is the length to exceed in order for the command
+to get logged.
+Default: 1024
+
+Default value: $redis::slowlog_max_len
+
+##### `stop_writes_on_bgsave_error`
+
+Data type: `String`
+
+If false then Redis will continue to work as usual even if there
+are problems with disk, permissions, and so forth.
+Default: true
+
+Default value: $redis::stop_writes_on_bgsave_error
+
+##### `syslog_enabled`
+
+Data type: `String`
+
+Enable/disable logging to the system logger.
+
+Default value: $redis::syslog_enabled
+
+##### `syslog_facility`
+
+Data type: `String`
+
+Specify the syslog facility.
+Must be USER or between LOCAL0-LOCAL7.
+Default: undef
+
+Default value: $redis::syslog_facility
+
+##### `tcp_backlog`
+
+Data type: `String`
+
+Sets the TCP backlog
+
+Default value: $redis::tcp_backlog
+
+##### `tcp_keepalive`
+
+Data type: `String`
+
+TCP keepalive.
+
+Default value: $redis::tcp_keepalive
+
+##### `timeout`
+
+Data type: `String`
+
+Close the connection after a client is idle for N seconds (0 to disable).
+
+Default value: $redis::timeout
+
+##### `ulimit`
+
+Data type: `String`
+
+Limit the use of system-wide resources.
+
+Default value: $redis::ulimit
+
+##### `unixsocket`
+
+Data type: `String`
+
+Define unix socket path
+
+Default value: "/var/run/redis/redis-server-${name}.sock"
+
+##### `unixsocketperm`
+
+Data type: `String`
+
+Define unix socket file permissions
+
+Default value: $redis::unixsocketperm
+
+##### `workdir`
+
+Data type: `Stdlib::Absolutepath`
+
+The DB will be written inside this directory, with the filename specified
+above using the 'dbfilename' configuration directive.
+Default: /var/lib/redis/
+
+Default value: "${redis::workdir}/redis-server-${name}"
+
+##### `workdir_mode`
+
+Data type: `Stdlib::Filemode`
+
+Adjust mode for data directory.
+
+Default value: $redis::workdir_mode
+
+##### `zset_max_ziplist_entries`
+
+Data type: `String`
+
+Set max entries for sorted sets.
+
+Default value: $redis::zset_max_ziplist_entries
+
+##### `zset_max_ziplist_value`
+
+Data type: `String`
+
+Set max values for sorted sets.
+
+Default value: $redis::zset_max_ziplist_value
+
+##### `cluster_enabled`
+
+Data type: `Boolean`
+
+Enables redis 3.0 cluster functionality
+
+Default value: $redis::cluster_enabled
+
+##### `cluster_config_file`
+
+Data type: `String`
+
+Config file for saving cluster nodes configuration. This file is never touched by humans.
+Only set if cluster_enabled is true
+Default: nodes.conf
+
+Default value: $redis::cluster_config_file
+
+##### `cluster_node_timeout`
+
+Data type: `String`
+
+Node timeout
+Only set if cluster_enabled is true
+Default: 5000
+
+Default value: $redis::cluster_node_timeout
+
+##### `cluster_slave_validity_factor`
+
+Data type: `Integer[0]`
+
+Control variable to disable promoting slave in case of disconnection from master
+Only set if cluster_enabled is true
+Default: 0
+
+Default value: $redis::cluster_slave_validity_factor
+
+##### `cluster_require_full_coverage`
+
+Data type: `Boolean`
+
+If false Redis Cluster will server queries even if requests about a subset of keys can be processed
+Only set if cluster_enabled is true
+Default: true
+
+Default value: $redis::cluster_require_full_coverage
+
+##### `cluster_migration_barrier`
+
+Data type: `Integer[0]`
+
+Minimum number of slaves master will remain connected with, for another slave to migrate to a  master which is no longer covered by any slave
+Only set if cluster_enabled is true
+Default: 1
+
+Default value: $redis::cluster_migration_barrier
+
+##### `output_buffer_limit_slave`
+
+Data type: `Any`
+
+
+
+Default value: $redis::output_buffer_limit_slave
+
+##### `output_buffer_limit_pubsub`
+
+Data type: `Any`
+
+
+
+Default value: $redis::output_buffer_limit_pubsub
+
+##### `minimum_version`
+
+Data type: `Any`
+
+
+
+Default value: $redis::minimum_version
+
+##### `managed_by_cluster_manager`
+
+Data type: `Any`
+
+
+
+Default value: $redis::managed_by_cluster_manager
+
+##### `package_ensure`
+
+Data type: `Any`
+
+
+
+Default value: $redis::package_ensure
+
+##### `manage_service_file`
+
+Data type: `Any`
+
+
+
+Default value: `true`
 
 ## Functions
 
@@ -58,4 +2236,28 @@ The endpoint of the Redis instance
 Data type: `Optional[String]`
 
 The value to return if the key is not found or the connection to Redis fails
+
+## Data types
+
+### Redis::RedisUrl
+
+The Redis::RedisUrl data type.
+
+Alias of `Pattern[/(^redis:\/\/)/]`
+
+## Tasks
+
+### redis_cli
+
+Executes a redis-cli command on the target system
+
+**Supports noop?** false
+
+#### Parameters
+
+##### `command`
+
+Data type: `String[1]`
+
+The command to run, including all arguments
 
