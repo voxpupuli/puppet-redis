@@ -1096,7 +1096,7 @@ Data type: `Stdlib::Port`
 
 Specify the port of the master redis server.
 
-Default value: 26379
+Default value: $redis::params::port
 
 ##### `package_name`
 
@@ -1155,7 +1155,7 @@ Data type: `Stdlib::Port`
 
 The port of sentinel server.
 
-Default value: $redis::params::sentinel_port
+Default value: 26379
 
 ##### `service_group`
 
@@ -1187,7 +1187,7 @@ Default value: $redis::params::service_enable
 
 ##### `working_dir`
 
-Data type: `Stdlib::Absolutepaht`
+Data type: `Stdlib::Absolutepath`
 
 The directory into which sentinel will change to avoid mount
 conflicts.
