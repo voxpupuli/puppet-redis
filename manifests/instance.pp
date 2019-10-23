@@ -1,5 +1,3 @@
-# redis::instance
-#
 # This is an defined type to allow the configuration of
 # multiple redis instances on one machine without conflicts
 #

@@ -1,7 +1,5 @@
-# = Class: redis::config
-#
-# This class provides configuration for Redis.
-#
+# @summary This class provides configuration for Redis.
+# @api private
 class redis::config {
 
   File {
