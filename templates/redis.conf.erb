@@ -20,6 +20,27 @@ daemonize <% if @daemonize -%>yes<% else -%>no<% end -%>
 # default. You can specify a custom pid file location here.
 pidfile <%= @pid_file %>
 
+<% if @supports_protected_mode -%>
+# Protected mode is a layer of security protection, in order to avoid that
+# Redis instances left open on the internet are accessed and exploited.
+#
+# When protected mode is on and if:
+#
+# 1) The server is not binding explicitly to a set of addresses using the
+#    "bind" directive.
+# 2) No password is configured.
+#
+# The server only accepts connections from clients connecting from the
+# IPv4 and IPv6 loopback addresses 127.0.0.1 and ::1, and from Unix domain
+# sockets.
+#
+# By default protected mode is enabled. You should disable it only if
+# you are sure you want clients from other hosts to connect to Redis
+# even if no authentication is configured, nor a specific set of interfaces
+# are explicitly listed using the "bind" directive.
+protected-mode <%= @protected_mode %>
+
+<% end -%>
 # Accept connections on the specified port, default is 6379.
 # If port 0 is specified Redis will not listen on a TCP socket.
 port <%= @port %>
@@ -34,9 +55,10 @@ port <%= @port %>
 tcp-backlog <%= @tcp_backlog %>
 
 <% unless @bind_arr.empty? -%>
-# If you want you can bind a single interface, if the bind option is not
-# specified all the interfaces will listen for incoming connections.
-#
+# By default, if no "bind" configuration directive is specified, Redis listens
+# for connections from all the network interfaces available on the server.
+# It is possible to listen to just one or multiple selected interfaces using
+# the "bind" configuration directive, followed by one or more IP addresses.
 bind <%= @bind_arr.join(' ') %>
 <% end -%>
 

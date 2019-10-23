@@ -2,8 +2,10 @@ require 'beaker-rspec'
 require 'beaker/puppet_install_helper'
 require 'beaker/module_install_helper'
 
-def change_root_password
-  on(hosts, 'echo "root:root" | chpasswd')
+DEFAULT_PASSWORD = 'root'.freeze
+
+def change_root_password(password = DEFAULT_PASSWORD)
+  on(hosts, "echo 'root:#{password}' | chpasswd")
 end
 
 def install_bolt_on(hosts)
@@ -12,17 +14,8 @@ def install_bolt_on(hosts)
 end
 
 run_puppet_install_helper unless ENV['BEAKER_provision'] == 'no'
-change_root_password
 install_module_on(hosts)
 install_module_dependencies_on(hosts)
-
-UNSUPPORTED_PLATFORMS = %w[windows AIX Solaris].freeze
-
-DEFAULT_PASSWORD = if default[:hypervisor] == 'vagrant'
-                     'root'
-                   elsif default[:hypervisor] == 'docker'
-                     'root'
-                   end
 
 def run_task(task_name:, params: nil, password: DEFAULT_PASSWORD)
   run_bolt_task(task_name: task_name, params: params, password: password)
@@ -44,15 +37,18 @@ RSpec.configure do |c|
 
   c.before :suite do
     hosts.each do |host|
-      if fact('osfamily') == 'Debian'
-        # These should be on all Deb-flavor machines by default...
-        # But Docker is often more slimline
-        shell('apt-get install apt-transport-https software-properties-common -y', acceptable_exit_codes: [0])
+      case fact_on(host, 'operatingsystem')
+      when 'Debian'
+        host.install_package('build-essential')
+      when 'Ubuntu'
+        host.install_package('build-essential')
+        host.install_package('software-properties-common')
+      else
+        # Bolt requires gcc and make
+        host.install_package('gcc')
+        host.install_package('make')
       end
-      # Bolt requires gcc and make
-      install_package(host, 'gcc')
-      install_package(host, 'make')
-      install_bolt_on(host)
     end
+    install_bolt_on(hosts)
   end
 end

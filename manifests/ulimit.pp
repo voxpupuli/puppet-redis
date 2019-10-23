@@ -54,18 +54,17 @@ class redis::ulimit {
       ],
     }
   } else {
-    augeas { 'redis ulimit':
-      changes => "set ULIMIT ${redis::ulimit}",
-    }
-    case $::osfamily {
+    case $facts['osfamily'] {
       'Debian': {
-        Augeas['redis ulimit'] {
+        augeas { 'redis ulimit':
           context => '/files/etc/default/redis-server',
+          changes => "set ULIMIT ${redis::ulimit}",
         }
       }
       'RedHat': {
-        Augeas['redis ulimit'] {
+        augeas { 'redis ulimit':
           context => '/files/etc/sysconfig/redis',
+          changes => "set ULIMIT ${redis::ulimit}",
         }
       }
       default: {

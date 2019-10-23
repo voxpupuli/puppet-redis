@@ -338,24 +338,8 @@ define redis::instance (
     $redis_version_real = pick(getvar('redis_server_version'), $minimum_version)
   }
 
-  if ($redis_version_real and $conf_template == 'redis/redis.conf.erb') {
-    case $redis_version_real {
-      /^2.4./: {
-        if $bind_arr.length > 1 { fail('Redis 2.4 doesn\'t support binding to multiple IPs') }
-        File[$redis_file_name_orig] { content => template('redis/redis.conf.2.4.10.erb') }
-      }
-      /^2.8./: {
-        File[$redis_file_name_orig] { content => template('redis/redis.conf.2.8.erb') }
-      }
-      /^3.2./: {
-        File[$redis_file_name_orig] { content => template('redis/redis.conf.3.2.erb') }
-      }
-      default: {
-        File[$redis_file_name_orig] { content => template($conf_template) }
-      }
-    }
-  } else {
-    File[$redis_file_name_orig] { content => template($conf_template) }
-  }
+  $supports_protected_mode = !$redis_version_real or versioncmp($redis_version_real, '3.2.0') >= 0
+
+  File[$redis_file_name_orig] { content => template($conf_template) }
 
 }

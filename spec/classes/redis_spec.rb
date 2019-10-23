@@ -1,23 +1,14 @@
 require 'spec_helper'
 
-describe 'redis', type: :class do
-  let(:service_file) { redis_service_file(service_provider: facts[:service_provider]) }
+describe 'redis' do
+  let(:service_file) { redis_service_file(service_provider: facts['service_provider']) }
+  let(:package_name) { manifest_vars[:package_name] }
+  let(:service_name) { manifest_vars[:service_name] }
+  let(:config_file_orig) { manifest_vars[:config_file_orig] }
 
   on_supported_os.each do |os, facts|
     context "on #{os}" do
-      let(:facts) do
-        merged_facts = facts.merge(redis_server_version: '3.2.3')
-
-        if facts[:operatingsystem].casecmp('archlinux') == 0
-          merged_facts = merged_facts.merge(service_provider: 'systemd')
-        end
-
-        merged_facts
-      end
-
-      let(:package_name) { manifest_vars[:package_name] }
-      let(:service_name) { manifest_vars[:service_name] }
-      let(:config_file_orig) { manifest_vars[:config_file_orig] }
+      let(:facts) { facts }
 
       describe 'without parameters' do
         it { is_expected.to create_class('redis') }
@@ -28,9 +19,17 @@ describe 'redis', type: :class do
 
         it { is_expected.to contain_package(package_name).with_ensure('present') }
 
-        it { is_expected.to contain_file(config_file_orig).with_ensure('file') }
+        it do
+          is_expected.to contain_file(config_file_orig).
+            with_ensure('file').
+            without_content(%r{undef})
 
-        it { is_expected.to contain_file(config_file_orig).without_content(%r{undef}) }
+          if facts[:osfamily] == 'FreeBSD'
+            is_expected.to contain_file(config_file_orig).
+              with_content(%r{dir /var/db/redis}).
+              with_content(%r{pidfile /var/run/redis/redis\.pid})
+          end
+        end
 
         it do
           is_expected.to contain_service(service_name).with(
@@ -39,6 +38,75 @@ describe 'redis', type: :class do
             'hasrestart' => 'true',
             'hasstatus'  => 'true'
           )
+        end
+      end
+
+      context 'with managed_by_cluster_manager true' do
+        let(:params) { { managed_by_cluster_manager: true } }
+
+        it { is_expected.to compile.with_all_deps }
+        it do
+          is_expected.to contain_file('/etc/security/limits.d/redis.conf').with(
+            'ensure'  => 'file',
+            'owner'   => 'root',
+            'group'   => 'root',
+            'mode'    => '0644',
+            'content' => "redis soft nofile 65536\nredis hard nofile 65536\n"
+          )
+        end
+
+        context 'when not managing service' do
+          let(:params) { super().merge(service_manage: false, notify_service: false) }
+
+          it { is_expected.to compile.with_all_deps }
+          it do
+            is_expected.to contain_file('/etc/security/limits.d/redis.conf').with(
+              'ensure'  => 'file',
+              'owner'   => 'root',
+              'group'   => 'root',
+              'mode'    => '0644',
+              'content' => "redis soft nofile 65536\nredis hard nofile 65536\n"
+            )
+          end
+        end
+      end
+
+      context 'with ulimit' do
+        let(:params) { { ulimit: '7777' } }
+
+        it { is_expected.to compile.with_all_deps }
+        it do
+          if facts['service_provider'] == 'systemd'
+            is_expected.to contain_file("/etc/systemd/system/#{service_name}.service.d/limit.conf").
+              with_ensure('file').
+              with_owner('root').
+              with_group('root').
+              with_mode('0444')
+            is_expected.to contain_augeas('Systemd redis ulimit').
+              with_incl("/etc/systemd/system/#{service_name}.service.d/limit.conf").
+              with_lens('Systemd.lns').
+              with_changes(['defnode nofile Service/LimitNOFILE ""', 'set $nofile/value "7777"']).
+              that_notifies('Exec[systemd-reload-redis]')
+          else
+            is_expected.not_to contain_file('/etc/systemd/system/redis-server.service.d/limit.conf')
+            is_expected.not_to contain_augeas('Systemd redis ulimit')
+            if %w[Debian RedHat].include?(facts[:osfamily])
+              ulimit_context = case facts[:osfamily]
+                               when 'Debian'
+                                 '/files/etc/default/redis-server'
+                               when 'RedHat'
+                                 '/files/etc/sysconfig/redis'
+                               end
+
+              if ulimit_context
+                is_expected.to contain_augeas('redis ulimit').
+                  with_changes('set ULIMIT 7777').
+                  with_context(ulimit_context)
+              else
+                is_expected.not_to contain_augeas('redis ulimit')
+              end
+            end
+          end
         end
       end
 
@@ -146,16 +214,6 @@ describe 'redis', type: :class do
           let(:params) { { bind: [] } }
 
           it { is_expected.not_to contain_file(config_file_orig).with_content(%r{^bind}) }
-        end
-        context 'with multiple IP addresses on redis 2.4' do
-          let(:params) do
-            {
-              package_ensure: '2.4.10',
-              bind: ['127.0.0.1', '::1']
-            }
-          end
-
-          it { is_expected.to compile.and_raise_error(%r{Redis 2\.4 doesn't support binding to multiple IPs}) }
         end
       end
 
@@ -622,11 +680,13 @@ describe 'redis', type: :class do
           }
         end
 
-        it {
-          is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{protected-mode.*_VALUE_}
-          )
-        }
+        it do
+          if facts[:operatingsystem] == 'Ubuntu' && facts[:operatingsystemmajrelease] == '16.04'
+            is_expected.not_to contain_file(config_file_orig).with_content(%r{protected-mode.*_VALUE_})
+          else
+            is_expected.to contain_file(config_file_orig).with_content(%r{protected-mode.*_VALUE_})
+          end
+        end
       end
 
       describe 'with parameter hll_sparse_max_bytes' do
@@ -1238,11 +1298,7 @@ describe 'redis', type: :class do
           }
         end
 
-        it {
-          is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{cluster-require-full-coverage.*no}
-          )
-        }
+        it { is_expected.to contain_file(config_file_orig).with_content(%r{cluster-require-full-coverage.*no}) }
       end
 
       describe 'with parameter cluster_config_file' do
@@ -1253,11 +1309,7 @@ describe 'redis', type: :class do
           }
         end
 
-        it {
-          is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{cluster-migration-barrier.*1}
-          )
-        }
+        it { is_expected.to contain_file(config_file_orig).with_content(%r{cluster-migration-barrier.*1}) }
       end
 
       describe 'with parameter manage_service_file' do
@@ -1267,9 +1319,7 @@ describe 'redis', type: :class do
           }
         end
 
-        it {
-          is_expected.to contain_file(service_file)
-        }
+        it { is_expected.to contain_file(service_file) }
       end
 
       describe 'with parameter manage_service_file' do
@@ -1279,9 +1329,29 @@ describe 'redis', type: :class do
           }
         end
 
-        it {
-          is_expected.not_to contain_file(service_file)
-        }
+        it { is_expected.not_to contain_file(service_file) }
+      end
+
+      context 'when $::redis_server_version fact is not present' do
+        let(:facts) { super().merge(redis_server_version: nil) }
+
+        context 'when package_ensure is version (3.2.1)' do
+          let(:params) { { package_ensure: '3.2.1' } }
+
+          it { is_expected.to contain_file(config_file_orig).with_content(%r{^protected-mode}) }
+        end
+
+        context 'when package_ensure is a newer version(4.0-rc3) (older features enabled)' do
+          let(:params) { { package_ensure: '4.0-rc3' } }
+
+          it { is_expected.to contain_file(config_file_orig).with_content(%r{^protected-mode}) }
+        end
+      end
+
+      context 'when $::redis_server_version fact is present but a newer version (older features enabled)' do
+        let(:facts) { super().merge(redis_server_version: '3.2.1') }
+
+        it { is_expected.to contain_file(config_file_orig).with_content(%r{^protected-mode}) }
       end
     end
   end

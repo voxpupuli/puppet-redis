@@ -116,29 +116,16 @@ class redis::params {
       $workdir                   = '/var/lib/redis'
       $workdir_mode              = '0750'
 
-      case $::operatingsystem {
+      case $facts['os']['name'] {
         'Ubuntu': {
-          $config_group              = 'redis'
-
-          case $::operatingsystemmajrelease {
-            '14.04': {
-              # upstream package is 2.8.4
-              $minimum_version           = '2.8.4'
-            }
-            '16.04': {
-              # upstream package is 3.0.3
-              $minimum_version           = '3.0.3'
-            }
-            default: {
-              warning("Ubuntu release ${::operatingsystemmajrelease} isn't 'officially' supported by module, but will give it a shot")
-              $minimum_version           = '2.8.5'
-            }
+          $config_group = 'redis'
+          $minimum_version = $facts['os']['release']['major'] ? {
+            '16.04' => '3.0.5',
+            default => '4.0.9',
           }
         }
         default: {
           $config_group              = 'root'
-          # Debian standard package is 2.4.14
-          # But we have dotdeb repo which is 3.2.5
           $minimum_version           = '3.2.5'
         }
       }
@@ -174,28 +161,12 @@ class redis::params {
       $workdir                   = '/var/lib/redis'
       $workdir_mode              = '0755'
 
-      case $::operatingsystemmajrelease {
-        '6': {
-          # CentOS 6 EPEL package is just updated to 3.2.10
-          # https://bugzilla.redhat.com/show_bug.cgi?id=923970
-          $minimum_version           = '3.2.10'
+      # EPEL 6 and newer have 3.2 so we can assume all EL is 3.2+
+      $minimum_version           = '3.2.10'
 
-          $service_group             = 'root'
-        }
-        '7': {
-          # CentOS 7 EPEL package is 3.2.3
-          $minimum_version           = '3.2.3'
-
-          $service_group             = 'redis'
-        }
-        '8': {
-          $minimum_version           = '3.2.3'
-
-          $service_group             = 'redis'
-        }
-        default: {
-          fail("Not sure what Redis version is avaliable upstream on your release: ${::operatingsystemmajrelease}")
-        }
+      $service_group = $facts['os']['release']['major'] ? {
+        '6'     => 'root',
+        default => 'redis',
       }
     }
 
