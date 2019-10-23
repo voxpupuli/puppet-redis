@@ -1,7 +1,5 @@
-# = Class: redis::params
-#
-# This class provides a number of parameters.
-#
+# @summary This class provides a number of parameters.
+# @api private
 class redis::params {
   # Generic
   $manage_repo                = false
@@ -49,25 +47,6 @@ class redis::params {
   $requirepass                     = undef
   $save_db_to_disk                 = true
   $save_db_to_disk_interval        = {'900' =>'1', '300' => '10', '60' => '10000'}
-  $sentinel_auth_pass              = undef
-  $sentinel_bind                   = undef
-  $sentinel_config_file_mode       = '0644'
-  $sentinel_config_group           = 'root'
-  $sentinel_config_owner           = 'redis'
-  $sentinel_conf_template          = 'redis/redis-sentinel.conf.erb'
-  $sentinel_down_after             = 30000
-  $sentinel_failover_timeout       = 180000
-  $sentinel_master_name            = 'mymaster'
-  $sentinel_parallel_sync          = 1
-  $sentinel_port                   = 26379
-  $sentinel_quorum                 = 2
-  $sentinel_redis_host             = '127.0.0.1'
-  $sentinel_service_name           = 'redis-sentinel'
-  $sentinel_working_dir            = '/tmp'
-  $sentinel_init_template          = 'redis/redis-sentinel.init.erb'
-  $sentinel_pid_file               = '/var/run/redis/redis-sentinel.pid'
-  $sentinel_notification_script    = undef
-  $sentinel_client_reconfig_script = undef
   $service_provider                = undef
   $set_max_intset_entries          = 512
   $slave_priority                  = 100
@@ -125,7 +104,6 @@ class redis::params {
       $sentinel_daemonize        = true
       $sentinel_init_script      = '/etc/init.d/redis-sentinel'
       $sentinel_package_name     = 'redis-sentinel'
-      $sentinel_package_ensure   = 'present'
       $service_manage            = true
       $service_enable            = true
       $service_ensure            = 'running'
@@ -185,7 +163,6 @@ class redis::params {
       $sentinel_daemonize        = false
       $sentinel_init_script      = undef
       $sentinel_package_name     = 'redis'
-      $sentinel_package_ensure   = 'present'
       $service_manage            = true
       $service_enable            = true
       $service_ensure            = 'running'
@@ -240,7 +217,6 @@ class redis::params {
       $sentinel_daemonize        = true
       $sentinel_init_script      = undef
       $sentinel_package_name     = 'redis'
-      $sentinel_package_ensure   = 'present'
       $service_manage            = true
       $service_enable            = true
       $service_ensure            = 'running'
@@ -274,7 +250,6 @@ class redis::params {
       $sentinel_daemonize        = true
       $sentinel_init_script      = undef
       $sentinel_package_name     = 'redis'
-      $sentinel_package_ensure   = 'present'
       $service_manage            = true
       $service_enable            = true
       $service_ensure            = 'running'
@@ -309,7 +284,6 @@ class redis::params {
       $sentinel_daemonize        = true
       $sentinel_init_script      = undef
       $sentinel_package_name     = 'redis'
-      $sentinel_package_ensure   = 'present'
       $service_manage            = true
       $service_enable            = true
       $service_ensure            = 'running'

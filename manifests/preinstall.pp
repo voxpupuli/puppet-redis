@@ -1,8 +1,6 @@
-# = Class: redis::preinstall
-#
-# This class provides anything required by the install class.
-# Such as package repositories.
-#
+# @summary Provides anything required by the install class, such as package
+#   repositories.
+# @api private
 class redis::preinstall {
   if $redis::manage_repo {
     case $::operatingsystem {

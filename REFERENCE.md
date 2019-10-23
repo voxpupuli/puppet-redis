@@ -9,15 +9,16 @@ _Public Classes_
 
 * [`redis`](#redis): This class installs redis
 * [`redis::administration`](#redisadministration): Allows various adminstrative settings for Redis As documented in the FAQ and https://redis.io/topics/admin
-* [`redis::config`](#redisconfig): = Class: redis::config  This class provides configuration for Redis.
-* [`redis::install`](#redisinstall): = Class: redis::install  This class installs the application.
-* [`redis::params`](#redisparams): = Class: redis::params  This class provides a number of parameters.
-* [`redis::preinstall`](#redispreinstall): = Class: redis::preinstall  This class provides anything required by the install class. Such as package repositories.
-* [`redis::sentinel`](#redissentinel): = Class: redis::sentinel  This class installs redis-sentinel  == Parameters:   [*auth_pass*]   The password to use to authenticate with the m
-* [`redis::service`](#redisservice): = Class: redis::service  This class manages the Redis daemon.
+* [`redis::sentinel`](#redissentinel): Install redis-sentinel
 
 _Private Classes_
 
+* `redis::config`: This class provides configuration for Redis.
+* `redis::install`: This class installs the application.
+* `redis::params`: This class provides a number of parameters.
+* `redis::preinstall`: Provides anything required by the install class, such as package
+repositories.
+* `redis::service`: This class manages the Redis daemon.
 * `redis::ulimit`: Redis class for configuring ulimit Used to DRY up the config class, and move the logic for ulimit changes all into one place.  Parameters are
 
 **Defined types**
@@ -953,203 +954,26 @@ Set somaxconn value (Defaults to '65535')
 
 Default value: '65535'
 
-### redis::config
-
-= Class: redis::config
-
-This class provides configuration for Redis.
-
-### redis::install
-
-= Class: redis::install
-
-This class installs the application.
-
-### redis::params
-
-= Class: redis::params
-
-This class provides a number of parameters.
-
-### redis::preinstall
-
-= Class: redis::preinstall
-
-This class provides anything required by the install class.
-Such as package repositories.
-
 ### redis::sentinel
 
-= Class: redis::sentinel
+Install redis-sentinel
 
-This class installs redis-sentinel
+#### Examples
 
-== Parameters:
+##### Basic inclusion
 
+```puppet
+include redis::sentinel
+```
 
-[*auth_pass*]
-  The password to use to authenticate with the master and slaves.
+##### Configuring options
 
-  Default: undef
-
-[*config_file*]
-  The location and name of the sentinel config file.
-
-  Default for deb: /etc/redis/redis-sentinel.conf
-  Default for rpm: /etc/redis-sentinel.conf
-
-[*config_file_orig*]
-  The location and name of a config file that provides the source
-  of the sentinel config file. Two different files are needed
-  because sentinel itself writes to its own config file and we do
-  not want override that when puppet is run unless there are
-  changes from the manifests.
-
-  Default for deb: /etc/redis/redis-sentinel.conf.puppet
-  Default for rpm: /etc/redis-sentinel.conf.puppet
-
-[*config_file_mode*]
-  Permissions of config file.
-
-  Default: 0644
-
-[*conf_template*]
-  Define which template to use.
-
-  Default: redis/redis-sentinel.conf.erb
-
-[*daemonize*]
-  Have Redis sentinel run as a daemon.
-
-  Default: true
-
-[*down_after*]
-  Number of milliseconds the master (or any attached slave or sentinel)
-  should be unreachable (as in, not acceptable reply to PING, continuously,
-  for the specified period) in order to consider it in S_DOWN state.
-
-  Default: 30000
-
-[*failover_timeout*]
-  Specify the failover timeout in milliseconds.
-
-  Default: 180000
-
-[*init_script*]
-  Specifiy the init script that will be created for sentinel.
-
-  Default: undef on rpm, /etc/init.d/redis-sentinel on apt.
-
-[*log_file*]
-  Specify where to write log entries.
-
-  Default: /var/log/redis/redis.log
-
-[*log_level*]
-  Specify how much we should log.
-
-  Default: notice
-
-[*master_name*]
-  Specify the name of the master redis server.
-  The valid charset is A-z 0-9 and the three characters ".-_".
-
-  Default: mymaster
-
-[*redis_host*]
-  Specify the bound host of the master redis server.
-
-  Default: 127.0.0.1
-
-[*redis_port*]
-  Specify the port of the master redis server.
-
-  Default: 6379
-
-[*package_name*]
-  The name of the package that installs sentinel.
-
-  Default: 'redis-server' on apt, 'redis' on rpm
-
-[*package_ensure*]
-  Do we ensure this package.
-
-  Default: 'present'
-
-[*parallel_sync*]
-  How many slaves can be reconfigured at the same time to use a
-  new master after a failover.
-
-  Default: 1
-
-[*pid_file*]
-  If sentinel is daemonized it will write its pid at this location.
-
-  Default: /var/run/redis/redis-sentinel.pid
-
-[*quorum*]
-  Number of sentinels that must agree that a master is down to
-  signal sdown state.
-
-  Default: 2
-
-[*sentinel_bind*]
-  Allow optional sentinel server ip binding.  Can help overcome
-  issues arising from protect-mode added Redis 3.2
-
-  Default: undef
-
-[*sentinel_port*]
-  The port of sentinel server.
-
-  Default: 26379
-
-[*service_group*]
-  The group of the config file.
-
-  Default: redis
-
-[*service_name*]
-  The name of the service (for puppet to manage).
-
-  Default: redis-sentinel
-
-[*service_owner*]
-  The owner of the config file.
-
-  Default: redis
-
-[*service_enable*]
-  Enable the service at boot time.
-
-  Default: true
-
-[*working_dir*]
-  The directory into which sentinel will change to avoid mount
-  conflicts.
-
-  Default: /tmp
-
-[*notification_script*]
-  Path to the notification script
-
-  Default: undef
-
-[*client_reconfig_script*]
-  Path to the client-reconfig script
-
-  Default: undef
-== Actions:
-  - Install and configure Redis Sentinel
-
-== Sample Usage:
-
-  class { 'redis::sentinel': }
-
-  class {'redis::sentinel':
-    down_after => 80000,
-    log_file => '/var/log/redis/sentinel.log',
-  }
+```puppet
+class {'redis::sentinel':
+  down_after => 80000,
+  log_file   => '/var/log/redis/sentinel.log',
+}
+```
 
 #### Parameters
 
@@ -1159,15 +983,15 @@ The following parameters are available in the `redis::sentinel` class.
 
 Data type: `Any`
 
+The password to use to authenticate with the master and slaves.
 
-
-Default value: $redis::params::sentinel_auth_pass
+Default value: `undef`
 
 ##### `config_file`
 
 Data type: `Any`
 
-
+The location and name of the sentinel config file.
 
 Default value: $redis::params::sentinel_config_file
 
@@ -1175,7 +999,11 @@ Default value: $redis::params::sentinel_config_file
 
 Data type: `Any`
 
-
+The location and name of a config file that provides the source
+of the sentinel config file. Two different files are needed
+because sentinel itself writes to its own config file and we do
+not want override that when puppet is run unless there are
+changes from the manifests.
 
 Default value: $redis::params::sentinel_config_file_orig
 
@@ -1183,23 +1011,23 @@ Default value: $redis::params::sentinel_config_file_orig
 
 Data type: `Stdlib::Filemode`
 
+Permissions of config file.
 
-
-Default value: $redis::params::sentinel_config_file_mode
+Default value: '0644'
 
 ##### `conf_template`
 
-Data type: `Any`
+Data type: `String[1]`
 
+Define which template to use.
 
-
-Default value: $redis::params::sentinel_conf_template
+Default value: 'redis/redis-sentinel.conf.erb'
 
 ##### `daemonize`
 
 Data type: `Any`
 
-
+Have Redis sentinel run as a daemon.
 
 Default value: $redis::params::sentinel_daemonize
 
@@ -1207,127 +1035,125 @@ Default value: $redis::params::sentinel_daemonize
 
 Data type: `Any`
 
+Number of milliseconds the master (or any attached slave or sentinel)
+should be unreachable (as in, not acceptable reply to PING, continuously,
+for the specified period) in order to consider it in S_DOWN state.
 
-
-Default value: $redis::params::sentinel_down_after
+Default value: 30000
 
 ##### `failover_timeout`
 
 Data type: `Any`
 
+Specify the failover timeout in milliseconds.
 
-
-Default value: $redis::params::sentinel_failover_timeout
+Default value: 180000
 
 ##### `init_script`
 
 Data type: `Any`
 
-
+Specifiy the init script that will be created for sentinel.
 
 Default value: $redis::params::sentinel_init_script
-
-##### `init_template`
-
-Data type: `Any`
-
-
-
-Default value: $redis::params::sentinel_init_template
-
-##### `log_level`
-
-Data type: `Any`
-
-
-
-Default value: $redis::params::log_level
 
 ##### `log_file`
 
 Data type: `Any`
 
-
+Specify where to write log entries.
 
 Default value: $redis::params::log_file
 
-##### `master_name`
+##### `log_level`
 
 Data type: `Any`
 
+Specify how much we should log.
 
+Default value: $redis::params::log_level
 
-Default value: $redis::params::sentinel_master_name
+##### `master_name`
+
+Data type: `String[1]`
+
+Specify the name of the master redis server.
+The valid charset is A-z 0-9 and the three characters ".-_".
+
+Default value: 'mymaster'
 
 ##### `redis_host`
 
 Data type: `Stdlib::Host`
 
+Specify the bound host of the master redis server.
 
-
-Default value: $redis::params::sentinel_redis_host
+Default value: '127.0.0.1'
 
 ##### `redis_port`
 
 Data type: `Stdlib::Port`
 
+Specify the port of the master redis server.
 
-
-Default value: $redis::params::port
+Default value: 26379
 
 ##### `package_name`
 
 Data type: `Any`
 
-
+The name of the package that installs sentinel.
 
 Default value: $redis::params::sentinel_package_name
 
 ##### `package_ensure`
 
-Data type: `Any`
+Data type: `String[1]`
 
+Do we ensure this package.
 
-
-Default value: $redis::params::sentinel_package_ensure
+Default value: 'present'
 
 ##### `parallel_sync`
 
-Data type: `Any`
+Data type: `Integer[0]`
 
+How many slaves can be reconfigured at the same time to use a
+new master after a failover.
 
-
-Default value: $redis::params::sentinel_parallel_sync
+Default value: 1
 
 ##### `pid_file`
 
-Data type: `Any`
+Data type: `Stdlib::Absolutepath`
 
+If sentinel is daemonized it will write its pid at this location.
 
-
-Default value: $redis::params::sentinel_pid_file
+Default value: '/var/run/redis/redis-sentinel.pid'
 
 ##### `quorum`
 
-Data type: `Any`
+Data type: `Integer[0]`
 
+Number of sentinels that must agree that a master is down to
+signal sdown state.
 
-
-Default value: $redis::params::sentinel_quorum
+Default value: 2
 
 ##### `sentinel_bind`
 
 Data type: `Any`
 
+Allow optional sentinel server ip binding.  Can help overcome
+issues arising from protect-mode added Redis 3.2
 
-
-Default value: $redis::params::sentinel_bind
+Default value: `undef`
 
 ##### `sentinel_port`
 
 Data type: `Stdlib::Port`
 
-
+The port of sentinel server.
 
 Default value: $redis::params::sentinel_port
 
@@ -1335,17 +1161,62 @@ Default value: $redis::params::sentinel_port
 
 Data type: `Any`
 
-
+The group of the config file.
 
 Default value: $redis::params::service_group
 
 ##### `service_name`
 
+Data type: `String[1]`
+
+The name of the service (for puppet to manage).
+
+Default value: 'redis-sentinel'
+
+##### `service_owner`
+
+The owner of the config file.
+
+##### `service_enable`
+
+Data type: `Boolean`
+
+Enable the service at boot time.
+
+Default value: $redis::params::service_enable
+
+##### `working_dir`
+
+Data type: `Stdlib::Absolutepaht`
+
+The directory into which sentinel will change to avoid mount
+conflicts.
+
+Default value: '/tmp'
+
+##### `notification_script`
+
 Data type: `Any`
 
+Path to the notification script
+
+Default value: `undef`
+
+##### `client_reconfig_script`
+
+Data type: `Any`
+
+Path to the client-reconfig script
+
+Default value: `undef`
+
+##### `init_template`
+
+Data type: `String[1]`
 
 
-Default value: $redis::params::sentinel_service_name
+
+Default value: 'redis/redis-sentinel.init.erb'
 
 ##### `service_ensure`
 
@@ -1355,14 +1226,6 @@ Data type: `Any`
 
 Default value: $redis::params::service_ensure
 
-##### `service_enable`
-
-Data type: `Boolean`
-
-
-
-Default value: $redis::params::service_enable
-
 ##### `service_user`
 
 Data type: `Any`
@@ -1371,41 +1234,9 @@ Data type: `Any`
 
 Default value: $redis::params::service_user
 
-##### `working_dir`
-
-Data type: `Any`
-
-
-
-Default value: $redis::params::sentinel_working_dir
-
-##### `notification_script`
-
-Data type: `Any`
-
-
-
-Default value: $redis::params::sentinel_notification_script
-
-##### `client_reconfig_script`
-
-Data type: `Any`
-
-
-
-Default value: $redis::params::sentinel_client_reconfig_script
-
-### redis::service
-
-= Class: redis::service
-
-This class manages the Redis daemon.
-
 ## Defined types
 
 ### redis::instance
-
-redis::instance
 
 This is an defined type to allow the configuration of
 multiple redis instances on one machine without conflicts
