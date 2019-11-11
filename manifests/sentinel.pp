@@ -160,7 +160,7 @@ class redis::sentinel (
   }
 
   file { $config_file_orig:
-    ensure  => present,
+    ensure  => file,
     owner   => $service_user,
     group   => $service_group,
     mode    => $config_file_mode,
@@ -177,7 +177,7 @@ class redis::sentinel (
   if $init_script {
 
     file { $init_script:
-      ensure  => present,
+      ensure  => file,
       owner   => 'root',
       group   => 'root',
       mode    => '0755',
