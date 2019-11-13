@@ -2,11 +2,11 @@
 .travis.yml:
   secure: "lmmQ5+ueE39cDevK+TjJWgD7b9X6FQDoyL/OTRXzOuCu/96yXQrm/KBq4E2IsFTx91XiqOH6ZnKcgiGwaY54E10ddTvlZhEa8orMmwfkrLAbyh7POB1q3AtQze7RPLvOuHZc6XIRBDiiFKMrzvwdP5OgU9iPEFdSRZll64nw240="
   docker_sets:
-    - set: ubuntu1404-64m
     - set: ubuntu1604-64m
+    - set: ubuntu1804-64m
     - set: centos6-64m
     - set: centos7-64m
-    - set: debian8-64m
+    - set: debian9-64m
 Gemfile:
   optional:
     ':test':

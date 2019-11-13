@@ -1,4 +1,3 @@
-# run a test task
 require 'spec_helper_acceptance'
 
 describe 'redis-cli task' do
@@ -13,8 +12,13 @@ describe 'redis-cli task' do
     }
     EOS
 
-    # Apply twice to ensure no errors the second time.
     apply_manifest(pp, catch_failures: true)
+
+    # Apply twice to ensure no errors the second time.
+    # TODO: not idempotent on Ubuntu 16.04
+    unless fact('operatingsystem') == 'Ubuntu' && fact('operatingsystemmajrelease') == '16.04'
+      apply_manifest(pp, catch_changes: true)
+    end
   end
 
   describe 'ping' do

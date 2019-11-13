@@ -139,28 +139,19 @@ class redis::sentinel (
 
   require 'redis'
 
-  if $::osfamily == 'Debian' {
-    # Debian flavour machines have a dedicated redis-sentinel package
-    # This is default in Xenial or Stretch onwards or PPA/other upstream
-    # See https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=775414 for context
-    if (
-      (versioncmp($::operatingsystemmajrelease, '16.04') >= 0 and $::operatingsystem == 'Ubuntu') or
-      (versioncmp($::operatingsystemmajrelease, '9') >= 0 and $::operatingsystem == 'Debian') or
-      $redis::manage_repo
-      ) {
-      package { $package_name:
-        ensure => $package_ensure,
-        before => File[$config_file_orig],
-      }
+  if $facts['osfamily'] == 'Debian' {
+    package { $package_name:
+      ensure => $package_ensure,
+      before => File[$config_file_orig],
+    }
 
-      if $init_script {
-        Package[$package_name] -> File[$init_script]
-      }
+    if $init_script {
+      Package[$package_name] -> File[$init_script]
     }
   }
 
   file { $config_file_orig:
-    ensure  => present,
+    ensure  => file,
     owner   => $service_user,
     group   => $service_group,
     mode    => $config_file_mode,
@@ -177,7 +168,7 @@ class redis::sentinel (
   if $init_script {
 
     file { $init_script:
-      ensure  => present,
+      ensure  => file,
       owner   => 'root',
       group   => 'root',
       mode    => '0755',
@@ -193,10 +184,8 @@ class redis::sentinel (
   }
 
   service { $service_name:
-    ensure     => $service_ensure,
-    enable     => $service_enable,
-    hasrestart => $redis::params::service_hasrestart,
-    hasstatus  => $redis::params::service_hasstatus,
+    ensure => $service_ensure,
+    enable => $service_enable,
   }
 
 }

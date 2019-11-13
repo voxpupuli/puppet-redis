@@ -269,10 +269,6 @@ class redis (
     ~> Class['redis::service']
   }
 
-  if $::puppetversion and versioncmp($::puppetversion, '4.0.0') < 0 {
-    warning("Puppet 3 is EOL as of 01/01/2017, The 3.X.X releases of the module are the last that will support Puppet 3\nFor more information, see https://github.com/arioch/puppet-redis#puppet-3-support")
-  }
-
   exec { 'systemd-reload-redis':
     command     => 'systemctl daemon-reload',
     refreshonly => true,

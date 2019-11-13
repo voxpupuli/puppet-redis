@@ -1,7 +1,6 @@
 require 'spec_helper_acceptance'
 
-# CentOS 6 Redis package is too old for Sentinel (2.4.10, needs 2.8+)
-describe 'redis::sentinel', unless: (fact('osfamily') == 'RedHat' && (fact('operatingsystemmajrelease') == '6')) do
+describe 'redis::sentinel' do
   redis_name = case fact('osfamily')
                when 'Debian'
                  'redis-server'
@@ -17,7 +16,7 @@ describe 'redis::sentinel', unless: (fact('osfamily') == 'RedHat' && (fact('oper
     $failover_timeout = '10000'
 
     # We're testing with `manage_repo` true.  In redis-sentinel 5, the daemon has its own rundir
-    if $::operatingsystem == 'Ubuntu' and $::operatingsystemmajrelease == '16.04' {
+    if $::operatingsystem == 'Ubuntu' {
       $pidfile = '/var/run/sentinel/redis-sentinel.pid'
     } else {
       $pidfile = undef
