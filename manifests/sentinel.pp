@@ -79,7 +79,7 @@
 # @param service_name
 #   The name of the service (for puppet to manage).
 #
-# @param service_owner
+# @param service_user
 #   The owner of the config file.
 #
 # @param service_enable
@@ -105,36 +105,36 @@
 #   }
 #
 class redis::sentinel (
-  $auth_pass              = undef,
-  $config_file            = $redis::params::sentinel_config_file,
-  $config_file_orig       = $redis::params::sentinel_config_file_orig,
+  Optional[String[1]] $auth_pass = undef,
+  Stdlib::Absolutepath $config_file = $redis::params::sentinel_config_file,
+  Stdlib::Absolutepath $config_file_orig = $redis::params::sentinel_config_file_orig,
   Stdlib::Filemode $config_file_mode = '0644',
   String[1] $conf_template = 'redis/redis-sentinel.conf.erb',
-  $daemonize              = $redis::params::sentinel_daemonize,
-  $down_after             = 30000,
-  $failover_timeout       = 180000,
-  $init_script            = $redis::params::sentinel_init_script,
+  Boolean $daemonize = $redis::params::sentinel_daemonize,
+  Integer[1] $down_after = 30000,
+  Integer[1] $failover_timeout = 180000,
+  Optional[Stdlib::Absolutepath] $init_script = $redis::params::sentinel_init_script,
   String[1] $init_template = 'redis/redis-sentinel.init.erb',
-  $log_level              = $redis::params::log_level,
-  $log_file               = $redis::params::log_file,
+  Redis::LogLevel $log_level = 'notice',
+  Stdlib::Absolutepath $log_file = '/var/log/redis/redis.log',
   String[1] $master_name  = 'mymaster',
   Stdlib::Host $redis_host = '127.0.0.1',
-  Stdlib::Port $redis_port = $redis::params::port,
-  $package_name           = $redis::params::sentinel_package_name,
+  Stdlib::Port::Unprivileged $redis_port = 6379,
+  String[1] $package_name = $redis::params::sentinel_package_name,
   String[1] $package_ensure = 'present',
   Integer[0] $parallel_sync = 1,
   Stdlib::Absolutepath $pid_file = '/var/run/redis/redis-sentinel.pid',
-  Integer[0] $quorum      = 2,
-  $sentinel_bind          = undef,
-  Stdlib::Port $sentinel_port = 26379,
-  $service_group          = $redis::params::service_group,
+  Integer[1] $quorum = 2,
+  Variant[Undef, Stdlib::IP::Address, Array[Stdlib::IP::Address]] $sentinel_bind = undef,
+  Stdlib::Port::Unprivileged $sentinel_port = 26379,
+  String[1] $service_group = $redis::params::service_group,
   String[1] $service_name = 'redis-sentinel',
-  $service_ensure         = $redis::params::service_ensure,
-  Boolean $service_enable = $redis::params::service_enable,
-  $service_user           = $redis::params::service_user,
+  Stdlib::Ensure::Service $service_ensure = 'running',
+  Boolean $service_enable = true,
+  String[1] $service_user = 'redis',
   Stdlib::Absolutepath $working_dir = '/tmp',
-  $notification_script    = undef,
-  $client_reconfig_script = undef,
+  Optional[Stdlib::Absolutepath] $notification_script = undef,
+  Optional[Stdlib::Absolutepath] $client_reconfig_script = undef,
 ) inherits redis::params {
 
   require 'redis'

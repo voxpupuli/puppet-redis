@@ -9,16 +9,20 @@
 #     disable_thp => false,
 #   }
 #
-# @param [Boolean] enable_overcommit_memory Enable the overcommit memory setting (Defaults to true)
-# @param [Boolean] disable_thp Disable Transparent Huge Pages (Defaults to true)
-# @param [String] somaxconn Set somaxconn value (Defaults to '65535')
+# @param enable_overcommit_memory
+#   Enable the overcommit memory setting
+# @param disable_thp
+#   Disable Transparent Huge Pages
+# @param somaxconn
+#   Set somaxconn value
 #
 # @author - Peter Souter
+# @see https://redis.io/topics/admin
 #
 class redis::administration(
-  $enable_overcommit_memory = true,
-  $disable_thp              = true,
-  $somaxconn                = '65535',
+  Boolean $enable_overcommit_memory = true,
+  Boolean $disable_thp              = true,
+  Integer[0] $somaxconn             = 65535,
 ) {
 
   if $enable_overcommit_memory {
@@ -37,7 +41,7 @@ class redis::administration(
     }
   }
 
-  if $somaxconn {
+  if $somaxconn > 0 {
     sysctl { 'net.core.somaxconn':
       ensure => 'present',
       value  => $somaxconn,

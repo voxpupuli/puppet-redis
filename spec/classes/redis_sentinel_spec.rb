@@ -69,8 +69,8 @@ CONFIG
             down_after: 6000,
             log_file: '/tmp/barn-sentinel.log',
             failover_timeout: 28_000,
-            notification_script: 'bar.sh',
-            client_reconfig_script: 'foo.sh'
+            notification_script: '/path/to/bar.sh',
+            client_reconfig_script: '/path/to/foo.sh'
           }
         end
 
@@ -87,8 +87,8 @@ sentinel down-after-milliseconds cow 6000
 sentinel parallel-syncs cow 1
 sentinel failover-timeout cow 28000
 sentinel auth-pass cow password
-sentinel notification-script cow bar.sh
-sentinel client-reconfig-script cow foo.sh
+sentinel notification-script cow /path/to/bar.sh
+sentinel client-reconfig-script cow /path/to/foo.sh
 
 loglevel notice
 logfile /tmp/barn-sentinel.log

@@ -72,7 +72,7 @@ describe 'redis' do
       end
 
       context 'with ulimit' do
-        let(:params) { { ulimit: '7777' } }
+        let(:params) { { ulimit: 7777 } }
 
         it { is_expected.to compile.with_all_deps }
         it do
@@ -183,11 +183,11 @@ describe 'redis' do
       describe 'with parameter auto_aof_rewrite_percentage' do
         let(:params) do
           {
-            auto_aof_rewrite_percentage: '_VALUE_'
+            auto_aof_rewrite_percentage: 75
           }
         end
 
-        it { is_expected.to contain_file(config_file_orig).with_content(%r{auto-aof-rewrite-percentage.*_VALUE_}) }
+        it { is_expected.to contain_file(config_file_orig).with_content(%r{auto-aof-rewrite-percentage 75}) }
       end
 
       describe 'parameter bind' do
@@ -256,9 +256,9 @@ describe 'redis' do
       end
 
       describe 'with parameter: config_file_orig' do
-        let(:params) { { config_file_orig: '_VALUE_' } }
+        let(:params) { { config_file_orig: '/path/to/orig' } }
 
-        it { is_expected.to contain_file('_VALUE_') }
+        it { is_expected.to contain_file('/path/to/orig') }
       end
 
       describe 'with parameter: config_file_mode' do
@@ -296,13 +296,13 @@ describe 'redis' do
       describe 'with parameter databases' do
         let(:params) do
           {
-            databases: '_VALUE_'
+            databases: 42
           }
         end
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{databases.*_VALUE_}
+            'content' => %r{databases 42}
           )
         }
       end
@@ -334,13 +334,13 @@ describe 'redis' do
       describe 'with parameter hash_max_ziplist_entries' do
         let(:params) do
           {
-            hash_max_ziplist_entries: '_VALUE_'
+            hash_max_ziplist_entries: 42
           }
         end
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{hash-max-ziplist-entries.*_VALUE_}
+            'content' => %r{hash-max-ziplist-entries 42}
           )
         }
       end
@@ -348,27 +348,28 @@ describe 'redis' do
       describe 'with parameter hash_max_ziplist_value' do
         let(:params) do
           {
-            hash_max_ziplist_value: '_VALUE_'
+            hash_max_ziplist_value: 42
           }
         end
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{hash-max-ziplist-value.*_VALUE_}
+            'content' => %r{hash-max-ziplist-value 42}
           )
         }
       end
 
+      # TODO: Only present in 3.0
       describe 'with parameter list_max_ziplist_entries' do
         let(:params) do
           {
-            list_max_ziplist_entries: '_VALUE_'
+            list_max_ziplist_entries: 42
           }
         end
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{list-max-ziplist-entries.*_VALUE_}
+            'content' => %r{list-max-ziplist-entries 42}
           )
         }
       end
@@ -376,13 +377,13 @@ describe 'redis' do
       describe 'with parameter list_max_ziplist_value' do
         let(:params) do
           {
-            list_max_ziplist_value: '_VALUE_'
+            list_max_ziplist_value: 42
           }
         end
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{list-max-ziplist-value.*_VALUE_}
+            'content' => %r{list-max-ziplist-value 42}
           )
         }
       end
@@ -418,13 +419,13 @@ describe 'redis' do
       describe 'with parameter log_level' do
         let(:params) do
           {
-            log_level: '_VALUE_'
+            log_level: 'debug'
           }
         end
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{loglevel.*_VALUE_}
+            'content' => %r{^loglevel debug$}
           )
         }
       end
@@ -507,13 +508,13 @@ describe 'redis' do
       describe 'with parameter maxclients' do
         let(:params) do
           {
-            maxclients: '_VALUE_'
+            maxclients: 42
           }
         end
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{maxclients.*_VALUE_}
+            'content' => %r{^maxclients 42$}
           )
         }
       end
@@ -563,13 +564,13 @@ describe 'redis' do
       describe 'with parameter min_slaves_max_lag' do
         let(:params) do
           {
-            min_slaves_max_lag: '_VALUE_'
+            min_slaves_max_lag: 42
           }
         end
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{min-slaves-max-lag.*_VALUE_}
+            'content' => %r{^min-slaves-max-lag 42$}
           )
         }
       end
@@ -577,13 +578,13 @@ describe 'redis' do
       describe 'with parameter min_slaves_to_write' do
         let(:params) do
           {
-            min_slaves_to_write: '_VALUE_'
+            min_slaves_to_write: 42
           }
         end
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{min-slaves-to-write.*_VALUE_}
+            'content' => %r{^min-slaves-to-write 42$}
           )
         }
       end
@@ -648,13 +649,13 @@ describe 'redis' do
       describe 'with parameter pid_file' do
         let(:params) do
           {
-            pid_file: '_VALUE_'
+            pid_file: '/path/to/redis.pid'
           }
         end
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{pidfile.*_VALUE_}
+            'content' => %r{^pidfile /path/to/redis.pid$}
           )
         }
       end
@@ -676,15 +677,15 @@ describe 'redis' do
       describe 'with parameter protected-mode' do
         let(:params) do
           {
-            protected_mode: '_VALUE_'
+            protected_mode: false
           }
         end
 
         it do
           if facts[:operatingsystem] == 'Ubuntu' && facts[:operatingsystemmajrelease] == '16.04'
-            is_expected.not_to contain_file(config_file_orig).with_content(%r{protected-mode.*_VALUE_})
+            is_expected.not_to contain_file(config_file_orig).with_content(%r{protected-mode})
           else
-            is_expected.to contain_file(config_file_orig).with_content(%r{protected-mode.*_VALUE_})
+            is_expected.to contain_file(config_file_orig).with_content(%r{^protected-mode no$})
           end
         end
       end
@@ -692,13 +693,13 @@ describe 'redis' do
       describe 'with parameter hll_sparse_max_bytes' do
         let(:params) do
           {
-            hll_sparse_max_bytes: '_VALUE_'
+            hll_sparse_max_bytes: 42
           }
         end
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{hll-sparse-max-bytes.*_VALUE_}
+            'content' => %r{^hll-sparse-max-bytes 42$}
           )
         }
       end
@@ -706,13 +707,13 @@ describe 'redis' do
       describe 'with parameter hz' do
         let(:params) do
           {
-            hz: '_VALUE_'
+            hz: 42
           }
         end
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{hz.*_VALUE_}
+            'content' => %r{^hz 42$}
           )
         }
       end
@@ -720,13 +721,13 @@ describe 'redis' do
       describe 'with parameter latency_monitor_threshold' do
         let(:params) do
           {
-            latency_monitor_threshold: '_VALUE_'
+            latency_monitor_threshold: 42
           }
         end
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{latency-monitor-threshold.*_VALUE_}
+            'content' => %r{^latency-monitor-threshold 42$}
           )
         }
       end
@@ -762,13 +763,13 @@ describe 'redis' do
       describe 'with parameter repl_backlog_ttl' do
         let(:params) do
           {
-            repl_backlog_ttl: '_VALUE_'
+            repl_backlog_ttl: 42
           }
         end
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{repl-backlog-ttl.*_VALUE_}
+            'content' => %r{^repl-backlog-ttl 42$}
           )
         }
       end
@@ -921,10 +922,10 @@ describe 'redis' do
       end
 
       describe 'with parameter: service_ensure' do
-        let(:params) { { service_ensure: '_VALUE_' } }
+        let(:params) { { service_ensure: 'stopped' } }
         let(:package_name) { manifest_vars[:package_name] }
 
-        it { is_expected.to contain_service(package_name).with_ensure('_VALUE_') }
+        it { is_expected.to contain_service(package_name).with_ensure('stopped') }
       end
 
       describe 'with parameter: service_group' do
@@ -962,13 +963,13 @@ describe 'redis' do
       describe 'with parameter set_max_intset_entries' do
         let(:params) do
           {
-            set_max_intset_entries: '_VALUE_'
+            set_max_intset_entries: 42
           }
         end
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{set-max-intset-entries.*_VALUE_}
+            'content' => %r{^set-max-intset-entries 42$}
           )
         }
       end
@@ -976,13 +977,13 @@ describe 'redis' do
       describe 'with parameter slave_priority' do
         let(:params) do
           {
-            slave_priority: '_VALUE_'
+            slave_priority: 42
           }
         end
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{slave-priority.*_VALUE_}
+            'content' => %r{^slave-priority 42$}
           )
         }
       end
@@ -1050,13 +1051,13 @@ describe 'redis' do
       describe 'with parameter slowlog_log_slower_than' do
         let(:params) do
           {
-            slowlog_log_slower_than: '_VALUE_'
+            slowlog_log_slower_than: 42
           }
         end
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{slowlog-log-slower-than.*_VALUE_}
+            'content' => %r{^slowlog-log-slower-than 42$}
           )
         }
       end
@@ -1064,13 +1065,13 @@ describe 'redis' do
       describe 'with parameter slowlog_max_len' do
         let(:params) do
           {
-            slowlog_max_len: '_VALUE_'
+            slowlog_max_len: 42
           }
         end
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{slowlog-max-len.*_VALUE_}
+            'content' => %r{^slowlog-max-len 42$}
           )
         }
       end
@@ -1121,13 +1122,13 @@ describe 'redis' do
       describe 'with parameter tcp_backlog' do
         let(:params) do
           {
-            tcp_backlog: '_VALUE_'
+            tcp_backlog: 42
           }
         end
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{tcp-backlog.*_VALUE_}
+            'content' => %r{^tcp-backlog 42$}
           )
         }
       end
@@ -1135,13 +1136,13 @@ describe 'redis' do
       describe 'with parameter tcp_keepalive' do
         let(:params) do
           {
-            tcp_keepalive: '_VALUE_'
+            tcp_keepalive: 42
           }
         end
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{tcp-keepalive.*_VALUE_}
+            'content' => %r{^tcp-keepalive 42$}
           )
         }
       end
@@ -1149,13 +1150,13 @@ describe 'redis' do
       describe 'with parameter timeout' do
         let(:params) do
           {
-            timeout: '_VALUE_'
+            timeout: 42
           }
         end
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{timeout.*_VALUE_}
+            'content' => %r{^timeout 42$}
           )
         }
       end
@@ -1177,13 +1178,13 @@ describe 'redis' do
       describe 'with parameter zset_max_ziplist_entries' do
         let(:params) do
           {
-            zset_max_ziplist_entries: '_VALUE_'
+            zset_max_ziplist_entries: 42
           }
         end
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{zset-max-ziplist-entries.*_VALUE_}
+            'content' => %r{zset-max-ziplist-entries 42}
           )
         }
       end
@@ -1191,13 +1192,13 @@ describe 'redis' do
       describe 'with parameter zset_max_ziplist_value' do
         let(:params) do
           {
-            zset_max_ziplist_value: '_VALUE_'
+            zset_max_ziplist_value: 42
           }
         end
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{zset-max-ziplist-value.*_VALUE_}
+            'content' => %r{zset-max-ziplist-value 42}
           )
         }
       end
@@ -1249,13 +1250,13 @@ describe 'redis' do
         let(:params) do
           {
             cluster_enabled: true,
-            cluster_node_timeout: '_VALUE_'
+            cluster_node_timeout: 42
           }
         end
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{cluster-node-timeout.*_VALUE_}
+            'content' => %r{cluster-node-timeout 42}
           )
         }
       end
