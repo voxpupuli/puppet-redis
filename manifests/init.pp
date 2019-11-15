@@ -253,7 +253,6 @@ class redis (
   Integer[0] $cluster_slave_validity_factor                      = $redis::params::cluster_slave_validity_factor,
   Boolean $cluster_require_full_coverage                         = $redis::params::cluster_require_full_coverage,
   Integer[0] $cluster_migration_barrier                          = $redis::params::cluster_migration_barrier,
-  ## Start hiera lookup
   Hash $instances                                                = {},
 ) inherits redis::params {
 
