@@ -265,8 +265,8 @@ class redis (
   $instances.each | String $key, Hash $values | {
     redis::instance { $key:
       * => $values,
-     }
-   }
+    }
+  }
 
   Class['redis::preinstall']
   -> Class['redis::install']
