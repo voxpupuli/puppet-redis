@@ -264,7 +264,7 @@ class redis (
 
   $instances.each | String $key, Hash $values | {
     redis::instance { $key:
-      *     => $values,
+      * => $values,
      }
    }
 
