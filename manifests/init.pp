@@ -259,6 +259,8 @@ class redis (
   contain redis::install
   contain redis::config
   contain redis::service
+  
+  create_resources('::redis::instance', $instances)
 
   Class['redis::preinstall']
   -> Class['redis::install']
