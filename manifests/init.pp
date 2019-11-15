@@ -262,7 +262,7 @@ class redis (
   contain redis::config
   contain redis::service
 
-  $instances.each || { 'redis::instance' }
+  $instances.each | String $key, Hash $value | { 'redis::instance' }
 
   Class['redis::preinstall']
   -> Class['redis::install']
