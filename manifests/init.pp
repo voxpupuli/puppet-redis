@@ -254,7 +254,7 @@ class redis (
   Boolean $cluster_require_full_coverage                         = $redis::params::cluster_require_full_coverage,
   Integer[0] $cluster_migration_barrier                          = $redis::params::cluster_migration_barrier,
   ## Start hiera lookup
-  $instances                                                     = {},
+  Hash $instances                                                = {},
 ) inherits redis::params {
 
   contain redis::preinstall
