@@ -15,6 +15,7 @@ _Private Classes_
 
 * `redis::config`: This class provides configuration for Redis.
 * `redis::install`: This class installs the application.
+* `redis::instances` : This class manages multiple instances.
 * `redis::params`: This class provides a number of parameters.
 * `redis::preinstall`: Provides anything required by the install class, such as package
 repositories.
