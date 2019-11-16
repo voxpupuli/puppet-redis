@@ -153,6 +153,7 @@
 # @param [Integer] cluster_migration_barrier    Minimum number of slaves master will remain connected with, for another slave to migrate to a  master which is no longer covered by any slave
 #   Only set if cluster_enabled is true
 #   Default: 1
+# @param [Hash] instances   Iterate through multiple instance configurations
 class redis (
   $activerehashing                                               = $redis::params::activerehashing,
   $aof_load_truncated                                            = $redis::params::aof_load_truncated,
@@ -253,7 +254,7 @@ class redis (
   Integer[0] $cluster_slave_validity_factor                      = $redis::params::cluster_slave_validity_factor,
   Boolean $cluster_require_full_coverage                         = $redis::params::cluster_require_full_coverage,
   Integer[0] $cluster_migration_barrier                          = $redis::params::cluster_migration_barrier,
-  Hash $instances                                                = {},
+  Hash[String[1], Hash] $instances                               = {},
 ) inherits redis::params {
 
   contain redis::preinstall
