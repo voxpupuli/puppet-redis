@@ -13,7 +13,7 @@ describe 'redis::sentinel' do
 
     $master_name      = 'mymaster'
     $redis_master     = '127.0.0.1'
-    $failover_timeout = '10000'
+    $failover_timeout = 10000
 
     # We're testing with `manage_repo` true.  In redis-sentinel 5, the daemon has its own rundir
     if $::operatingsystem == 'Ubuntu' {
