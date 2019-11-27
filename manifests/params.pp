@@ -14,7 +14,7 @@ class redis::params {
       $package_name              = 'redis-server'
       $pid_file                  = '/var/run/redis/redis-server.pid'
       $workdir                   = '/var/lib/redis'
-      $service_group             = 'redis'
+      $daemonize                 = true
       $service_name              = 'redis-server'
 
       $sentinel_config_file      = '/etc/redis/sentinel.conf'
@@ -22,6 +22,9 @@ class redis::params {
       $sentinel_daemonize        = true
       $sentinel_init_script      = '/etc/init.d/redis-sentinel'
       $sentinel_package_name     = 'redis-sentinel'
+      $sentinel_pid_file         = '/var/run/redis/redis-sentinel.pid'
+      $sentinel_log_file         = '/var/log/redis/redis-sentinel.log'
+      $sentinel_working_dir      = '/var/lib/redis'
 
       case $facts['os']['name'] {
         'Ubuntu': {
@@ -48,9 +51,13 @@ class redis::params {
       $config_file_orig          = '/etc/redis.conf.puppet'
       $config_group              = 'root'
       $config_owner              = 'redis'
-      $log_dir_mode              = '0755'
+      $log_dir_mode              = '0750'
       $package_name              = 'redis'
-      $pid_file                  = '/var/run/redis/redis.pid'
+      $pid_file                  = $facts['os']['release']['major'] ? {
+        '6'     => '/var/run/redis/redis.pid',
+        default => '/var/run/redis_6379.pid',
+      }
+      $daemonize                 = false
       $service_name              = 'redis'
       $workdir                   = '/var/lib/redis'
 
@@ -59,14 +66,12 @@ class redis::params {
       $sentinel_daemonize        = false
       $sentinel_init_script      = undef
       $sentinel_package_name     = 'redis'
+      $sentinel_working_dir      = '/tmp'
+      $sentinel_pid_file         = '/var/run/redis/redis-sentinel.pid'
+      $sentinel_log_file         = '/var/log/redis/sentinel.log'
 
       # EPEL 6 and newer have 3.2 so we can assume all EL is 3.2+
       $minimum_version           = '3.2.10'
-
-      $service_group = $facts['os']['release']['major'] ? {
-        '6'     => 'root',
-        default => 'redis',
-      }
     }
 
     'FreeBSD': {
@@ -81,7 +86,7 @@ class redis::params {
       $log_dir_mode              = '0755'
       $package_name              = 'redis'
       $pid_file                  = '/var/run/redis/redis.pid'
-      $service_group             = 'redis'
+      $daemonize                 = true
       $service_name              = 'redis'
       $workdir                   = '/var/db/redis'
 
@@ -90,6 +95,9 @@ class redis::params {
       $sentinel_daemonize        = true
       $sentinel_init_script      = undef
       $sentinel_package_name     = 'redis'
+      $sentinel_pid_file         = '/var/run/redis/redis-sentinel.pid'
+      $sentinel_log_file         = '/var/log/redis/sentinel.log'
+      $sentinel_working_dir      = '/tmp'
 
       # pkg version
       $minimum_version           = '3.2.4'
@@ -106,7 +114,7 @@ class redis::params {
       $log_dir_mode              = '0750'
       $package_name              = 'redis'
       $pid_file                  = '/var/run/redis/redis-server.pid'
-      $service_group             = 'redis'
+      $daemonize                 = true
       $service_name              = 'redis'
       $workdir                   = '/var/lib/redis'
 
@@ -115,6 +123,9 @@ class redis::params {
       $sentinel_daemonize        = true
       $sentinel_init_script      = undef
       $sentinel_package_name     = 'redis'
+      $sentinel_pid_file         = '/var/run/redis/redis-sentinel.pid'
+      $sentinel_log_file         = '/var/log/redis/sentinel.log'
+      $sentinel_working_dir      = '/tmp'
 
       # suse package version
       $minimum_version           = '3.0.5'
@@ -132,7 +143,7 @@ class redis::params {
       $log_dir_mode              = '0755'
       $package_name              = 'redis'
       $pid_file                  = '/var/run/redis.pid'
-      $service_group             = 'redis'
+      $daemonize                 = true
       $service_name              = 'redis'
       $workdir                   = '/var/lib/redis'
 
@@ -141,6 +152,9 @@ class redis::params {
       $sentinel_daemonize        = true
       $sentinel_init_script      = undef
       $sentinel_package_name     = 'redis'
+      $sentinel_pid_file         = '/var/run/redis/redis-sentinel.pid'
+      $sentinel_log_file         = '/var/log/redis/sentinel.log'
+      $sentinel_working_dir      = '/tmp'
 
       # pkg version
       $minimum_version           = '3.2.4'

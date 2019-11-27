@@ -223,7 +223,7 @@ Data type: `Boolean`
 
 Have Redis run as a daemon.
 
-Default value: `true`
+Default value: $redis::params::daemonize
 
 ##### `default_install`
 
@@ -599,7 +599,7 @@ Data type: `String[1]`
 
 Specify which group to run as.
 
-Default value: $redis::params::service_group
+Default value: 'redis'
 
 ##### `service_hasrestart`
 
@@ -1059,7 +1059,7 @@ Data type: `Stdlib::Absolutepath`
 
 Specify where to write log entries.
 
-Default value: '/var/log/redis/redis.log'
+Default value: $redis::params::sentinel_log_file
 
 ##### `log_level`
 
@@ -1125,7 +1125,7 @@ Data type: `Stdlib::Absolutepath`
 
 If sentinel is daemonized it will write its pid at this location.
 
-Default value: '/var/run/redis/redis-sentinel.pid'
+Default value: $redis::params::sentinel_pid_file
 
 ##### `quorum`
 
@@ -1159,7 +1159,7 @@ Data type: `String[1]`
 
 The group of the config file.
 
-Default value: $redis::params::service_group
+Default value: 'redis'
 
 ##### `service_name`
 
@@ -1192,7 +1192,7 @@ Data type: `Stdlib::Absolutepath`
 The directory into which sentinel will change to avoid mount
 conflicts.
 
-Default value: '/tmp'
+Default value: $redis::params::sentinel_working_dir
 
 ##### `notification_script`
 
@@ -1373,7 +1373,7 @@ Data type: `Boolean`
 
 Have Redis run as a daemon.
 
-Default value: $redis::daemonize
+Default value: `true`
 
 ##### `databases`
 

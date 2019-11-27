@@ -33,6 +33,7 @@ class redis::config {
       log_file            => $redis::log_file,
       unixsocket          => $redis::unixsocket,
       workdir             => $redis::workdir,
+      daemonize           => $redis::daemonize,
       service_name        => $redis::service_name,
       manage_service_file => $redis::manage_service_file,
     }

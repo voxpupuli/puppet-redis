@@ -212,7 +212,7 @@ define redis::instance (
   Stdlib::Absolutepath $config_file_orig                         = $redis::config_file_orig,
   String[1] $config_group                                        = $redis::config_group,
   String[1] $config_owner                                        = $redis::config_owner,
-  Boolean $daemonize                                             = $redis::daemonize,
+  Boolean $daemonize                                             = true,
   Integer[1] $databases                                          = $redis::databases,
   Variant[String[1], Boolean] $dbfilename                        = $redis::dbfilename,
   Optional[String] $extra_config_file                            = $redis::extra_config_file,
