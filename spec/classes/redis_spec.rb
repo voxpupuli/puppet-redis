@@ -464,31 +464,31 @@ describe 'redis' do
       end
 
       describe 'with parameter unixsocket' do
-        let(:params) do
-          {
-            unixsocket: '/tmp/redis.sock'
-          }
+        describe '/tmp/redis.sock' do
+          let(:params) { { unixsocket: '/tmp/redis.sock' } }
+
+          it { is_expected.to contain_file(config_file_orig).with_content(%r{^unixsocket /tmp/redis\.sock$}) }
         end
 
-        it {
-          is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{unixsocket.*/tmp/redis\.sock}
-          )
-        }
+        describe 'empty string' do
+          let(:params) { { unixsocket: '' } }
+
+          it { is_expected.to contain_file(config_file_orig).without_content(%r{^unixsocket }) }
+        end
       end
 
       describe 'with parameter unixsocketperm' do
-        let(:params) do
-          {
-            unixsocketperm: '777'
-          }
+        describe '777' do
+          let(:params) { { unixsocketperm: '777' } }
+
+          it { is_expected.to contain_file(config_file_orig).with_content(%r{^unixsocketperm 777$}) }
         end
 
-        it {
-          is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{unixsocketperm.*777}
-          )
-        }
+        describe 'empty string' do
+          let(:params) { { unixsocketperm: '' } }
+
+          it { is_expected.to contain_file(config_file_orig).without_content(%r{^unixsocketperm }) }
+        end
       end
 
       describe 'with parameter masterauth' do

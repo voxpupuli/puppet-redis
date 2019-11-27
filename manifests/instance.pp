@@ -267,7 +267,7 @@ define redis::instance (
   Integer[0] $tcp_backlog                                        = $redis::tcp_backlog,
   Integer[0] $tcp_keepalive                                      = $redis::tcp_keepalive,
   Integer[0] $timeout                                            = $redis::timeout,
-  Stdlib::Filemode $unixsocketperm                               = $redis::unixsocketperm,
+  Variant[Stdlib::Filemode , Enum['']] $unixsocketperm           = $redis::unixsocketperm,
   Integer[0] $ulimit                                             = $redis::ulimit,
   Stdlib::Filemode $workdir_mode                                 = $redis::workdir_mode,
   Integer[0] $zset_max_ziplist_entries                           = $redis::zset_max_ziplist_entries,
@@ -287,7 +287,7 @@ define redis::instance (
   Boolean $manage_service_file                                   = true,
   Optional[Stdlib::Absolutepath] $log_file                       = undef,
   Stdlib::Absolutepath $pid_file                                 = "/var/run/redis/redis-server-${name}.pid",
-  Stdlib::Absolutepath $unixsocket                               = "/var/run/redis/redis-server-${name}.sock",
+  Variant[Stdlib::Absolutepath, Enum['']] $unixsocket            = "/var/run/redis/redis-server-${name}.sock",
   Stdlib::Absolutepath $workdir                                  = "${redis::workdir}/redis-server-${name}",
 ) {
 

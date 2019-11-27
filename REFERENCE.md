@@ -766,7 +766,7 @@ Default value: 65536
 
 ##### `unixsocket`
 
-Data type: `Stdlib::Absolutepath`
+Data type: `Variant[Stdlib::Absolutepath, Enum['']]`
 
 Define unix socket path
 
@@ -774,7 +774,7 @@ Default value: '/var/run/redis/redis.sock'
 
 ##### `unixsocketperm`
 
-Data type: `Stdlib::Filemode`
+Data type: `Variant[Stdlib::Filemode, Enum['']]`
 
 Define unix socket file permissions
 
@@ -1845,7 +1845,7 @@ Default value: $redis::ulimit
 
 ##### `unixsocket`
 
-Data type: `Stdlib::Absolutepath`
+Data type: `Variant[Stdlib::Absolutepath, Enum['']]`
 
 Define unix socket path
 
@@ -1853,7 +1853,7 @@ Default value: "/var/run/redis/redis-server-${name}.sock"
 
 ##### `unixsocketperm`
 
-Data type: `Stdlib::Filemode`
+Data type: `Variant[Stdlib::Filemode , Enum['']]`
 
 Define unix socket file permissions
 

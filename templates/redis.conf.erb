@@ -62,13 +62,15 @@ tcp-backlog <%= @tcp_backlog %>
 bind <%= @bind_arr.join(' ') %>
 <% end -%>
 
+<% unless @unixsocket.empty? -%>
 # Specify the path for the unix socket that will be used to listen for
 # incoming connections. There is no default, so Redis will not listen
 # on a unix socket when not specified.
 #
-<% if @unixsocket %>unixsocket <%= @unixsocket %><% end %>
-<% if @unixsocketperm %>unixsocketperm <%= @unixsocketperm %><% end %>
+unixsocket <%= @unixsocket %>
+<% unless @unixsocketperm.empty? %>unixsocketperm <%= @unixsocketperm %><% end -%>
 
+<% end -%>
 # Close the connection after a client is idle for N seconds (0 to disable)
 timeout <%= @timeout %>
 
