@@ -242,7 +242,7 @@ define redis::instance (
   Optional[String[1]] $notify_keyspace_events                    = $redis::notify_keyspace_events,
   Boolean $managed_by_cluster_manager                            = $redis::managed_by_cluster_manager,
   String[1] $package_ensure                                      = $redis::package_ensure,
-  Stdlib::Port::Unprivileged $port                               = $redis::port,
+  Stdlib::Port $port                                             = $redis::port,
   Boolean $protected_mode                                        = $redis::protected_mode,
   Boolean $rdbcompression                                        = $redis::rdbcompression,
   String[1] $repl_backlog_size                                   = $redis::repl_backlog_size,

@@ -283,7 +283,7 @@ class redis (
   String[1] $package_ensure                                      = 'present',
   String[1] $package_name                                        = $redis::params::package_name,
   Stdlib::Absolutepath $pid_file                                 = $redis::params::pid_file,
-  Stdlib::Port::Unprivileged $port                               = 6379,
+  Stdlib::Port $port                                             = 6379,
   Boolean $protected_mode                                        = true,
   Optional[String] $ppa_repo                                     = $redis::params::ppa_repo,
   Boolean $rdbcompression                                        = true,
