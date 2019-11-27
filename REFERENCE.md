@@ -475,7 +475,7 @@ Default value: $redis::params::pid_file
 
 ##### `port`
 
-Data type: `Stdlib::Port::Unprivileged`
+Data type: `Stdlib::Port`
 
 Configure which port to listen on.
 
@@ -1088,7 +1088,7 @@ Default value: '127.0.0.1'
 
 ##### `redis_port`
 
-Data type: `Stdlib::Port::Unprivileged`
+Data type: `Stdlib::Port`
 
 Specify the port of the master redis server.
 
@@ -1147,7 +1147,7 @@ Default value: `undef`
 
 ##### `sentinel_port`
 
-Data type: `Stdlib::Port::Unprivileged`
+Data type: `Stdlib::Port`
 
 The port of sentinel server.
 
@@ -1585,7 +1585,7 @@ Default value: "/var/run/redis/redis-server-${name}.pid"
 
 ##### `port`
 
-Data type: `Stdlib::Port::Unprivileged`
+Data type: `Stdlib::Port`
 
 Configure which port to listen on.
 
