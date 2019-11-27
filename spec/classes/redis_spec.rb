@@ -11,6 +11,7 @@ describe 'redis' do
       let(:facts) { facts }
 
       describe 'without parameters' do
+        it { is_expected.to compile.with_all_deps }
         it { is_expected.to create_class('redis') }
         it { is_expected.to contain_class('redis::preinstall') }
         it { is_expected.to contain_class('redis::install') }
@@ -38,6 +39,31 @@ describe 'redis' do
             'hasrestart' => 'true',
             'hasstatus'  => 'true'
           )
+        end
+
+        context 'with SCL', if: facts[:osfamily] == 'RedHat' do
+          let(:pre_condition) do
+            <<-PUPPET
+            class { 'redis::globals':
+              scl => 'rh-redis5',
+            }
+            PUPPET
+          end
+
+          it { is_expected.to compile.with_all_deps }
+          it do
+            is_expected.to create_class('redis').
+              with_package_name('rh-redis5-redis').
+              with_config_file('/etc/opt/rh/rh-redis5/redis.conf').
+              with_service_name('rh-redis5-redis')
+          end
+
+          context 'manage_repo => true', if: facts[:operatingsystem] == 'CentOS' do
+            let(:params) { { manage_repo: true } }
+
+            it { is_expected.to compile.with_all_deps }
+            it { is_expected.to contain_package('centos-release-scl-rh') }
+          end
         end
       end
 

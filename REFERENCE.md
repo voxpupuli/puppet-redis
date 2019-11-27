@@ -9,6 +9,7 @@ _Public Classes_
 
 * [`redis`](#redis): This class installs redis
 * [`redis::administration`](#redisadministration): Allows various adminstrative settings for Redis As documented in the FAQ and https://redis.io/topics/admin
+* [`redis::globals`](#redisglobals): Set a global config for Redis
 * [`redis::sentinel`](#redissentinel): Install redis-sentinel
 
 _Private Classes_
@@ -950,6 +951,22 @@ Set somaxconn value
 
 Default value: 65535
 
+### redis::globals
+
+Set a global config for Redis
+
+#### Parameters
+
+The following parameters are available in the `redis::globals` class.
+
+##### `scl`
+
+Data type: `Optional[String]`
+
+Use a specific Software CoLlection on Red Hat based systems
+
+Default value: `undef`
+
 ### redis::sentinel
 
 Install redis-sentinel
@@ -1167,7 +1184,7 @@ Data type: `String[1]`
 
 The name of the service (for puppet to manage).
 
-Default value: 'redis-sentinel'
+Default value: $redis::params::sentinel_service_name
 
 ##### `service_user`
 
