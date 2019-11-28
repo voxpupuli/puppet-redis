@@ -54,7 +54,7 @@ class redis::ulimit {
       ],
     }
   } else {
-    case $facts['osfamily'] {
+    case $facts['os']['family'] {
       'Debian': {
         augeas { 'redis ulimit':
           context => '/files/etc/default/redis-server',
@@ -68,7 +68,7 @@ class redis::ulimit {
         }
       }
       default: {
-        warning("Not sure how to set ULIMIT on non-systemd OSFamily ${facts['osfamily']}, PR's welcome")
+        warning("Not sure how to set ULIMIT on non-systemd OSFamily ${facts['os']['family']}, PR's welcome")
       }
     }
   }

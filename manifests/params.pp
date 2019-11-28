@@ -1,7 +1,7 @@
 # @summary This class provides a number of parameters.
 # @api private
 class redis::params {
-  case $::osfamily {
+  case $facts['os']['family'] {
     'Debian': {
       $config_dir                = '/etc/redis'
       $config_dir_mode           = '0755'
@@ -137,7 +137,7 @@ class redis::params {
       $minimum_version           = '3.2.4'
     }
     default: {
-      fail "Operating system ${::operatingsystem} is not supported yet."
+      fail "Operating system ${facts['os']['name']} is not supported yet."
     }
   }
 }
