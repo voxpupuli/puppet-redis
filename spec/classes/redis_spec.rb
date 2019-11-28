@@ -440,7 +440,6 @@ describe 'redis' do
           context 'on Debian' do
             it do
               is_expected.to create_apt__source('dotdeb').with(location: 'http://packages.dotdeb.org/',
-                                                               release: facts[:lsbdistcodename],
                                                                repos: 'all',
                                                                key: {
                                                                  'id' => '6572BBEF1B5FF28B28B706837E3F070089DF5277',
