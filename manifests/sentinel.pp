@@ -139,7 +139,7 @@ class redis::sentinel (
 
   require 'redis'
 
-  if $facts['osfamily'] == 'Debian' {
+  if $facts['os']['family'] == 'Debian' {
     package { $package_name:
       ensure => $package_ensure,
       before => File[$config_file_orig],

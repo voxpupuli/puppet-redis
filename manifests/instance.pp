@@ -356,7 +356,7 @@ define redis::instance (
       file { "/etc/init.d/${redis_server_name}":
         ensure  => file,
         mode    => '0755',
-        content => template("redis/service_templates/redis.${::osfamily}.erb"),
+        content => template("redis/service_templates/redis.${facts['os']['family']}.erb"),
       }
 
       if $title != 'default' {

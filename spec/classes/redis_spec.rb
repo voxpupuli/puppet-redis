@@ -434,13 +434,10 @@ describe 'redis' do
         let(:params) { { manage_repo: true } }
 
         case facts[:operatingsystem]
-
         when 'Debian'
-
           context 'on Debian' do
             it do
               is_expected.to create_apt__source('dotdeb').with(location: 'http://packages.dotdeb.org/',
-                                                               release: facts[:lsbdistcodename],
                                                                repos: 'all',
                                                                key: {
                                                                  'id' => '6572BBEF1B5FF28B28B706837E3F070089DF5277',
@@ -449,17 +446,10 @@ describe 'redis' do
                                                                include: { 'src' => true })
             end
           end
-
         when 'Ubuntu'
-
-          let(:ppa_repo) { manifest_vars[:ppa_repo] }
-
-          it { is_expected.to contain_apt__ppa(ppa_repo) }
-
+          it { is_expected.to contain_apt__ppa('ppa:chris-lea/redis-server') }
         when 'RedHat', 'CentOS', 'Scientific', 'OEL', 'Amazon'
-
           it { is_expected.to contain_class('epel') }
-
         end
       end
 
@@ -610,8 +600,6 @@ describe 'redis' do
           }
         end
 
-        let(:service_name) { manifest_vars[:service_name] }
-
         it { is_expected.to contain_file(config_file_orig).that_notifies("Service[#{service_name}]") }
       end
 
@@ -631,7 +619,6 @@ describe 'redis' do
 
       describe 'with parameter: package_ensure' do
         let(:params) { { package_ensure: '_VALUE_' } }
-        let(:package_name) { manifest_vars[:package_name] }
 
         it {
           is_expected.to contain_package(package_name).with(
@@ -909,21 +896,18 @@ describe 'redis' do
 
       describe 'with parameter: service_manage (set to false)' do
         let(:params) { { service_manage: false } }
-        let(:package_name) { manifest_vars[:package_name] }
 
         it { is_expected.not_to contain_service(package_name) }
       end
 
       describe 'with parameter: service_enable' do
         let(:params) { { service_enable: true } }
-        let(:package_name) { manifest_vars[:package_name] }
 
         it { is_expected.to contain_service(package_name).with_enable(true) }
       end
 
       describe 'with parameter: service_ensure' do
         let(:params) { { service_ensure: 'stopped' } }
-        let(:package_name) { manifest_vars[:package_name] }
 
         it { is_expected.to contain_service(package_name).with_ensure('stopped') }
       end
@@ -936,14 +920,12 @@ describe 'redis' do
 
       describe 'with parameter: service_hasrestart' do
         let(:params) { { service_hasrestart: true } }
-        let(:package_name) { manifest_vars[:package_name] }
 
         it { is_expected.to contain_service(package_name).with_hasrestart(true) }
       end
 
       describe 'with parameter: service_hasstatus' do
         let(:params) { { service_hasstatus: true } }
-        let(:package_name) { manifest_vars[:package_name] }
 
         it { is_expected.to contain_service(package_name).with_hasstatus(true) }
       end
