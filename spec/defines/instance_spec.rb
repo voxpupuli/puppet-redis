@@ -8,8 +8,6 @@ describe 'redis::instance' do
     }
     PUPPET
   end
-  let(:service_name) { redis_service_name(service_name: title) }
-  let(:service_file) { redis_service_file(service_name: service_name, service_provider: facts['service_provider']) }
 
   on_supported_os.each do |os, facts|
     context "on #{os}" do
@@ -39,7 +37,7 @@ describe 'redis::instance' do
         end
         it { is_expected.to contain_file('/var/lib/redis/redis-server-app2') }
 
-        it 'does the correct thing for the init system' do
+        it do
           if facts['service_provider'] == 'systemd'
             is_expected.to contain_file('/etc/systemd/system/redis-server-app2.service').with_content(%r{ExecStart=/usr/bin/redis-server #{config_file}})
           else
@@ -59,26 +57,6 @@ describe 'redis::instance' do
         end
 
         it { is_expected.to contain_service('redis-server-app2').with_ensure('running').with_enable('true') }
-      end
-
-      context 'with default title' do
-        let(:title) { 'default' }
-        let(:config_file) { manifest_vars[:config_file] }
-
-        it 'does the correct thing for the init system' do
-          if facts['service_provider'] == 'systemd'
-            is_expected.to contain_file(service_file).with_content(%r{ExecStart=/usr/bin/redis-server #{config_file}})
-          else
-            case facts[:os]['family']
-            when 'Debian'
-              is_expected.to contain_file(service_file).with_content(%r{DAEMON_ARGS=#{config_file}})
-            when 'RedHat'
-              is_expected.to contain_file(service_file).with_content(%r{REDIS_CONFIG="#{config_file}"})
-            else
-              is_expected.to contain_file(service_file)
-            end
-          end
-        end
       end
     end
   end

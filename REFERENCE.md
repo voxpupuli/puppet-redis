@@ -1672,6 +1672,14 @@ save the dataset every N seconds if there are at least M changes in the dataset
 
 Default value: $redis::save_db_to_disk_interval
 
+##### `service_name`
+
+Data type: `String[1]`
+
+The service name for this instance
+
+Default value: "redis-server-${name}"
+
 ##### `service_enable`
 
 Data type: `Boolean`
