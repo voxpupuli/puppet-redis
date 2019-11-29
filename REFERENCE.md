@@ -1319,22 +1319,6 @@ Configure which IP address(es) to listen on. To bind on all interfaces, use an e
 
 Default value: $redis::bind
 
-##### `config_dir`
-
-Data type: `Stdlib::Absolutepath`
-
-Directory containing the configuration files.
-
-Default value: $redis::config_dir
-
-##### `config_dir_mode`
-
-Data type: `Stdlib::Filemode`
-
-Adjust mode for directory containing configuration files.
-
-Default value: $redis::config_dir_mode
-
 ##### `config_file_orig`
 
 Data type: `Stdlib::Absolutepath`

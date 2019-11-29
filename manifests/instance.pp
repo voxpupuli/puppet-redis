@@ -26,10 +26,6 @@
 #   Adjust percentatge for auto-aof-rewrite.
 # @param bind
 #   Configure which IP address(es) to listen on. To bind on all interfaces, use an empty array.
-# @param config_dir
-#   Directory containing the configuration files.
-# @param config_dir_mode
-#   Adjust mode for directory containing configuration files.
 # @param config_file_orig
 #   The location and name of a config file that provides the source
 # @param config_file
@@ -211,8 +207,6 @@ define redis::instance (
   String[1] $output_buffer_limit_slave                           = $redis::output_buffer_limit_slave,
   String[1] $output_buffer_limit_pubsub                          = $redis::output_buffer_limit_pubsub,
   String[1] $conf_template                                       = $redis::conf_template,
-  Stdlib::Absolutepath $config_dir                               = $redis::config_dir,
-  Stdlib::Filemode $config_dir_mode                              = $redis::config_dir_mode,
   Stdlib::Absolutepath $config_file                              = $redis::config_file,
   Stdlib::Filemode $config_file_mode                             = $redis::config_file_mode,
   Stdlib::Absolutepath $config_file_orig                         = $redis::config_file_orig,
