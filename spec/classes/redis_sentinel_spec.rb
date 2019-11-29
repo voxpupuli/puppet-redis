@@ -23,7 +23,7 @@ describe 'redis::sentinel' do
         let(:expected_content) do
           <<CONFIG
 port 26379
-dir /tmp
+dir #{facts[:osfamily] == 'Debian' ? '/var/lib/redis' : '/tmp'}
 daemonize #{facts[:osfamily] == 'RedHat' ? 'no' : 'yes'}
 pidfile /var/run/redis/redis-sentinel.pid
 
@@ -33,7 +33,7 @@ sentinel parallel-syncs mymaster 1
 sentinel failover-timeout mymaster 180000
 
 loglevel notice
-logfile /var/log/redis/redis.log
+logfile #{facts[:osfamily] == 'Debian' ? '/var/log/redis/redis-sentinel.log' : '/var/log/redis/sentinel.log'}
 CONFIG
         end
 
@@ -67,6 +67,7 @@ CONFIG
             sentinel_bind: '192.0.2.10',
             master_name: 'cow',
             down_after: 6000,
+            working_dir: '/tmp/redis',
             log_file: '/tmp/barn-sentinel.log',
             failover_timeout: 28_000,
             notification_script: '/path/to/bar.sh',
@@ -78,7 +79,7 @@ CONFIG
           <<CONFIG
 bind 192.0.2.10
 port 26379
-dir /tmp
+dir /tmp/redis
 daemonize #{facts[:osfamily] == 'RedHat' ? 'no' : 'yes'}
 pidfile /var/run/redis/redis-sentinel.pid
 

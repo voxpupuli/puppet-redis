@@ -26,10 +26,6 @@
 #   Adjust percentatge for auto-aof-rewrite.
 # @param bind
 #   Configure which IP address(es) to listen on. To bind on all interfaces, use an empty array.
-# @param config_dir
-#   Directory containing the configuration files.
-# @param config_dir_mode
-#   Adjust mode for directory containing configuration files.
 # @param config_file_orig
 #   The location and name of a config file that provides the source
 # @param config_file
@@ -115,6 +111,8 @@
 #   Set if save db to disk.
 # @param save_db_to_disk_interval
 #   save the dataset every N seconds if there are at least M changes in the dataset
+# @param service_name
+#   The service name for this instance
 # @param service_enable
 #   Enable/disable daemon at boot.
 # @param service_ensure
@@ -209,14 +207,12 @@ define redis::instance (
   String[1] $output_buffer_limit_slave                           = $redis::output_buffer_limit_slave,
   String[1] $output_buffer_limit_pubsub                          = $redis::output_buffer_limit_pubsub,
   String[1] $conf_template                                       = $redis::conf_template,
-  Stdlib::Absolutepath $config_dir                               = $redis::config_dir,
-  Stdlib::Filemode $config_dir_mode                              = $redis::config_dir_mode,
   Stdlib::Absolutepath $config_file                              = $redis::config_file,
   Stdlib::Filemode $config_file_mode                             = $redis::config_file_mode,
   Stdlib::Absolutepath $config_file_orig                         = $redis::config_file_orig,
   String[1] $config_group                                        = $redis::config_group,
   String[1] $config_owner                                        = $redis::config_owner,
-  Boolean $daemonize                                             = $redis::daemonize,
+  Boolean $daemonize                                             = true,
   Integer[1] $databases                                          = $redis::databases,
   Variant[String[1], Boolean] $dbfilename                        = $redis::dbfilename,
   Optional[String] $extra_config_file                            = $redis::extra_config_file,
@@ -278,12 +274,12 @@ define redis::instance (
   Integer[0] $cluster_slave_validity_factor                      = $redis::cluster_slave_validity_factor,
   Boolean $cluster_require_full_coverage                         = $redis::cluster_require_full_coverage,
   Integer[0] $cluster_migration_barrier                          = $redis::cluster_migration_barrier,
+  String[1] $service_name                                        = "redis-server-${name}",
   Stdlib::Ensure::Service $service_ensure                        = $redis::service_ensure,
   Boolean $service_enable                                        = $redis::service_enable,
   String[1] $service_group                                       = $redis::service_group,
   Boolean $service_hasrestart                                    = $redis::service_hasrestart,
   Boolean $service_hasstatus                                     = $redis::service_hasstatus,
-  # Defaults for redis::instance
   Boolean $manage_service_file                                   = true,
   Optional[Stdlib::Absolutepath] $log_file                       = undef,
   Stdlib::Absolutepath $pid_file                                 = "/var/run/redis/redis-server-${name}.pid",
@@ -292,13 +288,11 @@ define redis::instance (
 ) {
 
   if $title == 'default' {
-    $redis_server_name    = $redis::service_name
     $redis_file_name_orig = $config_file_orig
     $redis_file_name      = $config_file
   } else {
-    $redis_server_name    = "redis-server-${name}"
-    $redis_file_name_orig = sprintf('%s/%s.%s', dirname($config_file_orig), $redis_server_name, 'conf.puppet')
-    $redis_file_name      = sprintf('%s/%s.%s', dirname($config_file), $redis_server_name, 'conf')
+    $redis_file_name_orig = sprintf('%s/%s.%s', dirname($config_file_orig), $service_name, 'conf.puppet')
+    $redis_file_name      = sprintf('%s/%s.%s', dirname($config_file), $service_name, 'conf')
   }
 
   if $log_dir != $redis::log_dir {
@@ -329,7 +323,7 @@ define redis::instance (
 
     if $service_provider_lookup == 'systemd' {
 
-      file { "/etc/systemd/system/${redis_server_name}.service":
+      file { "/etc/systemd/system/${service_name}.service":
         ensure  => file,
         owner   => 'root',
         group   => 'root',
@@ -339,13 +333,13 @@ define redis::instance (
       ~> Exec['systemd-reload-redis']
 
       if $title != 'default' {
-        service { $redis_server_name:
+        service { $service_name:
           ensure     => $service_ensure,
           enable     => $service_enable,
           hasrestart => $service_hasrestart,
           hasstatus  => $service_hasstatus,
           subscribe  => [
-            File["/etc/systemd/system/${redis_server_name}.service"],
+            File["/etc/systemd/system/${service_name}.service"],
             Exec["cp -p ${redis_file_name_orig} ${redis_file_name}"],
           ],
         }
@@ -353,20 +347,20 @@ define redis::instance (
 
     } else {
 
-      file { "/etc/init.d/${redis_server_name}":
+      file { "/etc/init.d/${service_name}":
         ensure  => file,
         mode    => '0755',
         content => template("redis/service_templates/redis.${facts['os']['family']}.erb"),
       }
 
       if $title != 'default' {
-        service { $redis_server_name:
+        service { $service_name:
           ensure     => $service_ensure,
           enable     => $service_enable,
           hasrestart => $service_hasrestart,
           hasstatus  => $service_hasstatus,
           subscribe  => [
-            File["/etc/init.d/${redis_server_name}"],
+            File["/etc/init.d/${service_name}"],
             Exec["cp -p ${redis_file_name_orig} ${redis_file_name}"],
           ],
         }
