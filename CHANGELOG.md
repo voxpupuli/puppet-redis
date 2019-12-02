@@ -4,6 +4,38 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v5.0.0](https://github.com/voxpupuli/puppet-redis/tree/v5.0.0) (2019-12-03)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v4.2.1...v5.0.0)
+
+**Breaking changes:**
+
+- Closer match parameter to OS defaults [\#336](https://github.com/voxpupuli/puppet-redis/pull/336) ([ekohl](https://github.com/ekohl))
+- Stricter data types [\#328](https://github.com/voxpupuli/puppet-redis/pull/328) ([ekohl](https://github.com/ekohl))
+- Drop support for Redis 2, Debian 8 and Ubuntu 14.04; add Debian 9 and Ubuntu 18.04 [\#326](https://github.com/voxpupuli/puppet-redis/pull/326) ([ekohl](https://github.com/ekohl))
+
+**Implemented enhancements:**
+
+- Instance is not read from hiera file [\#329](https://github.com/voxpupuli/puppet-redis/issues/329)
+- Add SCL support [\#334](https://github.com/voxpupuli/puppet-redis/pull/334) ([ekohl](https://github.com/ekohl))
+- Support instances inside Hiera [\#330](https://github.com/voxpupuli/puppet-redis/pull/330) ([lordbink](https://github.com/lordbink))
+
+**Closed issues:**
+
+- Can't disable unixsocket after  [\#331](https://github.com/voxpupuli/puppet-redis/issues/331)
+- 2.8 version of Redis on Debian 8 errors out [\#246](https://github.com/voxpupuli/puppet-redis/issues/246)
+- Unable to unset unixsocket config parameter [\#228](https://github.com/voxpupuli/puppet-redis/issues/228)
+- bind $ipaddress [\#94](https://github.com/voxpupuli/puppet-redis/issues/94)
+- Create nodes.conf file?  [\#76](https://github.com/voxpupuli/puppet-redis/issues/76)
+
+**Merged pull requests:**
+
+- Clean up preinstall handling and use modern facts [\#335](https://github.com/voxpupuli/puppet-redis/pull/335) ([ekohl](https://github.com/ekohl))
+- Allow empty unixsocket\(perm\) [\#333](https://github.com/voxpupuli/puppet-redis/pull/333) ([ekohl](https://github.com/ekohl))
+- Allow privileged ports in data types [\#332](https://github.com/voxpupuli/puppet-redis/pull/332) ([ekohl](https://github.com/ekohl))
+- Fix typo in type [\#327](https://github.com/voxpupuli/puppet-redis/pull/327) ([ekohl](https://github.com/ekohl))
+- Complete the transition to puppet-strings [\#325](https://github.com/voxpupuli/puppet-redis/pull/325) ([ekohl](https://github.com/ekohl))
+
 ## [v4.2.1](https://github.com/voxpupuli/puppet-redis/tree/v4.2.1) (2019-09-19)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v4.2.0...v4.2.1)
