@@ -4,7 +4,16 @@
 class redis::preinstall {
   if $redis::manage_repo {
     if $facts['os']['family'] == 'RedHat' {
-        require 'epel'
+      if $facts['os']['name'] != 'Fedora' {
+        if $redis::scl {
+          if $facts['os']['name'] == 'CentOS' {
+            ensure_packages(['centos-release-scl-rh'])
+            Package['centos-release-scl-rh'] -> Package[$redis::package_name]
+          }
+        } else {
+          require 'epel'
+        }
+      }
     } elsif $facts['os']['name'] == 'Debian' {
       contain 'apt'
       apt::source { 'dotdeb':

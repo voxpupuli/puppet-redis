@@ -128,7 +128,7 @@ class redis::sentinel (
   Variant[Undef, Stdlib::IP::Address, Array[Stdlib::IP::Address]] $sentinel_bind = undef,
   Stdlib::Port $sentinel_port = 26379,
   String[1] $service_group = 'redis',
-  String[1] $service_name = 'redis-sentinel',
+  String[1] $service_name = $redis::params::sentinel_service_name,
   Stdlib::Ensure::Service $service_ensure = 'running',
   Boolean $service_enable = true,
   String[1] $service_user = 'redis',

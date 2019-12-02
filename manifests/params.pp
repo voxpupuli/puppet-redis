@@ -1,6 +1,6 @@
 # @summary This class provides a number of parameters.
 # @api private
-class redis::params {
+class redis::params inherits redis::globals {
   case $facts['os']['family'] {
     'Debian': {
       $ppa_repo                  = 'ppa:chris-lea/redis-server'
@@ -19,6 +19,7 @@ class redis::params {
 
       $sentinel_config_file      = '/etc/redis/sentinel.conf'
       $sentinel_config_file_orig = '/etc/redis/redis-sentinel.conf.puppet'
+      $sentinel_service_name     = 'redis-sentinel'
       $sentinel_daemonize        = true
       $sentinel_init_script      = '/etc/init.d/redis-sentinel'
       $sentinel_package_name     = 'redis-sentinel'
@@ -43,35 +44,60 @@ class redis::params {
     }
 
     'RedHat': {
-      $ppa_repo                  = undef
+      $ppa_repo             = undef
+      $daemonize            = false
+      $config_owner         = 'redis'
+      $config_group         = 'root'
+      $config_dir_mode      = '0755'
+      $log_dir_mode         = '0750'
 
-      $config_dir                = '/etc/redis'
-      $config_dir_mode           = '0755'
-      $config_file               = '/etc/redis.conf'
-      $config_file_orig          = '/etc/redis.conf.puppet'
-      $config_group              = 'root'
-      $config_owner              = 'redis'
-      $log_dir_mode              = '0750'
-      $package_name              = 'redis'
-      $pid_file                  = $facts['os']['release']['major'] ? {
-        '6'     => '/var/run/redis/redis.pid',
-        default => '/var/run/redis_6379.pid',
+      $sentinel_daemonize   = false
+      $sentinel_init_script = undef
+      $sentinel_working_dir = '/tmp'
+
+      $scl = $redis::globals::scl
+      if $scl {
+        $config_dir                = "/etc/opt/rh/${scl}/redis"
+        $config_file               = "/etc/opt/rh/${scl}/redis.conf"
+        $config_file_orig          = "/etc/opt/rh/${scl}/redis.conf.puppet"
+        $package_name              = "${scl}-redis"
+        $pid_file                  = "/var/opt/rh/${scl}/run/redis_6379.pid"
+        $service_name              = "${scl}-redis"
+        $workdir                   = "/var/opt/rh/${scl}/lib/redis"
+
+        $sentinel_config_file      = "${config_dir}/redis-sentinel.conf"
+        $sentinel_config_file_orig = "${config_dir}/redis-sentinel.conf.puppet"
+        $sentinel_service_name     = "${scl}-redis-sentinel"
+        $sentinel_package_name     = $package_name
+        $sentinel_pid_file         = "/var/opt/rh/${scl}/run/redis-sentinel.pid"
+        $sentinel_log_file         = "/var/opt/rh/${scl}/log/redis/sentinel.log"
+
+        $minimum_version = $scl ? {
+          'rh-redis32' => '3.2.13',
+          default      => '5.0.5',
+        }
+      } else {
+        $config_dir                = '/etc/redis'
+        $config_file               = '/etc/redis.conf'
+        $config_file_orig          = '/etc/redis.conf.puppet'
+        $package_name              = 'redis'
+        $pid_file                  = $facts['os']['release']['major'] ? {
+          '6'     => '/var/run/redis/redis.pid',
+          default => '/var/run/redis_6379.pid',
+        }
+        $service_name              = 'redis'
+        $workdir                   = '/var/lib/redis'
+
+        $sentinel_config_file      = '/etc/redis-sentinel.conf'
+        $sentinel_config_file_orig = '/etc/redis-sentinel.conf.puppet'
+        $sentinel_service_name     = 'redis-sentinel'
+        $sentinel_package_name     = 'redis'
+        $sentinel_pid_file         = '/var/run/redis/redis-sentinel.pid'
+        $sentinel_log_file         = '/var/log/redis/sentinel.log'
+
+        # EPEL 6 and newer have 3.2 so we can assume all EL is 3.2+
+        $minimum_version           = '3.2.10'
       }
-      $daemonize                 = false
-      $service_name              = 'redis'
-      $workdir                   = '/var/lib/redis'
-
-      $sentinel_config_file      = '/etc/redis-sentinel.conf'
-      $sentinel_config_file_orig = '/etc/redis-sentinel.conf.puppet'
-      $sentinel_daemonize        = false
-      $sentinel_init_script      = undef
-      $sentinel_package_name     = 'redis'
-      $sentinel_working_dir      = '/tmp'
-      $sentinel_pid_file         = '/var/run/redis/redis-sentinel.pid'
-      $sentinel_log_file         = '/var/log/redis/sentinel.log'
-
-      # EPEL 6 and newer have 3.2 so we can assume all EL is 3.2+
-      $minimum_version           = '3.2.10'
     }
 
     'FreeBSD': {
@@ -92,6 +118,7 @@ class redis::params {
 
       $sentinel_config_file      = '/usr/local/etc/redis-sentinel.conf'
       $sentinel_config_file_orig = '/usr/local/etc/redis-sentinel.conf.puppet'
+      $sentinel_service_name     = 'redis-sentinel'
       $sentinel_daemonize        = true
       $sentinel_init_script      = undef
       $sentinel_package_name     = 'redis'
@@ -120,6 +147,7 @@ class redis::params {
 
       $sentinel_config_file      = '/etc/redis/redis-sentinel.conf'
       $sentinel_config_file_orig = '/etc/redis/redis-sentinel.conf.puppet'
+      $sentinel_service_name     = 'redis-sentinel'
       $sentinel_daemonize        = true
       $sentinel_init_script      = undef
       $sentinel_package_name     = 'redis'
@@ -149,6 +177,7 @@ class redis::params {
 
       $sentinel_config_file      = '/etc/redis/redis-sentinel.conf'
       $sentinel_config_file_orig = '/etc/redis/redis-sentinel.conf.puppet'
+      $sentinel_service_name     = 'redis-sentinel'
       $sentinel_daemonize        = true
       $sentinel_init_script      = undef
       $sentinel_package_name     = 'redis'
