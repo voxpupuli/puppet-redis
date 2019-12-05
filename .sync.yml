@@ -7,6 +7,7 @@
     - set: centos6-64m
     - set: centos7-64m
     - set: debian9-64m
+    - set: debian10-64m
 Gemfile:
   optional:
     ':test':
