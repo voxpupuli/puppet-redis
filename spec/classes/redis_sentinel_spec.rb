@@ -10,6 +10,8 @@ describe 'redis::sentinel' do
           '/etc/redis/redis-sentinel.conf.puppet'
         when 'Debian'
           '/etc/redis/redis-sentinel.conf.puppet'
+        when 'Ubuntu'
+          '/etc/redis/redis-sentinel.conf.puppet'
         when 'Suse'
           '/etc/redis/redis-sentinel.conf.puppet'
         when 'FreeBSD'
