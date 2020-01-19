@@ -286,7 +286,6 @@ define redis::instance (
   Variant[Stdlib::Absolutepath, Enum['']] $unixsocket            = "/var/run/redis/redis-server-${name}.sock",
   Stdlib::Absolutepath $workdir                                  = "${redis::workdir}/redis-server-${name}",
 ) {
-
   if $title == 'default' {
     $redis_file_name_orig = $config_file_orig
     $redis_file_name      = $config_file
@@ -330,7 +329,13 @@ define redis::instance (
         mode    => '0644',
         content => template('redis/service_templates/redis.service.erb'),
       }
-      ~> Exec['systemd-reload-redis']
+
+      # Only necessary for Puppet < 6.1.0,
+      # See https://github.com/puppetlabs/puppet/commit/f8d5c60ddb130c6429ff12736bfdb4ae669a9fd4
+      if versioncmp($facts['puppetversion'],'6.1.0') < 0 {
+        include systemd::systemctl::daemon_reload
+        File["/etc/systemd/system/${service_name}.service"] ~> Class['systemd::systemctl::daemon_reload']
+      }
 
       if $title != 'default' {
         service { $service_name:

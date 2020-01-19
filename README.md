@@ -64,6 +64,33 @@ class { '::redis':
 }
 ```
 
+### Multiple instances
+
+
+```puppet
+$listening_ports = [6379,6380,6381,6382]
+
+class { '::redis':
+  default_install => false,
+  service_enable  => false,
+  service_ensure  => 'stopped',
+}
+
+$listening_ports.each |$port| {
+  $port_string = sprintf('%d',$port)
+  redis::instance { $port_string:
+    service_enable => true,
+    service_ensure => 'running',
+    port           => $port,
+    bind           => $facts['networking']['ip'],
+    dbfilename     => "${port}-dump.rdb",
+    appendfilename => "${port}-appendonly.aof",
+    appendfsync    => 'always',
+    require        => Class['Redis'],
+  }
+}
+```
+
 ### Manage repositories
 
 Disabled by default but if you really want the module to manage the required
@@ -103,6 +130,10 @@ class { '::redis::sentinel':
   failover_timeout => 30000,
 }
 ```
+
+### Soft dependency
+
+This module requires `camptocamp/systemd` on Puppet versions older than 6.1.0.
 
 ## `redis::get()` function
 
