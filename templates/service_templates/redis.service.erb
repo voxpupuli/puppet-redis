@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 RuntimeDirectory=redis
-RuntimeDirectoryMode=0755
+RuntimeDirectoryMode=2755
 Type=forking
 ExecStart=/usr/bin/redis-server <%= @redis_file_name %>
 ExecStop=/usr/bin/redis-server -p <%= @port %> shutdown
