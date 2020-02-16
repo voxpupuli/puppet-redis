@@ -41,7 +41,11 @@ class redis::params inherits redis::globals {
         default: {
           $config_group              = 'root'
           $minimum_version           = '3.2.5'
-          $sentinel_pid_file         = '/var/run/redis/redis-sentinel.pid'
+          if versioncmp($facts['os']['release']['major'], '10') >= 0 {
+            $sentinel_pid_file         = '/run/sentinel/redis-sentinel.pid'
+          } else {
+            $sentinel_pid_file         = '/var/run/redis/redis-sentinel.pid'
+          }
         }
       }
 

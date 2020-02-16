@@ -22,6 +22,8 @@ describe 'redis::sentinel' do
       let(:pidfile) do
         if facts[:operatingsystem] == 'Ubuntu'
           facts[:operatingsystemmajrelease] == '16.04' ? '/var/run/redis/redis-sentinel.pid' : '/var/run/sentinel/redis-sentinel.pid'
+        elsif facts[:operatingsystem] == 'Debian'
+          facts[:operatingsystemmajrelease] == '9' ? '/var/run/redis/redis-sentinel.pid' : '/run/sentinel/redis-sentinel.pid'
         else
           '/var/run/redis/redis-sentinel.pid'
         end
