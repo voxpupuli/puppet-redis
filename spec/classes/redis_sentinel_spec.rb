@@ -19,13 +19,21 @@ describe 'redis::sentinel' do
         end
       end
 
+      let(:pidfile) do
+        if facts[:operatingsystem] == 'Ubuntu'
+          facts[:operatingsystemmajrelease] == '16.04' ? '/var/run/redis/redis-sentinel.pid' : '/var/run/sentinel/redis-sentinel.pid'
+        else
+          '/var/run/redis/redis-sentinel.pid'
+        end
+      end
+
       describe 'without parameters' do
         let(:expected_content) do
           <<CONFIG
 port 26379
 dir #{facts[:osfamily] == 'Debian' ? '/var/lib/redis' : '/tmp'}
 daemonize #{facts[:osfamily] == 'RedHat' ? 'no' : 'yes'}
-pidfile /var/run/redis/redis-sentinel.pid
+pidfile #{pidfile}
 
 sentinel monitor mymaster 127.0.0.1 6379 2
 sentinel down-after-milliseconds mymaster 30000
@@ -81,7 +89,7 @@ bind 192.0.2.10
 port 26379
 dir /tmp/redis
 daemonize #{facts[:osfamily] == 'RedHat' ? 'no' : 'yes'}
-pidfile /var/run/redis/redis-sentinel.pid
+pidfile #{pidfile}
 
 sentinel monitor cow 127.0.0.1 6379 2
 sentinel down-after-milliseconds cow 6000

@@ -23,7 +23,6 @@ class redis::params inherits redis::globals {
       $sentinel_daemonize        = true
       $sentinel_init_script      = '/etc/init.d/redis-sentinel'
       $sentinel_package_name     = 'redis-sentinel'
-      $sentinel_pid_file         = '/var/run/redis/redis-sentinel.pid'
       $sentinel_log_file         = '/var/log/redis/redis-sentinel.log'
       $sentinel_working_dir      = '/var/lib/redis'
 
@@ -34,10 +33,15 @@ class redis::params inherits redis::globals {
             '16.04' => '3.0.5',
             default => '4.0.9',
           }
+          $sentinel_pid_file = $facts['os']['release']['major'] ? {
+            '16.04' => '/var/run/redis/redis-sentinel.pid',
+            default => '/var/run/sentinel/redis-sentinel.pid',
+          }
         }
         default: {
           $config_group              = 'root'
           $minimum_version           = '3.2.5'
+          $sentinel_pid_file         = '/var/run/redis/redis-sentinel.pid'
         }
       }
 
