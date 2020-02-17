@@ -19,7 +19,6 @@ if hosts.length >= 3
           }
 
           class { 'redis':
-            manage_repo => true,
             bind        => '#{master_ip_address}',
             requirepass => 'foobared',
           }
@@ -40,7 +39,6 @@ if hosts.length >= 3
         it 'works idempotently with no errors' do
           pp = <<-EOS
           class { 'redis':
-            manage_repo => true,
             bind        => '127.0.0.1',
             masterauth  => 'foobared',
             slaveof     => '#{master_ip_address} 6379'

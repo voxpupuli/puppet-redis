@@ -4,20 +4,13 @@ require 'spec_helper_acceptance'
 describe 'redis::get() function' do
   it 'runs successfully' do
     pp = <<-EOS
-    Exec {
-      path => [ '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin', ]
-    }
-
-    class { 'redis':
-      manage_repo => true,
-    }
+    include redis
 
     package { 'redis-rubygem' :
       ensure   => '3.3.3',
       name     => 'redis',
       provider => 'puppet_gem',
     }
-
     EOS
 
     # Apply twice to ensure no errors the second time.

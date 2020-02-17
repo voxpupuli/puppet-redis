@@ -12,7 +12,10 @@ RSpec.configure do |c|
 
   c.before :suite do
     hosts.each do |host|
-      if fact_on(host, 'operatingsystem') == 'Ubuntu'
+      case fact_on(host, 'operatingsystem')
+      when 'CentOS'
+        host.install_package('epel-release')
+      when 'Ubuntu'
         host.install_package('software-properties-common')
       end
       host.install_package('puppet-bolt')

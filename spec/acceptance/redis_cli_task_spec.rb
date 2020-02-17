@@ -3,22 +3,11 @@ require 'spec_helper_acceptance'
 describe 'redis-cli task' do
   it 'install redis-cli with the class' do
     pp = <<-EOS
-    Exec {
-      path => [ '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin', ]
-    }
-
-    class { '::redis':
-      manage_repo => true,
-    }
+    include redis
     EOS
 
     apply_manifest(pp, catch_failures: true)
-
-    # Apply twice to ensure no errors the second time.
-    # TODO: not idempotent on Ubuntu 16.04
-    unless fact('operatingsystem') == 'Ubuntu' && fact('operatingsystemmajrelease') == '16.04'
-      apply_manifest(pp, catch_changes: true)
-    end
+    apply_manifest(pp, catch_changes: true)
   end
 
   subject do
