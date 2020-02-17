@@ -10,31 +10,15 @@ describe 'redis::sentinel' do
 
   it 'runs successfully' do
     pp = <<-EOS
-
-    $master_name      = 'mymaster'
-    $redis_master     = '127.0.0.1'
-    $failover_timeout = 10000
-
-    # We're testing with `manage_repo` true.  In redis-sentinel 5, the daemon has its own rundir
-    if $::operatingsystem == 'Ubuntu' {
-      $pidfile = '/var/run/sentinel/redis-sentinel.pid'
-    } else {
-      $pidfile = undef
-    }
-
-    class { 'redis':
-      manage_repo => true,
-    }
-    ->
     class { 'redis::sentinel':
-      master_name      => $master_name,
-      redis_host       => $redis_master,
-      failover_timeout => $failover_timeout,
-      pid_file         => $pidfile,
+      master_name      => 'mymaster',
+      redis_host       => '127.0.0.1',
+      failover_timeout => 10000,
     }
     EOS
 
     apply_manifest(pp, catch_failures: true)
+    apply_manifest(pp, catch_changes: true)
   end
 
   describe package(redis_name) do

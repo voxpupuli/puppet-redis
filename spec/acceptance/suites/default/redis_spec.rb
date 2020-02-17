@@ -1,24 +1,16 @@
 require 'spec_helper_acceptance'
 
 describe 'redis' do
-  case fact('osfamily')
-  when 'Debian'
-    redis_name  = 'redis-server'
-    manage_repo = false
-  else
-    redis_name  = 'redis'
-    manage_repo = true
-  end
+  redis_name = case fact('osfamily')
+               when 'Debian'
+                 'redis-server'
+               else
+                 'redis'
+               end
 
   it 'runs successfully' do
     pp = <<-EOS
-    Exec {
-      path => [ '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin', ]
-    }
-
-    class { '::redis':
-      manage_repo => #{manage_repo},
-    }
+    include redis
     EOS
 
     # Apply twice to ensure no errors the second time.

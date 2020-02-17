@@ -1,37 +1,28 @@
 require 'spec_helper_acceptance'
 
-# Cant get this to work on Debian, add exception for now
-describe 'redis::instance', unless: (fact('operatingsystem') == 'Debian') do
+describe 'redis::instance' do
   case fact('osfamily')
   when 'Debian'
-    config_path  = '/etc/redis'
-    manage_repo  = false
+    config_path = '/etc/redis'
     redis_name = 'redis-server'
   else
     redis_name = 'redis'
-    config_path  = '/etc'
-    manage_repo  = true
+    config_path = '/etc'
   end
 
   it 'runs successfully' do
     pp = <<-EOS
-    Exec {
-      path => [ '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin', ]
-    }
-
-    class { '::redis':
-      manage_repo     => #{manage_repo},
+    class { 'redis':
       default_install => false,
     }
 
     redis::instance {'redis1':
-      port                => 7777,
+      port => 7777,
     }
 
     redis::instance {'redis2':
-      port                => 8888,
+      port => 8888,
     }
-
     EOS
 
     # Apply twice to ensure no errors the second time.
