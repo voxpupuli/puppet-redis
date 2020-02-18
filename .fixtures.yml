@@ -11,3 +11,6 @@ fixtures:
     yumrepo_core:
       repo: "https://github.com/puppetlabs/puppetlabs-yumrepo_core"
       puppet_version: ">= 6.0.0"
+    systemd:
+      repo: 'https://github.com/camptocamp/puppet-systemd.git'
+      puppet_version: "< 6.1.0"

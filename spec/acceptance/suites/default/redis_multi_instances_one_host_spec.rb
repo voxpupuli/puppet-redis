@@ -1,28 +1,40 @@
 require 'spec_helper_acceptance'
 
-describe 'redis::instance' do
+describe 'redis::instance example' do
+  instances = [6379, 6380, 6381, 6382]
   case fact('osfamily')
   when 'Debian'
     config_path = '/etc/redis'
     redis_name = 'redis-server'
   else
-    redis_name = 'redis'
     config_path = '/etc'
+    redis_name = 'redis'
   end
 
   it 'runs successfully' do
     pp = <<-EOS
-    class { 'redis':
+    $listening_ports = #{instances}
+
+    class { '::redis':
       default_install => false,
+      service_enable  => false,
+      service_ensure  => 'stopped',
     }
 
-    redis::instance {'redis1':
-      port => 7777,
+    $listening_ports.each |$port| {
+      $port_string = sprintf('%d',$port)
+      redis::instance { $port_string:
+        service_enable => true,
+        service_ensure => 'running',
+        port           => $port,
+        bind           => $facts['networking']['ip'],
+        dbfilename     => "${port}-dump.rdb",
+        appendfilename => "${port}-appendonly.aof",
+        appendfsync    => 'always',
+        require        => Class['Redis'],
+      }
     }
 
-    redis::instance {'redis2':
-      port => 8888,
-    }
     EOS
 
     # Apply twice to ensure no errors the second time.
@@ -34,29 +46,32 @@ describe 'redis::instance' do
     it { is_expected.to be_installed }
   end
 
-  describe service('redis-server-redis1') do
-    it { is_expected.to be_running }
+  describe service(redis_name) do
+    it { is_expected.not_to be_enabled }
+    it { is_expected.not_to be_running }
   end
 
-  describe service('redis-server-redis2') do
-    it { is_expected.to be_running }
-  end
-
-  describe file("#{config_path}/redis-server-redis1.conf") do
-    its(:content) { is_expected.to match %r{port 7777} }
-  end
-
-  describe file("#{config_path}/redis-server-redis2.conf") do
-    its(:content) { is_expected.to match %r{port 8888} }
-  end
-
-  context 'redis should respond to ping command' do
-    describe command('redis-cli -h 127.0.0.1 -p 7777 ping') do
-      its(:stdout) { is_expected.to match %r{PONG} }
+  instances.each do |instance|
+    describe file("/etc/systemd/system/redis-server-#{instance}.service"), if: (fact('service_provider') == 'systemd') do
+      its(:content) { is_expected.to match %r{redis-server-#{instance}.conf} }
     end
 
-    describe command('redis-cli -h 127.0.0.1 -p 8888 ping') do
-      its(:stdout) { is_expected.to match %r{PONG} }
+    describe service("redis-server-#{instance}") do
+      it { is_expected.to be_enabled }
+    end
+
+    describe service("redis-server-#{instance}") do
+      it { is_expected.to be_running }
+    end
+
+    describe file("#{config_path}/redis-server-#{instance}.conf") do
+      its(:content) { is_expected.to match %r{port #{instance}} }
+    end
+
+    context "redis instance #{instance} should respond to ping command" do
+      describe command("redis-cli -h #{fact('networking.ip')} -p #{instance} ping") do
+        its(:stdout) { is_expected.to match %r{PONG} }
+      end
     end
   end
 end
