@@ -50,7 +50,7 @@ describe 'redis' do
           )
         end
 
-        context 'with SCL', if: facts[:osfamily] == 'RedHat' do
+        context 'with SCL', if: facts[:osfamily] == 'RedHat' && facts[:operatingsystemmajrelease] < '8' do
           let(:pre_condition) do
             <<-PUPPET
             class { 'redis::globals':

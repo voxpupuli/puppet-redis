@@ -6,6 +6,7 @@
     - set: ubuntu1804-64m
     - set: centos6-64m
     - set: centos7-64m
+    - set: centos8-64m
     - set: debian9-64m
     - set: debian10-64m
 Gemfile:
