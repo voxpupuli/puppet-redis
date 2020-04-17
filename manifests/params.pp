@@ -65,7 +65,7 @@ class redis::params inherits redis::globals {
 
       $scl = $redis::globals::scl
       if $scl {
-        $config_dir                = "/etc/opt/rh/${scl}/redis"
+        $config_dir                = "/etc/opt/rh/${scl}"
         $config_file               = "/etc/opt/rh/${scl}/redis.conf"
         $config_file_orig          = "/etc/opt/rh/${scl}/redis.conf.puppet"
         $package_name              = "${scl}-redis"
