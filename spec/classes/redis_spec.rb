@@ -1,7 +1,13 @@
 require 'spec_helper'
 
 describe 'redis' do
-  let(:service_file) { redis_service_file(service_provider: facts['service_provider']) }
+  let(:service_file) do
+    if facts['service_provider'] == 'systemd'
+      "/etc/systemd/system/#{service_name}.service"
+    else
+      "/etc/init.d/#{service_name}"
+    end
+  end
   let(:package_name) { manifest_vars[:package_name] }
   let(:service_name) { manifest_vars[:service_name] }
   let(:config_file) { manifest_vars[:config_file] }
