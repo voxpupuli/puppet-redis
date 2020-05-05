@@ -13,12 +13,15 @@ describe 'redis::sentinel' do
     class { 'redis::sentinel':
       master_name   => {
         'mymaster' => {
-          redis_host       => '127.0.0.1',
-          redis_port       => 6379,
-          quorum           => 2,
-          parallel_sync    => 1,
-          down_after       => 30000,
-          failover_timeout => 180000,
+          redis_host             => '127.0.0.1',
+          redis_port             => 6379,
+          quorum                 => 2,
+          parallel_sync          => 1,
+          down_after             => 30000,
+          failover_timeout       => 180000,
+          auth_pass              => 'mymastertest',
+          notification_script    => '/path/to/bar.sh',
+          client_reconfig_script => '/path/to/foo.sh',
         },
       },
     }
