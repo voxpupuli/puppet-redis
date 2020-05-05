@@ -19,6 +19,7 @@ describe 'redis::sentinel' do
           parallel_sync    => 1,
           down_after       => 30000,
           failover_timeout => 180000,
+        },
       },
     }
     EOS
