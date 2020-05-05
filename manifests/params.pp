@@ -200,4 +200,18 @@ class redis::params inherits redis::globals {
       fail "Operating system ${facts['os']['name']} is not supported yet."
     }
   }
+
+  $sentinel_master_name = [
+      'mymaster' => {
+        redis_host             => '127.0.0.1',
+        redis_port             => 6379,
+        quorum                 => 2,
+        down_after             => 30000,
+        parallel_sync          => 1,
+        failover_timeout       => 180000,
+        auth_pass              => undef,
+        notification_script    => undef,
+        client_reconfig_script => undef,
+      }
+    ]
 }
