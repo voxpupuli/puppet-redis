@@ -1,4 +1,4 @@
-type Redis::MasterName = Array[Hash[String, Struct[{
+type Redis::MasterName = Hash[String, Struct[{
   auth_pass                        => String,
   redis_host                       => Stdlib::Host,
   redis_port                       => Stdlib::Port,
@@ -8,5 +8,5 @@ type Redis::MasterName = Array[Hash[String, Struct[{
   failover_timeout                 => Integer[1],
   Optional[auth_pass]              => String,
   Optional[notification_script]    => Stdlib::Absolutepath,
-  Optional[client_reconfig_script] => Stdlib::Absolutepat,}
-],1,1]]
+  Optional[client_reconfig_script] => Stdlib::Absolutepath,}
+],1]

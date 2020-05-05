@@ -104,8 +104,27 @@
 #
 # @example Configuring options
 #   class {'redis::sentinel':
-#     down_after => 80000,
-#     log_file   => '/var/log/redis/sentinel.log',
+#     log_file   => '/var/log/redis/sentinel.log',    
+#     master_name   => {
+#       'session_6381' => {
+#         redis_host       => $redis_master_ip,
+#         redis_port       => 6381,
+#         quorum           => 2,
+#         parallel_sync    => 1,
+#         down_after       => 5000,
+#         failover_timeout => 12000,
+#         auth_pass        => $redis_auth,
+#       },
+#       'cache_6380'   => {
+#         redis_host       => $redis_master_ip,
+#         redis_port       => 6380,
+#         quorum           => 2,
+#         parallel_sync    => 1,
+#         down_after       => 5000,
+#         failover_timeout => 12000,
+#         auth_pass        => $redis_auth,
+#       }
+#     }
 #   }
 #
 class redis::sentinel (
@@ -138,7 +157,7 @@ class redis::sentinel (
   if $facts['os']['family'] == 'Debian' {
     package { $package_name:
       ensure => $package_ensure,
-      before => File[$config_file_orig],
+      before => Concat[$config_file_orig],
     }
 
     if $init_script {
@@ -153,30 +172,30 @@ class redis::sentinel (
   }
 
   concat { $config_file_orig:
-    ensure => file,
+    ensure => present,
   }
 
   concat::fragment { 'sentinel_conf_header':
     target  => $config_file_orig,
     order   => 10,
-    content => template('redis/sentinel/redis-sentine.conf_header.erb'),
+    content => template('redis/sentinel/redis-sentinel.conf_header.erb'),
   }
 
-  $master_name.each |Hash $master| {
-    concat::fragment { "sentinel_conf_master_${master[0]}" :
+  $master_name.each |String $master, Hash $params| {
+    concat::fragment { "sentinel_conf_master_${master}" :
       target  => $config_file_orig,
       order   => 20,
-      content => epp('redis/sentinel/redis-sentine.conf_master.epp', {
-        master_name            => $master[0],
-        redis_host             => $master['redis_host'],
-        redis_port             => $master['redis_port'],
-        quorum                 => $master['quorum'],
-        down_after             => $master['down_after'],
-        parallel_sync          => $master['parallel_sync'],
-        failover_timeout       => $master['failover_timeout'],
-        auth_pass              => $master['auth_pass'],
-        notification_script    => $master['notification_script'],
-        client_reconfig_script => $master['client_reconfig_script'],
+      content => epp('redis/sentinel/redis-sentinel.conf_master.epp', {
+        master_name            => $master,
+        redis_host             => $params['redis_host'],
+        redis_port             => $params['redis_port'],
+        quorum                 => $params['quorum'],
+        down_after             => $params['down_after'],
+        parallel_sync          => $params['parallel_sync'],
+        failover_timeout       => $params['failover_timeout'],
+        auth_pass              => $params['auth_pass'],
+        notification_script    => $params['notification_script'],
+        client_reconfig_script => $params['client_reconfig_script'],
       }),
     }
   }
@@ -184,7 +203,7 @@ class redis::sentinel (
   concat::fragment { 'sentinel_conf_footer':
     target  => $config_file_orig,
     order   => 30,
-    content => template('redis/sentinel/redis-sentine.conf_footer.erb'),
+    content => template('redis/sentinel/redis-sentinel.conf_footer.erb'),
   }
 
   exec { "cp -p ${config_file_orig} ${config_file}":
