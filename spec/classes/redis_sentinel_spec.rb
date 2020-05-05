@@ -75,11 +75,15 @@ CONFIG
           {
             master_name: {
               'cow' => {
-                'auth_pass' => 'password',
-                'down_after' => 6000,
-                'parallel_sync' => 1,
-                'failover_timeout' => 28_000,
-                'notification_script' => '/path/to/bar.sh',
+                'redis_host'             => '127.0.0.1',
+                'redis_port'             => 6379,
+                'quorum'                 => 2,
+                'parallel_sync'          => 1,
+                'auth_pass'              => 'password',
+                'down_after'             => 6000,
+                'parallel_sync'          => 1,
+                'failover_timeout'       => 28_000,
+                'notification_script'    => '/path/to/bar.sh',
                 'client_reconfig_script' => '/path/to/foo.sh',
               },
             },
