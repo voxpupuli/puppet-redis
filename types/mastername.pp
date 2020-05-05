@@ -6,7 +6,6 @@ type Redis::MasterName = Hash[String, Struct[{
   parallel_sync                    => Integer[0],
   failover_timeout                 => Integer[1],
   Optional[auth_pass]              => String,
-  Optional[auth_pass]              => String,
   Optional[notification_script]    => Stdlib::Absolutepath,
   Optional[client_reconfig_script] => Stdlib::Absolutepath,}
 ],1]
