@@ -73,15 +73,17 @@ CONFIG
       describe 'with custom parameters' do
         let(:params) do
           {
-            auth_pass: 'password',
+            master_name: { 'cow' => {
+              'auth_pass' => 'password',
+              'down_after' => 6000,
+              'parallel_sync' => 1,
+              'failover_timeout' => 28_000,
+              'notification_script' => '/path/to/bar.sh',
+              'client_reconfig_script' => '/path/to/foo.sh',
+            }
             sentinel_bind: '192.0.2.10',
-            master_name: 'cow',
-            down_after: 6000,
             working_dir: '/tmp/redis',
             log_file: '/tmp/barn-sentinel.log',
-            failover_timeout: 28_000,
-            notification_script: '/path/to/bar.sh',
-            client_reconfig_script: '/path/to/foo.sh'
           }
         end
 

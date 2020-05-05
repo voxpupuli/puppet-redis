@@ -11,7 +11,6 @@
       $client_reconfig_script,
 | -%>
 
-
 sentinel monitor <%= $master_name %> <%= $redis_host %> <%= $redis_port %> <%= $quorum %>
 sentinel down-after-milliseconds <%= $master_name %> <%= $down_after %>
 sentinel parallel-syncs <%= $master_name %> <%= $parallel_sync %>
