@@ -1367,7 +1367,7 @@ describe 'redis' do
             |RuntimeDirectoryMode=2755
             |Type=#{servicetype}
             |ExecStart=/usr/bin/redis-server #{config_file}#{systemd}
-            |ExecStop=/usr/bin/redis-server -p 6379 shutdown
+            |ExecStop=/usr/bin/redis-cli -p 6379 shutdown
             |Restart=always
             |User=redis
             |Group=redis
