@@ -1,14 +1,29 @@
 require 'spec_helper'
 
 describe 'redis' do
-  let(:service_file) { redis_service_file(service_provider: facts['service_provider']) }
+  let(:service_file) do
+    if facts['service_provider'] == 'systemd'
+      "/etc/systemd/system/#{service_name}.service"
+    else
+      "/etc/init.d/#{service_name}"
+    end
+  end
   let(:package_name) { manifest_vars[:package_name] }
   let(:service_name) { manifest_vars[:service_name] }
+  let(:config_file) { manifest_vars[:config_file] }
   let(:config_file_orig) { manifest_vars[:config_file_orig] }
 
   on_supported_os.each do |os, facts|
     context "on #{os}" do
       let(:facts) { facts }
+
+      if facts[:operatingsystem] == 'Ubuntu' && facts[:operatingsystemmajrelease] == '16.04'
+        let(:systemd) { '' }
+        let(:servicetype) { 'forking' }
+      else
+        let(:systemd) { ' --supervised systemd' }
+        let(:servicetype) { 'notify' }
+      end
 
       describe 'without parameters' do
         it { is_expected.to compile.with_all_deps }
@@ -41,7 +56,7 @@ describe 'redis' do
           )
         end
 
-        context 'with SCL', if: facts[:osfamily] == 'RedHat' do
+        context 'with SCL', if: facts[:osfamily] == 'RedHat' && facts[:operatingsystemmajrelease] < '8' do
           let(:pre_condition) do
             <<-PUPPET
             class { 'redis::globals':
@@ -108,11 +123,20 @@ describe 'redis' do
               with_owner('root').
               with_group('root').
               with_mode('0444')
-            is_expected.to contain_augeas('Systemd redis ulimit').
-              with_incl("/etc/systemd/system/#{service_name}.service.d/limit.conf").
-              with_lens('Systemd.lns').
-              with_changes(['defnode nofile Service/LimitNOFILE ""', 'set $nofile/value "7777"']).
-              that_notifies('Exec[systemd-reload-redis]')
+            # Only necessary for Puppet < 6.1.0,
+            # See https://github.com/puppetlabs/puppet/commit/f8d5c60ddb130c6429ff12736bfdb4ae669a9fd4
+            if Puppet.version < '6.1'
+              is_expected.to contain_augeas('Systemd redis ulimit').
+                with_incl("/etc/systemd/system/#{service_name}.service.d/limit.conf").
+                with_lens('Systemd.lns').
+                with_changes(['defnode nofile Service/LimitNOFILE ""', 'set $nofile/value "7777"']).
+                that_notifies('Class[systemd::systemctl::daemon_reload]')
+            else
+              is_expected.to contain_augeas('Systemd redis ulimit').
+                with_incl("/etc/systemd/system/#{service_name}.service.d/limit.conf").
+                with_lens('Systemd.lns').
+                with_changes(['defnode nofile Service/LimitNOFILE ""', 'set $nofile/value "7777"'])
+            end
           else
             is_expected.not_to contain_file('/etc/systemd/system/redis-server.service.d/limit.conf')
             is_expected.not_to contain_augeas('Systemd redis ulimit')
@@ -1329,6 +1353,36 @@ describe 'redis' do
         end
 
         it { is_expected.to contain_file(service_file) }
+
+        it do
+          content = <<-END.gsub(%r{^\s+\|}, '')
+            |[Unit]
+            |Description=Redis Advanced key-value store for instance default
+            |After=network.target
+            |After=network-online.target
+            |Wants=network-online.target
+            |
+            |[Service]
+            |RuntimeDirectory=redis
+            |RuntimeDirectoryMode=2755
+            |Type=#{servicetype}
+            |ExecStart=/usr/bin/redis-server #{config_file}#{systemd}
+            |ExecStop=/usr/bin/redis-cli -p 6379 shutdown
+            |Restart=always
+            |User=redis
+            |Group=redis
+            |LimitNOFILE=65536
+            |
+            |[Install]
+            |WantedBy=multi-user.target
+          END
+
+          if facts['service_provider'] == 'systemd'
+            is_expected.to contain_file(service_file).with_content(content)
+          else
+            is_expected.to contain_file(service_file).with_content(%r{Required-Start:})
+          end
+        end
       end
 
       describe 'with parameter manage_service_file' do
