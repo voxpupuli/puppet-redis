@@ -18,10 +18,7 @@ describe 'redis::sentinel' do
           quorum                 => 2,
           parallel_sync          => 1,
           down_after             => 30000,
-          failover_timeout       => 180000,
-          auth_pass              => 'mymastertest',
-          notification_script    => '/path/to/bar.sh',
-          client_reconfig_script => '/path/to/foo.sh',
+          failover_timeout       => 10000,
         },
       },
     }
