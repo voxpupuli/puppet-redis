@@ -974,19 +974,13 @@ Install redis-sentinel
 
 #### Examples
 
-##### Basic inclusion
-
-```puppet
-include redis::sentinel
-```
-
 ##### Configuring options
 
 ```puppet
 class {'redis::sentinel':
   log_file   => '/var/log/redis/sentinel.log',
-  master_name   => {
-    'session_6381' => {
+  sentinel_monitor => {
+    'session' => {
       redis_host       => $redis_master_ip,
       redis_port       => 6381,
       quorum           => 2,
@@ -995,7 +989,7 @@ class {'redis::sentinel':
       failover_timeout => 12000,
       auth_pass        => $redis_auth,
     },
-    'cache_6380'   => {
+    'cache'   => {
       redis_host       => $redis_master_ip,
       redis_port       => 6380,
       quorum           => 2,
@@ -1005,7 +999,6 @@ class {'redis::sentinel':
       auth_pass        => $redis_auth,
     }
   }
-}
 ```
 
 #### Parameters
@@ -1079,11 +1072,6 @@ Data type: `Redis::LogLevel`
 Specify how much we should log.
 
 Default value: 'notice'
-
-##### `master_name`
-
-Specify the name of the master redis server.
-The valid charset is A-z 0-9 and the three characters ".-_".
 
 ##### `package_name`
 

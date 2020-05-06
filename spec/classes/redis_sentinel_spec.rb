@@ -73,17 +73,50 @@ CONFIG
       describe 'with custom parameters' do
         let(:params) do
           {
-            auth_pass: 'password',
+            sentinel_monitor: {
+              'cow' => {
+                'redis_host'             => '127.0.0.1',
+                'redis_port'             => 6379,
+                'quorum'                 => 2,
+                'parallel_sync'          => 1,
+                'auth_pass'              => 'password',
+                'down_after'             => 6000,
+                'failover_timeout'       => 28_000,
+                'notification_script'    => '/path/to/bar.sh',
+                'client_reconfig_script' => '/path/to/foo.sh'
+              },
+            },
             sentinel_bind: '192.0.2.10',
-            master_name: 'cow',
-            down_after: 6000,
             working_dir: '/tmp/redis',
             log_file: '/tmp/barn-sentinel.log',
-            failover_timeout: 28_000,
-            notification_script: '/path/to/bar.sh',
-            client_reconfig_script: '/path/to/foo.sh'
           }
         end
+
+
+# @example Configuring options
+#   class {'redis::sentinel':
+#     log_file   => '/var/log/redis/sentinel.log',    
+#     sentinel_monitor => {
+#       'session' => {
+#         redis_host       => $redis_master_ip,
+#         redis_port       => 6381,
+#         quorum           => 2,
+#         parallel_sync    => 1,
+#         down_after       => 5000,
+#         failover_timeout => 12000,
+#         auth_pass        => $redis_auth,
+#       },
+#       'cache'   => {
+#         redis_host       => $redis_master_ip,
+#         redis_port       => 6380,
+#         quorum           => 2,
+#         parallel_sync    => 1,
+#         down_after       => 5000,
+#         failover_timeout => 12000,
+#         auth_pass        => $redis_auth,
+#       },
+#     }
+
 
         let(:expected_content) do
           <<CONFIG

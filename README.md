@@ -125,9 +125,16 @@ With adjustments:
 
 ```puppet
 class { '::redis::sentinel':
-  master_name      => 'cow',
-  redis_host       => '192.168.1.5',
-  failover_timeout => 30000,
+  sentinel_monitor => {
+    'cow' => {
+      'redis_host'             => '192.168.1.5',
+      'redis_port'             => 6379,
+      'quorum'                 => 2,
+      'parallel_sync'          => 1,
+      'down_after'             => 6000,
+      'failover_timeout'       => 30000,
+    },
+  },
 }
 ```
 

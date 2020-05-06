@@ -28,10 +28,6 @@
 # @param log_level
 #   Specify how much we should log.
 #
-# @param master_name
-#   Specify the name of the master redis server.
-#   The valid charset is A-z 0-9 and the three characters ".-_".
-#
 # @param package_name
 #   The name of the package that installs sentinel.
 #
@@ -67,8 +63,8 @@
 # @example Configuring options
 #   class {'redis::sentinel':
 #     log_file   => '/var/log/redis/sentinel.log',    
-#     master_name   => {
-#       'session_6381' => {
+#     sentinel_monitor => {
+#       'session' => {
 #         redis_host       => $redis_master_ip,
 #         redis_port       => 6381,
 #         quorum           => 2,
@@ -77,7 +73,7 @@
 #         failover_timeout => 12000,
 #         auth_pass        => $redis_auth,
 #       },
-#       'cache_6380'   => {
+#       'cache'   => {
 #         redis_host       => $redis_master_ip,
 #         redis_port       => 6380,
 #         quorum           => 2,
@@ -85,9 +81,8 @@
 #         down_after       => 5000,
 #         failover_timeout => 12000,
 #         auth_pass        => $redis_auth,
-#       }
+#       },
 #     }
-#   }
 #
 class redis::sentinel (
   Stdlib::Absolutepath $config_file           = $redis::params::sentinel_config_file,
