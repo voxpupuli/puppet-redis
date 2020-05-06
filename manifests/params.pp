@@ -209,9 +209,6 @@ class redis::params inherits redis::globals {
         down_after             => 30000,
         parallel_sync          => 1,
         failover_timeout       => 180000,
-        auth_pass              => undef,
-        notification_script    => undef,
-        client_reconfig_script => undef,
       },
     }
 }

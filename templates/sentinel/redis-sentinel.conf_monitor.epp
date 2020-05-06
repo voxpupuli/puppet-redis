@@ -1,0 +1,26 @@
+<%- | 
+      $monitor_name,
+      $redis_host,
+      $redis_port,
+      $quorum,
+      $down_after,
+      $parallel_sync,
+      $failover_timeout,
+      $auth_pass,
+      $notification_script,
+      $client_reconfig_script,
+| -%>
+
+sentinel monitor <%= $monitor_name %> <%= $redis_host %> <%= $redis_port %> <%= $quorum %>
+sentinel down-after-milliseconds <%= $monitor_name %> <%= $down_after %>
+sentinel parallel-syncs <%= $monitor_name %> <%= $parallel_sync %>
+sentinel failover-timeout <%= $monitor_name %> <%= $failover_timeout %>
+<% if $auth_pass { -%>
+sentinel auth-pass <%= $monitor_name %> <%= $auth_pass %>
+<% } -%>
+<% if $notification_script { -%>
+sentinel notification-script <%= $monitor_name %> <%= $notification_script %>
+<% } -%>
+<% if $client_reconfig_script { -%>
+sentinel client-reconfig-script <%= $monitor_name %> <%= $client_reconfig_script %>
+<% } -%>

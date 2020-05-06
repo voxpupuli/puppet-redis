@@ -140,10 +140,10 @@ class redis::sentinel (
 
   $sentinel_monitor.each |$monitor,$values| {
     $redis_values = merge($values,{'monitor_name' => $monitor})
-    concat::fragment { "sentinel_conf_master_${monitor}" :
+    concat::fragment { "sentinel_conf_monitor_${monitor}" :
       target  => $config_file_orig,
       order   => 20,
-      content => epp('redis/sentinel/redis-sentinel.conf_master.epp', {
+      content => epp('redis/sentinel/redis-sentinel.conf_monitor.epp', {
         monitor_name           => $redis_values['monitor_name'],
         redis_host             => $redis_values['redis_host'],
         redis_port             => $redis_values['redis_port'],
