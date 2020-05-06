@@ -73,22 +73,15 @@ CONFIG
       describe 'with custom parameters' do
         let(:params) do
           {
-            master_name: {
-              'cow' => {
-                'redis_host'             => '127.0.0.1',
-                'redis_port'             => 6379,
-                'quorum'                 => 2,
-                'parallel_sync'          => 1,
-                'auth_pass'              => 'password',
-                'down_after'             => 6000,
-                'failover_timeout'       => 28_000,
-                'notification_script'    => '/path/to/bar.sh',
-                'client_reconfig_script' => '/path/to/foo.sh'
-              }
-            },
+            auth_pass: 'password',
             sentinel_bind: '192.0.2.10',
+            master_name: 'cow',
+            down_after: 6000,
             working_dir: '/tmp/redis',
-            log_file: '/tmp/barn-sentinel.log'
+            log_file: '/tmp/barn-sentinel.log',
+            failover_timeout: 28_000,
+            notification_script: '/path/to/bar.sh',
+            client_reconfig_script: '/path/to/foo.sh'
           }
         end
 

@@ -34,6 +34,7 @@ repositories.
 
 * [`Redis::LogLevel`](#redisloglevel): Specify the server verbosity level.
 * [`Redis::RedisUrl`](#redisredisurl): 
+* [`Redis::SentinelMonitor`](#redissentinelmonitor): 
 
 **Tasks**
 
@@ -973,18 +974,31 @@ Install redis-sentinel
 
 #### Examples
 
-##### Basic inclusion
-
-```puppet
-include redis::sentinel
-```
-
 ##### Configuring options
 
 ```puppet
 class {'redis::sentinel':
-  down_after => 80000,
   log_file   => '/var/log/redis/sentinel.log',
+  master_name   => {
+    'session_6381' => {
+      redis_host       => $redis_master_ip,
+      redis_port       => 6381,
+      quorum           => 2,
+      parallel_sync    => 1,
+      down_after       => 5000,
+      failover_timeout => 12000,
+      auth_pass        => $redis_auth,
+    },
+    'cache_6380'   => {
+      redis_host       => $redis_master_ip,
+      redis_port       => 6380,
+      quorum           => 2,
+      parallel_sync    => 1,
+      down_after       => 5000,
+      failover_timeout => 12000,
+      auth_pass        => $redis_auth,
+    }
+  }
 }
 ```
 
@@ -992,13 +1006,13 @@ class {'redis::sentinel':
 
 The following parameters are available in the `redis::sentinel` class.
 
-##### `auth_pass`
+##### `sentinel_monitor`
 
-Data type: `Optional[String[1]]`
+Data type: `Redis::SentinelMonitor`
 
-The password to use to authenticate with the master and slaves.
+Specify the sentinel monitor.
 
-Default value: `undef`
+Default value: $redis::params::sentinel_monitor
 
 ##### `config_file`
 
@@ -1036,32 +1050,6 @@ Define which template to use.
 
 Default value: 'redis/redis-sentinel.conf.erb'
 
-##### `daemonize`
-
-Data type: `Boolean`
-
-Have Redis sentinel run as a daemon.
-
-Default value: $redis::params::sentinel_daemonize
-
-##### `down_after`
-
-Data type: `Integer[1]`
-
-Number of milliseconds the master (or any attached slave or sentinel)
-should be unreachable (as in, not acceptable reply to PING, continuously,
-for the specified period) in order to consider it in S_DOWN state.
-
-Default value: 30000
-
-##### `failover_timeout`
-
-Data type: `Integer[1]`
-
-Specify the failover timeout in milliseconds.
-
-Default value: 180000
-
 ##### `init_script`
 
 Data type: `Optional[Stdlib::Absolutepath]`
@@ -1088,28 +1076,8 @@ Default value: 'notice'
 
 ##### `master_name`
 
-Data type: `String[1]`
-
 Specify the name of the master redis server.
 The valid charset is A-z 0-9 and the three characters ".-_".
-
-Default value: 'mymaster'
-
-##### `redis_host`
-
-Data type: `Stdlib::Host`
-
-Specify the bound host of the master redis server.
-
-Default value: '127.0.0.1'
-
-##### `redis_port`
-
-Data type: `Stdlib::Port`
-
-Specify the port of the master redis server.
-
-Default value: 6379
 
 ##### `package_name`
 
@@ -1127,15 +1095,6 @@ Do we ensure this package.
 
 Default value: 'present'
 
-##### `parallel_sync`
-
-Data type: `Integer[0]`
-
-How many slaves can be reconfigured at the same time to use a
-new master after a failover.
-
-Default value: 1
-
 ##### `pid_file`
 
 Data type: `Stdlib::Absolutepath`
@@ -1143,15 +1102,6 @@ Data type: `Stdlib::Absolutepath`
 If sentinel is daemonized it will write its pid at this location.
 
 Default value: $redis::params::sentinel_pid_file
-
-##### `quorum`
-
-Data type: `Integer[1]`
-
-Number of sentinels that must agree that a master is down to
-signal sdown state.
-
-Default value: 2
 
 ##### `sentinel_bind`
 
@@ -1211,21 +1161,13 @@ conflicts.
 
 Default value: $redis::params::sentinel_working_dir
 
-##### `notification_script`
+##### `daemonize`
 
-Data type: `Optional[Stdlib::Absolutepath]`
+Data type: `Boolean`
 
-Path to the notification script
 
-Default value: `undef`
 
-##### `client_reconfig_script`
-
-Data type: `Optional[Stdlib::Absolutepath]`
-
-Path to the client-reconfig script
-
-Default value: `undef`
+Default value: $redis::params::sentinel_daemonize
 
 ##### `init_template`
 
@@ -1234,6 +1176,14 @@ Data type: `String[1]`
 
 
 Default value: 'redis/redis-sentinel.init.erb'
+
+##### `parallel_sync`
+
+Data type: `Integer[0]`
+
+
+
+Default value: 1
 
 ##### `service_ensure`
 
@@ -2071,6 +2021,23 @@ Alias of `Enum['debug', 'verbose', 'notice', 'warning']`
 The Redis::RedisUrl data type.
 
 Alias of `Pattern[/(^redis:\/\/)/]`
+
+### Redis::SentinelMonitor
+
+The Redis::SentinelMonitor data type.
+
+Alias of `Hash[String, Struct[{
+  redis_host             => Stdlib::Host,
+  redis_port             => Stdlib::Port,
+  quorum                 => Integer[1],
+  down_after             => Integer[1],
+  parallel_sync          => Integer[0],
+  failover_timeout       => Integer[1],
+  monitor_name           => Optional[String],
+  auth_pass              => Optional[String],
+  notification_script    => Optional[Stdlib::Absolutepath],
+  client_reconfig_script => Optional[Stdlib::Absolutepath],
+}]]`
 
 ## Tasks
 

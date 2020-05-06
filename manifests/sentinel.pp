@@ -1,42 +1,7 @@
 # @summary Install redis-sentinel
 #
-# @param master_name
-#   Specify the name of the master redis server.
-#   The valid charset is A-z 0-9 and the three characters ".-_".
-#   Hash with following Keys:
-#     @key auth_pass
-#       The password to use to authenticate with the master and slaves.
-#
-#     @key redis_host
-#       Specify the bound host of the master redis server.
-#
-#     @key redis_port
-#       Specify the port of the master redis server.
-#
-#     @key daemonize
-#       Have Redis sentinel run as a daemon.
-#
-#     @key down_after
-#       Number of milliseconds the master (or any attached slave or sentinel)
-#       should be unreachable (as in, not acceptable reply to PING, continuously,
-#       for the specified period) in order to consider it in S_DOWN state.
-#
-#     @key failover_timeout
-#       Specify the failover timeout in milliseconds.
-#
-#     @key parallel_sync
-#       How many slaves can be reconfigured at the same time to use a
-#       new master after a failover.
-#
-#     @key quorum
-#       Number of sentinels that must agree that a master is down to
-#       signal sdown state.
-#
-#     @key notification_script
-#       Path to the notification script
-#
-#     @key client_reconfig_script
-#       Path to the client-reconfig script
+# @param sentinel_monitor
+#   Specify the sentinel monitor.
 #
 # @param config_file
 #   The location and name of the sentinel config file.
@@ -99,9 +64,6 @@
 #   The directory into which sentinel will change to avoid mount
 #   conflicts.
 #
-# @example Basic inclusion
-#   include redis::sentinel
-#
 # @example Configuring options
 #   class {'redis::sentinel':
 #     log_file   => '/var/log/redis/sentinel.log',    
@@ -128,28 +90,28 @@
 #   }
 #
 class redis::sentinel (
-  Stdlib::Absolutepath $config_file = $redis::params::sentinel_config_file,
-  Stdlib::Absolutepath $config_file_orig = $redis::params::sentinel_config_file_orig,
-  Stdlib::Filemode $config_file_mode = '0644',
-  String[1] $conf_template = 'redis/redis-sentinel.conf.erb',
-  Boolean $daemonize = $redis::params::sentinel_daemonize,
+  Stdlib::Absolutepath $config_file           = $redis::params::sentinel_config_file,
+  Stdlib::Absolutepath $config_file_orig      = $redis::params::sentinel_config_file_orig,
+  Stdlib::Filemode $config_file_mode          = '0644',
+  String[1] $conf_template                    = 'redis/redis-sentinel.conf.erb',
+  Boolean $daemonize                          = $redis::params::sentinel_daemonize,
   Optional[Stdlib::Absolutepath] $init_script = $redis::params::sentinel_init_script,
-  String[1] $init_template = 'redis/redis-sentinel.init.erb',
-  Redis::LogLevel $log_level = 'notice',
-  Stdlib::Absolutepath $log_file = $redis::params::sentinel_log_file,
-  Redis::MasterName $master_name = $redis::params::sentinel_master_name,
-  String[1] $package_name = $redis::params::sentinel_package_name,
-  String[1] $package_ensure = 'present',
-  Integer[0] $parallel_sync = 1,
-  Stdlib::Absolutepath $pid_file = $redis::params::sentinel_pid_file,
+  String[1] $init_template                    = 'redis/redis-sentinel.init.erb',
+  Redis::LogLevel $log_level                  = 'notice',
+  Stdlib::Absolutepath $log_file              = $redis::params::sentinel_log_file,
+  Redis::SentinelMonitor $sentinel_monitor    = $redis::params::sentinel_monitor,
+  String[1] $package_name                     = $redis::params::sentinel_package_name,
+  String[1] $package_ensure                   = 'present',
+  Integer[0] $parallel_sync                   = 1,
+  Stdlib::Absolutepath $pid_file              = $redis::params::sentinel_pid_file,
+  Stdlib::Port $sentinel_port                 = 26379,
+  String[1] $service_group                    = 'redis',
+  String[1] $service_name                     = $redis::params::sentinel_service_name,
+  Stdlib::Ensure::Service $service_ensure     = 'running',
+  Boolean $service_enable                     = true,
+  String[1] $service_user                     = 'redis',
+  Stdlib::Absolutepath $working_dir           = $redis::params::sentinel_working_dir,
   Variant[Undef, Stdlib::IP::Address, Array[Stdlib::IP::Address]] $sentinel_bind = undef,
-  Stdlib::Port $sentinel_port = 26379,
-  String[1] $service_group = 'redis',
-  String[1] $service_name = $redis::params::sentinel_service_name,
-  Stdlib::Ensure::Service $service_ensure = 'running',
-  Boolean $service_enable = true,
-  String[1] $service_user = 'redis',
-  Stdlib::Absolutepath $working_dir = $redis::params::sentinel_working_dir,
 ) inherits redis::params {
 
   require 'redis'
@@ -181,21 +143,22 @@ class redis::sentinel (
     content => template('redis/sentinel/redis-sentinel.conf_header.erb'),
   }
 
-  $master_name.each |String $master, Hash $params| {
-    concat::fragment { "sentinel_conf_master_${master}" :
+  $sentinel_monitor.each |$monitor,$values| {
+    $redis_values = merge($values,{'monitor_name' => $monitor})
+    concat::fragment { "sentinel_conf_master_${monitor}" :
       target  => $config_file_orig,
       order   => 20,
       content => epp('redis/sentinel/redis-sentinel.conf_master.epp', {
-        master_name            => $master,
-        redis_host             => $params['redis_host'],
-        redis_port             => $params['redis_port'],
-        quorum                 => $params['quorum'],
-        down_after             => $params['down_after'],
-        parallel_sync          => $params['parallel_sync'],
-        failover_timeout       => $params['failover_timeout'],
-        auth_pass              => $params['auth_pass'],
-        notification_script    => $params['notification_script'],
-        client_reconfig_script => $params['client_reconfig_script'],
+        monitor_name           => $redis_values['monitor_name'],
+        redis_host             => $redis_values['redis_host'],
+        redis_port             => $redis_values['redis_port'],
+        quorum                 => $redis_values['quorum'],
+        down_after             => $redis_values['down_after'],
+        parallel_sync          => $redis_values['parallel_sync'],
+        failover_timeout       => $redis_values['failover_timeout'],
+        auth_pass              => $redis_values['auth_pass'],
+        notification_script    => $redis_values['notification_script'],
+        client_reconfig_script => $redis_values['client_reconfig_script'],
       }),
     }
   }
