@@ -974,6 +974,12 @@ Install redis-sentinel
 
 #### Examples
 
+##### Basic inclusion
+
+```puppet
+include redis::sentinel
+```
+
 ##### Configuring options
 
 ```puppet
