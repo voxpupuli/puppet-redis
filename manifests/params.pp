@@ -201,14 +201,15 @@ class redis::params inherits redis::globals {
     }
   }
 
-  $sentinel_monitor = {
-    'mymaster' => {
-      redis_host             => '127.0.0.1',
-      redis_port             => 6379,
-      quorum                 => 2,
-      down_after             => 30000,
-      parallel_sync          => 1,
-      failover_timeout       => 180000,
-    },
+  $sentinel_monitor_defaults = {
+    redis_host             => '127.0.0.1',
+    redis_port             => 6379,
+    quorum                 => 2,
+    down_after             => 30000,
+    parallel_sync          => 1,
+    failover_timeout       => 180000,
+  }
+  $sentinel_default_monitor = {
+    'mymaster' => $sentinel_monitor_defaults
   }
 }

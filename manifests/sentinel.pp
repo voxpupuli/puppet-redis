@@ -3,6 +3,9 @@
 # @param sentinel_monitor
 #   Specify the sentinel monitor.
 #
+# @param monitor_defaults
+#   Override the monitor defaults
+#
 # @param config_file
 #   The location and name of the sentinel config file.
 #
@@ -81,7 +84,7 @@
 #         down_after       => 5000,
 #         failover_timeout => 12000,
 #         auth_pass        => $redis_auth,
-#       },
+#       }
 #     }
 #
 class redis::sentinel (
@@ -94,7 +97,8 @@ class redis::sentinel (
   String[1] $init_template                    = 'redis/redis-sentinel.init.erb',
   Redis::LogLevel $log_level                  = 'notice',
   Stdlib::Absolutepath $log_file              = $redis::params::sentinel_log_file,
-  Redis::SentinelMonitor $sentinel_monitor    = $redis::params::sentinel_monitor,
+  Redis::SentinelMonitor $sentinel_monitor    = $redis::params::sentinel_default_monitor,
+  $monitor_defaults                           = $redis::params::sentinel_monitor_defaults,
   String[1] $package_name                     = $redis::params::sentinel_package_name,
   String[1] $package_ensure                   = 'present',
   Integer[0] $parallel_sync                   = 1,
@@ -139,7 +143,8 @@ class redis::sentinel (
   }
 
   $sentinel_monitor.each |$monitor,$values| {
-    $redis_values = merge($values,{'monitor_name' => $monitor})
+    $_monitor = merge($monitor_defaults,$values)
+    $redis_values = merge({'monitor_name' => $monitor},$_monitor)
     concat::fragment { "sentinel_conf_monitor_${monitor}" :
       target  => $config_file_orig,
       order   => 20,
