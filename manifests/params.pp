@@ -210,6 +210,6 @@ class redis::params inherits redis::globals {
     failover_timeout       => 180000,
   }
   $sentinel_default_monitor = {
-    'mymaster' => $sentinel_monitor_defaults
+    'mymaster' => $sentinel_monitor_defaults,
   }
 }
