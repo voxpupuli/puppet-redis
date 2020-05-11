@@ -9,16 +9,8 @@
   "issues_url": "https://github.com/voxpupuli/puppet-redis/issues",
   "dependencies": [
     {
-      "name": "puppetlabs/apt",
-      "version_requirement": ">= 2.3.0 < 8.0.0"
-    },
-    {
       "name": "puppetlabs/stdlib",
       "version_requirement": ">= 4.25.0 < 7.0.0"
-    },
-    {
-      "name": "puppet/epel",
-      "version_requirement": ">= 3.0.0 < 4.0.0"
     },
     {
       "name": "herculesteam/augeasproviders_sysctl",
