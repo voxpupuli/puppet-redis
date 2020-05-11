@@ -4,6 +4,36 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v6.0.0](https://github.com/voxpupuli/puppet-redis/tree/v6.0.0) (2020-05-12)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v5.0.0...v6.0.0)
+
+**Breaking changes:**
+
+- Make apt and epel soft dependencies [\#358](https://github.com/voxpupuli/puppet-redis/pull/358) ([ekohl](https://github.com/ekohl))
+
+**Implemented enhancements:**
+
+- Add support for RedHat/CentOS 8 [\#350](https://github.com/voxpupuli/puppet-redis/pull/350) ([yakatz](https://github.com/yakatz))
+- Add Debian 10 support [\#344](https://github.com/voxpupuli/puppet-redis/pull/344) ([ekohl](https://github.com/ekohl))
+- Finishing touches for multi-instance support [\#343](https://github.com/voxpupuli/puppet-redis/pull/343) ([fraenki](https://github.com/fraenki))
+- Set RuntimeDirectory in service template [\#342](https://github.com/voxpupuli/puppet-redis/pull/342) ([basti-nis](https://github.com/basti-nis))
+
+**Fixed bugs:**
+
+- change systemd stop command to redis-cli [\#355](https://github.com/voxpupuli/puppet-redis/pull/355) ([alexskr](https://github.com/alexskr))
+- Fix the sentinel pid file location for Ubuntu 18.04 [\#347](https://github.com/voxpupuli/puppet-redis/pull/347) ([ekohl](https://github.com/ekohl))
+
+**Closed issues:**
+
+- Type forking causes service timeout [\#260](https://github.com/voxpupuli/puppet-redis/issues/260)
+
+**Merged pull requests:**
+
+- Use more native rspec and serverspec testing [\#348](https://github.com/voxpupuli/puppet-redis/pull/348) ([ekohl](https://github.com/ekohl))
+- Run acceptance tests with manage\_repo =\> false [\#346](https://github.com/voxpupuli/puppet-redis/pull/346) ([ekohl](https://github.com/ekohl))
+- Update bolt testing to use modern versions [\#345](https://github.com/voxpupuli/puppet-redis/pull/345) ([ekohl](https://github.com/ekohl))
+
 ## [v5.0.0](https://github.com/voxpupuli/puppet-redis/tree/v5.0.0) (2019-12-03)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v4.2.1...v5.0.0)
