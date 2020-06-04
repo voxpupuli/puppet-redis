@@ -208,6 +208,9 @@ class redis::params inherits redis::globals {
     down_after             => 30000,
     parallel_sync          => 1,
     failover_timeout       => 180000,
+    auth_pass              => false,
+    notification_script    => false,
+    client_reconfig_script => false,
   }
   $sentinel_default_monitor = {
     'mymaster' => $sentinel_monitor_defaults,

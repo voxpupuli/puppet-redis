@@ -65,7 +65,7 @@
 #
 # @example Configuring options
 #   class {'redis::sentinel':
-#     log_file   => '/var/log/redis/sentinel.log',    
+#     log_file   => '/var/log/redis/sentinel.log',
 #     sentinel_monitor => {
 #       'session' => {
 #         redis_host       => $redis_master_ip,
@@ -126,14 +126,11 @@ class redis::sentinel (
     }
   }
 
-  Concat {
-    owner => $service_user,
-    group => $service_group,
-    mode  => $config_file_mode,
-  }
-
   concat { $config_file_orig:
     ensure => present,
+    owner  => $service_user,
+    group  => $service_group,
+    mode   => $config_file_mode,
   }
 
   concat::fragment { 'sentinel_conf_header':
@@ -148,18 +145,7 @@ class redis::sentinel (
     concat::fragment { "sentinel_conf_monitor_${monitor}" :
       target  => $config_file_orig,
       order   => 20,
-      content => epp('redis/sentinel/redis-sentinel.conf_monitor.epp', {
-        monitor_name           => $redis_values['monitor_name'],
-        redis_host             => $redis_values['redis_host'],
-        redis_port             => $redis_values['redis_port'],
-        quorum                 => $redis_values['quorum'],
-        down_after             => $redis_values['down_after'],
-        parallel_sync          => $redis_values['parallel_sync'],
-        failover_timeout       => $redis_values['failover_timeout'],
-        auth_pass              => $redis_values['auth_pass'],
-        notification_script    => $redis_values['notification_script'],
-        client_reconfig_script => $redis_values['client_reconfig_script'],
-      }),
+      content => epp('redis/sentinel/redis-sentinel.conf_monitor.epp', $redis_values)
     }
   }
 
