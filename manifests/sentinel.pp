@@ -145,7 +145,7 @@ class redis::sentinel (
     concat::fragment { "sentinel_conf_monitor_${monitor}" :
       target  => $config_file_orig,
       order   => 20,
-      content => epp('redis/sentinel/redis-sentinel.conf_monitor.epp', $redis_values)
+      content => epp('redis/sentinel/redis-sentinel.conf_monitor.epp', $redis_values),
     }
   }
 
