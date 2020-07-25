@@ -49,7 +49,6 @@ class redis::params inherits redis::globals {
           }
         }
       }
-
     }
 
     'RedHat': {

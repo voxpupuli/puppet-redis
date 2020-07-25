@@ -32,4 +32,3 @@ class redis::preinstall {
     }
   }
 }
-

@@ -7,4 +7,3 @@ class redis::install {
     }
   }
 }
-
