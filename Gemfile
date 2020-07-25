@@ -11,11 +11,11 @@ def location_for(place, fake_version = nil)
 end
 
 group :test do
-  gem 'voxpupuli-test', '>= 1.0.0',  :require => false
-  gem 'coveralls',                   :require => false
-  gem 'simplecov-console',           :require => false
-  gem 'redis',                       :require => false
-  gem 'mock_redis',                  :require => false
+  gem 'voxpupuli-test', '~> 2.0',  :require => false
+  gem 'coveralls',                 :require => false
+  gem 'simplecov-console',         :require => false
+  gem 'redis',                     :require => false
+  gem 'mock_redis',                :require => false
 end
 
 group :development do
