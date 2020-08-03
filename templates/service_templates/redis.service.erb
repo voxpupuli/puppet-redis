@@ -1,15 +1,25 @@
 [Unit]
-Description=Advanced key-value store for <%= @title %>
+Description=Redis Advanced key-value store for instance <%= @title %>
 After=network.target
+After=network-online.target
+Wants=network-online.target
 
 [Service]
+RuntimeDirectory=redis
+RuntimeDirectoryMode=2755
+<%# Redis on Xenial is too old for systemd integration -%>
+<% if @facts['os']['name'] == 'Ubuntu' and @facts['os']['release']['major'] == '16.04' -%>
 Type=forking
 ExecStart=/usr/bin/redis-server <%= @redis_file_name %>
-ExecStop=/usr/bin/redis-server -p <%= @port %> shutdown
-TimeoutStopSec=0
+<% else -%>
+Type=notify
+ExecStart=/usr/bin/redis-server <%= @redis_file_name %> --supervised systemd
+<% end -%>
+ExecStop=/usr/bin/redis-cli -p <%= @port %> shutdown
 Restart=always
 User=<%= @service_user %>
 Group=<%= @service_user %>
+LimitNOFILE=<%= @ulimit %>
 
 [Install]
 WantedBy=multi-user.target

@@ -1,26 +1,26 @@
 {
-  "name": "arioch-redis",
-  "version": "3.2.0",
-  "author": "Tom De Vylder",
+  "name": "puppet-redis",
+  "version": "6.0.1-rc0",
+  "author": "Vox Pupuli",
   "summary": "Redis module",
   "license": "Apache-2.0",
-  "source": "https://github.com/arioch/puppet-redis",
-  "project_page": "http://arioch.github.io/puppet-redis/",
-  "issues_url": "https://github.com/arioch/puppet-redis/issues",
+  "source": "https://github.com/voxpupuli/puppet-redis.git",
+  "project_page": "http://github.com/voxpupuli/puppet-redis",
+  "issues_url": "https://github.com/voxpupuli/puppet-redis/issues",
   "dependencies": [
-    {"name":"puppetlabs/apt","version_requirement":">= 2.3.0 <5.0.0"},
-    {"name":"puppetlabs/stdlib","version_requirement":">= 1.0.2 <5.0.0"},
-    {"name":"stahnma/epel","version_requirement":">= 1.2.2 <2.0.0"},
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.25.0 < 7.0.0"
+    },
     {
       "name": "herculesteam/augeasproviders_sysctl",
-      "version_requirement": ">=2.1.0 < 3.0.0"
+      "version_requirement": ">= 2.1.0 < 3.0.0"
     },
     {
       "name": "herculesteam/augeasproviders_core",
-      "version_requirement": ">=2.1.0 < 3.0.0"
+      "version_requirement": ">= 2.1.0 < 3.0.0"
     }
   ],
-  "data_provider": null,
   "description": "Redis module with cluster support",
   "tags": [
     "cluster",
@@ -29,32 +29,42 @@
     "redis",
     "sentinel"
   ],
+  "requirements": [
+    {
+      "name": "puppet",
+      "version_requirement": ">= 5.5.8 < 7.0.0"
+    }
+  ],
   "operatingsystem_support": [
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "8"
+        "9",
+        "10"
       ]
     },
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "14.04",
-        "16.04"
+        "16.04",
+        "18.04",
+        "20.04"
       ]
     },
     {
       "operatingsystem": "RedHat",
       "operatingsystemrelease": [
         "6",
-        "7"
+        "7",
+        "8"
       ]
     },
     {
       "operatingsystem": "CentOS",
       "operatingsystemrelease": [
         "6",
-        "7"
+        "7",
+        "8"
       ]
     },
     {

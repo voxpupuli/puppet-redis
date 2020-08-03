@@ -1,37 +1,47 @@
-# run a test task
 require 'spec_helper_acceptance'
 
 describe 'redis-cli task' do
-
   it 'install redis-cli with the class' do
     pp = <<-EOS
-    Exec {
-      path => [ '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin', ]
-    }
-
-    class { '::redis':
-      manage_repo => true,
-    }
+    include redis
     EOS
 
-    # Apply twice to ensure no errors the second time.
-    apply_manifest(pp, :catch_failures => true)
+    apply_manifest(pp, catch_failures: true)
+    apply_manifest(pp, catch_changes: true)
   end
 
+  subject do
+    on(master, "bolt task run --modulepath /etc/puppetlabs/code/modules --targets localhost #{task_name} #{params}", acceptable_exit_codes: [0, 1]).stdout
+  end
+
+  let(:task_name) { 'redis::redis_cli' }
+
   describe 'ping' do
+    let(:params) { 'command="ping"' }
+
     it 'execute ping' do
-      result = run_task(task_name: 'redis::redis_cli', params: 'command="ping"')
-      expect_multiple_regexes(result: result, regexes: [%r{{"status":"PONG"}}, %r{Ran on 1 node in .+ seconds}])
+      is_expected.to match(%r{{\s*"status":\s*"PONG"\s*}})
+      is_expected.to match(%r{Ran on 1 target in .+ sec})
     end
   end
 
   describe 'security' do
-    it 'stops script injections and escapes' do
-      result = run_task(task_name: 'redis::redis_cli', params: 'command="ping; cat /etc/passwd"')
-      expect_multiple_regexes(result: result, regexes: [%r{{"status":"ERR unknown command 'ping; cat /etc/passwd'"}}, %r{Ran on 1 node in .+ seconds}])
+    describe 'command with semi colon' do
+      let(:params) { 'command="ping; cat /etc/passwd"' }
 
-      result = run_task(task_name: 'redis::redis_cli', params: 'command="ping && cat /etc/passwd"')
-      expect_multiple_regexes(result: result, regexes: [%r{{"status":"ERR unknown command 'ping && cat /etc/passwd'"}}, %r{Ran on 1 node in .+ seconds}])
+      it 'stops script injections and escapes' do
+        is_expected.to match(%r!{\s*"status":\s*"ERR unknown command ('|`)ping; cat /etc/passwd('|`)!)
+        is_expected.to match(%r{Ran on 1 target in .+ sec})
+      end
+    end
+
+    describe 'command with double ampersand' do
+      let(:params) { 'command="ping && cat /etc/passwd"' }
+
+      it 'stops script injections and escapes' do
+        is_expected.to match(%r!{\s*"status":\s*"ERR unknown command ('|`)ping && cat /etc/passwd('|`)!)
+        is_expected.to match(%r{Ran on 1 target in .+ sec})
+      end
     end
   end
 end

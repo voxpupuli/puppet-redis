@@ -1,163 +1,85 @@
-require 'rubygems'
+RSpec.configure do |c|
+  c.mock_with :mocha
+end
+
 require 'puppetlabs_spec_helper/module_spec_helper'
 require 'rspec-puppet-facts'
 include RspecPuppetFacts
 
-require 'puppet/indirector/catalog/compiler'
-
-# Magic to add a catalog.exported_resources accessor
-class Puppet::Resource::Catalog::Compiler
-  alias_method :filter_exclude_exported_resources, :filter
-  def filter(catalog)
-    filter_exclude_exported_resources(catalog).tap do |filtered|
-      # Every time we filter a catalog, add a .exported_resources to it.
-      filtered.define_singleton_method(:exported_resources) do
-        # The block passed to filter returns `false` if it wants to keep a resource. Go figure.
-        catalog.filter { |r| !r.exported? }
-      end
-    end
-  end
-end
-
-module Support
-  module ExportedResources
-    # Get exported resources as a catalog. Compatible with all catalog matchers, e.g.
-    # `expect(exported_resources).to contain_myexportedresource('name').with_param('value')`
-    def exported_resources
-      # Catalog matchers expect something that can receive .call
-      proc { subject.call.exported_resources }
-    end
-  end
-end
-
-def get_spec_fixtures_dir
-  spec_dir = File.expand_path(File.dirname(__FILE__) + '/fixtures')
-
-  raise "The directory #{spec_dir} does not exist" unless Dir.exists? spec_dir
-
-  spec_dir
-end
-
-def read_fixture_file filename
-  filename = get_spec_fixtures_dir + "/#{filename}"
-
-  raise "The fixture file #{filename} doesn't exist" unless File.exists? filename
-
-  File.read(filename)
-end
-
 def manifest_vars
-
   vars = {}
 
   case facts[:osfamily].to_s
   when 'RedHat'
     vars[:package_name] = 'redis'
     vars[:service_name] = 'redis'
+    vars[:config_file] = '/etc/redis.conf'
     vars[:config_file_orig] = '/etc/redis.conf.puppet'
-    vars[:ppa_repo] = nil
   when 'FreeBSD',
     vars[:package_name] = 'redis'
     vars[:service_name] = 'redis'
+    vars[:config_file] = '/usr/local/etc/redis.conf'
     vars[:config_file_orig] = '/usr/local/etc/redis.conf.puppet'
-    vars[:ppa_repo] = nil
   when 'Debian'
     vars[:package_name] = 'redis-server'
     vars[:service_name] = 'redis-server'
+    vars[:config_file] = '/etc/redis/redis.conf'
     vars[:config_file_orig] = '/etc/redis/redis.conf.puppet'
-    vars[:ppa_repo] = 'ppa:chris-lea/redis-server'
   when 'Archlinux'
     vars[:package_name] = 'redis'
     vars[:service_name] = 'redis'
     vars[:config_file] = '/etc/redis/redis.conf'
     vars[:config_file_orig] = '/etc/redis/redis.conf.puppet'
-    vars[:ppa_repo] = nil
   end
 
   vars
 end
 
-def centos_facts
-  {
-    :operatingsystem => 'CentOS',
-    :osfamily        => 'RedHat',
-    :puppetversion   => '4.5.2',
-  }
+if ENV['DEBUG']
+  Puppet::Util::Log.level = :debug
+  Puppet::Util::Log.newdestination(:console)
 end
 
-def debian_facts
-  {
-    :operatingsystem           => 'Debian',
-    :osfamily                  => 'Debian',
-    :operatingsystemmajrelease => '8',
-    :puppetversion             => '4.5.2',
-    :lsbdistcodename           => 'jessie',
-  }
-end
+add_custom_fact :service_provider, (lambda do |_os, facts|
+  case facts[:osfamily].downcase
+  when 'archlinux'
+    'systemd'
+  when 'darwin'
+    'launchd'
+  when 'debian'
+    'systemd'
+  when 'freebsd'
+    'freebsd'
+  when 'gentoo'
+    'openrc'
+  when 'openbsd'
+    'openbsd'
+  when 'redhat'
+    facts[:operatingsystemrelease].to_i >= 7 ? 'systemd' : 'redhat'
+  when 'suse'
+    facts[:operatingsystemmajrelease].to_i >= 12 ? 'systemd' : 'redhat'
+  when 'windows'
+    'windows'
+  else
+    'init'
+  end
+end)
 
-def freebsd_facts
-  {
-    :operatingsystem => 'FreeBSD',
-    :osfamily        => 'FreeBSD',
-    :puppetversion   => '4.5.2',
-  }
-end
+RSpec.configure do |c|
+  # getting the correct facter version is tricky. We use facterdb as a source to mock facts
+  # see https://github.com/camptocamp/facterdb
+  # people might provide a specific facter version. In that case we use it.
+  # Otherwise we need to match the correct facter version to the used puppet version.
+  # as of 2019-10-31, puppet 5 ships facter 3.11 and puppet 6 ships facter 3.14
+  # https://puppet.com/docs/puppet/5.5/about_agent.html
+  c.default_facter_version = if ENV['FACTERDB_FACTS_VERSION']
+                               ENV['FACTERDB_FACTS_VERSION']
+                             else
+                               Gem::Dependency.new('', ENV['PUPPET_VERSION']).match?('', '5') ? '3.11.0' : '3.14.0'
+                             end
 
-def centos_6_facts
-  {
-    :operatingsystem => 'CentOS',
-    :osfamily        => 'RedHat',
-    :operatingsystemmajrelease => '6',
-    :puppetversion   => '4.5.2',
-  }
+  # Coverage generation
+  c.after(:suite) do
+    RSpec::Puppet::Coverage.report!
+  end
 end
-
-def centos_7_facts
-  {
-    :operatingsystem => 'CentOS',
-    :osfamily        => 'RedHat',
-    :operatingsystemmajrelease => '7',
-    :puppetversion   => '4.5.2',
-  }
-end
-
-def debian_wheezy_facts
-  {
-    :operatingsystem           => 'Debian',
-    :osfamily                  => 'Debian',
-    :operatingsystemmajrelease => '8',
-    :puppetversion             => '4.5.2',
-    :lsbdistcodename           => 'wheezy',
-  }
-end
-
-def ubuntu_1404_facts
-  {
-    :operatingsystem           => 'Ubuntu',
-    :osfamily                  => 'Debian',
-    :operatingsystemmajrelease => '14.04',
-    :puppetversion             => '4.5.2',
-    :lsbdistcodename           => 'trusty',
-  }
-end
-
-def ubuntu_1604_facts
-  {
-    :operatingsystem           => 'Ubuntu',
-    :osfamily                  => 'Debian',
-    :operatingsystemmajrelease => '16.04',
-    :puppetversion             => '4.5.2',
-    :lsbdistcodename           => 'xenial',
-  }
-end
-
-def archlinux_facts
-  {
-    :operatingsystem => 'Archlinux',
-    :osfamily        => 'Archlinux',
-    :puppetversion   => '4.5.2',
-  }
-end
-
-# Include code coverage report for all our specs
-at_exit { RSpec::Puppet::Coverage.report! }

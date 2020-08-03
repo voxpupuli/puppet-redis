@@ -19,59 +19,60 @@ class redis::ulimit {
 
   $service_provider_lookup = pick(getvar('service_provider'), false)
 
-  if $::redis::managed_by_cluster_manager {
+  if $redis::managed_by_cluster_manager {
     file { '/etc/security/limits.d/redis.conf':
       ensure  => 'file',
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      content => "redis soft nofile ${::redis::ulimit}\nredis hard nofile ${::redis::ulimit}\n",
+      content => "redis soft nofile ${redis::ulimit}\nredis hard nofile ${redis::ulimit}\n",
     }
   }
   if $service_provider_lookup == 'systemd' {
-    file { "/etc/systemd/system/${::redis::service_name}.service.d/":
+    file { "/etc/systemd/system/${redis::service_name}.service.d/":
       ensure                  => 'directory',
       owner                   => 'root',
       group                   => 'root',
       selinux_ignore_defaults => true,
     }
 
-    file { "/etc/systemd/system/${::redis::service_name}.service.d/limit.conf":
+    file { "/etc/systemd/system/${redis::service_name}.service.d/limit.conf":
       ensure => file,
       owner  => 'root',
       group  => 'root',
       mode   => '0444',
     }
     augeas { 'Systemd redis ulimit' :
-      incl    => "/etc/systemd/system/${::redis::service_name}.service.d/limits.conf",
+      incl    => "/etc/systemd/system/${redis::service_name}.service.d/limit.conf",
       lens    => 'Systemd.lns',
-      context => "/etc/systemd/system/${::redis::service_name}.service.d/limits.conf",
       changes => [
         "defnode nofile Service/LimitNOFILE \"\"",
-        "set \$nofile/value \"${::redis::ulimit}\""],
-      notify  => [
-        Exec['systemd-reload-redis'],
+        "set \$nofile/value \"${redis::ulimit}\"",
       ],
     }
-  } else {
-    augeas { 'redis ulimit':
-      changes => "set ULIMIT ${::redis::ulimit}",
+    # Only necessary for Puppet < 6.1.0,
+    # See https://github.com/puppetlabs/puppet/commit/f8d5c60ddb130c6429ff12736bfdb4ae669a9fd4
+    if versioncmp($facts['puppetversion'],'6.1.0') < 0 {
+      include systemd::systemctl::daemon_reload
+      Augeas['Systemd redis ulimit'] ~> Class['systemd::systemctl::daemon_reload']
     }
-    case $::osfamily {
+  } else {
+    case $facts['os']['family'] {
       'Debian': {
-        Augeas['redis ulimit'] {
+        augeas { 'redis ulimit':
           context => '/files/etc/default/redis-server',
+          changes => "set ULIMIT ${redis::ulimit}",
         }
       }
       'RedHat': {
-        Augeas['redis ulimit'] {
+        augeas { 'redis ulimit':
           context => '/files/etc/sysconfig/redis',
+          changes => "set ULIMIT ${redis::ulimit}",
         }
       }
       default: {
-        warning("Not sure how to set ULIMIT on non-systemd OSFamily ${::osfamily}, PR's welcome")
+        warning("Not sure how to set ULIMIT on non-systemd OSFamily ${facts['os']['family']}, PR's welcome")
       }
     }
   }
-
 }

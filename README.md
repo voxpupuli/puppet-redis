@@ -1,8 +1,12 @@
 # Puppet Redis
 
-## Build status
-
-[![Build Status](https://travis-ci.org/arioch/puppet-redis.png?branch=master)](https://travis-ci.org/arioch/puppet-redis)
+[![License](https://img.shields.io/github/license/voxpupuli/puppet-redis.svg)](https://github.com/voxpupuli/puppet-redis/blob/master/LICENSE)
+[![Build Status](https://travis-ci.org/voxpupuli/puppet-redis.png?branch=master)](https://travis-ci.org/voxpupuli/puppet-redis)
+[![Code Coverage](https://coveralls.io/repos/github/voxpupuli/puppet-redis/badge.svg?branch=master)](https://coveralls.io/github/voxpupuli/puppet-redis)
+[![Puppet Forge](https://img.shields.io/puppetforge/v/puppet/redis.svg)](https://forge.puppetlabs.com/puppet/redis)
+[![Puppet Forge - downloads](https://img.shields.io/puppetforge/dt/puppet/redis.svg)](https://forge.puppetlabs.com/puppet/redis)
+[![Puppet Forge - endorsement](https://img.shields.io/puppetforge/e/puppet/redis.svg)](https://forge.puppetlabs.com/puppet/redis)
+[![Puppet Forge - scores](https://img.shields.io/puppetforge/f/puppet/redis.svg)](https://forge.puppetlabs.com/puppet/redis)
 
 ## Example usage
 
@@ -60,6 +64,33 @@ class { '::redis':
 }
 ```
 
+### Multiple instances
+
+
+```puppet
+$listening_ports = [6379,6380,6381,6382]
+
+class { '::redis':
+  default_install => false,
+  service_enable  => false,
+  service_ensure  => 'stopped',
+}
+
+$listening_ports.each |$port| {
+  $port_string = sprintf('%d',$port)
+  redis::instance { $port_string:
+    service_enable => true,
+    service_ensure => 'running',
+    port           => $port,
+    bind           => $facts['networking']['ip'],
+    dbfilename     => "${port}-dump.rdb",
+    appendfilename => "${port}-appendonly.aof",
+    appendfsync    => 'always',
+    require        => Class['Redis'],
+  }
+}
+```
+
 ### Manage repositories
 
 Disabled by default but if you really want the module to manage the required
@@ -79,6 +110,8 @@ class { '::redis':
   ppa_repo    => 'ppa:rwky/redis',
 }
 ```
+
+**Warning** note that it requires [puppetlabs/apt](https://forge.puppet.com/puppetlabs/apt) on Debian or Ubuntu distros. On Red Hat [puppet/epel](https://forge.puppet.com/puppet/epel) is needed unless the installation is using Software Collections. In that case will install `centos-release-scl-rh` from CentOS extras. For RHEL or other RHEL-derivatives this isn't managed.
 
 ### Redis Sentinel
 
@@ -100,61 +133,15 @@ class { '::redis::sentinel':
 }
 ```
 
-## `redisget()` function
+### Soft dependency
 
-`redisget()` takes two or three arguments that are strings. The first is the key
-to be looked up, the second is the URL to the Redis service and the
-optional third argument is a default value to use if the key is not
-found or connection to the Redis service cannot be made.
+This module requires [camptocamp/systemd](https://forge.puppet.com/camptocamp/systemd) on Puppet versions older than 6.1.0.
 
-Example of basic usage.
+When managing the repo, it either needs [puppetlabs/apt](https://forge.puppet.com/puppetlabs/apt) or [puppet/epel](https://forge.puppet.com/puppet/epel).
 
-```puppet
-$version = redisget('version.myapp', 'redis://redis.example.com:6379')
-```
+## `redis::get()` function
 
-Example with default value specified. This is useful to allow for cached
-data in case Redis is not available.
-
-```puppet
-$version = redisget('version.myapp', 'redis://redis.example.com:6379', $::myapp_version)
-```
-
+This function is used to get data from redis.
 You must have the 'redis' gem installed on your puppet master.
 
-## Unit testing
-
-Plain RSpec:
-
-    $ rake spec
-
-Using bundle:
-
-    $ bundle exec rake spec
-
-Test against a specific Puppet or Facter version:
-
-    $ PUPPET_VERSION=3.2.1  bundle update && bundle exec rake spec
-    $ PUPPET_VERSION=4.10.0 bundle update && bundle exec rake spec
-    $ FACTER_VERSION=1.6.8  bundle update && bundle exec rake spec
-
-## Puppet 3 Support
-
-Puppet 3 is EOL as-of January 2017. The last release of this module that will
-support Puppet 3.X and earlier will be the 3.X.X module releases.
-
-Module versions from 4.X.X onwards will use Puppet 4 only features and will not work with
-earlier versions.
-
-We would recommend upgrading your Puppet agent to the latest release, as Puppet 4 comes with a load of awesome new features.
-
-If you're stuck with older Puppet, you could also fork the module from 3.0.0 and use your fork as a Puppet 3 supported version.
-
-## Contributing
-
-* Fork it
-* Create a feature branch (`git checkout -b my-new-feature`)
-* Run rspec tests (`bundle exec rake spec`)
-* Commit your changes (`git commit -am 'Added some feature'`)
-* Push to the branch (`git push origin my-new-feature`)
-* Create new Pull Request
+Functions are documented in [REFERENCE.md](REFERENCE.md)
