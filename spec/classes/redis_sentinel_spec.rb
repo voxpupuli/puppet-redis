@@ -36,6 +36,7 @@ port 26379
 dir #{facts[:osfamily] == 'Debian' ? '/var/lib/redis' : '/tmp'}
 daemonize #{facts[:osfamily] == 'RedHat' ? 'no' : 'yes'}
 pidfile #{pidfile}
+protected-mode yes
 
 sentinel monitor mymaster 127.0.0.1 6379 2
 sentinel down-after-milliseconds mymaster 30000
@@ -75,6 +76,7 @@ CONFIG
           {
             auth_pass: 'password',
             sentinel_bind: '192.0.2.10',
+            protected_mode: false,
             master_name: 'cow',
             down_after: 6000,
             working_dir: '/tmp/redis',
@@ -92,6 +94,7 @@ port 26379
 dir /tmp/redis
 daemonize #{facts[:osfamily] == 'RedHat' ? 'no' : 'yes'}
 pidfile #{pidfile}
+protected-mode no
 
 sentinel monitor cow 127.0.0.1 6379 2
 sentinel down-after-milliseconds cow 6000
