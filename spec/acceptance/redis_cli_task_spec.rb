@@ -1,6 +1,12 @@
 require 'spec_helper_acceptance'
 
 describe 'redis-cli task' do
+  subject do
+    on(master, "bolt task run --modulepath /etc/puppetlabs/code/modules --targets localhost #{task_name} #{params}", acceptable_exit_codes: [0, 1]).stdout
+  end
+
+  let(:task_name) { 'redis::redis_cli' }
+
   it 'install redis-cli with the class' do
     pp = <<-EOS
     include redis
@@ -9,12 +15,6 @@ describe 'redis-cli task' do
     apply_manifest(pp, catch_failures: true)
     apply_manifest(pp, catch_changes: true)
   end
-
-  subject do
-    on(master, "bolt task run --modulepath /etc/puppetlabs/code/modules --targets localhost #{task_name} #{params}", acceptable_exit_codes: [0, 1]).stdout
-  end
-
-  let(:task_name) { 'redis::redis_cli' }
 
   describe 'ping' do
     let(:params) { 'command="ping"' }

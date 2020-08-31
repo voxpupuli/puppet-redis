@@ -294,7 +294,7 @@ class redis (
   Integer[1] $repl_timeout                                       = 60,
   Optional[String] $requirepass                                  = undef,
   Boolean $save_db_to_disk                                       = true,
-  Hash $save_db_to_disk_interval                                 = {'900' =>'1', '300' => '10', '60' => '10000'},
+  Hash $save_db_to_disk_interval                                 = { '900' => '1', '300' => '10', '60' => '10000' },
   Boolean $service_enable                                        = true,
   Stdlib::Ensure::Service $service_ensure                        = 'running',
   String[1] $service_group                                       = 'redis',
@@ -332,7 +332,6 @@ class redis (
   Integer[0] $cluster_migration_barrier                          = 1,
   Hash[String[1], Hash] $instances                               = {},
 ) inherits redis::params {
-
   contain redis::preinstall
   contain redis::install
   contain redis::config
@@ -352,5 +351,4 @@ class redis (
     Class['redis::config']
     ~> Class['redis::service']
   }
-
 }

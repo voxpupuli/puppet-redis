@@ -19,12 +19,11 @@
 # @author - Peter Souter
 # @see https://redis.io/topics/admin
 #
-class redis::administration(
+class redis::administration (
   Boolean $enable_overcommit_memory = true,
   Boolean $disable_thp              = true,
   Integer[0] $somaxconn             = 65535,
 ) {
-
   if $enable_overcommit_memory {
     sysctl { 'vm.overcommit_memory':
       ensure => 'present',
@@ -47,5 +46,4 @@ class redis::administration(
       value  => $somaxconn,
     }
   }
-
 }

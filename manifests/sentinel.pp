@@ -136,7 +136,6 @@ class redis::sentinel (
   Optional[Stdlib::Absolutepath] $notification_script = undef,
   Optional[Stdlib::Absolutepath] $client_reconfig_script = undef,
 ) inherits redis::params {
-
   require 'redis'
 
   if $facts['os']['family'] == 'Debian' {
@@ -166,7 +165,6 @@ class redis::sentinel (
   }
 
   if $init_script {
-
     file { $init_script:
       ensure  => file,
       owner   => 'root',
@@ -180,12 +178,10 @@ class redis::sentinel (
       refreshonly => true,
       notify      => Service[$service_name],
     }
-
   }
 
   service { $service_name:
     ensure => $service_ensure,
     enable => $service_enable,
   }
-
 }

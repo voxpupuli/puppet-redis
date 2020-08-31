@@ -2,7 +2,7 @@
 #
 # @param scl
 #   Use a specific Software CoLlection on Red Hat based systems
-class redis::globals(
+class redis::globals (
   Optional[String] $scl = undef,
 ) {
   if $scl and $facts['os']['family'] != 'RedHat' {
