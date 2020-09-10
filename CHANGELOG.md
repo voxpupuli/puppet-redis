@@ -4,7 +4,15 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
-## [v6.0.0](https://github.com/voxpupuli/puppet-redis/tree/v6.0.0) (2020-05-12)
+## [v6.1.0](https://github.com/voxpupuli/puppet-redis/tree/v6.1.0) (2020-09-11)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v6.0.0...v6.1.0)
+
+**Implemented enhancements:**
+
+- Add Ubuntu 20.04 support [\#357](https://github.com/voxpupuli/puppet-redis/pull/357) ([mmoll](https://github.com/mmoll))
+
+## [v6.0.0](https://github.com/voxpupuli/puppet-redis/tree/v6.0.0) (2020-05-11)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v5.0.0...v6.0.0)
 
