@@ -1,5 +1,5 @@
-<% if @sentinel_bind -%>
-bind <%= @sentinel_bind %>
+<% unless @sentinel_bind_arr.empty? -%>
+bind <%= @sentinel_bind_arr.join(' ') %>
 <% end -%>
 port <%= @sentinel_port %>
 dir <%= @working_dir %>
