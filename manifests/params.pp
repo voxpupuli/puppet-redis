@@ -25,6 +25,7 @@ class redis::params inherits redis::globals {
       $sentinel_package_name     = 'redis-sentinel'
       $sentinel_log_file         = '/var/log/redis/redis-sentinel.log'
       $sentinel_working_dir      = '/var/lib/redis'
+      $sentinel_protected_mode   = true
 
       case $facts['os']['name'] {
         'Ubuntu': {
@@ -62,6 +63,7 @@ class redis::params inherits redis::globals {
       $sentinel_daemonize   = false
       $sentinel_init_script = undef
       $sentinel_working_dir = '/tmp'
+      $sentinel_protected_mode   = true
 
       $scl = $redis::globals::scl
       if $scl {
@@ -133,6 +135,7 @@ class redis::params inherits redis::globals {
       $sentinel_pid_file         = '/var/run/redis/redis-sentinel.pid'
       $sentinel_log_file         = '/var/log/redis/sentinel.log'
       $sentinel_working_dir      = '/tmp'
+      $sentinel_protected_mode   = true
 
       # pkg version
       $minimum_version           = '3.2.4'
@@ -162,6 +165,7 @@ class redis::params inherits redis::globals {
       $sentinel_pid_file         = '/var/run/redis/redis-sentinel.pid'
       $sentinel_log_file         = '/var/log/redis/sentinel.log'
       $sentinel_working_dir      = '/tmp'
+      $sentinel_protected_mode   = true
 
       # suse package version
       $minimum_version           = '3.0.5'
@@ -192,6 +196,7 @@ class redis::params inherits redis::globals {
       $sentinel_pid_file         = '/var/run/redis/redis-sentinel.pid'
       $sentinel_log_file         = '/var/log/redis/sentinel.log'
       $sentinel_working_dir      = '/tmp'
+      $sentinel_protected_mode   = true
 
       # pkg version
       $minimum_version           = '3.2.4'

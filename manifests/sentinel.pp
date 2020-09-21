@@ -49,6 +49,9 @@
 # @param redis_port
 #   Specify the port of the master redis server.
 #
+# @param protected_mode
+#   Whether protected mode is enabled or not. Only applicable when no bind is set.
+#
 # @param package_name
 #   The name of the package that installs sentinel.
 #
@@ -111,6 +114,7 @@ class redis::sentinel (
   Stdlib::Filemode $config_file_mode = '0644',
   String[1] $conf_template = 'redis/redis-sentinel.conf.erb',
   Boolean $daemonize = $redis::params::sentinel_daemonize,
+  Boolean $protected_mode = $redis::params::sentinel_protected_mode,
   Integer[1] $down_after = 30000,
   Integer[1] $failover_timeout = 180000,
   Optional[Stdlib::Absolutepath] $init_script = $redis::params::sentinel_init_script,
