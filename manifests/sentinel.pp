@@ -153,6 +153,8 @@ class redis::sentinel (
     }
   }
 
+  $sentinel_bind_arr = delete_undef_values([$sentinel_bind].flatten)
+
   file { $config_file_orig:
     ensure  => file,
     owner   => $service_user,
