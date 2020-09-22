@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v6.2.0](https://github.com/voxpupuli/puppet-redis/tree/v6.2.0) (2020-09-22)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v6.1.0...v6.2.0)
+
+**Merged pull requests:**
+
+- Add type alias tests to data types [\#366](https://github.com/voxpupuli/puppet-redis/pull/366) ([ekohl](https://github.com/ekohl))
+- enable sentinel bind usage with multi ip [\#365](https://github.com/voxpupuli/puppet-redis/pull/365) ([ragingdave](https://github.com/ragingdave))
+- Make protected-mode configurable for sentinel [\#272](https://github.com/voxpupuli/puppet-redis/pull/272) ([eliskovets](https://github.com/eliskovets))
+
 ## [v6.1.0](https://github.com/voxpupuli/puppet-redis/tree/v6.1.0) (2020-09-11)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v6.0.0...v6.1.0)
