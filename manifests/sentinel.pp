@@ -139,8 +139,22 @@ class redis::sentinel (
   Stdlib::Absolutepath $working_dir = $redis::params::sentinel_working_dir,
   Optional[Stdlib::Absolutepath] $notification_script = undef,
   Optional[Stdlib::Absolutepath] $client_reconfig_script = undef,
+  String[5] $minimum_version = $redis::params::minimum_version,
 ) inherits redis::params {
   require 'redis'
+
+  if $package_ensure =~ /^([0-9]+:)?[0-9]+\.[0-9]/ {
+    if ':' in $package_ensure {
+      $_redis_version_real = split($package_ensure, ':')
+      $redis_version_real = $_redis_version_real[1]
+    } else {
+      $redis_version_real = $package_ensure
+    }
+  } else {
+    $redis_version_real = pick(getvar('redis_server_version'), $minimum_version)
+  }
+
+  $supports_protected_mode = !$redis_version_real or versioncmp($redis_version_real, '3.2.0') >= 0
 
   if $facts['os']['family'] == 'Debian' {
     package { $package_name:

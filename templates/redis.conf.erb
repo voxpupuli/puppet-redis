@@ -34,11 +34,13 @@ pidfile <%= @pid_file %>
 # IPv4 and IPv6 loopback addresses 127.0.0.1 and ::1, and from Unix domain
 # sockets.
 #
-# By default protected mode is enabled. You should disable it only if
+# By default protected mode is enabled *on systems that support it*. You should disable it only if
 # you are sure you want clients from other hosts to connect to Redis
 # even if no authentication is configured, nor a specific set of interfaces
 # are explicitly listed using the "bind" directive.
+#<% if @supports_protected_mode -%>
 protected-mode <%= @protected_mode ? 'yes' : 'no' %>
+<% end -%>
 
 <% end -%>
 # Accept connections on the specified port, default is 6379.

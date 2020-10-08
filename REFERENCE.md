@@ -1112,6 +1112,14 @@ Specify the port of the master redis server.
 
 Default value: `6379`
 
+##### `protected_mode`
+
+Data type: `Boolean`
+
+Whether protected mode is enabled or not. Only applicable when no bind is set.
+
+Default value: `$redis::params::sentinel_protected_mode`
+
 ##### `package_name`
 
 Data type: `String[1]`
@@ -1243,6 +1251,14 @@ Data type: `Stdlib::Ensure::Service`
 
 
 Default value: `'running'`
+
+##### `minimum_version`
+
+Data type: `String[5]`
+
+
+
+Default value: `$redis::params::minimum_version`
 
 ## Defined types
 
