@@ -36,7 +36,6 @@ port 26379
 dir #{facts[:osfamily] == 'Debian' ? '/var/lib/redis' : '/tmp'}
 daemonize #{facts[:osfamily] == 'RedHat' ? 'no' : 'yes'}
 pidfile #{pidfile}
-protected-mode yes
 
 sentinel monitor mymaster 127.0.0.1 6379 2
 sentinel down-after-milliseconds mymaster 30000
@@ -76,7 +75,6 @@ CONFIG
           {
             auth_pass: 'password',
             sentinel_bind: '192.0.2.10',
-            protected_mode: false,
             master_name: 'cow',
             down_after: 6000,
             working_dir: '/tmp/redis',
@@ -94,7 +92,6 @@ port 26379
 dir /tmp/redis
 daemonize #{facts[:osfamily] == 'RedHat' ? 'no' : 'yes'}
 pidfile #{pidfile}
-protected-mode no
 
 sentinel monitor cow 127.0.0.1 6379 2
 sentinel down-after-milliseconds cow 6000
@@ -153,6 +150,36 @@ CONFIG
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to create_class('redis::sentinel') }
         it { is_expected.to contain_file(config_file_orig).with_content(expected_content) }
+      end
+
+      describe 'protected_mode' do
+        context 'when `true`' do
+          let(:params) { { protected_mode: true } }
+
+          it { is_expected.to contain_file(config_file_orig).with_content(%r{^protected-mode yes$}) }
+        end
+
+        context 'when `false`' do
+          let(:params) { { protected_mode: false } }
+
+          it { is_expected.to contain_file(config_file_orig).with_content(%r{^protected-mode no$}) }
+        end
+
+        context 'when set at the same time as `sentinel_bind`' do
+          let(:params) { { sentinel_bind: '192.168.2.10' } }
+
+          context 'when `true`' do
+            let(:params) { super().merge(protected_mode: true) }
+
+            it { is_expected.to compile.and_raise_error(%r{`protected_mode` should not be set at the same time as `sentinel_bind`}) }
+          end
+
+          context 'when `false`' do
+            let(:params) { super().merge(protected_mode: false) }
+
+            it { is_expected.to compile.and_raise_error(%r{`protected_mode` should not be set at the same time as `sentinel_bind`}) }
+          end
+        end
       end
     end
   end

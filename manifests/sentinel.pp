@@ -114,7 +114,7 @@ class redis::sentinel (
   Stdlib::Filemode $config_file_mode = '0644',
   String[1] $conf_template = 'redis/redis-sentinel.conf.erb',
   Boolean $daemonize = $redis::params::sentinel_daemonize,
-  Boolean $protected_mode = $redis::params::sentinel_protected_mode,
+  Optional[Boolean] $protected_mode = undef,
   Integer[1] $down_after = 30000,
   Integer[1] $failover_timeout = 180000,
   Optional[Stdlib::Absolutepath] $init_script = $redis::params::sentinel_init_script,
@@ -129,7 +129,7 @@ class redis::sentinel (
   Integer[0] $parallel_sync = 1,
   Stdlib::Absolutepath $pid_file = $redis::params::sentinel_pid_file,
   Integer[1] $quorum = 2,
-  Variant[Undef, Stdlib::IP::Address, Array[Stdlib::IP::Address]] $sentinel_bind = undef,
+  Optional[Variant[Stdlib::IP::Address, Array[Stdlib::IP::Address]]] $sentinel_bind = undef,
   Stdlib::Port $sentinel_port = 26379,
   String[1] $service_group = 'redis',
   String[1] $service_name = $redis::params::sentinel_service_name,
@@ -141,6 +141,10 @@ class redis::sentinel (
   Optional[Stdlib::Absolutepath] $client_reconfig_script = undef,
 ) inherits redis::params {
   require 'redis'
+
+  if $sentinel_bind and $protected_mode != undef {
+    fail('`protected_mode` should not be set at the same time as `sentinel_bind`')
+  }
 
   if $facts['os']['family'] == 'Debian' {
     package { $package_name:
