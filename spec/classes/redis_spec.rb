@@ -484,18 +484,6 @@ describe 'redis' do
         let(:params) { { manage_repo: true } }
 
         case facts[:operatingsystem]
-        when 'Debian'
-          context 'on Debian' do
-            it do
-              is_expected.to create_apt__source('dotdeb').with(location: 'http://packages.dotdeb.org/',
-                                                               repos: 'all',
-                                                               key: {
-                                                                 'id' => '6572BBEF1B5FF28B28B706837E3F070089DF5277',
-                                                                 'source' => 'http://www.dotdeb.org/dotdeb.gpg'
-                                                               },
-                                                               include: { 'src' => true })
-            end
-          end
         when 'Ubuntu'
           it { is_expected.to contain_apt__ppa('ppa:chris-lea/redis-server') }
         when 'RedHat', 'CentOS', 'Scientific', 'OEL', 'Amazon'

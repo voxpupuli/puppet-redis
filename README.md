@@ -111,7 +111,7 @@ class { '::redis':
 }
 ```
 
-**Warning** note that it requires [puppetlabs/apt](https://forge.puppet.com/puppetlabs/apt) on Debian or Ubuntu distros. On Red Hat [puppet/epel](https://forge.puppet.com/puppet/epel) is needed unless the installation is using Software Collections. In that case will install `centos-release-scl-rh` from CentOS extras. For RHEL or other RHEL-derivatives this isn't managed.
+**Warning** note that it requires [puppetlabs/apt](https://forge.puppet.com/puppetlabs/apt) on Ubuntu distros. On Red Hat [puppet/epel](https://forge.puppet.com/puppet/epel) is needed unless the installation is using Software Collections. In that case will install `centos-release-scl-rh` from CentOS extras. For RHEL or other RHEL-derivatives this isn't managed.
 
 ### Redis Sentinel
 
