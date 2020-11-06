@@ -44,6 +44,51 @@ protected-mode <%= @protected_mode ? 'yes' : 'no' %>
 # Accept connections on the specified port, default is 6379.
 # If port 0 is specified Redis will not listen on a TCP socket.
 port <%= @port %>
+<% if @tls_port %>
+# By default, TLS/SSL is disabled. To enable it, the "tls-port" configuration
+# directive can be used to define TLS-listening ports. To enable TLS on the
+# default port, use:
+#
+# port
+# tls-port 6379
+tls-port <%= @tls_port %>
+
+# Configure a X.509 certificate and private key to use for authenticating the
+# server to connected clients, masters or cluster peers.  These files should be
+# PEM formatted.
+tls-cert-file <%= @tls_cert_file %>
+tls-key-file <%= @tls_key_file %>
+
+# Configure a CA certificate(s) bundle or directory to authenticate TLS/SSL
+# clients and peers.  Redis requires an explicit configuration of at least one
+# of these, and will not implicitly use the system wide configuration.
+tls-ca-cert-file <%= @tls_ca_cert_file %>
+tls-ca-cert-dir <%= @tls_ca_cert_dir %>
+
+# By default, clients (including replica servers) on a TLS port are required
+# to authenticate using valid client side certificates.
+#
+# If "no" is specified, client certificates are not required and not accepted.
+# If "optional" is specified, client certificates are accepted and must be
+# valid if provided, but are not required.
+tls-auth-clients <%= @tls_auth_clients %>
+
+<% if @tls_replication %>
+# By default, a Redis replica does not attempt to establish a TLS connection
+# with its master.
+#
+# Use the following directive to enable TLS on replication links.
+#
+tls-replication yes
+<% end %>
+
+<% if @tls_cluster %>
+# By default, the Redis Cluster bus uses a plain TCP connection. To enable
+# TLS for the bus protocol, use the following directive:
+#
+tls-cluster yes
+<% end %>
+<% end %>
 
 # TCP listen() backlog.
 #

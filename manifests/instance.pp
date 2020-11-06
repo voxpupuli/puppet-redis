@@ -263,7 +263,15 @@ define redis::instance (
   Integer[0] $tcp_backlog                                        = $redis::tcp_backlog,
   Integer[0] $tcp_keepalive                                      = $redis::tcp_keepalive,
   Integer[0] $timeout                                            = $redis::timeout,
-  Variant[Stdlib::Filemode , Enum['']] $unixsocketperm           = $redis::unixsocketperm,
+  Optional[Integer[0]] $tls_port                                 = $redis::tls_port,
+  String[0] $tls_cert_file                                       = $redis::tls_cert_file,
+  String[0] $tls_key_file                                        = $redis::tls_key_file,
+  String[0] $tls_ca_cert_file                                    = $redis::tls_ca_cert_file,
+  String[0] $tls_ca_cert_dir                                     = $redis::tls_ca_cert_dir,
+  Enum['yes', 'no', 'optional'] $tls_auth_clients                = $redis::tls_auth_clients,
+  Boolean $tls_replication                                       = $redis::tls_replication,
+  Boolean $tls_cluster                                           = $redis::tls_cluster,
+  Variant[Stdlib::Filemode, Enum['']] $unixsocketperm            = $redis::unixsocketperm,
   Integer[0] $ulimit                                             = $redis::ulimit,
   Stdlib::Filemode $workdir_mode                                 = $redis::workdir_mode,
   Integer[0] $zset_max_ziplist_entries                           = $redis::zset_max_ziplist_entries,
@@ -371,13 +379,13 @@ define redis::instance (
   }
 
   File {
-    owner  => $config_owner,
-    group  => $config_group,
-    mode   => $config_file_mode,
+    owner => $config_owner,
+    group => $config_group,
+    mode  => $config_file_mode,
   }
 
   file { $redis_file_name_orig:
-    ensure  => file,
+    ensure => file,
   }
 
   exec { "cp -p ${redis_file_name_orig} ${redis_file_name}":
