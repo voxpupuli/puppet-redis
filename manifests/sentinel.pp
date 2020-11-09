@@ -118,7 +118,7 @@ class redis::sentinel (
   if $facts['os']['family'] == 'Debian' {
     package { $package_name:
       ensure => $package_ensure,
-      before => Concat[$config_file_orig],
+      before => File[$config_file_orig],
     }
 
     if $init_script {
@@ -126,38 +126,21 @@ class redis::sentinel (
     }
   }
 
-  concat { $config_file_orig:
-    ensure => present,
-    owner  => $service_user,
-    group  => $service_group,
-    mode   => $config_file_mode,
+  $_monitor = $sentinel_monitor.map |$monitor,$values| {
+    $redis_values = $monitor_defaults + {'monitor_name' => $monitor} + $values
   }
 
-  concat::fragment { 'sentinel_conf_header':
-    target  => $config_file_orig,
-    order   => 10,
-    content => template('redis/sentinel/redis-sentinel.conf_header.erb'),
-  }
-
-  $sentinel_monitor.each |$monitor,$values| {
-    $_monitor = merge($monitor_defaults,$values)
-    $redis_values = merge({'monitor_name' => $monitor},$_monitor)
-    concat::fragment { "sentinel_conf_monitor_${monitor}" :
-      target  => $config_file_orig,
-      order   => 20,
-      content => epp('redis/sentinel/redis-sentinel.conf_monitor.epp', $redis_values),
-    }
-  }
-
-  concat::fragment { 'sentinel_conf_footer':
-    target  => $config_file_orig,
-    order   => 30,
-    content => template('redis/sentinel/redis-sentinel.conf_footer.erb'),
+  file { $config_file_orig:
+    ensure  => present,
+    owner   => $service_user,
+    group   => $service_group,
+    mode    => $config_file_mode,
+    content => template('redis/redis-sentinel.conf.erb'),
   }
 
   exec { "cp -p ${config_file_orig} ${config_file}":
     path        => '/usr/bin:/bin',
-    subscribe   => Concat[$config_file_orig],
+    subscribe   => File[$config_file_orig],
     notify      => Service[$service_name],
     refreshonly => true,
   }

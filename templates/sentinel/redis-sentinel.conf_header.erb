@@ -1,7 +1,0 @@
-<% if @sentinel_bind -%>
-bind <%= @sentinel_bind %>
-<% end -%>
-port <%= @sentinel_port %>
-dir <%= @working_dir %>
-daemonize <%= @daemonize ? 'yes' : 'no' %>
-pidfile <%= @pid_file %>
