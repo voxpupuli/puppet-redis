@@ -32,7 +32,8 @@ class redis::params inherits redis::globals {
           $config_group = 'redis'
           $minimum_version = $facts['os']['release']['major'] ? {
             '16.04' => '3.0.5',
-            default => '4.0.9',
+            '18.04' => '4.0.9',
+            default => '5.0.7',
           }
           $sentinel_pid_file = $facts['os']['release']['major'] ? {
             '16.04' => '/var/run/redis/redis-sentinel.pid',
@@ -49,7 +50,6 @@ class redis::params inherits redis::globals {
           }
         }
       }
-
     }
 
     'RedHat': {

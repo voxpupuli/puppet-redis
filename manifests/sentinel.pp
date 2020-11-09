@@ -31,6 +31,12 @@
 # @param log_level
 #   Specify how much we should log.
 #
+# @param redis_host
+#   Specify the bound host of the master redis server.
+#
+# @param protected_mode
+#   Whether protected mode is enabled or not. Only applicable when no bind is set.
+#
 # @param package_name
 #   The name of the package that installs sentinel.
 #
@@ -116,7 +122,6 @@ class redis::sentinel (
   Stdlib::Absolutepath $working_dir           = $redis::params::sentinel_working_dir,
   Variant[Undef, Stdlib::IP::Address, Array[Stdlib::IP::Address]] $sentinel_bind = undef,
 ) inherits redis::params {
-
   require 'redis'
 
   if $facts['os']['family'] == 'Debian' {
@@ -131,6 +136,7 @@ class redis::sentinel (
   }
 
   $sentinel_bind_arr = delete_undef_values([$sentinel_bind].flatten)
+
 
   $_monitor = $sentinel_monitor.map |$monitor,$values| {
     $redis_values = $monitor_defaults + {'monitor_name' => $monitor} + $values
@@ -152,7 +158,6 @@ class redis::sentinel (
   }
 
   if $init_script {
-
     file { $init_script:
       ensure  => file,
       owner   => 'root',
@@ -166,12 +171,10 @@ class redis::sentinel (
       refreshonly => true,
       notify      => Service[$service_name],
     }
-
   }
 
   service { $service_name:
     ensure => $service_ensure,
     enable => $service_enable,
   }
-
 }

@@ -321,7 +321,6 @@ define redis::instance (
     $service_provider_lookup = pick(getvar('service_provider'), false)
 
     if $service_provider_lookup == 'systemd' {
-
       file { "/etc/systemd/system/${service_name}.service":
         ensure  => file,
         owner   => 'root',
@@ -349,9 +348,7 @@ define redis::instance (
           ],
         }
       }
-
     } else {
-
       file { "/etc/init.d/${service_name}":
         ensure  => file,
         mode    => '0755',
@@ -379,11 +376,11 @@ define redis::instance (
     mode   => $config_file_mode,
   }
 
-  file {$redis_file_name_orig:
+  file { $redis_file_name_orig:
     ensure  => file,
   }
 
-  exec {"cp -p ${redis_file_name_orig} ${redis_file_name}":
+  exec { "cp -p ${redis_file_name_orig} ${redis_file_name}":
     path        => '/usr/bin:/bin',
     subscribe   => File[$redis_file_name_orig],
     refreshonly => true,
@@ -405,5 +402,4 @@ define redis::instance (
   $supports_protected_mode = !$redis_version_real or versioncmp($redis_version_real, '3.2.0') >= 0
 
   File[$redis_file_name_orig] { content => template($conf_template) }
-
 }

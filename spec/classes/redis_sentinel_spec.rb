@@ -37,10 +37,12 @@ dir #{facts[:osfamily] == 'Debian' ? '/var/lib/redis' : '/tmp'}
 daemonize #{facts[:osfamily] == 'RedHat' ? 'no' : 'yes'}
 pidfile #{pidfile}
 protected-mode yes
+
 sentinel monitor mymaster 127.0.0.1 6379 2
 sentinel down-after-milliseconds mymaster 30000
 sentinel parallel-syncs mymaster 1
 sentinel failover-timeout mymaster 180000
+
 loglevel notice
 logfile #{facts[:osfamily] == 'Debian' ? '/var/log/redis/redis-sentinel.log' : '/var/log/redis/sentinel.log'}
 CONFIG
