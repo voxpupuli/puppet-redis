@@ -22,6 +22,9 @@
 # @param conf_template
 #   Define which template to use.
 #
+# @param daemonize
+#   Have Redis sentinel run as a daemon.
+#
 # @param init_script
 #   Specifiy the init script that will be created for sentinel.
 #
@@ -71,6 +74,9 @@
 # @param working_dir
 #   The directory into which sentinel will change to avoid mount
 #   conflicts.
+#
+# @example Basic inclusion
+#   include redis::sentinel
 #
 # @example Configuring options
 #   class {'redis::sentinel':
