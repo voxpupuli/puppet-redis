@@ -56,9 +56,6 @@
 # @param sentinel_port
 #   The port of sentinel server.
 #
-# @param protected_mode
-#   Whether protected mode is enabled or not. Only applicable when no bind is set.
-#
 # @param service_group
 #   The group of the config file.
 #
