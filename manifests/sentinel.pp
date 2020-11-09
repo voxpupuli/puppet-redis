@@ -34,9 +34,6 @@
 # @param log_level
 #   Specify how much we should log.
 #
-# @param redis_host
-#   Specify the bound host of the master redis server.
-#
 # @param protected_mode
 #   Whether protected mode is enabled or not. Only applicable when no bind is set.
 #
@@ -114,7 +111,6 @@ class redis::sentinel (
   $monitor_defaults                           = $redis::params::sentinel_monitor_defaults,
   String[1] $package_name                     = $redis::params::sentinel_package_name,
   String[1] $package_ensure                   = 'present',
-  Integer[0] $parallel_sync                   = 1,
   Stdlib::Absolutepath $pid_file              = $redis::params::sentinel_pid_file,
   Stdlib::Port $sentinel_port                 = 26379,
   String[1] $service_group                    = 'redis',
