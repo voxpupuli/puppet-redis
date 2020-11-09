@@ -47,6 +47,9 @@
 # @param sentinel_port
 #   The port of sentinel server.
 #
+# @param protected_mode
+#   Whether protected mode is enabled or not. Only applicable when no bind is set.
+#
 # @param service_group
 #   The group of the config file.
 #
@@ -93,6 +96,7 @@ class redis::sentinel (
   Stdlib::Filemode $config_file_mode          = '0644',
   String[1] $conf_template                    = 'redis/redis-sentinel.conf.erb',
   Boolean $daemonize                          = $redis::params::sentinel_daemonize,
+  Boolean $protected_mode                     = $redis::params::sentinel_protected_mode,
   Optional[Stdlib::Absolutepath] $init_script = $redis::params::sentinel_init_script,
   String[1] $init_template                    = 'redis/redis-sentinel.init.erb',
   Redis::LogLevel $log_level                  = 'notice',
@@ -125,6 +129,8 @@ class redis::sentinel (
       Package[$package_name] -> File[$init_script]
     }
   }
+
+  $sentinel_bind_arr = delete_undef_values([$sentinel_bind].flatten)
 
   $_monitor = $sentinel_monitor.map |$monitor,$values| {
     $redis_values = $monitor_defaults + {'monitor_name' => $monitor} + $values

@@ -30,37 +30,31 @@ describe 'redis::sentinel' do
       end
 
       describe 'without parameters' do
-        let(:expected_content_header) do
+        let(:expected_content) do
           <<CONFIG
 port 26379
 dir #{facts[:osfamily] == 'Debian' ? '/var/lib/redis' : '/tmp'}
 daemonize #{facts[:osfamily] == 'RedHat' ? 'no' : 'yes'}
 pidfile #{pidfile}
-CONFIG
-        end
-
-        let(:expected_content_monitor) do
-          <<CONFIG
-
+protected-mode yes
 sentinel monitor mymaster 127.0.0.1 6379 2
 sentinel down-after-milliseconds mymaster 30000
 sentinel parallel-syncs mymaster 1
 sentinel failover-timeout mymaster 180000
-CONFIG
-        end
-
-        let(:expected_content_footer) do
-          <<CONFIG
-
 loglevel notice
 logfile #{facts[:osfamily] == 'Debian' ? '/var/log/redis/redis-sentinel.log' : '/var/log/redis/sentinel.log'}
 CONFIG
         end
 
         it { is_expected.to create_class('redis::sentinel') }
-        it { is_expected.to contain_concat__fragment('sentinel_conf_header').with_content(expected_content_header) }
-        it { is_expected.to contain_concat__fragment('sentinel_conf_monitor_mymaster').with_content(expected_content_monitor) }
-        it { is_expected.to contain_concat__fragment('sentinel_conf_footer').with_content(expected_content_footer) }
+
+        it {
+          is_expected.to contain_file(config_file_orig).
+            with_ensure('file').
+            with_mode('0644').
+            with_owner('redis').
+            with_content(expected_content)
+        }
 
         it {
           is_expected.to contain_service('redis-sentinel').
@@ -88,27 +82,24 @@ CONFIG
                 'down_after'             => 6000,
                 'failover_timeout'       => 28_000,
                 'notification_script'    => '/path/to/bar.sh',
-                'client_reconfig_script' => '/path/to/foo.sh'
+                'client_reconfig_script' => '/path/to/foo.sh',
+                'auth_pass'              => 'password',
               }
-            },
             sentinel_bind: '192.0.2.10',
+            protected_mode: false,
             working_dir: '/tmp/redis',
-            log_file: '/tmp/barn-sentinel.log'
+            log_file: '/tmp/barn-sentinel.log',
           }
         end
 
-        let(:expected_content_header) do
+        let(:expected_content) do
           <<CONFIG
 bind 192.0.2.10
 port 26379
 dir /tmp/redis
 daemonize #{facts[:osfamily] == 'RedHat' ? 'no' : 'yes'}
 pidfile #{pidfile}
-CONFIG
-        end
-
-        let(:expected_content_monitor) do
-          <<CONFIG
+protected-mode no
 
 sentinel monitor mymaster 127.0.0.1 6379 2
 sentinel down-after-milliseconds mymaster 6000
@@ -117,11 +108,6 @@ sentinel failover-timeout mymaster 28000
 sentinel auth-pass mymaster password
 sentinel notification-script mymaster /path/to/bar.sh
 sentinel client-reconfig-script mymaster /path/to/foo.sh
-CONFIG
-        end
-
-        let(:expected_content_footer) do
-          <<CONFIG
 
 loglevel notice
 logfile /tmp/barn-sentinel.log
@@ -130,9 +116,46 @@ CONFIG
 
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to create_class('redis::sentinel') }
-        it { is_expected.to contain_concat__fragment('sentinel_conf_header').with_content(expected_content_header) }
-        it { is_expected.to contain_concat__fragment('sentinel_conf_monitor_mymaster').with_content(expected_content_monitor) }
-        it { is_expected.to contain_concat__fragment('sentinel_conf_footer').with_content(expected_content_footer) }
+        it { is_expected.to contain_file(config_file_orig).with_content(expected_content) }
+      end
+
+      describe 'with array sentinel bind' do
+        let(:params) do
+          {
+            auth_pass: 'password',
+            sentinel_bind: ['192.0.2.10', '192.168.1.1'],
+            master_name: 'cow',
+            down_after: 6000,
+            working_dir: '/tmp/redis',
+            log_file: '/tmp/barn-sentinel.log',
+            failover_timeout: 28_000,
+            notification_script: '/path/to/bar.sh',
+            client_reconfig_script: '/path/to/foo.sh'
+          }
+        end
+
+        let(:expected_content) do
+          <<CONFIG
+bind 192.0.2.10 192.168.1.1
+port 26379
+dir /tmp/redis
+daemonize #{facts[:osfamily] == 'RedHat' ? 'no' : 'yes'}
+pidfile #{pidfile}
+sentinel monitor cow 127.0.0.1 6379 2
+sentinel down-after-milliseconds cow 6000
+sentinel parallel-syncs cow 1
+sentinel failover-timeout cow 28000
+sentinel auth-pass cow password
+sentinel notification-script cow /path/to/bar.sh
+sentinel client-reconfig-script cow /path/to/foo.sh
+loglevel notice
+logfile /tmp/barn-sentinel.log
+CONFIG
+        end
+
+        it { is_expected.to compile.with_all_deps }
+        it { is_expected.to create_class('redis::sentinel') }
+        it { is_expected.to contain_file(config_file_orig).with_content(expected_content) }
       end
     end
   end

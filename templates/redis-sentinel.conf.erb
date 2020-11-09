@@ -1,10 +1,11 @@
-<% if @sentinel_bind -%>
-bind <%= @sentinel_bind %>
+<% unless @sentinel_bind_arr.empty? -%>
+bind <%= @sentinel_bind_arr.join(' ') %>
 <% end -%>
 port <%= @sentinel_port %>
 dir <%= @working_dir %>
 daemonize <%= @daemonize ? 'yes' : 'no' %>
 pidfile <%= @pid_file %>
+protected-mode <%= @protected_mode ? 'yes' : 'no' %>
 
 <% @_monitor.each do |values| -%>
 sentinel monitor <%= values['monitor_name'] %> <%= values['redis_host'] %> <%= values['redis_port'] %> <%= values['quorum'] %>
