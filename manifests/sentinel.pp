@@ -145,7 +145,7 @@ class redis::sentinel (
     owner   => $service_user,
     group   => $service_group,
     mode    => $config_file_mode,
-    content => template('redis/redis-sentinel.conf.erb'),
+    content => template($conf_template),
   }
 
   exec { "cp -p ${config_file_orig} ${config_file}":
