@@ -137,7 +137,7 @@ class redis::sentinel (
   $sentinel_bind_arr = delete_undef_values([$sentinel_bind].flatten)
 
   $_monitor = $sentinel_monitor.map |$monitor,$values| {
-    $redis_values = $monitor_defaults + {'monitor_name' => $monitor} + $values
+    $redis_values = $monitor_defaults + { 'monitor_name' => $monitor } + $values
   }
 
   file { $config_file_orig:
