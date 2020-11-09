@@ -142,7 +142,7 @@ class redis::sentinel (
   }
 
   file { $config_file_orig:
-    ensure  => present,
+    ensure  => file,
     owner   => $service_user,
     group   => $service_group,
     mode    => $config_file_mode,
