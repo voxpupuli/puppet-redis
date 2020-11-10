@@ -29,9 +29,33 @@ describe 'redis::sentinel' do
         end
       end
 
+      let(:protected_mode) do
+        if facts[:operatingsystem] == 'Ubuntu'
+          facts[:operatingsystemmajrelease] != '16.04' ? "protected-mode yes\n" : ''
+        end
+      end
+
       describe 'without parameters' do
-        let(:expected_content) do
-          <<CONFIG
+        if facts[:operatingsystem] == 'Ubuntu' && facts[:operatingsystemmajrelease] == '16.04'
+          let(:expected_content) do
+            <<CONFIG
+port 26379
+dir #{facts[:osfamily] == 'Debian' ? '/var/lib/redis' : '/tmp'}
+daemonize #{facts[:osfamily] == 'RedHat' ? 'no' : 'yes'}
+pidfile #{pidfile}
+
+sentinel monitor mymaster 127.0.0.1 6379 2
+sentinel down-after-milliseconds mymaster 30000
+sentinel parallel-syncs mymaster 1
+sentinel failover-timeout mymaster 180000
+
+loglevel notice
+logfile #{facts[:osfamily] == 'Debian' ? '/var/log/redis/redis-sentinel.log' : '/var/log/redis/sentinel.log'}
+CONFIG
+          end
+        else
+          let(:expected_content) do
+            <<CONFIG
 port 26379
 dir #{facts[:osfamily] == 'Debian' ? '/var/lib/redis' : '/tmp'}
 daemonize #{facts[:osfamily] == 'RedHat' ? 'no' : 'yes'}
@@ -46,6 +70,7 @@ sentinel failover-timeout mymaster 180000
 loglevel notice
 logfile #{facts[:osfamily] == 'Debian' ? '/var/log/redis/redis-sentinel.log' : '/var/log/redis/sentinel.log'}
 CONFIG
+          end
         end
 
         it { is_expected.to create_class('redis::sentinel') }
@@ -93,8 +118,9 @@ CONFIG
           }
         end
 
-        let(:expected_content) do
-          <<CONFIG
+        if facts[:operatingsystem] == 'Ubuntu' && facts[:operatingsystemmajrelease] == '16.04'
+          let(:expected_content) do
+            <<CONFIG
 bind 192.0.2.10
 port 26379
 dir /tmp/redis
@@ -112,6 +138,29 @@ sentinel client-reconfig-script mymaster /path/to/foo.sh
 loglevel notice
 logfile /tmp/barn-sentinel.log
 CONFIG
+          end
+        else
+          let(:expected_content) do
+            <<CONFIG
+bind 192.0.2.10
+port 26379
+dir /tmp/redis
+daemonize #{facts[:osfamily] == 'RedHat' ? 'no' : 'yes'}
+pidfile #{pidfile}
+protected-mode yes
+
+sentinel monitor mymaster 127.0.0.1 6379 2
+sentinel down-after-milliseconds mymaster 6000
+sentinel parallel-syncs mymaster 1
+sentinel failover-timeout mymaster 28000
+sentinel auth-pass mymaster password
+sentinel notification-script mymaster /path/to/bar.sh
+sentinel client-reconfig-script mymaster /path/to/foo.sh
+
+loglevel notice
+logfile /tmp/barn-sentinel.log
+CONFIG
+          end
         end
 
         it { is_expected.to compile.with_all_deps }
@@ -141,8 +190,9 @@ CONFIG
           }
         end
 
-        let(:expected_content) do
-          <<CONFIG
+        if facts[:operatingsystem] == 'Ubuntu' && facts[:operatingsystemmajrelease] == '16.04'
+          let(:expected_content) do
+            <<CONFIG
 bind 192.0.2.10 192.168.1.1
 port 26379
 dir /tmp/redis
@@ -160,6 +210,29 @@ sentinel client-reconfig-script cow /path/to/foo.sh
 loglevel notice
 logfile /tmp/barn-sentinel.log
 CONFIG
+          end
+        else
+          let(:expected_content) do
+            <<CONFIG
+bind 192.0.2.10 192.168.1.1
+port 26379
+dir /tmp/redis
+daemonize #{facts[:osfamily] == 'RedHat' ? 'no' : 'yes'}
+pidfile #{pidfile}
+protected-mode yes
+
+sentinel monitor cow 127.0.0.1 6379 2
+sentinel down-after-milliseconds cow 6000
+sentinel parallel-syncs cow 1
+sentinel failover-timeout cow 28000
+sentinel auth-pass cow password
+sentinel notification-script cow /path/to/bar.sh
+sentinel client-reconfig-script cow /path/to/foo.sh
+
+loglevel notice
+logfile /tmp/barn-sentinel.log
+CONFIG
+          end
         end
 
         it { is_expected.to compile.with_all_deps }
