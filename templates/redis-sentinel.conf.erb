@@ -24,6 +24,5 @@ sentinel notification-script <%= values['monitor_name'] %> <%= values['notificat
 sentinel client-reconfig-script <%= values['monitor_name'] %> <%= values['client_reconfig_script'] %>
 <% end %>
 <% end -%>
-
 loglevel <%= @log_level %>
 logfile <%= @log_file %>

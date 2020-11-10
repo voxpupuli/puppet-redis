@@ -102,7 +102,6 @@ port 26379
 dir /tmp/redis
 daemonize #{facts[:osfamily] == 'RedHat' ? 'no' : 'yes'}
 pidfile #{pidfile}
-protected-mode no
 
 sentinel monitor mymaster 127.0.0.1 6379 2
 sentinel down-after-milliseconds mymaster 6000
@@ -153,7 +152,6 @@ port 26379
 dir /tmp/redis
 daemonize #{facts[:osfamily] == 'RedHat' ? 'no' : 'yes'}
 pidfile #{pidfile}
-protected-mode yes
 
 sentinel monitor cow 127.0.0.1 6379 2
 sentinel down-after-milliseconds cow 6000
