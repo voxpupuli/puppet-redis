@@ -134,6 +134,11 @@ class redis::sentinel (
     }
   }
 
+  $minimum_version = $redis::params::minimum_version
+  $redis_version_real = pick(getvar('redis_server_version'), $minimum_version)
+
+  $supports_protected_mode = versioncmp($redis_version_real, '3.2.0') >= 0
+
   $sentinel_bind_arr = delete_undef_values([$sentinel_bind].flatten)
 
   $_monitor = $sentinel_monitor.map |$monitor,$values| {

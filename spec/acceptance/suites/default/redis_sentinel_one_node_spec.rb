@@ -21,7 +21,6 @@ describe 'redis::sentinel' do
           failover_timeout => 10000,
         },
       },
-      protected_mode   => false,
     }
     EOS
 
