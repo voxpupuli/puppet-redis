@@ -138,6 +138,7 @@ CONFIG
                 'auth_pass'              => 'password'
               },
             sentinel_bind: ['192.0.2.10', '192.168.1.1'],
+            protected_mode: false,
             working_dir: '/tmp/redis',
             log_file: '/tmp/barn-sentinel.log'
           }
