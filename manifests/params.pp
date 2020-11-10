@@ -212,10 +212,7 @@ class redis::params inherits redis::globals {
     quorum                 => 2,
     down_after             => 30000,
     parallel_sync          => 1,
-    failover_timeout       => 180000,
-    # auth_pass              => undef,
-    # notification_script    => undef,
-    # client_reconfig_script => undef,
+    failover_timeout       => 180000
   }
   $sentinel_default_monitor = {
     'mymaster' => $sentinel_monitor_defaults,
