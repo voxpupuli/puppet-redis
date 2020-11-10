@@ -85,12 +85,12 @@ CONFIG
                 'failover_timeout'       => 28_000,
                 'notification_script'    => '/path/to/bar.sh',
                 'client_reconfig_script' => '/path/to/foo.sh',
-                'auth_pass'              => 'password',
+                'auth_pass'              => 'password'
               }
             sentinel_bind: '192.0.2.10',
             protected_mode: false,
             working_dir: '/tmp/redis',
-            log_file: '/tmp/barn-sentinel.log',
+            log_file: '/tmp/barn-sentinel.log'
           }
         end
 
@@ -135,11 +135,11 @@ CONFIG
                 'failover_timeout'       => 28_000,
                 'notification_script'    => '/path/to/bar.sh',
                 'client_reconfig_script' => '/path/to/foo.sh',
-                'auth_pass'              => 'password',
+                'auth_pass'              => 'password'
               },
             sentinel_bind: ['192.0.2.10', '192.168.1.1'],
             working_dir: '/tmp/redis',
-            log_file: '/tmp/barn-sentinel.log',
+            log_file: '/tmp/barn-sentinel.log'
           }
         end
 
