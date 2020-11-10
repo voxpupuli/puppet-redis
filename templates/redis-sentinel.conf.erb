@@ -5,7 +5,7 @@ port <%= @sentinel_port %>
 dir <%= @working_dir %>
 daemonize <%= @daemonize ? 'yes' : 'no' %>
 pidfile <%= @pid_file %>
-<% if @protected_mode -%>
+<% if @supports_protected_mode -%>
 protected-mode <%= @protected_mode ? 'yes' : 'no' %>
 <% end -%>
 

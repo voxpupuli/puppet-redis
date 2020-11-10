@@ -110,7 +110,8 @@ class redis::sentinel (
   Redis::SentinelMonitor $sentinel_monitor    = $redis::params::sentinel_default_monitor,
   $monitor_defaults                           = $redis::params::sentinel_monitor_defaults,
   String[1] $package_name                     = $redis::params::sentinel_package_name,
-  String[1] $package_ensure                   = 'present',
+  String[1] $package_ensure                   = $redis::package_ensure,
+  String[1] $minimum_version                  = $redis::minimum_version,
   Stdlib::Absolutepath $pid_file              = $redis::params::sentinel_pid_file,
   Stdlib::Port $sentinel_port                 = 26379,
   String[1] $service_group                    = 'redis',
@@ -133,6 +134,19 @@ class redis::sentinel (
       Package[$package_name] -> File[$init_script]
     }
   }
+
+  if $package_ensure =~ /^([0-9]+:)?[0-9]+\.[0-9]/ {
+    if ':' in $package_ensure {
+      $_redis_version_real = split($package_ensure, ':')
+      $redis_version_real = $_redis_version_real[1]
+    } else {
+      $redis_version_real = $package_ensure
+    }
+  } else {
+    $redis_version_real = pick(getvar('redis_server_version'), $minimum_version)
+  }
+
+  $supports_protected_mode = !$redis_version_real or versioncmp($redis_version_real, '3.2.0') >= 0
 
   $sentinel_bind_arr = delete_undef_values([$sentinel_bind].flatten)
 
