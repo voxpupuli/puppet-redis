@@ -84,8 +84,7 @@ CONFIG
                 'down_after'             => 6000,
                 'failover_timeout'       => 28_000,
                 'notification_script'    => '/path/to/bar.sh',
-                'client_reconfig_script' => '/path/to/foo.sh',
-                'auth_pass'              => 'password'
+                'client_reconfig_script' => '/path/to/foo.sh'
               }
             },
             sentinel_bind: '192.0.2.10',
@@ -134,8 +133,7 @@ CONFIG
                 'down_after'             => 6000,
                 'failover_timeout'       => 28_000,
                 'notification_script'    => '/path/to/bar.sh',
-                'client_reconfig_script' => '/path/to/foo.sh',
-                'auth_pass'              => 'password'
+                'client_reconfig_script' => '/path/to/foo.sh'
               }
             },
             sentinel_bind: ['192.0.2.10', '192.168.1.1'],
