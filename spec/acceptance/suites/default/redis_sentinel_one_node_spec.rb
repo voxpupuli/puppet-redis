@@ -12,15 +12,16 @@ describe 'redis::sentinel' do
     pp = <<-EOS
     class { 'redis::sentinel':
       sentinel_monitor => {
-        'mymaster' => {
-          redis_host             => '127.0.0.1',
-          redis_port             => 6379,
-          quorum                 => 2,
-          parallel_sync          => 1,
-          down_after             => 30000,
-          failover_timeout       => 10000,
+        'mymaster'     => {
+          redis_host       => '127.0.0.1',
+          redis_port       => 6379,
+          quorum           => 2,
+          parallel_sync    => 1,
+          down_after       => 30000,
+          failover_timeout => 10000,
         },
       },
+      protected_mode   => false,
     }
     EOS
 
