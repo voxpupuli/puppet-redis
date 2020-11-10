@@ -111,7 +111,6 @@ class redis::sentinel (
   $monitor_defaults                           = $redis::params::sentinel_monitor_defaults,
   String[1] $package_name                     = $redis::params::sentinel_package_name,
   String[1] $package_ensure                   = 'present',
-  String[1] $minimum_version                  = $redis::params::minimum_version,
   Stdlib::Absolutepath $pid_file              = $redis::params::sentinel_pid_file,
   Stdlib::Port $sentinel_port                 = 26379,
   String[1] $service_group                    = 'redis',
@@ -135,6 +134,7 @@ class redis::sentinel (
     }
   }
 
+  $minimum_version = $redis::params::minimum_version
   $redis_version_real = pick(getvar('redis_server_version'), $minimum_version)
 
   $supports_protected_mode = versioncmp($redis_version_real, '3.2.0') >= 0
