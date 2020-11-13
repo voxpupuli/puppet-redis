@@ -53,17 +53,17 @@ class redis::params inherits redis::globals {
     }
 
     'RedHat': {
-      $ppa_repo             = undef
-      $daemonize            = false
-      $config_owner         = 'redis'
-      $config_group         = 'root'
-      $config_dir_mode      = '0755'
-      $log_dir_mode         = '0750'
+      $ppa_repo                = undef
+      $daemonize               = false
+      $config_owner            = 'redis'
+      $config_group            = 'root'
+      $config_dir_mode         = '0755'
+      $log_dir_mode            = '0750'
 
-      $sentinel_daemonize   = false
-      $sentinel_init_script = undef
-      $sentinel_working_dir = '/tmp'
-      $sentinel_protected_mode   = true
+      $sentinel_daemonize      = false
+      $sentinel_init_script    = undef
+      $sentinel_working_dir    = '/tmp'
+      $sentinel_protected_mode = true
 
       $scl = $redis::globals::scl
       if $scl {
@@ -204,5 +204,20 @@ class redis::params inherits redis::globals {
     default: {
       fail "Operating system ${facts['os']['name']} is not supported yet."
     }
+  }
+
+  $sentinel_monitor_defaults = {
+    redis_host             => '127.0.0.1',
+    redis_port             => 6379,
+    quorum                 => 2,
+    down_after             => 30000,
+    parallel_sync          => 1,
+    failover_timeout       => 180000,
+    auth_pass              => undef,
+    notification_script    => undef,
+    client_reconfig_script => undef,
+  }
+  $sentinel_default_monitor = {
+    'mymaster' => $sentinel_monitor_defaults,
   }
 }

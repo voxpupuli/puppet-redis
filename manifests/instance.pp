@@ -226,7 +226,6 @@ define redis::instance (
   Stdlib::Absolutepath $log_dir                                  = $redis::log_dir,
   Stdlib::Filemode $log_dir_mode                                 = $redis::log_dir_mode,
   Redis::LogLevel $log_level                                     = $redis::log_level,
-  String[1] $minimum_version                                     = $redis::minimum_version,
   Optional[String[1]] $masterauth                                = $redis::masterauth,
   Integer[1] $maxclients                                         = $redis::maxclients,
   $maxmemory                                                     = $redis::maxmemory,
@@ -237,7 +236,6 @@ define redis::instance (
   Boolean $no_appendfsync_on_rewrite                             = $redis::no_appendfsync_on_rewrite,
   Optional[String[1]] $notify_keyspace_events                    = $redis::notify_keyspace_events,
   Boolean $managed_by_cluster_manager                            = $redis::managed_by_cluster_manager,
-  String[1] $package_ensure                                      = $redis::package_ensure,
   Stdlib::Port $port                                             = $redis::port,
   Boolean $protected_mode                                        = $redis::protected_mode,
   Boolean $rdbcompression                                        = $redis::rdbcompression,
@@ -388,18 +386,7 @@ define redis::instance (
 
   $bind_arr = [$bind].flatten
 
-  if $package_ensure =~ /^([0-9]+:)?[0-9]+\.[0-9]/ {
-    if ':' in $package_ensure {
-      $_redis_version_real = split($package_ensure, ':')
-      $redis_version_real = $_redis_version_real[1]
-    } else {
-      $redis_version_real = $package_ensure
-    }
-  } else {
-    $redis_version_real = pick(getvar('redis_server_version'), $minimum_version)
-  }
-
-  $supports_protected_mode = !$redis_version_real or versioncmp($redis_version_real, '3.2.0') >= 0
+  $supports_protected_mode = $redis::supports_protected_mode
 
   File[$redis_file_name_orig] { content => template($conf_template) }
 }
