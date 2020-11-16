@@ -154,6 +154,7 @@ class redis::sentinel (
   }
 
   $sentinel_bind_arr = delete_undef_values([$sentinel_bind].flatten)
+  $supports_protected_mode = $redis::supports_protected_mode
 
   file { $config_file_orig:
     ensure  => file,
