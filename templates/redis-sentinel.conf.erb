@@ -9,19 +9,20 @@ pidfile <%= @pid_file %>
 protected-mode <%= @protected_mode ? 'yes' : 'no' %>
 <% end -%>
 
-sentinel monitor <%= @master_name %> <%= @redis_host %> <%= @redis_port %> <%= @quorum %>
-sentinel down-after-milliseconds <%= @master_name %> <%= @down_after %>
-sentinel parallel-syncs <%= @master_name %> <%= @parallel_sync %>
-sentinel failover-timeout <%= @master_name %> <%= @failover_timeout %>
-<% if @auth_pass -%>
-sentinel auth-pass <%= @master_name %> <%= @auth_pass %>
+<% @_monitor.each do |values| -%>
+sentinel monitor <%= values['monitor_name'] %> <%= values['redis_host'] %> <%= values['redis_port'] %> <%= values['quorum'] %>
+sentinel down-after-milliseconds <%= values['monitor_name'] %> <%= values['down_after'] %>
+sentinel parallel-syncs <%= values['monitor_name'] %> <%= values['parallel_sync'] %>
+sentinel failover-timeout <%= values['monitor_name'] %> <%= values['failover_timeout'] %>
+<% if values['auth_pass'] -%>
+sentinel auth-pass <%= values['monitor_name'] %> <%= values['auth_pass'] %>
 <% end -%>
-<% if @notification_script -%>
-sentinel notification-script <%= @master_name %> <%= @notification_script %>
+<% if values['notification_script'] -%>
+sentinel notification-script <%= values['monitor_name'] %> <%= values['notification_script'] %>
 <% end -%>
-<% if @client_reconfig_script -%>
-sentinel client-reconfig-script <%= @master_name %> <%= @client_reconfig_script %>
+<% if values['client_reconfig_script'] -%>
+sentinel client-reconfig-script <%= values['monitor_name'] %> <%= values['client_reconfig_script'] %>
+<% end %>
 <% end -%>
-
 loglevel <%= @log_level %>
 logfile <%= @log_file %>
