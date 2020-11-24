@@ -137,6 +137,8 @@ class { '::redis::sentinel':
 
 When managing the repo, it either needs [puppetlabs/apt](https://forge.puppet.com/puppetlabs/apt) or [puppet/epel](https://forge.puppet.com/puppet/epel).
 
+For administration of sysctl it depends on [herculesteam/augeasproviders_sysctl](https://forge.puppet.com/herculesteam/augeasproviders_sysctl).
+
 ## `redis::get()` function
 
 This function is used to get data from redis.
