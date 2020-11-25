@@ -1,15 +1,4 @@
 ---
-.travis.yml:
-  secure: "lmmQ5+ueE39cDevK+TjJWgD7b9X6FQDoyL/OTRXzOuCu/96yXQrm/KBq4E2IsFTx91XiqOH6ZnKcgiGwaY54E10ddTvlZhEa8orMmwfkrLAbyh7POB1q3AtQze7RPLvOuHZc6XIRBDiiFKMrzvwdP5OgU9iPEFdSRZll64nw240="
-  docker_sets:
-    - set: ubuntu1604-64m
-    - set: ubuntu1804-64m
-    - set: ubuntu2004-64m
-    - set: centos6-64m
-    - set: centos7-64m
-    - set: centos8-64m
-    - set: debian9-64m
-    - set: debian10-64m
 Gemfile:
   optional:
     ':test':
@@ -17,17 +6,3 @@ Gemfile:
       - gem: 'mock_redis'
 spec/spec_helper.rb:
   unmanaged: true
-spec/acceptance/nodesets/ec2/amazonlinux-2016091.yml:
-  delete: true
-spec/acceptance/nodesets/ec2/image_templates.yaml:
-  delete: true
-spec/acceptance/nodesets/ec2/rhel-73-x64.yml:
-  delete: true
-spec/acceptance/nodesets/ec2/sles-12sp2-x64.yml:
-  delete: true
-spec/acceptance/nodesets/ec2/ubuntu-1604-x64.yml:
-  delete: true
-spec/acceptance/nodesets/ec2/windows-2016-base-x64.yml:
-  delete: true
-spec/acceptance/nodesets/archlinux-2-x64.yml:
-  delete: true
