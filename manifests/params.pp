@@ -10,6 +10,7 @@ class redis::params inherits redis::globals {
       $config_file               = '/etc/redis/redis.conf'
       $config_file_orig          = '/etc/redis/redis.conf.puppet'
       $config_owner              = 'redis'
+      $log_dir                   = '/var/log/redis'
       $log_dir_mode              = '0755'
       $package_name              = 'redis-server'
       $pid_file                  = '/var/run/redis/redis-server.pid'
@@ -70,6 +71,7 @@ class redis::params inherits redis::globals {
         $config_dir                = "/etc/opt/rh/${scl}/redis"
         $config_file               = "/etc/opt/rh/${scl}/redis.conf"
         $config_file_orig          = "/etc/opt/rh/${scl}/redis.conf.puppet"
+        $log_dir                   = "/var/opt/rh/${scl}/log/redis"
         $package_name              = "${scl}-redis"
         $pid_file                  = "/var/opt/rh/${scl}/run/redis_6379.pid"
         $service_name              = "${scl}-redis"
@@ -90,6 +92,7 @@ class redis::params inherits redis::globals {
         $config_dir                = '/etc/redis'
         $config_file               = '/etc/redis.conf'
         $config_file_orig          = '/etc/redis.conf.puppet'
+        $log_dir                   = '/var/log/redis'
         $package_name              = 'redis'
         $pid_file                  = $facts['os']['release']['major'] ? {
           '6'     => '/var/run/redis/redis.pid',
@@ -119,6 +122,7 @@ class redis::params inherits redis::globals {
       $config_file_orig          = '/usr/local/etc/redis.conf.puppet'
       $config_group              = 'wheel'
       $config_owner              = 'redis'
+      $log_dir                   = '/var/log/redis'
       $log_dir_mode              = '0755'
       $package_name              = 'redis'
       $pid_file                  = '/var/run/redis/redis.pid'
@@ -149,6 +153,7 @@ class redis::params inherits redis::globals {
       $config_file               = '/etc/redis/redis-server.conf'
       $config_group              = 'redis'
       $config_owner              = 'redis'
+      $log_dir                   = '/var/log/redis'
       $log_dir_mode              = '0750'
       $package_name              = 'redis'
       $pid_file                  = '/var/run/redis/redis-server.pid'
@@ -180,6 +185,7 @@ class redis::params inherits redis::globals {
       $config_file_orig          = '/etc/redis/redis.conf.puppet'
       $config_group              = 'root'
       $config_owner              = 'root'
+      $log_dir                   = '/var/log/redis'
       $log_dir_mode              = '0755'
       $package_name              = 'redis'
       $pid_file                  = '/var/run/redis.pid'
