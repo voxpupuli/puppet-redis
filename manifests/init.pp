@@ -155,8 +155,6 @@
 #   Does the init script support status?
 # @param service_name
 #   Specify the service name for Init or Systemd.
-# @param service_provider
-#   Specify the service provider to use
 # @param service_user
 #   Specify which user to run as.
 # @param set_max_intset_entries
@@ -303,7 +301,6 @@ class redis (
   Boolean $service_hasstatus                                     = true,
   Boolean $service_manage                                        = true,
   String[1] $service_name                                        = $redis::params::service_name,
-  Optional[String] $service_provider                             = undef,
   String[1] $service_user                                        = 'redis',
   Integer[0] $set_max_intset_entries                             = 512,
   Integer[0] $slave_priority                                     = 100,

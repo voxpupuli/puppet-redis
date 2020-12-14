@@ -316,54 +316,31 @@ define redis::instance (
   }
 
   if $manage_service_file {
-    $service_provider_lookup = pick(getvar('service_provider'), false)
+    file { "/etc/systemd/system/${service_name}.service":
+      ensure  => file,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      content => template('redis/service_templates/redis.service.erb'),
+    }
 
-    if $service_provider_lookup == 'systemd' {
-      file { "/etc/systemd/system/${service_name}.service":
-        ensure  => file,
-        owner   => 'root',
-        group   => 'root',
-        mode    => '0644',
-        content => template('redis/service_templates/redis.service.erb'),
-      }
+    # Only necessary for Puppet < 6.1.0,
+    # See https://github.com/puppetlabs/puppet/commit/f8d5c60ddb130c6429ff12736bfdb4ae669a9fd4
+    if versioncmp($facts['puppetversion'],'6.1.0') < 0 {
+      include systemd::systemctl::daemon_reload
+      File["/etc/systemd/system/${service_name}.service"] ~> Class['systemd::systemctl::daemon_reload']
+    }
 
-      # Only necessary for Puppet < 6.1.0,
-      # See https://github.com/puppetlabs/puppet/commit/f8d5c60ddb130c6429ff12736bfdb4ae669a9fd4
-      if versioncmp($facts['puppetversion'],'6.1.0') < 0 {
-        include systemd::systemctl::daemon_reload
-        File["/etc/systemd/system/${service_name}.service"] ~> Class['systemd::systemctl::daemon_reload']
-      }
-
-      if $title != 'default' {
-        service { $service_name:
-          ensure     => $service_ensure,
-          enable     => $service_enable,
-          hasrestart => $service_hasrestart,
-          hasstatus  => $service_hasstatus,
-          subscribe  => [
-            File["/etc/systemd/system/${service_name}.service"],
-            Exec["cp -p ${redis_file_name_orig} ${redis_file_name}"],
-          ],
-        }
-      }
-    } else {
-      file { "/etc/init.d/${service_name}":
-        ensure  => file,
-        mode    => '0755',
-        content => template("redis/service_templates/redis.${facts['os']['family']}.erb"),
-      }
-
-      if $title != 'default' {
-        service { $service_name:
-          ensure     => $service_ensure,
-          enable     => $service_enable,
-          hasrestart => $service_hasrestart,
-          hasstatus  => $service_hasstatus,
-          subscribe  => [
-            File["/etc/init.d/${service_name}"],
-            Exec["cp -p ${redis_file_name_orig} ${redis_file_name}"],
-          ],
-        }
+    if $title != 'default' {
+      service { $service_name:
+        ensure     => $service_ensure,
+        enable     => $service_enable,
+        hasrestart => $service_hasrestart,
+        hasstatus  => $service_hasstatus,
+        subscribe  => [
+          File["/etc/systemd/system/${service_name}.service"],
+          Exec["cp -p ${redis_file_name_orig} ${redis_file_name}"],
+        ],
       }
     }
   }

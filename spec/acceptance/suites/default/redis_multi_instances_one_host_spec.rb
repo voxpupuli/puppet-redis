@@ -52,7 +52,7 @@ describe 'redis::instance example' do
   end
 
   instances.each do |instance|
-    describe file("/etc/systemd/system/redis-server-#{instance}.service"), if: (fact('service_provider') == 'systemd') do
+    describe file("/etc/systemd/system/redis-server-#{instance}.service") do
       its(:content) { is_expected.to match %r{redis-server-#{instance}.conf} }
     end
 

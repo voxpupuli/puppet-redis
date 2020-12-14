@@ -7,7 +7,6 @@ class redis::service {
       enable     => $redis::service_enable,
       hasrestart => $redis::service_hasrestart,
       hasstatus  => $redis::service_hasstatus,
-      provider   => $redis::service_provider,
     }
   }
 }

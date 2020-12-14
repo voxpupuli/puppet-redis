@@ -40,31 +40,6 @@ if ENV['DEBUG']
   Puppet::Util::Log.newdestination(:console)
 end
 
-add_custom_fact :service_provider, (lambda do |_os, facts|
-  case facts[:osfamily].downcase
-  when 'archlinux'
-    'systemd'
-  when 'darwin'
-    'launchd'
-  when 'debian'
-    'systemd'
-  when 'freebsd'
-    'freebsd'
-  when 'gentoo'
-    'openrc'
-  when 'openbsd'
-    'openbsd'
-  when 'redhat'
-    facts[:operatingsystemrelease].to_i >= 7 ? 'systemd' : 'redhat'
-  when 'suse'
-    facts[:operatingsystemmajrelease].to_i >= 12 ? 'systemd' : 'redhat'
-  when 'windows'
-    'windows'
-  else
-    'init'
-  end
-end)
-
 RSpec.configure do |c|
   # getting the correct facter version is tricky. We use facterdb as a source to mock facts
   # see https://github.com/camptocamp/facterdb
