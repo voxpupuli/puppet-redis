@@ -91,10 +91,7 @@ class redis::params inherits redis::globals {
         $config_file               = '/etc/redis.conf'
         $config_file_orig          = '/etc/redis.conf.puppet'
         $package_name              = 'redis'
-        $pid_file                  = $facts['os']['release']['major'] ? {
-          '6'     => '/var/run/redis/redis.pid',
-          default => '/var/run/redis_6379.pid',
-        }
+        $pid_file                  = '/var/run/redis_6379.pid'
         $service_name              = 'redis'
         $workdir                   = '/var/lib/redis'
 
@@ -105,8 +102,8 @@ class redis::params inherits redis::globals {
         $sentinel_pid_file         = '/var/run/redis/redis-sentinel.pid'
         $sentinel_log_file         = '/var/log/redis/sentinel.log'
 
-        # EPEL 6 and newer have 3.2 so we can assume all EL is 3.2+
-        $minimum_version           = '3.2.10'
+        # EPEL 7 and newer have 3.2 so we can assume all EL is 3.2+
+        $minimum_version           = '3.2.12'
       }
     }
 
