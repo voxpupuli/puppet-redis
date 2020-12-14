@@ -5,4 +5,4 @@ Gemfile:
       - gem: 'redis'
       - gem: 'mock_redis'
 spec/spec_helper.rb:
-  unmanaged: true
+  mock_with: ":mocha"
