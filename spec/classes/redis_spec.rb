@@ -45,8 +45,6 @@ describe 'redis' do
           is_expected.to contain_service(service_name).with(
             'ensure'     => 'running',
             'enable'     => 'true',
-            'hasrestart' => 'true',
-            'hasstatus'  => 'true'
           )
         end
 
@@ -927,18 +925,6 @@ describe 'redis' do
         let(:params) { { service_group: '_VALUE_' } }
 
         it { is_expected.to contain_file('/var/log/redis').with_group('_VALUE_') }
-      end
-
-      describe 'with parameter: service_hasrestart' do
-        let(:params) { { service_hasrestart: true } }
-
-        it { is_expected.to contain_service(package_name).with_hasrestart(true) }
-      end
-
-      describe 'with parameter: service_hasstatus' do
-        let(:params) { { service_hasstatus: true } }
-
-        it { is_expected.to contain_service(package_name).with_hasstatus(true) }
       end
 
       describe 'with parameter: service_name' do

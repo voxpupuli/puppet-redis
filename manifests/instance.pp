@@ -119,10 +119,6 @@
 #   Specify if the server should be running.
 # @param service_group
 #   Specify which group to run as.
-# @param service_hasrestart
-#   Does the init script support restart?
-# @param service_hasstatus
-#   Does the init script support status?
 # @param service_user
 #   Specify which user to run as.
 # @param set_max_intset_entries
@@ -276,8 +272,6 @@ define redis::instance (
   Stdlib::Ensure::Service $service_ensure                        = $redis::service_ensure,
   Boolean $service_enable                                        = $redis::service_enable,
   String[1] $service_group                                       = $redis::service_group,
-  Boolean $service_hasrestart                                    = $redis::service_hasrestart,
-  Boolean $service_hasstatus                                     = $redis::service_hasstatus,
   Boolean $manage_service_file                                   = true,
   Optional[Stdlib::Absolutepath] $log_file                       = undef,
   Stdlib::Absolutepath $pid_file                                 = "/var/run/redis/redis-server-${name}.pid",
@@ -333,11 +327,9 @@ define redis::instance (
 
     if $title != 'default' {
       service { $service_name:
-        ensure     => $service_ensure,
-        enable     => $service_enable,
-        hasrestart => $service_hasrestart,
-        hasstatus  => $service_hasstatus,
-        subscribe  => [
+        ensure    => $service_ensure,
+        enable    => $service_enable,
+        subscribe => [
           File["/etc/systemd/system/${service_name}.service"],
           Exec["cp -p ${redis_file_name_orig} ${redis_file_name}"],
         ],

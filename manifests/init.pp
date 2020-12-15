@@ -149,10 +149,6 @@
 #   Specify if the server should be running.
 # @param service_group
 #   Specify which group to run as.
-# @param service_hasrestart
-#   Does the init script support restart?
-# @param service_hasstatus
-#   Does the init script support status?
 # @param service_name
 #   Specify the service name for Init or Systemd.
 # @param service_user
@@ -297,8 +293,6 @@ class redis (
   Boolean $service_enable                                        = true,
   Stdlib::Ensure::Service $service_ensure                        = 'running',
   String[1] $service_group                                       = 'redis',
-  Boolean $service_hasrestart                                    = true,
-  Boolean $service_hasstatus                                     = true,
   Boolean $service_manage                                        = true,
   String[1] $service_name                                        = $redis::params::service_name,
   String[1] $service_user                                        = 'redis',

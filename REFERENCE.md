@@ -603,22 +603,6 @@ Specify which group to run as.
 
 Default value: `'redis'`
 
-##### `service_hasrestart`
-
-Data type: `Boolean`
-
-Does the init script support restart?
-
-Default value: ``true``
-
-##### `service_hasstatus`
-
-Data type: `Boolean`
-
-Does the init script support status?
-
-Default value: ``true``
-
 ##### `service_name`
 
 Data type: `String[1]`
@@ -1697,22 +1681,6 @@ Data type: `String[1]`
 Specify which group to run as.
 
 Default value: `$redis::service_group`
-
-##### `service_hasrestart`
-
-Data type: `Boolean`
-
-Does the init script support restart?
-
-Default value: `$redis::service_hasrestart`
-
-##### `service_hasstatus`
-
-Data type: `Boolean`
-
-Does the init script support status?
-
-Default value: `$redis::service_hasstatus`
 
 ##### `service_user`
 
