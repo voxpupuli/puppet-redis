@@ -295,11 +295,6 @@ define redis::instance (
     }
   }
 
-  $_real_log_file = $log_file ? {
-    undef   => "${log_dir}/redis-server-${name}.log",
-    default => $log_file,
-  }
-
   if $workdir != $redis::workdir {
     file { $workdir:
       ensure => directory,
@@ -337,14 +332,16 @@ define redis::instance (
     }
   }
 
-  File {
-    owner  => $config_owner,
-    group  => $config_group,
-    mode   => $config_file_mode,
-  }
+  $_real_log_file = pick($log_file, "${log_dir}/redis-server-${name}.log")
+  $bind_arr = [$bind].flatten
+  $supports_protected_mode = $redis::supports_protected_mode
 
   file { $redis_file_name_orig:
     ensure  => file,
+    owner   => $config_owner,
+    group   => $config_group,
+    mode    => $config_file_mode,
+    content => template($conf_template),
   }
 
   exec { "cp -p ${redis_file_name_orig} ${redis_file_name}":
@@ -352,10 +349,4 @@ define redis::instance (
     subscribe   => File[$redis_file_name_orig],
     refreshonly => true,
   }
-
-  $bind_arr = [$bind].flatten
-
-  $supports_protected_mode = $redis::supports_protected_mode
-
-  File[$redis_file_name_orig] { content => template($conf_template) }
 }
