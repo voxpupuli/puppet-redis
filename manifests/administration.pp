@@ -30,14 +30,43 @@ class redis::administration (
       value  => '1',
     }
   }
+  file { '/etc/systemd/system/disable_thp.service':
+    ensure  => file,
+    mode    => '0644',
+    owner   => 'root',
+    group   => 'root',
+    content => file('redis/service_files/disable_thp.service'),
+  }
 
-  if $disable_thp {
-    exec { 'Disable Hugepages':
-      command => 'echo never > /sys/kernel/mm/transparent_hugepage/enabled',
-      path    => ['/sbin', '/usr/sbin', '/bin', '/usr/bin'],
-      onlyif  => 'test -f /sys/kernel/mm/transparent_hugepage/enabled',
-      unless  => 'cat /sys/kernel/mm/transparent_hugepage/enabled | grep "\[never\]"',
-    }
+  # Only necessary for Puppet < 6.1.0,
+  # See https://github.com/puppetlabs/puppet/commit/f8d5c60ddb130c6429ff12736bfdb4ae669a9fd4
+  if versioncmp($facts['puppetversion'],'6.1.0') < 0 {
+    include systemd::systemctl::daemon_reload
+    File['/etc/systemd/system/disable_thp.service'] ~> Class['systemd::systemctl::daemon_reload']
+  }
+
+  $hugeadm_package = $facts['os']['family'] ? {
+    'RedHat' => 'libhugetlbfs-utils',
+    'Debian' => 'libhugetlbfs',
+    'Archlinux' => 'libhugetlbfs',
+    default  => 'hugepages',
+  }
+
+  package { $hugeadm_package:
+    ensure => 'present',
+  }
+
+  service { 'disable_thp':
+    ensure    => false,
+    enable    => $disable_thp,
+    subscribe => File['/etc/systemd/system/disable_thp.service'],
+  }
+
+  exec { 'systemd run_once disable_thp':
+    command     => '/usr/bin/systemctl start disable_thp.service',
+    refreshonly => true,
+    subscribe   => File['/etc/systemd/system/disable_thp.service'],
+    require     => Service['disable_thp'],
   }
 
   if $somaxconn > 0 {

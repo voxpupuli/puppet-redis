@@ -1,0 +1,9 @@
+[Unit]
+Description=Disables THP on boot
+
+[Service]
+Type=oneshot
+ExecStart=/bin/hugeadm --thp-never
+
+[Install]
+WantedBy=default.target
