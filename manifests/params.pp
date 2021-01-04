@@ -38,6 +38,8 @@ class redis::params inherits redis::globals {
             '16.04' => '/var/run/redis/redis-sentinel.pid',
             default => '/var/run/sentinel/redis-sentinel.pid',
           }
+
+          $hugeadm_package = 'hugepages'
         }
         default: {
           $config_group              = 'root'
@@ -47,6 +49,7 @@ class redis::params inherits redis::globals {
           } else {
             $sentinel_pid_file         = '/var/run/redis/redis-sentinel.pid'
           }
+          $hugeadm_package           = 'libhugetlbfs'
         }
       }
     }
@@ -62,6 +65,8 @@ class redis::params inherits redis::globals {
       $sentinel_daemonize   = false
       $sentinel_working_dir = '/tmp'
       $sentinel_protected_mode   = true
+
+      $hugeadm_package = 'libhugetlbfs-utils'
 
       $scl = $redis::globals::scl
       if $scl {
@@ -162,6 +167,8 @@ class redis::params inherits redis::globals {
 
       # suse package version
       $minimum_version           = '3.0.5'
+
+      $hugeadm_package           = 'libhugetlbfs-utils'
     }
 
     'Archlinux': {
@@ -192,6 +199,8 @@ class redis::params inherits redis::globals {
 
       # pkg version
       $minimum_version           = '3.2.4'
+
+      $hugeadm_package           = 'libhugetlbfs'
     }
     default: {
       fail "Operating system ${facts['os']['name']} is not supported yet."

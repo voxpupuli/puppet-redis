@@ -23,50 +23,34 @@ class redis::administration (
   Boolean $enable_overcommit_memory = true,
   Boolean $disable_thp              = true,
   Integer[0] $somaxconn             = 65535,
-) {
+  String[1] $hugeadm_package        = $redis::params::hugeadm_package,
+) inherits redis::params {
   if $enable_overcommit_memory {
     sysctl { 'vm.overcommit_memory':
       ensure => 'present',
       value  => '1',
     }
   }
-  file { '/etc/systemd/system/disable_thp.service':
-    ensure  => file,
-    mode    => '0644',
-    owner   => 'root',
-    group   => 'root',
-    content => file('redis/service_files/disable_thp.service'),
+
+  if $disable_thp {
+    package { $hugeadm_package:
+      ensure => 'present',
+    }
+
+    exec { 'systemd run_once disable_thp':
+      command     => '/usr/bin/systemctl start disable_thp.service',
+      refreshonly => true,
+      subscribe   => Systemd::Unit_file['disable_thp.service'],
+    }
   }
 
-  # Only necessary for Puppet < 6.1.0,
-  # See https://github.com/puppetlabs/puppet/commit/f8d5c60ddb130c6429ff12736bfdb4ae669a9fd4
-  if versioncmp($facts['puppetversion'],'6.1.0') < 0 {
-    include systemd::systemctl::daemon_reload
-    File['/etc/systemd/system/disable_thp.service'] ~> Class['systemd::systemctl::daemon_reload']
-  }
+  $ensure_thp_service = $disable_thp ? { true => 'present', false => 'absent' }
 
-  $hugeadm_package = $facts['os']['family'] ? {
-    'RedHat' => 'libhugetlbfs-utils',
-    'Debian' => 'libhugetlbfs',
-    'Archlinux' => 'libhugetlbfs',
-    default  => 'hugepages',
-  }
-
-  package { $hugeadm_package:
-    ensure => 'present',
-  }
-
-  service { 'disable_thp':
-    ensure    => false,
-    enable    => $disable_thp,
-    subscribe => File['/etc/systemd/system/disable_thp.service'],
-  }
-
-  exec { 'systemd run_once disable_thp':
-    command     => '/usr/bin/systemctl start disable_thp.service',
-    refreshonly => true,
-    subscribe   => File['/etc/systemd/system/disable_thp.service'],
-    require     => Service['disable_thp'],
+  systemd::unit_file { 'disable_thp.service':
+    ensure  => $ensure_thp_service,
+    active  => false,
+    enable  => $disable_thp,
+    content => file("${module_name}/service_files/disable_thp.service"),
   }
 
   if $somaxconn > 0 {

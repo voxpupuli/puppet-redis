@@ -5,17 +5,22 @@ describe 'redis::administration' do
     context "on #{os}" do
       let(:facts) { facts }
       let(:thp_control_package_name) do
-        case facts[:osfamily]
+        case facts[:operatingsystem]
         when 'Debian'
           'libhugetlbfs'
         when 'Ubuntu'
-          'hugepagesz'
+          'hugepages'
         when 'RedHat'
+          'libhugetlbfs-utils'
+        when 'CentOS'
           'libhugetlbfs-utils'
         when 'Archlinux'
           'libhugetlbfs'
         end
       end
+
+      it { is_expected.to compile }
+
       it do
         is_expected.to contain_sysctl('vm.overcommit_memory').with(
           'ensure' => 'present',
@@ -30,21 +35,22 @@ describe 'redis::administration' do
         )
       end
 
-      it {
-        is_expected.to contain_file('/etc/systemd/system/disable_thp.service').
-          with_ensure('file').
-          with_mode('0644').
-          with_owner('root').
-          with_content(%r{ExecStart=/bin/hugeadm --thp-never})
-      }
-
       it { is_expected.to contain_package(thp_control_package_name).with_ensure('present') }
 
-      it do
-        is_expected.to contain_service('disable_thp').with(
-          'ensure' => 'false',
-          'enable' => 'true',
-        )
+      it {
+        is_expected.to contain_class('systemd')
+      }
+
+      describe 'unit file' do
+        let(:content) { catalogue.resource('systemd::unit_file', 'disable_thp.service').send(:parameters)[:content] }
+
+        it { is_expected.to contain_systemd__unit_file('disable_thp.service') }
+        it 'Description' do
+          expect(content).to include('Description=Disables THP on boot')
+        end
+        it 'ExecStart' do
+          expect(content).to include('ExecStart=/bin/hugeadm --thp-never')
+        end
       end
 
       it do
