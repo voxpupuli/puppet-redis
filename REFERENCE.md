@@ -603,22 +603,6 @@ Specify which group to run as.
 
 Default value: `'redis'`
 
-##### `service_hasrestart`
-
-Data type: `Boolean`
-
-Does the init script support restart?
-
-Default value: ``true``
-
-##### `service_hasstatus`
-
-Data type: `Boolean`
-
-Does the init script support status?
-
-Default value: ``true``
-
 ##### `service_name`
 
 Data type: `String[1]`
@@ -626,14 +610,6 @@ Data type: `String[1]`
 Specify the service name for Init or Systemd.
 
 Default value: `$redis::params::service_name`
-
-##### `service_provider`
-
-Data type: `Optional[String]`
-
-Specify the service provider to use
-
-Default value: ``undef``
 
 ##### `service_user`
 
@@ -900,6 +876,14 @@ Data type: `Boolean`
 
 Default value: ``false``
 
+##### `minimum_version`
+
+Data type: `String[1]`
+
+
+
+Default value: `$redis::params::minimum_version`
+
 ### `redis::administration`
 
 Allows various adminstrative settings for Redis
@@ -1063,14 +1047,6 @@ Specify the failover timeout in milliseconds.
 
 Default value: `180000`
 
-##### `init_script`
-
-Data type: `Optional[Stdlib::Absolutepath]`
-
-Specifiy the init script that will be created for sentinel.
-
-Default value: `$redis::params::sentinel_init_script`
-
 ##### `log_file`
 
 Data type: `Stdlib::Absolutepath`
@@ -1111,6 +1087,14 @@ Data type: `Stdlib::Port`
 Specify the port of the master redis server.
 
 Default value: `6379`
+
+##### `protected_mode`
+
+Data type: `Boolean`
+
+Whether protected mode is enabled or not. Only applicable when no bind is set.
+
+Default value: `$redis::params::sentinel_protected_mode`
 
 ##### `package_name`
 
@@ -1227,14 +1211,6 @@ Data type: `Optional[Stdlib::Absolutepath]`
 Path to the client-reconfig script
 
 Default value: ``undef``
-
-##### `init_template`
-
-Data type: `String[1]`
-
-
-
-Default value: `'redis/redis-sentinel.init.erb'`
 
 ##### `service_ensure`
 
@@ -1706,22 +1682,6 @@ Specify which group to run as.
 
 Default value: `$redis::service_group`
 
-##### `service_hasrestart`
-
-Data type: `Boolean`
-
-Does the init script support restart?
-
-Default value: `$redis::service_hasrestart`
-
-##### `service_hasstatus`
-
-Data type: `Boolean`
-
-Does the init script support status?
-
-Default value: `$redis::service_hasstatus`
-
 ##### `service_user`
 
 Data type: `String[1]`
@@ -1971,14 +1931,6 @@ Data type: `String[1]`
 
 Default value: `$redis::output_buffer_limit_pubsub`
 
-##### `minimum_version`
-
-Data type: `String[1]`
-
-
-
-Default value: `$redis::minimum_version`
-
 ##### `managed_by_cluster_manager`
 
 Data type: `Boolean`
@@ -1986,14 +1938,6 @@ Data type: `Boolean`
 
 
 Default value: `$redis::managed_by_cluster_manager`
-
-##### `package_ensure`
-
-Data type: `String[1]`
-
-
-
-Default value: `$redis::package_ensure`
 
 ##### `manage_service_file`
 

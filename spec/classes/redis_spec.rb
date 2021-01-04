@@ -1,13 +1,7 @@
 require 'spec_helper'
 
 describe 'redis' do
-  let(:service_file) do
-    if facts['service_provider'] == 'systemd'
-      "/etc/systemd/system/#{service_name}.service"
-    else
-      "/etc/init.d/#{service_name}"
-    end
-  end
+  let(:service_file) { "/etc/systemd/system/#{service_name}.service" }
   let(:package_name) { manifest_vars[:package_name] }
   let(:service_name) { manifest_vars[:service_name] }
   let(:config_file) { manifest_vars[:config_file] }
@@ -51,8 +45,6 @@ describe 'redis' do
           is_expected.to contain_service(service_name).with(
             'ensure'     => 'running',
             'enable'     => 'true',
-            'hasrestart' => 'true',
-            'hasstatus'  => 'true'
           )
         end
 
@@ -117,45 +109,24 @@ describe 'redis' do
 
         it { is_expected.to compile.with_all_deps }
         it do
-          if facts['service_provider'] == 'systemd'
-            is_expected.to contain_file("/etc/systemd/system/#{service_name}.service.d/limit.conf").
-              with_ensure('file').
-              with_owner('root').
-              with_group('root').
-              with_mode('0444')
-            # Only necessary for Puppet < 6.1.0,
-            # See https://github.com/puppetlabs/puppet/commit/f8d5c60ddb130c6429ff12736bfdb4ae669a9fd4
-            if Puppet.version < '6.1'
-              is_expected.to contain_augeas('Systemd redis ulimit').
-                with_incl("/etc/systemd/system/#{service_name}.service.d/limit.conf").
-                with_lens('Systemd.lns').
-                with_changes(['defnode nofile Service/LimitNOFILE ""', 'set $nofile/value "7777"']).
-                that_notifies('Class[systemd::systemctl::daemon_reload]')
-            else
-              is_expected.to contain_augeas('Systemd redis ulimit').
-                with_incl("/etc/systemd/system/#{service_name}.service.d/limit.conf").
-                with_lens('Systemd.lns').
-                with_changes(['defnode nofile Service/LimitNOFILE ""', 'set $nofile/value "7777"'])
-            end
+          is_expected.to contain_file("/etc/systemd/system/#{service_name}.service.d/limit.conf").
+            with_ensure('file').
+            with_owner('root').
+            with_group('root').
+            with_mode('0444')
+          # Only necessary for Puppet < 6.1.0,
+          # See https://github.com/puppetlabs/puppet/commit/f8d5c60ddb130c6429ff12736bfdb4ae669a9fd4
+          if Puppet.version < '6.1'
+            is_expected.to contain_augeas('Systemd redis ulimit').
+              with_incl("/etc/systemd/system/#{service_name}.service.d/limit.conf").
+              with_lens('Systemd.lns').
+              with_changes(['defnode nofile Service/LimitNOFILE ""', 'set $nofile/value "7777"']).
+              that_notifies('Class[systemd::systemctl::daemon_reload]')
           else
-            is_expected.not_to contain_file('/etc/systemd/system/redis-server.service.d/limit.conf')
-            is_expected.not_to contain_augeas('Systemd redis ulimit')
-            if %w[Debian RedHat].include?(facts[:osfamily])
-              ulimit_context = case facts[:osfamily]
-                               when 'Debian'
-                                 '/files/etc/default/redis-server'
-                               when 'RedHat'
-                                 '/files/etc/sysconfig/redis'
-                               end
-
-              if ulimit_context
-                is_expected.to contain_augeas('redis ulimit').
-                  with_changes('set ULIMIT 7777').
-                  with_context(ulimit_context)
-              else
-                is_expected.not_to contain_augeas('redis ulimit')
-              end
-            end
+            is_expected.to contain_augeas('Systemd redis ulimit').
+              with_incl("/etc/systemd/system/#{service_name}.service.d/limit.conf").
+              with_lens('Systemd.lns').
+              with_changes(['defnode nofile Service/LimitNOFILE ""', 'set $nofile/value "7777"'])
           end
         end
       end
@@ -956,18 +927,6 @@ describe 'redis' do
         it { is_expected.to contain_file('/var/log/redis').with_group('_VALUE_') }
       end
 
-      describe 'with parameter: service_hasrestart' do
-        let(:params) { { service_hasrestart: true } }
-
-        it { is_expected.to contain_service(package_name).with_hasrestart(true) }
-      end
-
-      describe 'with parameter: service_hasstatus' do
-        let(:params) { { service_hasstatus: true } }
-
-        it { is_expected.to contain_service(package_name).with_hasstatus(true) }
-      end
-
       describe 'with parameter: service_name' do
         let(:params) { { service_name: '_VALUE_' } }
 
@@ -1365,11 +1324,7 @@ describe 'redis' do
             |WantedBy=multi-user.target
           END
 
-          if facts['service_provider'] == 'systemd'
-            is_expected.to contain_file(service_file).with_content(content)
-          else
-            is_expected.to contain_file(service_file).with_content(%r{Required-Start:})
-          end
+          is_expected.to contain_file(service_file).with_content(content)
         end
       end
 

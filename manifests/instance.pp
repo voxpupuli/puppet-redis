@@ -119,10 +119,6 @@
 #   Specify if the server should be running.
 # @param service_group
 #   Specify which group to run as.
-# @param service_hasrestart
-#   Does the init script support restart?
-# @param service_hasstatus
-#   Does the init script support status?
 # @param service_user
 #   Specify which user to run as.
 # @param set_max_intset_entries
@@ -276,8 +272,6 @@ define redis::instance (
   Stdlib::Ensure::Service $service_ensure                        = $redis::service_ensure,
   Boolean $service_enable                                        = $redis::service_enable,
   String[1] $service_group                                       = $redis::service_group,
-  Boolean $service_hasrestart                                    = $redis::service_hasrestart,
-  Boolean $service_hasstatus                                     = $redis::service_hasstatus,
   Boolean $manage_service_file                                   = true,
   Optional[Stdlib::Absolutepath] $log_file                       = undef,
   Stdlib::Absolutepath $pid_file                                 = "/var/run/redis/redis-server-${name}.pid",
@@ -301,11 +295,6 @@ define redis::instance (
     }
   }
 
-  $_real_log_file = $log_file ? {
-    undef   => "${log_dir}/redis-server-${name}.log",
-    default => $log_file,
-  }
-
   if $workdir != $redis::workdir {
     file { $workdir:
       ensure => directory,
@@ -316,66 +305,43 @@ define redis::instance (
   }
 
   if $manage_service_file {
-    $service_provider_lookup = pick(getvar('service_provider'), false)
+    file { "/etc/systemd/system/${service_name}.service":
+      ensure  => file,
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
+      content => template('redis/service_templates/redis.service.erb'),
+    }
 
-    if $service_provider_lookup == 'systemd' {
-      file { "/etc/systemd/system/${service_name}.service":
-        ensure  => file,
-        owner   => 'root',
-        group   => 'root',
-        mode    => '0644',
-        content => template('redis/service_templates/redis.service.erb'),
-      }
+    # Only necessary for Puppet < 6.1.0,
+    # See https://github.com/puppetlabs/puppet/commit/f8d5c60ddb130c6429ff12736bfdb4ae669a9fd4
+    if versioncmp($facts['puppetversion'],'6.1.0') < 0 {
+      include systemd::systemctl::daemon_reload
+      File["/etc/systemd/system/${service_name}.service"] ~> Class['systemd::systemctl::daemon_reload']
+    }
 
-      # Only necessary for Puppet < 6.1.0,
-      # See https://github.com/puppetlabs/puppet/commit/f8d5c60ddb130c6429ff12736bfdb4ae669a9fd4
-      if versioncmp($facts['puppetversion'],'6.1.0') < 0 {
-        include systemd::systemctl::daemon_reload
-        File["/etc/systemd/system/${service_name}.service"] ~> Class['systemd::systemctl::daemon_reload']
-      }
-
-      if $title != 'default' {
-        service { $service_name:
-          ensure     => $service_ensure,
-          enable     => $service_enable,
-          hasrestart => $service_hasrestart,
-          hasstatus  => $service_hasstatus,
-          subscribe  => [
-            File["/etc/systemd/system/${service_name}.service"],
-            Exec["cp -p ${redis_file_name_orig} ${redis_file_name}"],
-          ],
-        }
-      }
-    } else {
-      file { "/etc/init.d/${service_name}":
-        ensure  => file,
-        mode    => '0755',
-        content => template("redis/service_templates/redis.${facts['os']['family']}.erb"),
-      }
-
-      if $title != 'default' {
-        service { $service_name:
-          ensure     => $service_ensure,
-          enable     => $service_enable,
-          hasrestart => $service_hasrestart,
-          hasstatus  => $service_hasstatus,
-          subscribe  => [
-            File["/etc/init.d/${service_name}"],
-            Exec["cp -p ${redis_file_name_orig} ${redis_file_name}"],
-          ],
-        }
+    if $title != 'default' {
+      service { $service_name:
+        ensure    => $service_ensure,
+        enable    => $service_enable,
+        subscribe => [
+          File["/etc/systemd/system/${service_name}.service"],
+          Exec["cp -p ${redis_file_name_orig} ${redis_file_name}"],
+        ],
       }
     }
   }
 
-  File {
-    owner  => $config_owner,
-    group  => $config_group,
-    mode   => $config_file_mode,
-  }
+  $_real_log_file = pick($log_file, "${log_dir}/redis-server-${name}.log")
+  $bind_arr = [$bind].flatten
+  $supports_protected_mode = $redis::supports_protected_mode
 
   file { $redis_file_name_orig:
     ensure  => file,
+    owner   => $config_owner,
+    group   => $config_group,
+    mode    => $config_file_mode,
+    content => template($conf_template),
   }
 
   exec { "cp -p ${redis_file_name_orig} ${redis_file_name}":
@@ -383,10 +349,4 @@ define redis::instance (
     subscribe   => File[$redis_file_name_orig],
     refreshonly => true,
   }
-
-  $bind_arr = [$bind].flatten
-
-  $supports_protected_mode = $redis::supports_protected_mode
-
-  File[$redis_file_name_orig] { content => template($conf_template) }
 }

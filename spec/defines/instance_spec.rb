@@ -38,22 +38,8 @@ describe 'redis::instance' do
         it { is_expected.to contain_file('/var/lib/redis/redis-server-app2') }
 
         it do
-          if facts['service_provider'] == 'systemd'
-            is_expected.to contain_file('/etc/systemd/system/redis-server-app2.service').with_content(%r{ExecStart=/usr/bin/redis-server #{config_file}})
-          else
-            case facts[:os]['family']
-            when 'Debian'
-              is_expected.to contain_file('/etc/init.d/redis-server-app2').
-                with_content(%r{DAEMON_ARGS=#{config_file}}).
-                with_content(%r{PIDFILE=/var/run/redis/redis-server-app2\.pid})
-            when 'RedHat'
-              is_expected.to contain_file('/etc/init.d/redis-server-app2').
-                with_content(%r{REDIS_CONFIG="#{config_file}"}).
-                with_content(%r{pidfile="/var/run/redis/redis-server-app2\.pid"})
-            else
-              is_expected.to contain_file('/etc/init.d/redis-server-app2')
-            end
-          end
+          is_expected.to contain_file('/etc/systemd/system/redis-server-app2.service').
+            with_content(%r{ExecStart=/usr/bin/redis-server #{config_file}})
         end
 
         it { is_expected.to contain_service('redis-server-app2').with_ensure('running').with_enable('true') }
