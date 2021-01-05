@@ -36,21 +36,16 @@ class redis::administration (
     package { $hugeadm_package:
       ensure => 'present',
     }
-
-    exec { 'systemd run_once disable_thp':
-      command     => '/usr/bin/systemctl start disable_thp.service',
-      refreshonly => true,
-      subscribe   => Systemd::Unit_file['disable_thp.service'],
-    }
   }
 
-  $ensure_thp_service = $disable_thp ? { true => 'present', false => 'absent' }
+  $ensure_thp = $disable_thp ? { true => 'present', false => 'absent' }
 
-  systemd::unit_file { 'disable_thp.service':
-    ensure  => $ensure_thp_service,
-    active  => false,
-    enable  => $disable_thp,
-    content => file("${module_name}/service_files/disable_thp.service"),
+  systemd::timer { 'disable_thp.timer':
+    ensure          => $ensure_thp,
+    timer_content   => file("${module_name}/service_files/disable_thp.timer"),
+    service_content => file("${module_name}/service_files/disable_thp.service"),
+    active          => false,
+    enable          => $disable_thp,
   }
 
   if $somaxconn > 0 {

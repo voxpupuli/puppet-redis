@@ -1,0 +1,8 @@
+[Unit]
+Description=Ensure that THP is disabled at boot
+
+[Timer]
+OnBootSec=0
+
+[Install]
+WantedBy=timers.target

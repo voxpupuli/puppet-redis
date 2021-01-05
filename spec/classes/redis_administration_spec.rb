@@ -40,6 +40,7 @@ describe 'redis::administration' do
       it {
         is_expected.to contain_class('systemd')
       }
+      it { is_expected.to contain_systemd__unit_file('disable_thp.timer') }
 
       describe 'unit file' do
         let(:content) { catalogue.resource('systemd::unit_file', 'disable_thp.service').send(:parameters)[:content] }
@@ -51,13 +52,6 @@ describe 'redis::administration' do
         it 'ExecStart' do
           expect(content).to include('ExecStart=/bin/hugeadm --thp-never')
         end
-      end
-
-      it do
-        is_expected.to contain_exec('systemd run_once disable_thp').with(
-          'command' => '/usr/bin/systemctl start disable_thp.service',
-          'refreshonly' => 'true',
-        )
       end
 
     end
