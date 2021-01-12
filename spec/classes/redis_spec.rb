@@ -742,6 +742,44 @@ describe 'redis' do
         }
       end
 
+      describe 'with parameter rename_commands' do
+        context 'with a single rename' do
+          let(:params) do
+            {
+              rename_commands: { CONFIG: "\"\"" }
+            }
+          end
+          it {
+            is_expected.to contain_file(config_file_orig).with(
+              'content' => %r{^rename-command CONFIG ""$}
+            )
+          }
+        end
+        context 'with multiple renames' do
+          let(:params) do
+            {
+              rename_commands: { CONFIG: "\"\"", RENAME: "\"\"" }
+            }
+          end
+          it {
+            is_expected.to contain_file(config_file_orig).with(
+              'content' => %r{^rename-command CONFIG ""$}
+            )
+            is_expected.to contain_file(config_file_orig).with(
+              'content' => %r{^rename-command RENAME ""$}
+            )
+          }
+        end
+        context 'with empty hash' do
+          let(:params) do
+            {
+              "rename_commands" => {}
+            }
+          end
+          it { is_expected.not_to contain_file(config_file_orig).with_content(%r{^rename-command}) }
+        end
+      end
+
       describe 'with parameter repl_backlog_size' do
         let(:params) do
           {
