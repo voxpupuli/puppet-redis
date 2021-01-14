@@ -355,6 +355,9 @@ min-slaves-max-lag <%= @min_slaves_max_lag %>
 # an empty string:
 #
 # rename-command CONFIG ""
+<% @rename_commands.each do |from,to| -%>
+rename-command <%= from %> <%= to %>
+<% end -%>
 
 ################################### LIMITS ####################################
 

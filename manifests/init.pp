@@ -125,6 +125,8 @@
 #   Specify upstream (Ubuntu) PPA entry.
 # @param rdbcompression
 #   Enable/disable compression of string objects using LZF when dumping.
+# @param rename_commands
+#   A list of Redis commands to rename or disable for security reasons
 # @param repl_backlog_size
 #   The replication backlog size
 # @param repl_backlog_ttl
@@ -282,6 +284,7 @@ class redis (
   Boolean $protected_mode                                        = true,
   Optional[String] $ppa_repo                                     = $redis::params::ppa_repo,
   Boolean $rdbcompression                                        = true,
+  Hash[String,String] $rename_commands                           = {},
   String[1] $repl_backlog_size                                   = '1mb',
   Integer[0] $repl_backlog_ttl                                   = 3600,
   Boolean $repl_disable_tcp_nodelay                              = false,

@@ -94,6 +94,8 @@
 #   Whether protected mode is enabled or not.  Only applicable when no bind is set.
 # @param rdbcompression
 #   Enable/disable compression of string objects using LZF when dumping.
+# @param rename_commands
+#   A list of Redis commands to rename or disable for security reasons
 # @param repl_backlog_size
 #   The replication backlog size
 # @param repl_backlog_ttl
@@ -235,6 +237,7 @@ define redis::instance (
   Stdlib::Port $port                                             = $redis::port,
   Boolean $protected_mode                                        = $redis::protected_mode,
   Boolean $rdbcompression                                        = $redis::rdbcompression,
+  Hash[String,String] $rename_commands                           = $redis::rename_commands,
   String[1] $repl_backlog_size                                   = $redis::repl_backlog_size,
   Integer[0] $repl_backlog_ttl                                   = $redis::repl_backlog_ttl,
   Boolean $repl_disable_tcp_nodelay                              = $redis::repl_disable_tcp_nodelay,
