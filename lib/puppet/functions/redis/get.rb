@@ -1,6 +1,6 @@
 require 'redis'
-# Returns the value of the key being looked up or `undef` if the key does not
-# exist. Takes two arguments with an optional third. The first being a string
+# @summary Returns the value of the key being looked up or `undef` if the key does not exist. 
+# Takes two arguments with an optional third. The first being a string
 # value of the key to be looked up, the second is the URL to the Redis service
 # and the third optional argument is a default value to be used if the lookup
 # fails.

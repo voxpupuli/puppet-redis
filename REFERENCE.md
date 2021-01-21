@@ -9,7 +9,7 @@
 #### Public Classes
 
 * [`redis`](#redis): This class installs redis
-* [`redis::administration`](#redisadministration): Allows various adminstrative settings for Redis As documented in the FAQ and https://redis.io/topics/admin
+* [`redis::administration`](#redisadministration): Allows various administrative settings for Redis
 * [`redis::globals`](#redisglobals): Set a global config for Redis
 * [`redis::sentinel`](#redissentinel): Install redis-sentinel
 
@@ -29,7 +29,7 @@ repositories.
 
 ### Functions
 
-* [`redis::get`](#redisget): ```
+* [`redis::get`](#redisget): Returns the value of the key being looked up or `undef` if the key does not exist.
 
 ### Data types
 
@@ -886,8 +886,9 @@ Default value: `$redis::params::minimum_version`
 
 ### `redis::administration`
 
-Allows various adminstrative settings for Redis
-As documented in the FAQ and https://redis.io/topics/admin
+As documented in the FAQ and https://redis.io/topics/admin.
+For disabling Transparent Huge Pages (THP), use separate module such as:
+https://forge.puppet.com/modules/alexharvey/disable_transparent_hugepage
 
 * **See also**
   * https://redis.io/topics/admin
@@ -904,7 +905,7 @@ include redis::administration
 
 ```puppet
 class {'redis::administration':
-  disable_thp => false,
+  enable_overcommit_memory => false,
 }
 ```
 
@@ -917,14 +918,6 @@ The following parameters are available in the `redis::administration` class.
 Data type: `Boolean`
 
 Enable the overcommit memory setting
-
-Default value: ``true``
-
-##### `disable_thp`
-
-Data type: `Boolean`
-
-Disable Transparent Huge Pages
 
 Default value: ``true``
 
@@ -1953,10 +1946,28 @@ Default value: ``true``
 
 Type: Ruby 4.x API
 
+Takes two arguments with an optional third. The first being a string
+value of the key to be looked up, the second is the URL to the Redis service
+and the third optional argument is a default value to be used if the lookup
+fails.
+
+example usage
+```
+$version = redis::get('version.myapp', 'redis://redis.example.com:6379')
+$version_with_default = redis::get('version.myapp', 'redis://redis.example.com:6379', $::myapp_version)
 ```
 
 #### `redis::get(String[1] $key, Redis::RedisUrl $url, Optional[String] $default)`
 
+Takes two arguments with an optional third. The first being a string
+value of the key to be looked up, the second is the URL to the Redis service
+and the third optional argument is a default value to be used if the lookup
+fails.
+
+example usage
+```
+$version = redis::get('version.myapp', 'redis://redis.example.com:6379')
+$version_with_default = redis::get('version.myapp', 'redis://redis.example.com:6379', $::myapp_version)
 ```
 
 Returns: `Optional[String]` Returns the value of the key from Redis
