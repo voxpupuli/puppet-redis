@@ -258,7 +258,7 @@ class redis (
   Integer[0] $latency_monitor_threshold                          = 0,
   Integer[0] $list_max_ziplist_entries                           = 512,
   Integer[0] $list_max_ziplist_value                             = 64,
-  Stdlib::Absolutepath $log_dir                                  = '/var/log/redis',
+  Stdlib::Absolutepath $log_dir                                  = $redis::params::log_dir,
   Stdlib::Filemode $log_dir_mode                                 = $redis::params::log_dir_mode,
   Stdlib::Absolutepath $log_file                                 = '/var/log/redis/redis.log',
   Redis::LogLevel $log_level                                     = 'notice',
