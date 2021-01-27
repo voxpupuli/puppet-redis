@@ -32,6 +32,7 @@ describe 'redis' do
         it do
           is_expected.to contain_file(config_file_orig).
             with_ensure('file').
+            with_content(%r{logfile /var/log/redis/redis\.log}).
             without_content(%r{undef})
 
           if facts[:osfamily] == 'FreeBSD'
@@ -424,17 +425,34 @@ describe 'redis' do
       end
 
       describe 'with parameter log_file' do
-        let(:params) do
-          {
-            log_file: '/var/log/redis/redis.log'
+        describe 'as absolute path' do
+          let(:params) do
+            {
+              log_file: '/var/log/my-redis/my-redis.log'
+            }
+          end
+
+          it {
+            is_expected.to contain_file(config_file_orig).with(
+              'content' => %r{^logfile /var/log/my-redis/my-redis\.log$}
+            )
           }
         end
 
-        it {
-          is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{^logfile /var/log/redis/redis\.log$}
-          )
-        }
+        describe 'as relative path' do
+          let(:params) do
+            {
+              log_dir: '/var/log/my-redis',
+              log_file: 'my-redis.log'
+            }
+          end
+
+          it {
+            is_expected.to contain_file(config_file_orig).with(
+              'content' => %r{^logfile /var/log/my-redis/my-redis\.log$}
+            )
+          }
+        end
       end
 
       describe 'with parameter log_level' do

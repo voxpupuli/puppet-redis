@@ -65,7 +65,8 @@
 # @param log_dir_mode
 #   Adjust mode for directory containing log files.
 # @param log_file
-#   Specify file where to write log entries.
+#   Specify file where to write log entries. Relative paths will be prepended
+#   with log_dir but absolute paths are also accepted.
 # @param log_level
 #   Specify the server verbosity level.
 # @param masterauth
@@ -276,7 +277,7 @@ define redis::instance (
   Boolean $service_enable                                        = $redis::service_enable,
   String[1] $service_group                                       = $redis::service_group,
   Boolean $manage_service_file                                   = true,
-  Optional[Stdlib::Absolutepath] $log_file                       = undef,
+  String $log_file                                               = "redis-server-${name}.log",
   Stdlib::Absolutepath $pid_file                                 = "/var/run/redis/redis-server-${name}.pid",
   Variant[Stdlib::Absolutepath, Enum['']] $unixsocket            = "/var/run/redis/redis-server-${name}.sock",
   Stdlib::Absolutepath $workdir                                  = "${redis::workdir}/redis-server-${name}",
@@ -335,7 +336,11 @@ define redis::instance (
     }
   }
 
-  $_real_log_file = pick($log_file, "${log_dir}/redis-server-${name}.log")
+  $_real_log_file = $log_file ? {
+    Stdlib::Absolutepath => $log_file,
+    default              => "${log_dir}/${log_file}",
+  }
+
   $bind_arr = [$bind].flatten
   $supports_protected_mode = $redis::supports_protected_mode
 
