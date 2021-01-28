@@ -17,10 +17,6 @@ describe 'redis::administration', unless: default['hypervisor'] =~ %r{docker} do
     its(:content) { is_expected.to eq("1\n") }
   end
 
-  describe file('/sys/kernel/mm/transparent_hugepage/enabled') do
-    its(:content) { is_expected.to eq("always madvise [never]\n") }
-  end
-
   describe file('/proc/sys/net/core/somaxconn') do
     its(:content) { is_expected.to eq("65535\n") }
   end

@@ -82,7 +82,8 @@
 # @param log_dir_mode
 #   Adjust mode for directory containing log files.
 # @param log_file
-#   Specify file where to write log entries.
+#   Specify file where to write log entries. Relative paths will be prepended
+#   with log_dir but absolute paths are also accepted.
 # @param log_level
 #   Specify the server verbosity level.
 # @param manage_repo
@@ -125,6 +126,8 @@
 #   Specify upstream (Ubuntu) PPA entry.
 # @param rdbcompression
 #   Enable/disable compression of string objects using LZF when dumping.
+# @param rename_commands
+#   A list of Redis commands to rename or disable for security reasons
 # @param repl_backlog_size
 #   The replication backlog size
 # @param repl_backlog_ttl
@@ -149,14 +152,8 @@
 #   Specify if the server should be running.
 # @param service_group
 #   Specify which group to run as.
-# @param service_hasrestart
-#   Does the init script support restart?
-# @param service_hasstatus
-#   Does the init script support status?
 # @param service_name
 #   Specify the service name for Init or Systemd.
-# @param service_provider
-#   Specify the service provider to use
 # @param service_user
 #   Specify which user to run as.
 # @param set_max_intset_entries
@@ -262,9 +259,9 @@ class redis (
   Integer[0] $latency_monitor_threshold                          = 0,
   Integer[0] $list_max_ziplist_entries                           = 512,
   Integer[0] $list_max_ziplist_value                             = 64,
-  Stdlib::Absolutepath $log_dir                                  = '/var/log/redis',
+  Stdlib::Absolutepath $log_dir                                  = $redis::params::log_dir,
   Stdlib::Filemode $log_dir_mode                                 = $redis::params::log_dir_mode,
-  Stdlib::Absolutepath $log_file                                 = '/var/log/redis/redis.log',
+  String $log_file                                               = 'redis.log',
   Redis::LogLevel $log_level                                     = 'notice',
   Boolean $manage_service_file                                   = false,
   Boolean $manage_package                                        = true,
@@ -288,6 +285,7 @@ class redis (
   Boolean $protected_mode                                        = true,
   Optional[String] $ppa_repo                                     = $redis::params::ppa_repo,
   Boolean $rdbcompression                                        = true,
+  Hash[String,String] $rename_commands                           = {},
   String[1] $repl_backlog_size                                   = '1mb',
   Integer[0] $repl_backlog_ttl                                   = 3600,
   Boolean $repl_disable_tcp_nodelay                              = false,
@@ -299,11 +297,8 @@ class redis (
   Boolean $service_enable                                        = true,
   Stdlib::Ensure::Service $service_ensure                        = 'running',
   String[1] $service_group                                       = 'redis',
-  Boolean $service_hasrestart                                    = true,
-  Boolean $service_hasstatus                                     = true,
   Boolean $service_manage                                        = true,
   String[1] $service_name                                        = $redis::params::service_name,
-  Optional[String] $service_provider                             = undef,
   String[1] $service_user                                        = 'redis',
   Integer[0] $set_max_intset_entries                             = 512,
   Integer[0] $slave_priority                                     = 100,

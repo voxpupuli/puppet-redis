@@ -9,7 +9,7 @@
 #### Public Classes
 
 * [`redis`](#redis): This class installs redis
-* [`redis::administration`](#redisadministration): Allows various adminstrative settings for Redis As documented in the FAQ and https://redis.io/topics/admin
+* [`redis::administration`](#redisadministration): Allows various administrative settings for Redis
 * [`redis::globals`](#redisglobals): Set a global config for Redis
 * [`redis::sentinel`](#redissentinel): Install redis-sentinel
 
@@ -29,7 +29,7 @@ repositories.
 
 ### Functions
 
-* [`redis::get`](#redisget): ```
+* [`redis::get`](#redisget): Returns the value of the key being looked up or `undef` if the key does not exist.
 
 ### Data types
 
@@ -603,22 +603,6 @@ Specify which group to run as.
 
 Default value: `'redis'`
 
-##### `service_hasrestart`
-
-Data type: `Boolean`
-
-Does the init script support restart?
-
-Default value: ``true``
-
-##### `service_hasstatus`
-
-Data type: `Boolean`
-
-Does the init script support status?
-
-Default value: ``true``
-
 ##### `service_name`
 
 Data type: `String[1]`
@@ -626,14 +610,6 @@ Data type: `String[1]`
 Specify the service name for Init or Systemd.
 
 Default value: `$redis::params::service_name`
-
-##### `service_provider`
-
-Data type: `Optional[String]`
-
-Specify the service provider to use
-
-Default value: ``undef``
 
 ##### `service_user`
 
@@ -900,10 +876,19 @@ Data type: `Boolean`
 
 Default value: ``false``
 
+##### `minimum_version`
+
+Data type: `String[1]`
+
+
+
+Default value: `$redis::params::minimum_version`
+
 ### `redis::administration`
 
-Allows various adminstrative settings for Redis
-As documented in the FAQ and https://redis.io/topics/admin
+As documented in the FAQ and https://redis.io/topics/admin.
+For disabling Transparent Huge Pages (THP), use separate module such as:
+https://forge.puppet.com/modules/alexharvey/disable_transparent_hugepage
 
 * **See also**
   * https://redis.io/topics/admin
@@ -920,7 +905,7 @@ include redis::administration
 
 ```puppet
 class {'redis::administration':
-  disable_thp => false,
+  enable_overcommit_memory => false,
 }
 ```
 
@@ -933,14 +918,6 @@ The following parameters are available in the `redis::administration` class.
 Data type: `Boolean`
 
 Enable the overcommit memory setting
-
-Default value: ``true``
-
-##### `disable_thp`
-
-Data type: `Boolean`
-
-Disable Transparent Huge Pages
 
 Default value: ``true``
 
@@ -1063,14 +1040,6 @@ Specify the failover timeout in milliseconds.
 
 Default value: `180000`
 
-##### `init_script`
-
-Data type: `Optional[Stdlib::Absolutepath]`
-
-Specifiy the init script that will be created for sentinel.
-
-Default value: `$redis::params::sentinel_init_script`
-
 ##### `log_file`
 
 Data type: `Stdlib::Absolutepath`
@@ -1111,6 +1080,14 @@ Data type: `Stdlib::Port`
 Specify the port of the master redis server.
 
 Default value: `6379`
+
+##### `protected_mode`
+
+Data type: `Boolean`
+
+Whether protected mode is enabled or not. Only applicable when no bind is set.
+
+Default value: `$redis::params::sentinel_protected_mode`
 
 ##### `package_name`
 
@@ -1227,14 +1204,6 @@ Data type: `Optional[Stdlib::Absolutepath]`
 Path to the client-reconfig script
 
 Default value: ``undef``
-
-##### `init_template`
-
-Data type: `String[1]`
-
-
-
-Default value: `'redis/redis-sentinel.init.erb'`
 
 ##### `service_ensure`
 
@@ -1706,22 +1675,6 @@ Specify which group to run as.
 
 Default value: `$redis::service_group`
 
-##### `service_hasrestart`
-
-Data type: `Boolean`
-
-Does the init script support restart?
-
-Default value: `$redis::service_hasrestart`
-
-##### `service_hasstatus`
-
-Data type: `Boolean`
-
-Does the init script support status?
-
-Default value: `$redis::service_hasstatus`
-
 ##### `service_user`
 
 Data type: `String[1]`
@@ -1971,14 +1924,6 @@ Data type: `String[1]`
 
 Default value: `$redis::output_buffer_limit_pubsub`
 
-##### `minimum_version`
-
-Data type: `String[1]`
-
-
-
-Default value: `$redis::minimum_version`
-
 ##### `managed_by_cluster_manager`
 
 Data type: `Boolean`
@@ -1986,14 +1931,6 @@ Data type: `Boolean`
 
 
 Default value: `$redis::managed_by_cluster_manager`
-
-##### `package_ensure`
-
-Data type: `String[1]`
-
-
-
-Default value: `$redis::package_ensure`
 
 ##### `manage_service_file`
 
@@ -2009,10 +1946,28 @@ Default value: ``true``
 
 Type: Ruby 4.x API
 
+Takes two arguments with an optional third. The first being a string
+value of the key to be looked up, the second is the URL to the Redis service
+and the third optional argument is a default value to be used if the lookup
+fails.
+
+example usage
+```
+$version = redis::get('version.myapp', 'redis://redis.example.com:6379')
+$version_with_default = redis::get('version.myapp', 'redis://redis.example.com:6379', $::myapp_version)
 ```
 
 #### `redis::get(String[1] $key, Redis::RedisUrl $url, Optional[String] $default)`
 
+Takes two arguments with an optional third. The first being a string
+value of the key to be looked up, the second is the URL to the Redis service
+and the third optional argument is a default value to be used if the lookup
+fails.
+
+example usage
+```
+$version = redis::get('version.myapp', 'redis://redis.example.com:6379')
+$version_with_default = redis::get('version.myapp', 'redis://redis.example.com:6379', $::myapp_version)
 ```
 
 Returns: `Optional[String]` Returns the value of the key from Redis

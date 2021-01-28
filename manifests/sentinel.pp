@@ -25,9 +25,6 @@
 # @param daemonize
 #   Have Redis sentinel run as a daemon.
 #
-# @param init_script
-#   Specifiy the init script that will be created for sentinel.
-#
 # @param log_file
 #   Specify where to write log entries.
 #
@@ -103,8 +100,6 @@ class redis::sentinel (
   String[1] $conf_template                    = 'redis/redis-sentinel.conf.erb',
   Boolean $daemonize                          = $redis::params::sentinel_daemonize,
   Boolean $protected_mode                     = $redis::params::sentinel_protected_mode,
-  Optional[Stdlib::Absolutepath] $init_script = $redis::params::sentinel_init_script,
-  String[1] $init_template                    = 'redis/redis-sentinel.init.erb',
   Redis::LogLevel $log_level                  = 'notice',
   Stdlib::Absolutepath $log_file              = $redis::params::sentinel_log_file,
   Redis::SentinelMonitor $sentinel_monitor    = $redis::params::sentinel_default_monitor,
@@ -123,16 +118,8 @@ class redis::sentinel (
 ) inherits redis::params {
   require 'redis'
 
-  if $facts['os']['family'] == 'Debian' {
-    package { $package_name:
-      ensure => $package_ensure,
-      before => File[$config_file_orig],
-    }
-
-    if $init_script {
-      Package[$package_name] -> File[$init_script]
-    }
-  }
+  ensure_packages([$package_name])
+  Package[$package_name] -> File[$config_file_orig]
 
   $sentinel_bind_arr = delete_undef_values([$sentinel_bind].flatten)
   $supports_protected_mode = $redis::supports_protected_mode
@@ -154,22 +141,6 @@ class redis::sentinel (
     subscribe   => File[$config_file_orig],
     notify      => Service[$service_name],
     refreshonly => true,
-  }
-
-  if $init_script {
-    file { $init_script:
-      ensure  => file,
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0755',
-      content => template($init_template),
-    }
-
-    exec { '/usr/sbin/update-rc.d redis-sentinel defaults':
-      subscribe   => File[$init_script],
-      refreshonly => true,
-      notify      => Service[$service_name],
-    }
   }
 
   service { $service_name:
