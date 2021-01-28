@@ -1,4 +1,4 @@
-type Redis::SentinelMonitorDefault = Hash[Struct[{
+type Redis::SentinelMonitorDefaults = Hash[Struct[{
   redis_host             => Stdlib::Host,
   redis_port             => Stdlib::Port,
   quorum                 => Integer[1],
