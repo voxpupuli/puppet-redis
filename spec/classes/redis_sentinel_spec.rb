@@ -77,7 +77,7 @@ CONFIG
       describe 'with custom parameters' do
         let(:params) do
           {
-            sentinel_monitor: {
+            sentinel_monitors: {
               'mymaster' => {
                 'redis_host'             => '127.0.0.1',
                 'redis_port'             => 6379,
@@ -126,7 +126,7 @@ CONFIG
       describe 'with array sentinel bind' do
         let(:params) do
           {
-            sentinel_monitor: {
+            sentinel_monitors: {
               'cow' => {
                 'redis_host'             => '127.0.0.1',
                 'redis_port'             => 6379,

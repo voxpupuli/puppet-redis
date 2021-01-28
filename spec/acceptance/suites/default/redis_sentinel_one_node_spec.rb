@@ -11,7 +11,7 @@ describe 'redis::sentinel' do
   it 'runs successfully' do
     pp = <<-EOS
     class { 'redis::sentinel':
-      sentinel_monitor => {
+      sentinel_monitors => {
         'mymaster' => {
           redis_host             => '127.0.0.1',
           redis_port             => 6379,

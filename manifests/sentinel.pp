@@ -1,6 +1,6 @@
 # @summary Install redis-sentinel
 #
-# @param sentinel_monitor
+# @param sentinel_monitors
 #   Specify the sentinel monitor.
 #
 # @param monitor_defaults
@@ -72,7 +72,7 @@
 # @example Configuring options
 #   class {'redis::sentinel':
 #     log_file   => '/var/log/redis/sentinel.log',
-#     sentinel_monitor => {
+#     sentinel_monitors => {
 #       'session' => {
 #         redis_host       => $redis_master_ip,
 #         redis_port       => 6381,
@@ -94,26 +94,26 @@
 #     }
 #
 class redis::sentinel (
-  Stdlib::Absolutepath $config_file           = $redis::params::sentinel_config_file,
-  Stdlib::Absolutepath $config_file_orig      = $redis::params::sentinel_config_file_orig,
-  Stdlib::Filemode $config_file_mode          = '0644',
-  String[1] $conf_template                    = 'redis/redis-sentinel.conf.erb',
-  Boolean $daemonize                          = $redis::params::sentinel_daemonize,
-  Boolean $protected_mode                     = $redis::params::sentinel_protected_mode,
-  Redis::LogLevel $log_level                  = 'notice',
-  Stdlib::Absolutepath $log_file              = $redis::params::sentinel_log_file,
-  Redis::SentinelMonitor $sentinel_monitor    = $redis::params::sentinel_default_monitor,
-  $monitor_defaults                           = $redis::params::sentinel_monitor_defaults,
-  String[1] $package_name                     = $redis::params::sentinel_package_name,
-  String[1] $package_ensure                   = 'present',
-  Stdlib::Absolutepath $pid_file              = $redis::params::sentinel_pid_file,
-  Stdlib::Port $sentinel_port                 = 26379,
-  String[1] $service_group                    = 'redis',
-  String[1] $service_name                     = $redis::params::sentinel_service_name,
-  Stdlib::Ensure::Service $service_ensure     = 'running',
-  Boolean $service_enable                     = true,
-  String[1] $service_user                     = 'redis',
-  Stdlib::Absolutepath $working_dir           = $redis::params::sentinel_working_dir,
+  Stdlib::Absolutepath $config_file                = $redis::params::sentinel_config_file,
+  Stdlib::Absolutepath $config_file_orig           = $redis::params::sentinel_config_file_orig,
+  Stdlib::Filemode $config_file_mode               = '0644',
+  String[1] $conf_template                         = 'redis/redis-sentinel.conf.erb',
+  Boolean $daemonize                               = $redis::params::sentinel_daemonize,
+  Boolean $protected_mode                          = $redis::params::sentinel_protected_mode,
+  Redis::LogLevel $log_level                       = 'notice',
+  Stdlib::Absolutepath $log_file                   = $redis::params::sentinel_log_file,
+  Redis::SentinelMonitors $sentinel_monitors       = $redis::params::sentinel_default_monitor,
+  Redis::SentinelMonitorDefaults $monitor_defaults = $redis::params::sentinel_monitor_defaults,
+  String[1] $package_name                          = $redis::params::sentinel_package_name,
+  String[1] $package_ensure                        = 'present',
+  Stdlib::Absolutepath $pid_file                   = $redis::params::sentinel_pid_file,
+  Stdlib::Port $sentinel_port                      = 26379,
+  String[1] $service_group                         = 'redis',
+  String[1] $service_name                          = $redis::params::sentinel_service_name,
+  Stdlib::Ensure::Service $service_ensure          = 'running',
+  Boolean $service_enable                          = true,
+  String[1] $service_user                          = 'redis',
+  Stdlib::Absolutepath $working_dir                = $redis::params::sentinel_working_dir,
   Variant[Undef, Stdlib::IP::Address, Array[Stdlib::IP::Address]] $sentinel_bind = undef,
 ) inherits redis::params {
   require 'redis'
@@ -124,7 +124,7 @@ class redis::sentinel (
   $sentinel_bind_arr = delete_undef_values([$sentinel_bind].flatten)
   $supports_protected_mode = $redis::supports_protected_mode
 
-  $_monitor = $sentinel_monitor.map |$monitor,$values| {
+  $_monitor = $sentinel_monitors.map |$monitor,$values| {
     $redis_values = $monitor_defaults + { 'monitor_name' => $monitor } + $values
   }
 
