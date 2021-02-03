@@ -1,0 +1,30 @@
+<%- | Array $sentinel_bind_arr = delete_undef_values([$redis::sentinel::sentinel_bind].flatten),
+  Boolean $supports_protected_mode = $redis::supports_protected_mode,
+| -%>
+<% unless $sentinel_bind_arr =~ Array[Data,0,0] { -%>
+bind <%= $sentinel_bind_arr.join(' ') %>
+<% } -%>
+port <%= $redis::sentinel::sentinel_port %>
+dir <%= $redis::sentinel::working_dir %>
+daemonize <%= $redis::sentinel::daemonize ? {true => 'yes', default => 'no'} %>
+pidfile <%= $redis::sentinel::pid_file %>
+<% if $supports_protected_mode { -%>
+protected-mode <%= $redis::sentinel::protected_mode ? {true => 'yes', default => 'no'} %>
+<% } -%>
+
+sentinel monitor <%= $redis::sentinel::master_name %> <%= $redis::sentinel::redis_host %> <%= $redis::sentinel::redis_port %> <%= $redis::sentinel::quorum %>
+sentinel down-after-milliseconds <%= $redis::sentinel::master_name %> <%= $redis::sentinel::down_after %>
+sentinel parallel-syncs <%= $redis::sentinel::master_name %> <%= $redis::sentinel::parallel_sync %>
+sentinel failover-timeout <%= $redis::sentinel::master_name %> <%= $redis::sentinel::failover_timeout %>
+<% if $redis::sentinel::auth_pass { -%>
+sentinel auth-pass <%= $redis::sentinel::master_name %> <%= $redis::sentinel::auth_pass %>
+<% } -%>
+<% if $redis::sentinel::notification_script { -%>
+sentinel notification-script <%= $redis::sentinel::master_name %> <%= $redis::sentinel::notification_script %>
+<% } -%>
+<% if $redis::sentinel::client_reconfig_script { -%>
+sentinel client-reconfig-script <%= $redis::sentinel::master_name %> <%= $redis::sentinel::client_reconfig_script %>
+<% } -%>
+
+loglevel <%= $redis::sentinel::log_level %>
+logfile <%= $redis::sentinel::log_file %>
