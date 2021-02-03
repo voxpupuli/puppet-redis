@@ -95,10 +95,10 @@ describe 'redis' do
           it { is_expected.to compile.with_all_deps }
           it do
             is_expected.to contain_file('/etc/security/limits.d/redis.conf').with(
-              'ensure'  => 'file',
-              'owner'   => 'root',
-              'group'   => 'root',
-              'mode'    => '0644',
+              'ensure' => 'file',
+              'owner' => 'root',
+              'group' => 'root',
+              'mode' => '0644',
               'content' => "redis soft nofile 65536\nredis hard nofile 65536\n"
             )
           end
@@ -486,12 +486,6 @@ describe 'redis' do
 
           it { is_expected.to contain_file(config_file_orig).with_content(%r{^unixsocket /tmp/redis\.sock$}) }
         end
-
-        describe 'empty string' do
-          let(:params) { { unixsocket: '' } }
-
-          it { is_expected.to contain_file(config_file_orig).without_content(%r{^unixsocket }) }
-        end
       end
 
       describe 'with parameter unixsocketperm' do
@@ -499,12 +493,6 @@ describe 'redis' do
           let(:params) { { unixsocketperm: '777' } }
 
           it { is_expected.to contain_file(config_file_orig).with_content(%r{^unixsocketperm 777$}) }
-        end
-
-        describe 'empty string' do
-          let(:params) { { unixsocketperm: '' } }
-
-          it { is_expected.to contain_file(config_file_orig).without_content(%r{^unixsocketperm }) }
         end
       end
 
@@ -553,13 +541,13 @@ describe 'redis' do
       describe 'with parameter maxmemory_policy' do
         let(:params) do
           {
-            maxmemory_policy: '_VALUE_'
+            maxmemory_policy: 'noeviction'
           }
         end
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{maxmemory-policy.*_VALUE_}
+            'content' => %r{maxmemory-policy.*noeviction}
           )
         }
       end
@@ -567,13 +555,13 @@ describe 'redis' do
       describe 'with parameter maxmemory_samples' do
         let(:params) do
           {
-            maxmemory_samples: '_VALUE_'
+            maxmemory_samples: 9
           }
         end
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{maxmemory-samples.*_VALUE_}
+            'content' => %r{maxmemory-samples.*9}
           )
         }
       end
@@ -697,7 +685,7 @@ describe 'redis' do
 
         it do
           if facts[:operatingsystem] == 'Ubuntu' && facts[:operatingsystemmajrelease] == '16.04'
-            is_expected.not_to contain_file(config_file_orig).with_content(%r{protected-mode})
+            is_expected.not_to contain_file(config_file_orig).with_content(%r{^protected-mode$})
           else
             is_expected.to contain_file(config_file_orig).with_content(%r{^protected-mode no$})
           end
@@ -1247,7 +1235,7 @@ describe 'redis' do
 
         it {
           is_expected.not_to contain_file(config_file_orig).with(
-            'content' => %r{cluster-enabled}
+            'content' => %r{^cluster-enabled.*yes}
           )
         }
       end
@@ -1261,7 +1249,7 @@ describe 'redis' do
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{cluster-enabled.*yes}
+            'content' => %r{^cluster-enabled.*yes}
           )
         }
       end
@@ -1415,6 +1403,1196 @@ describe 'redis' do
 
         it { is_expected.to contain_file(config_file_orig).with_content(%r{^protected-mode}) }
       end
+
+      describe 'test extra_config_file for redis6 config' do
+        let(:params) do
+          {
+            extra_config_file: '/var/redis6/local.conf',
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^include /var/redis6/local.conf$}
+          )
+        }
+      end
+
+      describe 'test bind for redis6 config' do
+        let(:params) do
+          {
+            bind: %w[192.168.1.1 172.0.0.1],
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^bind 192.168.1.1 172.0.0.1$}
+          )
+        }
+      end
+
+      describe 'test protected-mode for redis6 config' do
+        let(:params) do
+          {
+            protected_mode: true,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^protected-mode yes$}
+          )
+        }
+      end
+
+      describe 'test port for redis6 config' do
+        let(:params) do
+          {
+            port: 6378,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^port 6378$}
+          )
+        }
+      end
+
+      describe 'test tcp-backlog for redis6 config' do
+        let(:params) do
+          {
+            tcp_backlog: 1011,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^tcp-backlog 1011$}
+          )
+        }
+      end
+
+      describe 'test unixsocket for redis6 config' do
+        let(:params) do
+          {
+            unixsocket: '/tmp/redis6.sock',
+            unixsocketperm: '400',
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^unixsocket /tmp/redis6.sock$}
+          )
+        }
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^unixsocketperm 400$}
+          )
+        }
+      end
+
+      describe 'test timeout for redis6 config' do
+        let(:params) do
+          {
+            timeout: 17,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^timeout 17$}
+          )
+        }
+      end
+
+      describe 'test tcp-keepalive for redis6 config' do
+        let(:params) do
+          {
+            tcp_keepalive: 1321,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^tcp-keepalive 1321$}
+          )
+        }
+      end
+
+      describe 'test daemonize for redis6 config' do
+        let(:params) do
+          {
+            daemonize: true,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^daemonize yes$}
+          )
+        }
+      end
+
+      describe 'test pidfile for redis6 config' do
+        let(:params) do
+          {
+            pid_file: '/tmp/redis6.pid',
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^pidfile /tmp/redis6.pid$}
+          )
+        }
+      end
+
+      describe 'test loglevel for redis6 config' do
+        let(:params) do
+          {
+            log_level: 'debug',
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^loglevel debug$}
+          )
+        }
+      end
+
+      describe 'test logfile for redis6 config' do
+        let(:params) do
+          {
+            log_file: '/tmp/redis6.log',
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^logfile /tmp/redis6.log$}
+          )
+        }
+      end
+
+      describe 'test syslog-enabled for redis6 config' do
+        let(:params) do
+          {
+            syslog_enabled: true,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^syslog-enabled yes$}
+          )
+        }
+      end
+
+      describe 'test syslog-facility for redis6 config' do
+        let(:params) do
+          {
+            syslog_facility: 'local7',
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^syslog-facility local7$}
+          )
+        }
+      end
+
+      describe 'test databases for redis6 config' do
+        let(:params) do
+          {
+            databases: 7,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^databases 7$}
+          )
+        }
+      end
+
+      describe 'test save_db_to_disk disabled for redis6 config' do
+        let(:params) do
+          {
+            save_db_to_disk: false,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^save ""$}
+          )
+        }
+      end
+
+      describe 'test save_db_to_disk enabled for redis6 config' do
+        let(:params) do
+          {
+            save_db_to_disk: true,
+            save_db_to_disk_interval: { '900' => '1', '300' => '11', '60' => '10011' },
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it { is_expected.to contain_file(config_file_orig).with('content' => %r{save 900 1}) }
+        it { is_expected.to contain_file(config_file_orig).with('content' => %r{save 300 11}) }
+        it {
+          is_expected.to contain_file(config_file_orig).with('content' => %r{save 60 10011})
+        }
+      end
+
+      describe 'test stop-writes-on-bgsave-error for redis6 config' do
+        let(:params) do
+          {
+            stop_writes_on_bgsave_error: true,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^stop-writes-on-bgsave-error yes$}
+          )
+        }
+      end
+
+      describe 'test rdbcompression for redis6 config' do
+        let(:params) do
+          {
+            rdbcompression: true,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^rdbcompression yes$}
+          )
+        }
+      end
+
+      describe 'test dbfilename for redis6 config' do
+        let(:params) do
+          {
+            dbfilename: 'redis6.rdb',
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^dbfilename redis6.rdb$}
+          )
+        }
+      end
+
+      describe 'test workdir for redis6 config' do
+        let(:params) do
+          {
+            workdir: '/var/lib/redis6',
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^dir /var/lib/redis6$}
+          )
+        }
+      end
+
+      describe 'test slaveof for redis6 config' do
+        let(:params) do
+          {
+            slaveof: 'redis6-master',
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^slaveof redis6-master$}
+          )
+        }
+      end
+
+      describe 'test masterauth for redis6 config' do
+        let(:params) do
+          {
+            masterauth: 'secret_password',
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^masterauth secret_password$}
+          )
+        }
+      end
+
+      describe 'test replica-serve-stale-data for redis6 config' do
+        let(:params) do
+          {
+            slave_serve_stale_data: true,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^replica-serve-stale-data yes$}
+          )
+        }
+      end
+
+      describe 'test replica-read-only for redis6 config' do
+        let(:params) do
+          {
+            slave_serve_stale_data: true,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^replica-read-only yes$}
+          )
+        }
+      end
+
+      describe 'test repl-ping-replica-period for redis6 config' do
+        let(:params) do
+          {
+            repl_ping_slave_period: 1426,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^repl-ping-replica-period 1426$}
+          )
+        }
+      end
+
+      describe 'test repl-timeout for redis6 config' do
+        let(:params) do
+          {
+            repl_timeout: 3,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^repl-timeout 3$}
+          )
+        }
+      end
+
+      describe 'test repl-timeout for redis6 config' do
+        let(:params) do
+          {
+            repl_timeout: 3,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^repl-timeout 3$}
+          )
+        }
+      end
+
+      describe 'test repl-disable-tcp-nodelay for redis6 config' do
+        let(:params) do
+          {
+            repl_disable_tcp_nodelay: true,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^repl-disable-tcp-nodelay yes$}
+          )
+        }
+      end
+
+      describe 'test repl-backlog-size for redis6 config' do
+        let(:params) do
+          {
+            repl_backlog_size: '5mb',
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^repl-backlog-size 5mb$}
+          )
+        }
+      end
+
+      describe 'test repl-backlog-ttl for redis6 config' do
+        let(:params) do
+          {
+            repl_backlog_ttl: 3601,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^repl-backlog-ttl 3601$}
+          )
+        }
+      end
+
+      describe 'test replica-priority for redis6 config' do
+        let(:params) do
+          {
+            slave_priority: 7,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^replica-priority 7$}
+          )
+        }
+      end
+
+      describe 'test replica-priority for redis6 config' do
+        let(:params) do
+          {
+            slave_priority: 47,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^replica-priority 47$}
+          )
+        }
+      end
+
+      describe 'test min-replicas-to-write for redis6 config' do
+        let(:params) do
+          {
+            min_slaves_to_write: 21,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^min-replicas-to-write 21$}
+          )
+        }
+      end
+
+      describe 'test min-replicas-max-lag for redis6 config' do
+        let(:params) do
+          {
+            min_slaves_max_lag: 23,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^min-replicas-max-lag 23$}
+          )
+        }
+      end
+
+      describe 'test requirepass for redis6 config' do
+        let(:params) do
+          {
+            requirepass: 'password_secret',
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^requirepass password_secret$}
+          )
+        }
+      end
+
+      describe 'test rename-command for redis6 config' do
+        let(:params) do
+          {
+            rename_commands: { 'CONFIG': 'J29CONFIG' },
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^rename-command CONFIG J29CONFIG$}
+          )
+        }
+      end
+
+      describe 'test maxclients for redis6 config' do
+        let(:params) do
+          {
+            maxclients: 21111,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^maxclients 21111$}
+          )
+        }
+      end
+
+      describe 'test maxmemory for redis6 config' do
+        let(:params) do
+          {
+            maxmemory: '21371mb',
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^maxmemory 21371mb$}
+          )
+        }
+      end
+
+      describe 'test maxmemory-policy for redis6 config' do
+        let(:params) do
+          {
+            maxmemory_policy: 'allkeys-lru',
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^maxmemory-policy allkeys-lru$}
+          )
+        }
+      end
+
+      describe 'test maxmemory-samples for redis6 config' do
+        let(:params) do
+          {
+            maxmemory_samples: 9,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^maxmemory-samples 9$}
+          )
+        }
+      end
+
+      describe 'test appendonly for redis6 config' do
+        let(:params) do
+          {
+            appendonly: true,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^appendonly yes$}
+          )
+        }
+      end
+
+      describe 'test appendfilename for redis6 config' do
+        let(:params) do
+          {
+            appendfilename: 'appendonly6378.aof',
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^appendfilename appendonly6378.aof$}
+          )
+        }
+      end
+
+      describe 'test appendfsync for redis6 config' do
+        let(:params) do
+          {
+            appendfsync: 'no',
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^appendfsync no$}
+          )
+        }
+      end
+
+      describe 'test no-appendfsync-on-rewrite for redis6 config' do
+        let(:params) do
+          {
+            no_appendfsync_on_rewrite: true,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^no-appendfsync-on-rewrite yes$}
+          )
+        }
+      end
+
+      describe 'test auto-aof-rewrite-percentage for redis6 config' do
+        let(:params) do
+          {
+            auto_aof_rewrite_percentage: 71,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^auto-aof-rewrite-percentage 71$}
+          )
+        }
+      end
+
+      describe 'test auto-aof-rewrite-min-size for redis6 config' do
+        let(:params) do
+          {
+            auto_aof_rewrite_min_size: '32mb',
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^auto-aof-rewrite-min-size 32mb$}
+          )
+        }
+      end
+
+      describe 'test aof-load-truncated for redis6 config' do
+        let(:params) do
+          {
+            aof_load_truncated: true,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^aof-load-truncated yes$}
+          )
+        }
+      end
+
+      describe 'test cluster mode for redis6 config' do
+        let(:params) do
+          {
+            cluster_enabled: true,
+            cluster_config_file: 'nodes6.conf',
+            cluster_node_timeout: 10001,
+            cluster_slave_validity_factor: 1,
+            cluster_require_full_coverage: false,
+            cluster_migration_barrier: 2,
+            cluster_allow_reads_when_down: true,
+            cluster_replica_no_failover: true,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^cluster-enabled yes$}
+          )
+        }
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^cluster-config-file nodes6.conf$}
+          )
+        }
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^cluster-node-timeout 10001$}
+          )
+        }
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^cluster-replica-validity-factor 1$}
+          )
+        }
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^cluster-require-full-coverage no$}
+          )
+        }
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^cluster-migration-barrier 2$}
+          )
+        }
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^cluster-allow-reads-when-down yes$}
+          )
+        }
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^cluster-replica-no-failover yes$}
+          )
+        }
+      end
+
+      describe 'test slowlog-log-slower-than for redis6 config' do
+        let(:params) do
+          {
+            slowlog_log_slower_than: 1000,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^slowlog-log-slower-than 1000$}
+          )
+        }
+      end
+
+      describe 'test slowlog-max-len for redis6 config' do
+        let(:params) do
+          {
+            slowlog_max_len: 112,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^slowlog-max-len 112$}
+          )
+        }
+      end
+
+      describe 'test latency-monitor-threshold for redis6 config' do
+        let(:params) do
+          {
+            latency_monitor_threshold: 509,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^latency-monitor-threshold 509$}
+          )
+        }
+      end
+
+      describe 'test notify-keyspace-events for redis6 config' do
+        let(:params) do
+          {
+            notify_keyspace_events: 'Ex',
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^notify-keyspace-events Ex$}
+          )
+        }
+      end
+
+      describe 'test hash-max-ziplist-entries for redis6 config' do
+        let(:params) do
+          {
+            hash_max_ziplist_entries: 342,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^hash-max-ziplist-entries 342$}
+          )
+        }
+      end
+
+      describe 'test hash-max-ziplist-value for redis6 config' do
+        let(:params) do
+          {
+            hash_max_ziplist_value: 2557,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^hash-max-ziplist-value 2557$}
+          )
+        }
+      end
+
+      describe 'test list-max-ziplist-entries for redis6 config' do
+        let(:params) do
+          {
+            list_max_ziplist_entries: 16556,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^list-max-ziplist-entries 16556$}
+          )
+        }
+      end
+
+      describe 'test list-max-ziplist-value for redis6 config' do
+        let(:params) do
+          {
+            list_max_ziplist_value: 15681,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^list-max-ziplist-value 15681$}
+          )
+        }
+      end
+
+      describe 'test set-max-intset-entries for redis6 config' do
+        let(:params) do
+          {
+            set_max_intset_entries: 14597,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^set-max-intset-entries 14597$}
+          )
+        }
+      end
+
+      describe 'test zset-max-ziplist-entries for redis6 config' do
+        let(:params) do
+          {
+            zset_max_ziplist_entries: 4487,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^zset-max-ziplist-entries 4487$}
+          )
+        }
+      end
+
+      describe 'test zset-max-ziplist-value for redis6 config' do
+        let(:params) do
+          {
+            zset_max_ziplist_value: 2603,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^zset-max-ziplist-value 2603$}
+          )
+        }
+      end
+
+      describe 'test hll-sparse-max-bytes for redis6 config' do
+        let(:params) do
+          {
+            hll_sparse_max_bytes: 985,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^hll-sparse-max-bytes 985$}
+          )
+        }
+      end
+
+      describe 'test activerehashing for redis6 config' do
+        let(:params) do
+          {
+            activerehashing: true,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^activerehashing yes$}
+          )
+        }
+      end
+
+      describe 'test client-output-buffer-limit replica for redis6 config' do
+        let(:params) do
+          {
+            output_buffer_limit_slave: '251mb 63mb 59',
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^client-output-buffer-limit replica 251mb 63mb 59$}
+          )
+        }
+      end
+
+      describe 'test client-output-buffer-limit pubsub for redis6 config' do
+        let(:params) do
+          {
+            output_buffer_limit_pubsub: '253mb 61mb 57',
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^client-output-buffer-limit pubsub 253mb 61mb 57$}
+          )
+        }
+      end
+
+      describe 'test hz for redis6 config' do
+        let(:params) do
+          {
+            hz: 314,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^hz 314$}
+          )
+        }
+      end
+
+      describe 'test aof-rewrite-incremental-fsync for redis6 config' do
+        let(:params) do
+          {
+            aof_rewrite_incremental_fsync: true,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^aof-rewrite-incremental-fsync yes$}
+          )
+        }
+      end
+
+      describe 'test io-threads for redis6 config' do
+        let(:params) do
+          {
+            conf_template: "redis/redis6.conf.epp",
+            io_threads: 4
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^io-threads 4$}
+          )
+        }
+      end
+
+      describe 'test io-threads-do-reads for redis6 config' do
+        let(:params) do
+          {
+            io_threads_do_reads: true,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^io-threads-do-reads yes$}
+          )
+        }
+      end
+
+      describe 'test dynamic-hz for redis6 config' do
+        let(:params) do
+          {
+            dynamic_hz: true,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^dynamic-hz yes$}
+          )
+        }
+      end
+
+      describe 'test activedefrag for redis6 config' do
+        let(:params) do
+          {
+            activedefrag: false,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^activedefrag no$}
+          )
+        }
+      end
+
+      describe 'test jemalloc-bg-thread for redis6 config' do
+        let(:params) do
+          {
+            jemalloc_bg_thread: true,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^jemalloc-bg-thread yes$}
+          )
+        }
+      end
+
+      describe 'test activedefrag configuration for redis6 config' do
+        let(:params) do
+          {
+            activedefrag: true,
+            active_defrag_ignore_bytes: '200mb',
+            active_defrag_threshold_lower: 11,
+            active_defrag_threshold_upper: 99,
+            active_defrag_cycle_min: 7,
+            active_defrag_cycle_max: 23,
+            active_defrag_max_scan_fields: 1341,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^activedefrag yes$}
+          )
+        }
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^active-defrag-ignore-bytes 200mb$}
+          )
+        }
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^active-defrag-threshold-lower 11$}
+          )
+        }
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^active-defrag-threshold-upper 99$}
+          )
+        }
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^active-defrag-cycle-min 7$}
+          )
+        }
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^active-defrag-cycle-max 23$}
+          )
+        }
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^active-defrag-max-scan-fields 1341$}
+          )
+        }
+      end
+
+      describe 'test rdb-save-incremental-fsync for redis6 config' do
+        let(:params) do
+          {
+            rdb_save_incremental_fsync: true,
+            conf_template: "redis/redis6.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^rdb-save-incremental-fsync yes$}
+          )
+        }
+      end
+
     end
   end
 end
