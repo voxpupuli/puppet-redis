@@ -401,7 +401,7 @@ define redis::instance (
     owner   => $config_owner,
     group   => $config_group,
     mode    => $config_file_mode,
-    content => epp($conf_template,{'real_log_path' => $_real_log_file}),
+    content => epp($conf_template,{ 'real_log_path' => $_real_log_file }),
   }
 
   exec { "cp -p ${redis_file_name_orig} ${redis_file_name}":
