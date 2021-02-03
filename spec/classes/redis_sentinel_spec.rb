@@ -156,6 +156,213 @@ CONFIG
         it { is_expected.to create_class('redis::sentinel') }
         it { is_expected.to contain_file(config_file_orig).with_content(expected_content) }
       end
+
+      describe 'with parameter sentinel_bind for redis6 config' do
+        let(:params) do
+          {
+            sentinel_bind: %w[192.168.1.1 127.0.0.1],
+            conf_template: "redis/redis6-sentinel.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^bind 192.168.1.1 127.0.0.1$}
+          )
+        }
+      end
+
+      describe 'with parameter protected_mode for redis6 config' do
+        let(:params) do
+          {
+            protected_mode: false,
+            conf_template: "redis/redis6-sentinel.conf.epp"
+          }
+        end
+        it do
+          if facts[:operatingsystem] == 'Ubuntu' && facts[:operatingsystemmajrelease] == '16.04'
+            is_expected.not_to contain_file(config_file_orig).with_content(%r{^protected-mode$})
+          else
+            is_expected.to contain_file(config_file_orig).with(
+              'content' => %r{^protected-mode no$}
+            )
+          end
+        end
+      end
+
+      describe 'with parameter sentinel_port for redis6 config' do
+        let(:params) do
+          {
+            sentinel_port: 6200,
+            conf_template: "redis/redis6-sentinel.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^port 6200$}
+          )
+        }
+      end
+
+      describe 'with parameter daemonize for redis6 config' do
+        let(:params) do
+          {
+            daemonize: true,
+            conf_template: "redis/redis6-sentinel.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^daemonize yes$}
+          )
+        }
+      end
+
+      describe 'with parameter pid_file for redis6 config' do
+        let(:params) do
+          {
+            pid_file: '/var/run/redis6-sentinel.pid',
+            conf_template: "redis/redis6-sentinel.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^pidfile /var/run/redis6-sentinel.pid$}
+          )
+        }
+      end
+
+      describe 'with parameter log_file for redis6 config' do
+        let(:params) do
+          {
+            log_file: '/tmp/sentinel.log',
+            conf_template: "redis/redis6-sentinel.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^logfile /tmp/sentinel.log$}
+          )
+        }
+      end
+
+      describe 'with parameter working_dir for redis6 config' do
+        let(:params) do
+          {
+            working_dir: '/tmp/sentinel/',
+            conf_template: "redis/redis6-sentinel.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^dir /tmp/sentinel/$}
+          )
+        }
+      end
+
+      describe 'test sentinel monitor for redis6 config' do
+        let(:params) do
+          {
+            master_name: 'mymaster',
+            redis_host: 'redis01',
+            redis_port: 6378,
+            quorum: 5,
+            conf_template: "redis/redis6-sentinel.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^sentinel monitor mymaster redis01 6378 5$}
+          )
+        }
+      end
+
+      describe 'test auth_pass for redis6 config' do
+        let(:params) do
+          {
+            master_name: 'mymaster',
+            auth_pass: 'super_secure_secret',
+            conf_template: "redis/redis6-sentinel.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^sentinel auth-pass mymaster super_secure_secret$}
+          )
+        }
+      end
+
+      describe 'test sentinel down-after-milliseconds for redis6 config' do
+        let(:params) do
+          {
+            master_name: 'mymaster',
+            down_after: 17000,
+            conf_template: "redis/redis6-sentinel.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^sentinel down-after-milliseconds mymaster 17000$}
+          )
+        }
+      end
+
+      describe 'test sentinel failover-timeout for redis6 config' do
+        let(:params) do
+          {
+            master_name: 'mymaster',
+            failover_timeout: 17001,
+            conf_template: "redis/redis6-sentinel.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^sentinel failover-timeout mymaster 17001$}
+          )
+        }
+      end
+
+      describe 'test sentinel notification-script for redis6 config' do
+        let(:params) do
+          {
+            master_name: 'mymaster',
+            notification_script: '/var/redis6/notify.sh',
+            conf_template: "redis/redis6-sentinel.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^sentinel notification-script mymaster /var/redis6/notify.sh$}
+          )
+        }
+      end
+
+      describe 'test sentinel client-reconfig-script for redis6 config' do
+        let(:params) do
+          {
+            master_name: 'mymaster',
+            client_reconfig_script: '/var/redis6/reconfig.sh',
+            conf_template: "redis/redis6-sentinel.conf.epp"
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^sentinel client-reconfig-script mymaster /var/redis6/reconfig.sh$}
+          )
+        }
+      end
+
     end
   end
 end

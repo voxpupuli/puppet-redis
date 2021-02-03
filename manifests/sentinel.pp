@@ -109,7 +109,7 @@ class redis::sentinel (
   Stdlib::Absolutepath $config_file = $redis::params::sentinel_config_file,
   Stdlib::Absolutepath $config_file_orig = $redis::params::sentinel_config_file_orig,
   Stdlib::Filemode $config_file_mode = '0644',
-  String[1] $conf_template = 'redis/redis-sentinel.conf.erb',
+  String[1] $conf_template = 'redis/redis-sentinel.conf.epp',
   Boolean $daemonize = $redis::params::sentinel_daemonize,
   Boolean $protected_mode = $redis::params::sentinel_protected_mode,
   Integer[1] $down_after = 30000,
@@ -140,15 +140,12 @@ class redis::sentinel (
   ensure_packages([$package_name])
   Package[$package_name] -> File[$config_file_orig]
 
-  $sentinel_bind_arr = delete_undef_values([$sentinel_bind].flatten)
-  $supports_protected_mode = $redis::supports_protected_mode
-
   file { $config_file_orig:
     ensure  => file,
     owner   => $service_user,
     group   => $service_group,
     mode    => $config_file_mode,
-    content => template($conf_template),
+    content => epp($conf_template),
   }
 
   exec { "cp -p ${config_file_orig} ${config_file}":
