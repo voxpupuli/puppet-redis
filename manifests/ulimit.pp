@@ -31,7 +31,7 @@ class redis::ulimit {
     limits          => {
       'LimitNOFILE' => $redis::ulimit,
     },
-    restart_service =>  false,
+    restart_service => false,
   }
 
   file { "/etc/systemd/system/${redis::service_name}.service.d/limit.conf":

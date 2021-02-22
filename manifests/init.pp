@@ -196,7 +196,8 @@
 # @param ulimit
 #   Limit the use of system-wide resources.
 # @param ulimit_managed
-#   Defines wheter the Limit is managed by this module or not.
+#   Defines wheter the max number of open files for the
+#   systemd service unit is explicitly managed.
 # @param unixsocket
 #   Define unix socket path
 # @param unixsocketperm

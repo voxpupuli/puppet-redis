@@ -163,6 +163,9 @@
 #   Close the connection after a client is idle for N seconds (0 to disable).
 # @param ulimit
 #   Limit the use of system-wide resources.
+# @param ulimit_managed
+#   Defines wheter the max number of open files for the
+#   systemd service unit is explicitly managed.
 # @param unixsocket
 #   Define unix socket path
 # @param unixsocketperm
@@ -310,8 +313,8 @@ define redis::instance (
   }
 
   if $manage_service_file {
-    file { "/etc/systemd/system/${service_name}.service":
-      ensure  => file,
+    systemd::unit_file { "${service_name}.service":
+      ensure  => 'present',
       owner   => 'root',
       group   => 'root',
       mode    => '0644',

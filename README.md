@@ -135,8 +135,6 @@ class { '::redis::sentinel':
 
 ### Soft dependency
 
-This module requires [camptocamp/systemd](https://forge.puppet.com/camptocamp/systemd) on Puppet versions older than 6.1.0.
-
 When managing the repo, it either needs [puppetlabs/apt](https://forge.puppet.com/puppetlabs/apt) or [puppet/epel](https://forge.puppet.com/puppet/epel).
 
 ## `redis::get()` function

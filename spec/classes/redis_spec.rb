@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'redis' do
-  let(:service_file) { "/etc/systemd/system/#{service_name}.service" }
   let(:package_name) { facts[:osfamily] == 'Debian' ? 'redis-server' : 'redis' }
   let(:service_name) { package_name }
   let(:config_file) do
@@ -1363,7 +1362,7 @@ describe 'redis' do
           }
         end
 
-        it { is_expected.to contain_file(service_file) }
+        it { is_expected.to contain_systemd__unit_file("#{service_name}.service") }
 
         it do
           content = <<-END.gsub(%r{^\s+\|}, '')
@@ -1388,18 +1387,18 @@ describe 'redis' do
             |WantedBy=multi-user.target
           END
 
-          is_expected.to contain_file(service_file).with_content(content)
+          is_expected.to contain_systemd__unit_file("#{service_name}.service").with_content(content)
         end
       end
 
-      describe 'with parameter manage_service_file' do
+      describe 'with parameter manage_service_file set to false' do
         let(:params) do
           {
             manage_service_file: false
           }
         end
 
-        it { is_expected.not_to contain_file(service_file) }
+        it { is_expected.not_to contain_systemd__unit_file("#{service_name}.service") }
       end
 
       context 'when $::redis_server_version fact is not present' do
