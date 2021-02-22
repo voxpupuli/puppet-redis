@@ -195,6 +195,8 @@
 #   Close the connection after a client is idle for N seconds (0 to disable).
 # @param ulimit
 #   Limit the use of system-wide resources.
+# @param ulimit_managed
+#   Defines wheter the Limit is managed by this module or not.
 # @param unixsocket
 #   Define unix socket path
 # @param unixsocketperm

@@ -120,25 +120,13 @@ describe 'redis' do
 
           it { is_expected.to compile.with_all_deps }
           it do
-            is_expected.to contain_file("/etc/systemd/system/#{service_name}.service.d/limit.conf").
-              with_ensure('file').
-              with_owner('root').
-              with_group('root').
-              with_mode('0444')
-            # Only necessary for Puppet < 6.1.0,
-            # See https://github.com/puppetlabs/puppet/commit/f8d5c60ddb130c6429ff12736bfdb4ae669a9fd4
-            if Puppet.version < '6.1'
-              is_expected.to contain_augeas('Systemd redis ulimit').
-                with_incl("/etc/systemd/system/#{service_name}.service.d/limit.conf").
-                with_lens('Systemd.lns').
-                with_changes(['defnode nofile Service/LimitNOFILE ""', 'set $nofile/value "7777"']).
-                that_notifies('Class[systemd::systemctl::daemon_reload]')
-            else
-              is_expected.to contain_augeas('Systemd redis ulimit').
-                with_incl("/etc/systemd/system/#{service_name}.service.d/limit.conf").
-                with_lens('Systemd.lns').
-                with_changes(['defnode nofile Service/LimitNOFILE ""', 'set $nofile/value "7777"'])
-            end
+            is_expected.to contain_file("/etc/systemd/system/#{service_name}.service.d/limit.conf")
+              .with_ensure('absent')
+
+            is_expected.to contain_systemd__service_limits("#{service_name}.service").
+              with_limits({ "LimitNOFILE" => 7777 }).
+              with_restart_service(false).
+              with_ensure('present')
           end
         end
 
@@ -147,8 +135,7 @@ describe 'redis' do
 
           it { is_expected.to compile.with_all_deps }
           it do
-            is_expected.to_not contain_file("/etc/systemd/system/#{service_name}.service.d/limit.conf")
-            is_expected.to_not contain_augeas('Systemd redis ulimit')
+            is_expected.not_to contain_systemd__service_limits("#{service_name}.service")
           end
         end
       end

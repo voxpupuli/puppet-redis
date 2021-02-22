@@ -19,6 +19,10 @@
     {
       "name": "herculesteam/augeasproviders_core",
       "version_requirement": ">= 2.1.0 < 3.0.0"
+    },
+    {
+      "name": "camptocamp/systemd",
+      "version_requirement": ">= 2.0.0 < 3.0.0"
     }
   ],
   "description": "Redis module with cluster support",
