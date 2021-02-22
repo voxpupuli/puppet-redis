@@ -114,29 +114,41 @@ describe 'redis' do
         end
       end
 
-      context 'with ulimit' do
-        let(:params) { { ulimit: 7777 } }
+      describe 'with parameter ulimit_managed' do
+        context 'true' do
+          let(:params) { { ulimit: 7777, ulimit_managed: true } }
 
-        it { is_expected.to compile.with_all_deps }
-        it do
-          is_expected.to contain_file("/etc/systemd/system/#{service_name}.service.d/limit.conf").
-            with_ensure('file').
-            with_owner('root').
-            with_group('root').
-            with_mode('0444')
-          # Only necessary for Puppet < 6.1.0,
-          # See https://github.com/puppetlabs/puppet/commit/f8d5c60ddb130c6429ff12736bfdb4ae669a9fd4
-          if Puppet.version < '6.1'
-            is_expected.to contain_augeas('Systemd redis ulimit').
-              with_incl("/etc/systemd/system/#{service_name}.service.d/limit.conf").
-              with_lens('Systemd.lns').
-              with_changes(['defnode nofile Service/LimitNOFILE ""', 'set $nofile/value "7777"']).
-              that_notifies('Class[systemd::systemctl::daemon_reload]')
-          else
-            is_expected.to contain_augeas('Systemd redis ulimit').
-              with_incl("/etc/systemd/system/#{service_name}.service.d/limit.conf").
-              with_lens('Systemd.lns').
-              with_changes(['defnode nofile Service/LimitNOFILE ""', 'set $nofile/value "7777"'])
+          it { is_expected.to compile.with_all_deps }
+          it do
+            is_expected.to contain_file("/etc/systemd/system/#{service_name}.service.d/limit.conf").
+              with_ensure('file').
+              with_owner('root').
+              with_group('root').
+              with_mode('0444')
+            # Only necessary for Puppet < 6.1.0,
+            # See https://github.com/puppetlabs/puppet/commit/f8d5c60ddb130c6429ff12736bfdb4ae669a9fd4
+            if Puppet.version < '6.1'
+              is_expected.to contain_augeas('Systemd redis ulimit').
+                with_incl("/etc/systemd/system/#{service_name}.service.d/limit.conf").
+                with_lens('Systemd.lns').
+                with_changes(['defnode nofile Service/LimitNOFILE ""', 'set $nofile/value "7777"']).
+                that_notifies('Class[systemd::systemctl::daemon_reload]')
+            else
+              is_expected.to contain_augeas('Systemd redis ulimit').
+                with_incl("/etc/systemd/system/#{service_name}.service.d/limit.conf").
+                with_lens('Systemd.lns').
+                with_changes(['defnode nofile Service/LimitNOFILE ""', 'set $nofile/value "7777"'])
+            end
+          end
+        end
+
+        context 'false' do
+          let(:params) { { ulimit_managed: false } }
+
+          it { is_expected.to compile.with_all_deps }
+          it do
+            is_expected.to_not contain_file("/etc/systemd/system/#{service_name}.service.d/limit.conf")
+            is_expected.to_not contain_augeas('Systemd redis ulimit')
           end
         end
       end

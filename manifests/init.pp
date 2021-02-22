@@ -316,6 +316,7 @@ class redis (
   Variant[Stdlib::Absolutepath, Enum['']] $unixsocket            = '/var/run/redis/redis.sock',
   Variant[Stdlib::Filemode, Enum['']] $unixsocketperm            = '0755',
   Integer[0] $ulimit                                             = 65536,
+  Boolean $ulimit_managed                                        = true,
   Stdlib::Absolutepath $workdir                                  = $redis::params::workdir,
   Stdlib::Filemode $workdir_mode                                 = '0750',
   Integer[0] $zset_max_ziplist_entries                           = 128,

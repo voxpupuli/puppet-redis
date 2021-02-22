@@ -263,6 +263,7 @@ define redis::instance (
   Integer[0] $timeout                                            = $redis::timeout,
   Variant[Stdlib::Filemode , Enum['']] $unixsocketperm           = $redis::unixsocketperm,
   Integer[0] $ulimit                                             = $redis::ulimit,
+  Boolean $ulimit_managed                                        = $redis::ulimit_managed,
   Stdlib::Filemode $workdir_mode                                 = $redis::workdir_mode,
   Integer[0] $zset_max_ziplist_entries                           = $redis::zset_max_ziplist_entries,
   Integer[0] $zset_max_ziplist_value                             = $redis::zset_max_ziplist_value,
