@@ -2,10 +2,19 @@ require 'spec_helper'
 
 describe 'redis' do
   let(:service_file) { "/etc/systemd/system/#{service_name}.service" }
-  let(:package_name) { manifest_vars[:package_name] }
-  let(:service_name) { manifest_vars[:service_name] }
-  let(:config_file) { manifest_vars[:config_file] }
-  let(:config_file_orig) { manifest_vars[:config_file_orig] }
+  let(:package_name) { facts[:osfamily] == 'Debian' ? 'redis-server' : 'redis' }
+  let(:service_name) { package_name }
+  let(:config_file) do
+    case facts[:osfamily]
+    when 'Archlinux', 'Debian'
+      '/etc/redis/redis.conf'
+    when 'FreeBSD',
+      '/usr/local/etc/redis.conf'
+    when 'RedHat'
+      '/etc/redis.conf'
+    end
+  end
+  let(:config_file_orig) { "#{config_file}.puppet" }
 
   on_supported_os.each do |os, facts|
     context "on #{os}" do
