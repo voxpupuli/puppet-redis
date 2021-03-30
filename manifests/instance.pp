@@ -313,30 +313,24 @@ define redis::instance (
   }
 
   if $manage_service_file {
+    if $title != 'default' {
+      $real_service_ensure = $service_ensure == 'running'
+      $real_service_enable = $service_enable
+
+      Exec["cp -p ${redis_file_name_orig} ${redis_file_name}"] ~> Service["${service_name}.service"]
+    } else {
+      $real_service_ensure = undef
+      $real_service_enable = undef
+    }
+
     systemd::unit_file { "${service_name}.service":
       ensure  => 'present',
+      active  => $real_service_ensure,
+      enable  => $real_service_enable,
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
       content => template('redis/service_templates/redis.service.erb'),
-    }
-
-    # Only necessary for Puppet < 6.1.0,
-    # See https://github.com/puppetlabs/puppet/commit/f8d5c60ddb130c6429ff12736bfdb4ae669a9fd4
-    if versioncmp($facts['puppetversion'],'6.1.0') < 0 {
-      include systemd::systemctl::daemon_reload
-      File["/etc/systemd/system/${service_name}.service"] ~> Class['systemd::systemctl::daemon_reload']
-    }
-
-    if $title != 'default' {
-      service { $service_name:
-        ensure    => $service_ensure,
-        enable    => $service_enable,
-        subscribe => [
-          File["/etc/systemd/system/${service_name}.service"],
-          Exec["cp -p ${redis_file_name_orig} ${redis_file_name}"],
-        ],
-      }
     }
   }
 
