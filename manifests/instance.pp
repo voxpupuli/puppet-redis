@@ -332,6 +332,15 @@ define redis::instance (
       mode    => '0644',
       content => template('redis/service_templates/redis.service.erb'),
     }
+  } else {
+    if $ulimit_managed {
+      systemd::service_limits { "${service_name}.service":
+        limits          => {
+          'LimitNOFILE' => $ulimit,
+        },
+        restart_service => false,
+      }
+    }
   }
 
   $_real_log_file = $log_file ? {

@@ -27,13 +27,7 @@ class redis::ulimit {
     }
   }
 
-  systemd::service_limits { "${redis::service_name}.service":
-    limits          => {
-      'LimitNOFILE' => $redis::ulimit,
-    },
-    restart_service => false,
-  }
-
+  # Migrate from the old managed service
   file { "/etc/systemd/system/${redis::service_name}.service.d/limit.conf":
     ensure => absent,
   }
