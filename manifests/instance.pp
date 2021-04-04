@@ -278,8 +278,8 @@ define redis::instance (
   String[1] $service_group                                       = $redis::service_group,
   Boolean $manage_service_file                                   = true,
   String $log_file                                               = "redis-server-${name}.log",
-  Stdlib::Absolutepath $pid_file                                 = "/var/run/redis/redis-server-${name}.pid",
-  Variant[Stdlib::Absolutepath, Enum['']] $unixsocket            = "/var/run/redis/redis-server-${name}.sock",
+  Stdlib::Absolutepath $pid_file                                 = "/var/run/redis-${name}/redis.pid",
+  Variant[Stdlib::Absolutepath, Enum['']] $unixsocket            = "/var/run/redis-${name}/redis.sock",
   Stdlib::Absolutepath $workdir                                  = "${redis::workdir}/redis-server-${name}",
 ) {
   if $title == 'default' {

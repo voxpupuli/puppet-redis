@@ -5,7 +5,7 @@ After=network-online.target
 Wants=network-online.target
 
 [Service]
-RuntimeDirectory=redis
+RuntimeDirectory=redis-<%= @title %>
 RuntimeDirectoryMode=2755
 <%# Redis on Xenial is too old for systemd integration -%>
 <% if @facts['os']['name'] == 'Ubuntu' and @facts['os']['release']['major'] == '16.04' -%>
