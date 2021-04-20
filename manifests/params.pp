@@ -7,6 +7,8 @@ class redis::params inherits redis::globals {
 
       $config_dir                = '/etc/redis'
       $config_dir_mode           = '0755'
+      $config_dir_purge          = false
+      $config_dir_recurse        = false
       $config_file               = '/etc/redis/redis.conf'
       $config_file_orig          = '/etc/redis/redis.conf.puppet'
       $config_owner              = 'redis'

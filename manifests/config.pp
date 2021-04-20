@@ -8,8 +8,10 @@ class redis::config {
   }
 
   file { $redis::config_dir:
-    ensure => directory,
-    mode   => $redis::config_dir_mode,
+    ensure  => directory,
+    mode    => $redis::config_dir_mode,
+    purge   => $redis::config_dir_purge,
+    recurse => $redis::config_dir_recurse,
   }
 
   file { $redis::log_dir:

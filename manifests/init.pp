@@ -41,6 +41,10 @@
 #   Directory containing the configuration files.
 # @param config_dir_mode
 #   Adjust mode for directory containing configuration files.
+# @param config_dir_purge
+#   Adjust purge option for directory containing configuration files.
+# @param config_dir_recurse
+#   Adjust recurse option for directory containing configuration files.
 # @param config_file_orig
 #   The location and name of a config file that provides the source
 # @param config_file
@@ -242,6 +246,8 @@ class redis (
   String[1] $conf_template                                       = 'redis/redis.conf.erb',
   Stdlib::Absolutepath $config_dir                               = $redis::params::config_dir,
   Stdlib::Filemode $config_dir_mode                              = $redis::params::config_dir_mode,
+  Boolean $config_dir_purge                                      = $redis::params::config_dir_purge,
+  Boolean $config_dir_recurse                                    = $redis::params::config_dir_recurse,
   Stdlib::Absolutepath $config_file                              = $redis::params::config_file,
   Stdlib::Filemode $config_file_mode                             = '0644',
   Stdlib::Absolutepath $config_file_orig                         = $redis::params::config_file_orig,
