@@ -286,8 +286,7 @@ define redis::instance (
     $redis_file_name_orig = $config_file_orig
     $redis_file_name      = $config_file
   } else {
-    $redis_file_name_orig = sprintf('%s/%s.%s', dirname($config_file_orig), $service_name, 'conf.puppet')
-    $redis_file_name      = sprintf('%s/%s.%s', dirname($config_file), $service_name, 'conf')
+    $redis_file_name_orig = $redis_file_name = sprintf('%s/%s.%s', dirname($config_file_orig), $service_name, 'conf')
   }
 
   if $log_dir != $redis::log_dir {
@@ -330,7 +329,6 @@ define redis::instance (
         enable    => $service_enable,
         subscribe => [
           File["/etc/systemd/system/${service_name}.service"],
-          Exec["cp -p ${redis_file_name_orig} ${redis_file_name}"],
         ],
       }
     }
@@ -352,9 +350,11 @@ define redis::instance (
     content => template($conf_template),
   }
 
-  exec { "cp -p ${redis_file_name_orig} ${redis_file_name}":
-    path        => '/usr/bin:/bin',
-    subscribe   => File[$redis_file_name_orig],
-    refreshonly => true,
+  if $title == 'default' {
+    exec { "cp -p ${redis_file_name_orig} ${redis_file_name}":
+      path        => '/usr/bin:/bin',
+      subscribe   => File[$redis_file_name_orig],
+      refreshonly => true,
+    }
   }
 }
