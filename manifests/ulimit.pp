@@ -27,31 +27,8 @@ class redis::ulimit {
     }
   }
 
-  file { "/etc/systemd/system/${redis::service_name}.service.d/":
-    ensure                  => 'directory',
-    owner                   => 'root',
-    group                   => 'root',
-    selinux_ignore_defaults => true,
-  }
-
+  # Migrate from the old managed service
   file { "/etc/systemd/system/${redis::service_name}.service.d/limit.conf":
-    ensure => file,
-    owner  => 'root',
-    group  => 'root',
-    mode   => '0444',
-  }
-  augeas { 'Systemd redis ulimit' :
-    incl    => "/etc/systemd/system/${redis::service_name}.service.d/limit.conf",
-    lens    => 'Systemd.lns',
-    changes => [
-      "defnode nofile Service/LimitNOFILE \"\"",
-      "set \$nofile/value \"${redis::ulimit}\"",
-    ],
-  }
-  # Only necessary for Puppet < 6.1.0,
-  # See https://github.com/puppetlabs/puppet/commit/f8d5c60ddb130c6429ff12736bfdb4ae669a9fd4
-  if versioncmp($facts['puppetversion'],'6.1.0') < 0 {
-    include systemd::systemctl::daemon_reload
-    Augeas['Systemd redis ulimit'] ~> Class['systemd::systemctl::daemon_reload']
+    ensure => absent,
   }
 }

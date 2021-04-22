@@ -163,6 +163,9 @@
 #   Close the connection after a client is idle for N seconds (0 to disable).
 # @param ulimit
 #   Limit the use of system-wide resources.
+# @param ulimit_managed
+#   Defines wheter the max number of open files for the
+#   systemd service unit is explicitly managed.
 # @param unixsocket
 #   Define unix socket path
 # @param unixsocketperm
@@ -263,6 +266,7 @@ define redis::instance (
   Integer[0] $timeout                                            = $redis::timeout,
   Variant[Stdlib::Filemode , Enum['']] $unixsocketperm           = $redis::unixsocketperm,
   Integer[0] $ulimit                                             = $redis::ulimit,
+  Boolean $ulimit_managed                                        = $redis::ulimit_managed,
   Stdlib::Filemode $workdir_mode                                 = $redis::workdir_mode,
   Integer[0] $zset_max_ziplist_entries                           = $redis::zset_max_ziplist_entries,
   Integer[0] $zset_max_ziplist_value                             = $redis::zset_max_ziplist_value,
@@ -309,29 +313,32 @@ define redis::instance (
   }
 
   if $manage_service_file {
-    file { "/etc/systemd/system/${service_name}.service":
-      ensure  => file,
+    if $title != 'default' {
+      $real_service_ensure = $service_ensure == 'running'
+      $real_service_enable = $service_enable
+
+      Exec["cp -p ${redis_file_name_orig} ${redis_file_name}"] ~> Service["${service_name}.service"]
+    } else {
+      $real_service_ensure = undef
+      $real_service_enable = undef
+    }
+
+    systemd::unit_file { "${service_name}.service":
+      ensure  => 'present',
+      active  => $real_service_ensure,
+      enable  => $real_service_enable,
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
       content => template('redis/service_templates/redis.service.erb'),
     }
-
-    # Only necessary for Puppet < 6.1.0,
-    # See https://github.com/puppetlabs/puppet/commit/f8d5c60ddb130c6429ff12736bfdb4ae669a9fd4
-    if versioncmp($facts['puppetversion'],'6.1.0') < 0 {
-      include systemd::systemctl::daemon_reload
-      File["/etc/systemd/system/${service_name}.service"] ~> Class['systemd::systemctl::daemon_reload']
-    }
-
-    if $title != 'default' {
-      service { $service_name:
-        ensure    => $service_ensure,
-        enable    => $service_enable,
-        subscribe => [
-          File["/etc/systemd/system/${service_name}.service"],
-          Exec["cp -p ${redis_file_name_orig} ${redis_file_name}"],
-        ],
+  } else {
+    if $ulimit_managed {
+      systemd::service_limits { "${service_name}.service":
+        limits          => {
+          'LimitNOFILE' => $ulimit,
+        },
+        restart_service => false,
       }
     }
   }

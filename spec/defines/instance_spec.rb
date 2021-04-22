@@ -42,7 +42,7 @@ describe 'redis::instance' do
             with_content(%r{ExecStart=/usr/bin/redis-server #{config_file}})
         end
 
-        it { is_expected.to contain_service('redis-server-app2').with_ensure('running').with_enable('true') }
+        it { is_expected.to contain_service('redis-server-app2.service').with_ensure(true).with_enable(true) }
       end
     end
   end

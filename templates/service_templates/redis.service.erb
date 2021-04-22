@@ -19,7 +19,9 @@ ExecStop=/usr/bin/redis-cli -p <%= @port %> shutdown
 Restart=always
 User=<%= @service_user %>
 Group=<%= @service_user %>
+<%if @ulimit_managed -%>
 LimitNOFILE=<%= @ulimit %>
+<% end -%>
 
 [Install]
 WantedBy=multi-user.target

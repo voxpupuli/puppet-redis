@@ -38,7 +38,7 @@ class redis::config {
     }
   }
 
-  if $redis::ulimit {
+  if $redis::ulimit_managed {
     contain redis::ulimit
   }
 

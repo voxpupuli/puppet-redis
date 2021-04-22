@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe 'redis' do
-  let(:service_file) { "/etc/systemd/system/#{service_name}.service" }
   let(:package_name) { facts[:osfamily] == 'Debian' ? 'redis-server' : 'redis' }
   let(:service_name) { package_name }
   let(:config_file) do
@@ -114,29 +113,28 @@ describe 'redis' do
         end
       end
 
-      context 'with ulimit' do
-        let(:params) { { ulimit: 7777 } }
+      describe 'with parameter ulimit_managed' do
+        context 'true' do
+          let(:params) { { ulimit: 7777, ulimit_managed: true } }
 
-        it { is_expected.to compile.with_all_deps }
-        it do
-          is_expected.to contain_file("/etc/systemd/system/#{service_name}.service.d/limit.conf").
-            with_ensure('file').
-            with_owner('root').
-            with_group('root').
-            with_mode('0444')
-          # Only necessary for Puppet < 6.1.0,
-          # See https://github.com/puppetlabs/puppet/commit/f8d5c60ddb130c6429ff12736bfdb4ae669a9fd4
-          if Puppet.version < '6.1'
-            is_expected.to contain_augeas('Systemd redis ulimit').
-              with_incl("/etc/systemd/system/#{service_name}.service.d/limit.conf").
-              with_lens('Systemd.lns').
-              with_changes(['defnode nofile Service/LimitNOFILE ""', 'set $nofile/value "7777"']).
-              that_notifies('Class[systemd::systemctl::daemon_reload]')
-          else
-            is_expected.to contain_augeas('Systemd redis ulimit').
-              with_incl("/etc/systemd/system/#{service_name}.service.d/limit.conf").
-              with_lens('Systemd.lns').
-              with_changes(['defnode nofile Service/LimitNOFILE ""', 'set $nofile/value "7777"'])
+          it { is_expected.to compile.with_all_deps }
+          it do
+            is_expected.to contain_file("/etc/systemd/system/#{service_name}.service.d/limit.conf")
+              .with_ensure('absent')
+
+            is_expected.to contain_systemd__service_limits("#{service_name}.service").
+              with_limits({ "LimitNOFILE" => 7777 }).
+              with_restart_service(false).
+              with_ensure('present')
+          end
+        end
+
+        context 'false' do
+          let(:params) { { ulimit_managed: false } }
+
+          it { is_expected.to compile.with_all_deps }
+          it do
+            is_expected.not_to contain_systemd__service_limits("#{service_name}.service")
           end
         end
       end
@@ -1364,7 +1362,7 @@ describe 'redis' do
           }
         end
 
-        it { is_expected.to contain_file(service_file) }
+        it { is_expected.to contain_systemd__unit_file("#{service_name}.service") }
 
         it do
           content = <<-END.gsub(%r{^\s+\|}, '')
@@ -1389,18 +1387,18 @@ describe 'redis' do
             |WantedBy=multi-user.target
           END
 
-          is_expected.to contain_file(service_file).with_content(content)
+          is_expected.to contain_systemd__unit_file("#{service_name}.service").with_content(content)
         end
       end
 
-      describe 'with parameter manage_service_file' do
+      describe 'with parameter manage_service_file set to false' do
         let(:params) do
           {
             manage_service_file: false
           }
         end
 
-        it { is_expected.not_to contain_file(service_file) }
+        it { is_expected.not_to contain_systemd__unit_file("#{service_name}.service") }
       end
 
       context 'when $::redis_server_version fact is not present' do
