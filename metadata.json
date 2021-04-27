@@ -13,14 +13,6 @@
       "version_requirement": ">= 4.25.0 < 8.0.0"
     },
     {
-      "name": "herculesteam/augeasproviders_sysctl",
-      "version_requirement": ">= 2.1.0 < 3.0.0"
-    },
-    {
-      "name": "herculesteam/augeasproviders_core",
-      "version_requirement": ">= 2.1.0 < 3.0.0"
-    },
-    {
       "name": "camptocamp/systemd",
       "version_requirement": ">= 2.0.0 < 4.0.0"
     }

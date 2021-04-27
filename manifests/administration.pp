@@ -3,6 +3,8 @@
 # For disabling Transparent Huge Pages (THP), use separate module such as:
 # https://forge.puppet.com/modules/alexharvey/disable_transparent_hugepage
 #
+# Note that this class requires the herculesteam/augeasproviders_sysctl module.
+#
 # @example
 #   include redis::administration
 #
@@ -18,6 +20,7 @@
 #
 # @author - Peter Souter
 # @see https://redis.io/topics/admin
+# @see https://forge.puppet.com/herculesteam/augeasproviders_sysctl
 #
 class redis::administration (
   Boolean $enable_overcommit_memory = true,
