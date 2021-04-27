@@ -30,9 +30,6 @@
 # @param failover_timeout
 #   Specify the failover timeout in milliseconds.
 #
-# @param init_script
-#   Specifiy the init script that will be created for sentinel.
-#
 # @param log_file
 #   Specify where to write log entries.
 #
@@ -51,6 +48,9 @@
 #
 # @param requirepass
 #   Specify the password to require client authentication via the AUTH command, however this feature is only available starting with Redis 5.0.1.
+#
+# @param protected_mode
+#   Whether protected mode is enabled or not. Only applicable when no bind is set.
 #
 # @param package_name
 #   The name of the package that installs sentinel.
@@ -114,10 +114,9 @@ class redis::sentinel (
   Stdlib::Filemode $config_file_mode = '0644',
   String[1] $conf_template = 'redis/redis-sentinel.conf.erb',
   Boolean $daemonize = $redis::params::sentinel_daemonize,
+  Boolean $protected_mode = $redis::params::sentinel_protected_mode,
   Integer[1] $down_after = 30000,
   Integer[1] $failover_timeout = 180000,
-  Optional[Stdlib::Absolutepath] $init_script = $redis::params::sentinel_init_script,
-  String[1] $init_template = 'redis/redis-sentinel.init.erb',
   Redis::LogLevel $log_level = 'notice',
   Stdlib::Absolutepath $log_file = $redis::params::sentinel_log_file,
   String[1] $master_name  = 'mymaster',
@@ -140,19 +139,13 @@ class redis::sentinel (
   Optional[Stdlib::Absolutepath] $notification_script = undef,
   Optional[Stdlib::Absolutepath] $client_reconfig_script = undef,
 ) inherits redis::params {
-
   require 'redis'
 
-  if $facts['os']['family'] == 'Debian' {
-    package { $package_name:
-      ensure => $package_ensure,
-      before => File[$config_file_orig],
-    }
+  ensure_packages([$package_name])
+  Package[$package_name] -> File[$config_file_orig]
 
-    if $init_script {
-      Package[$package_name] -> File[$init_script]
-    }
-  }
+  $sentinel_bind_arr = delete_undef_values([$sentinel_bind].flatten)
+  $supports_protected_mode = $redis::supports_protected_mode
 
   file { $config_file_orig:
     ensure  => file,
@@ -169,27 +162,8 @@ class redis::sentinel (
     refreshonly => true,
   }
 
-  if $init_script {
-
-    file { $init_script:
-      ensure  => file,
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0755',
-      content => template($init_template),
-    }
-
-    exec { '/usr/sbin/update-rc.d redis-sentinel defaults':
-      subscribe   => File[$init_script],
-      refreshonly => true,
-      notify      => Service[$service_name],
-    }
-
-  }
-
   service { $service_name:
     ensure => $service_ensure,
     enable => $service_enable,
   }
-
 }

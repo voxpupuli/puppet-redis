@@ -15,11 +15,13 @@ ExecStart=/usr/bin/redis-server <%= @redis_file_name %>
 Type=notify
 ExecStart=/usr/bin/redis-server <%= @redis_file_name %> --supervised systemd
 <% end -%>
-ExecStop=/usr/bin/redis-server -p <%= @port %> shutdown
+ExecStop=/usr/bin/redis-cli -p <%= @port %> shutdown
 Restart=always
 User=<%= @service_user %>
 Group=<%= @service_user %>
+<%if @ulimit_managed -%>
 LimitNOFILE=<%= @ulimit %>
+<% end -%>
 
 [Install]
 WantedBy=multi-user.target

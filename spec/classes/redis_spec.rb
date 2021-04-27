@@ -1,11 +1,19 @@
 require 'spec_helper'
 
 describe 'redis' do
-  let(:service_file) { redis_service_file(service_provider: facts['service_provider']) }
-  let(:package_name) { manifest_vars[:package_name] }
-  let(:service_name) { manifest_vars[:service_name] }
-  let(:config_file) { manifest_vars[:config_file] }
-  let(:config_file_orig) { manifest_vars[:config_file_orig] }
+  let(:package_name) { facts[:osfamily] == 'Debian' ? 'redis-server' : 'redis' }
+  let(:service_name) { package_name }
+  let(:config_file) do
+    case facts[:osfamily]
+    when 'Archlinux', 'Debian'
+      '/etc/redis/redis.conf'
+    when 'FreeBSD',
+      '/usr/local/etc/redis.conf'
+    when 'RedHat'
+      '/etc/redis.conf'
+    end
+  end
+  let(:config_file_orig) { "#{config_file}.puppet" }
 
   on_supported_os.each do |os, facts|
     context "on #{os}" do
@@ -32,6 +40,7 @@ describe 'redis' do
         it do
           is_expected.to contain_file(config_file_orig).
             with_ensure('file').
+            with_content(%r{logfile /var/log/redis/redis\.log}).
             without_content(%r{undef})
 
           if facts[:osfamily] == 'FreeBSD'
@@ -45,8 +54,6 @@ describe 'redis' do
           is_expected.to contain_service(service_name).with(
             'ensure'     => 'running',
             'enable'     => 'true',
-            'hasrestart' => 'true',
-            'hasstatus'  => 'true'
           )
         end
 
@@ -106,50 +113,28 @@ describe 'redis' do
         end
       end
 
-      context 'with ulimit' do
-        let(:params) { { ulimit: 7777 } }
+      describe 'with parameter ulimit_managed' do
+        context 'true' do
+          let(:params) { { ulimit: 7777, ulimit_managed: true } }
 
-        it { is_expected.to compile.with_all_deps }
-        it do
-          if facts['service_provider'] == 'systemd'
-            is_expected.to contain_file("/etc/systemd/system/#{service_name}.service.d/limit.conf").
-              with_ensure('file').
-              with_owner('root').
-              with_group('root').
-              with_mode('0444')
-            # Only necessary for Puppet < 6.1.0,
-            # See https://github.com/puppetlabs/puppet/commit/f8d5c60ddb130c6429ff12736bfdb4ae669a9fd4
-            if Puppet.version < '6.1'
-              is_expected.to contain_augeas('Systemd redis ulimit').
-                with_incl("/etc/systemd/system/#{service_name}.service.d/limit.conf").
-                with_lens('Systemd.lns').
-                with_changes(['defnode nofile Service/LimitNOFILE ""', 'set $nofile/value "7777"']).
-                that_notifies('Class[systemd::systemctl::daemon_reload]')
-            else
-              is_expected.to contain_augeas('Systemd redis ulimit').
-                with_incl("/etc/systemd/system/#{service_name}.service.d/limit.conf").
-                with_lens('Systemd.lns').
-                with_changes(['defnode nofile Service/LimitNOFILE ""', 'set $nofile/value "7777"'])
-            end
-          else
-            is_expected.not_to contain_file('/etc/systemd/system/redis-server.service.d/limit.conf')
-            is_expected.not_to contain_augeas('Systemd redis ulimit')
-            if %w[Debian RedHat].include?(facts[:osfamily])
-              ulimit_context = case facts[:osfamily]
-                               when 'Debian'
-                                 '/files/etc/default/redis-server'
-                               when 'RedHat'
-                                 '/files/etc/sysconfig/redis'
-                               end
+          it { is_expected.to compile.with_all_deps }
+          it do
+            is_expected.to contain_file("/etc/systemd/system/#{service_name}.service.d/limit.conf")
+              .with_ensure('absent')
 
-              if ulimit_context
-                is_expected.to contain_augeas('redis ulimit').
-                  with_changes('set ULIMIT 7777').
-                  with_context(ulimit_context)
-              else
-                is_expected.not_to contain_augeas('redis ulimit')
-              end
-            end
+            is_expected.to contain_systemd__service_limits("#{service_name}.service").
+              with_limits({ "LimitNOFILE" => 7777 }).
+              with_restart_service(false).
+              with_ensure('present')
+          end
+        end
+
+        context 'false' do
+          let(:params) { { ulimit_managed: false } }
+
+          it { is_expected.to compile.with_all_deps }
+          it do
+            is_expected.not_to contain_systemd__service_limits("#{service_name}.service")
           end
         end
       end
@@ -447,17 +432,34 @@ describe 'redis' do
       end
 
       describe 'with parameter log_file' do
-        let(:params) do
-          {
-            log_file: '/var/log/redis/redis.log'
+        describe 'as absolute path' do
+          let(:params) do
+            {
+              log_file: '/var/log/my-redis/my-redis.log'
+            }
+          end
+
+          it {
+            is_expected.to contain_file(config_file_orig).with(
+              'content' => %r{^logfile /var/log/my-redis/my-redis\.log$}
+            )
           }
         end
 
-        it {
-          is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{^logfile /var/log/redis/redis\.log$}
-          )
-        }
+        describe 'as relative path' do
+          let(:params) do
+            {
+              log_dir: '/var/log/my-redis',
+              log_file: 'my-redis.log'
+            }
+          end
+
+          it {
+            is_expected.to contain_file(config_file_orig).with(
+              'content' => %r{^logfile /var/log/my-redis/my-redis\.log$}
+            )
+          }
+        end
       end
 
       describe 'with parameter log_level' do
@@ -478,18 +480,6 @@ describe 'redis' do
         let(:params) { { manage_repo: true } }
 
         case facts[:operatingsystem]
-        when 'Debian'
-          context 'on Debian' do
-            it do
-              is_expected.to create_apt__source('dotdeb').with(location: 'http://packages.dotdeb.org/',
-                                                               repos: 'all',
-                                                               key: {
-                                                                 'id' => '6572BBEF1B5FF28B28B706837E3F070089DF5277',
-                                                                 'source' => 'http://www.dotdeb.org/dotdeb.gpg'
-                                                               },
-                                                               include: { 'src' => true })
-            end
-          end
         when 'Ubuntu'
           it { is_expected.to contain_apt__ppa('ppa:chris-lea/redis-server') }
         when 'RedHat', 'CentOS', 'Scientific', 'OEL', 'Amazon'
@@ -777,6 +767,44 @@ describe 'redis' do
         }
       end
 
+      describe 'with parameter rename_commands' do
+        context 'with a single rename' do
+          let(:params) do
+            {
+              rename_commands: { CONFIG: "\"\"" }
+            }
+          end
+          it {
+            is_expected.to contain_file(config_file_orig).with(
+              'content' => %r{^rename-command CONFIG ""$}
+            )
+          }
+        end
+        context 'with multiple renames' do
+          let(:params) do
+            {
+              rename_commands: { CONFIG: "\"\"", RENAME: "\"\"" }
+            }
+          end
+          it {
+            is_expected.to contain_file(config_file_orig).with(
+              'content' => %r{^rename-command CONFIG ""$}
+            )
+            is_expected.to contain_file(config_file_orig).with(
+              'content' => %r{^rename-command RENAME ""$}
+            )
+          }
+        end
+        context 'with empty hash' do
+          let(:params) do
+            {
+              "rename_commands" => {}
+            }
+          end
+          it { is_expected.not_to contain_file(config_file_orig).with_content(%r{^rename-command}) }
+        end
+      end
+
       describe 'with parameter repl_backlog_size' do
         let(:params) do
           {
@@ -960,18 +988,6 @@ describe 'redis' do
         let(:params) { { service_group: '_VALUE_' } }
 
         it { is_expected.to contain_file('/var/log/redis').with_group('_VALUE_') }
-      end
-
-      describe 'with parameter: service_hasrestart' do
-        let(:params) { { service_hasrestart: true } }
-
-        it { is_expected.to contain_service(package_name).with_hasrestart(true) }
-      end
-
-      describe 'with parameter: service_hasstatus' do
-        let(:params) { { service_hasstatus: true } }
-
-        it { is_expected.to contain_service(package_name).with_hasstatus(true) }
       end
 
       describe 'with parameter: service_name' do
@@ -1346,7 +1362,7 @@ describe 'redis' do
           }
         end
 
-        it { is_expected.to contain_file(service_file) }
+        it { is_expected.to contain_systemd__unit_file("#{service_name}.service") }
 
         it do
           content = <<-END.gsub(%r{^\s+\|}, '')
@@ -1361,7 +1377,7 @@ describe 'redis' do
             |RuntimeDirectoryMode=2755
             |Type=#{servicetype}
             |ExecStart=/usr/bin/redis-server #{config_file}#{systemd}
-            |ExecStop=/usr/bin/redis-server -p 6379 shutdown
+            |ExecStop=/usr/bin/redis-cli -p 6379 shutdown
             |Restart=always
             |User=redis
             |Group=redis
@@ -1371,22 +1387,18 @@ describe 'redis' do
             |WantedBy=multi-user.target
           END
 
-          if facts['service_provider'] == 'systemd'
-            is_expected.to contain_file(service_file).with_content(content)
-          else
-            is_expected.to contain_file(service_file).with_content(%r{Required-Start:})
-          end
+          is_expected.to contain_systemd__unit_file("#{service_name}.service").with_content(content)
         end
       end
 
-      describe 'with parameter manage_service_file' do
+      describe 'with parameter manage_service_file set to false' do
         let(:params) do
           {
             manage_service_file: false
           }
         end
 
-        it { is_expected.not_to contain_file(service_file) }
+        it { is_expected.not_to contain_systemd__unit_file("#{service_name}.service") }
       end
 
       context 'when $::redis_server_version fact is not present' do

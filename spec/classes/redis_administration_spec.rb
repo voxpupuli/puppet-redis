@@ -10,15 +10,6 @@ describe 'redis::administration' do
     end
 
     it do
-      is_expected.to contain_exec('Disable Hugepages').with(
-        'command' => 'echo never > /sys/kernel/mm/transparent_hugepage/enabled',
-        'path' => ['/sbin', '/usr/sbin', '/bin', '/usr/bin'],
-        'onlyif' => 'test -f /sys/kernel/mm/transparent_hugepage/enabled',
-        'unless' => 'cat /sys/kernel/mm/transparent_hugepage/enabled | grep "\\[never\\]"'
-      )
-    end
-
-    it do
       is_expected.to contain_sysctl('net.core.somaxconn').with(
         'ensure' => 'present',
         'value' => '65535'
