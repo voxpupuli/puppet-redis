@@ -122,7 +122,7 @@ class redis::sentinel (
   String[1] $master_name  = 'mymaster',
   Stdlib::Host $redis_host = '127.0.0.1',
   Stdlib::Port $redis_port = 6379,
-  Optional[String] $requirepass = undef,
+  Optional[String[1]] $requirepass = undef,
   String[1] $package_name = $redis::params::sentinel_package_name,
   String[1] $package_ensure = 'present',
   Integer[0] $parallel_sync = 1,
