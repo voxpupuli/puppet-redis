@@ -108,7 +108,7 @@
 #   }
 #
 class redis::sentinel (
-  Optional[String[1]] $auth_pass = undef,
+  Optional[Variant[String[1], Sensitive[String[1]]]] $auth_pass = undef,
   Stdlib::Absolutepath $config_file = $redis::params::sentinel_config_file,
   Stdlib::Absolutepath $config_file_orig = $redis::params::sentinel_config_file_orig,
   Stdlib::Filemode $config_file_mode = '0644',
@@ -139,6 +139,12 @@ class redis::sentinel (
   Optional[Stdlib::Absolutepath] $notification_script = undef,
   Optional[Stdlib::Absolutepath] $client_reconfig_script = undef,
 ) inherits redis::params {
+  $auth_pass_unsensitive = if $auth_pass =~ Sensitive {
+    $auth_pass.unwrap
+  } else {
+    $auth_pass
+  }
+
   require 'redis'
 
   ensure_packages([$package_name])

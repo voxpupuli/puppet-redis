@@ -269,7 +269,7 @@ class redis (
   Boolean $manage_service_file                                   = false,
   Boolean $manage_package                                        = true,
   Boolean $manage_repo                                           = false,
-  Optional[String[1]] $masterauth                                = undef,
+  Optional[Variant[String[1], Sensitive[String[1]]]] $masterauth = undef,
   Integer[1] $maxclients                                         = 10000,
   $maxmemory                                                     = undef,
   $maxmemory_policy                                              = undef,
