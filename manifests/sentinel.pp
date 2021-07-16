@@ -114,7 +114,7 @@ class redis::sentinel (
   Stdlib::Filemode $config_file_mode = '0644',
   String[1] $conf_template = 'redis/redis-sentinel.conf.erb',
   Boolean $daemonize = $redis::params::sentinel_daemonize,
-  Boolean $protected_mode = $redis::params::sentinel_protected_mode,
+  Boolean $protected_mode = true,
   Integer[1] $down_after = 30000,
   Integer[1] $failover_timeout = 180000,
   Redis::LogLevel $log_level = 'notice',
@@ -145,7 +145,6 @@ class redis::sentinel (
   Package[$package_name] -> File[$config_file_orig]
 
   $sentinel_bind_arr = delete_undef_values([$sentinel_bind].flatten)
-  $supports_protected_mode = $redis::supports_protected_mode
 
   file { $config_file_orig:
     ensure  => file,

@@ -19,14 +19,6 @@ describe 'redis' do
     context "on #{os}" do
       let(:facts) { facts }
 
-      if facts[:operatingsystem] == 'Ubuntu' && facts[:operatingsystemmajrelease] == '16.04'
-        let(:systemd) { '' }
-        let(:servicetype) { 'forking' }
-      else
-        let(:systemd) { ' --supervised systemd' }
-        let(:servicetype) { 'notify' }
-      end
-
       describe 'without parameters' do
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to create_class('redis') }
@@ -702,13 +694,7 @@ describe 'redis' do
           }
         end
 
-        it do
-          if facts[:operatingsystem] == 'Ubuntu' && facts[:operatingsystemmajrelease] == '16.04'
-            is_expected.not_to contain_file(config_file_orig).with_content(%r{protected-mode})
-          else
-            is_expected.to contain_file(config_file_orig).with_content(%r{^protected-mode no$})
-          end
-        end
+        it { is_expected.to contain_file(config_file_orig).with_content(%r{^protected-mode no$}) }
       end
 
       describe 'with parameter hll_sparse_max_bytes' do
@@ -1375,8 +1361,8 @@ describe 'redis' do
             |[Service]
             |RuntimeDirectory=redis
             |RuntimeDirectoryMode=2755
-            |Type=#{servicetype}
-            |ExecStart=/usr/bin/redis-server #{config_file}#{systemd}
+            |Type=notify
+            |ExecStart=/usr/bin/redis-server #{config_file} --supervised systemd
             |ExecStop=/usr/bin/redis-cli -p 6379 shutdown
             |Restart=always
             |User=redis
@@ -1399,28 +1385,6 @@ describe 'redis' do
         end
 
         it { is_expected.not_to contain_systemd__unit_file("#{service_name}.service") }
-      end
-
-      context 'when $::redis_server_version fact is not present' do
-        let(:facts) { super().merge(redis_server_version: nil) }
-
-        context 'when package_ensure is version (3.2.1)' do
-          let(:params) { { package_ensure: '3.2.1' } }
-
-          it { is_expected.to contain_file(config_file_orig).with_content(%r{^protected-mode}) }
-        end
-
-        context 'when package_ensure is a newer version(4.0-rc3) (older features enabled)' do
-          let(:params) { { package_ensure: '4.0-rc3' } }
-
-          it { is_expected.to contain_file(config_file_orig).with_content(%r{^protected-mode}) }
-        end
-      end
-
-      context 'when $::redis_server_version fact is present but a newer version (older features enabled)' do
-        let(:facts) { super().merge(redis_server_version: '3.2.1') }
-
-        it { is_expected.to contain_file(config_file_orig).with_content(%r{^protected-mode}) }
       end
     end
   end

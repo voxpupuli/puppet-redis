@@ -20,7 +20,6 @@ daemonize <% if @daemonize -%>yes<% else -%>no<% end -%>
 # default. You can specify a custom pid file location here.
 pidfile <%= @pid_file %>
 
-<% if @supports_protected_mode -%>
 # Protected mode is a layer of security protection, in order to avoid that
 # Redis instances left open on the internet are accessed and exploited.
 #
@@ -40,7 +39,6 @@ pidfile <%= @pid_file %>
 # are explicitly listed using the "bind" directive.
 protected-mode <%= @protected_mode ? 'yes' : 'no' %>
 
-<% end -%>
 # Accept connections on the specified port, default is 6379.
 # If port 0 is specified Redis will not listen on a TCP socket.
 port <%= @port %>

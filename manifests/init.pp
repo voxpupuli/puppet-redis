@@ -280,7 +280,6 @@ class redis (
   Optional[String[1]] $notify_keyspace_events                    = undef,
   Boolean $notify_service                                        = true,
   Boolean $managed_by_cluster_manager                            = false,
-  String[1] $minimum_version                                     = $redis::params::minimum_version,
   String[1] $package_ensure                                      = 'present',
   String[1] $package_name                                        = $redis::params::package_name,
   Stdlib::Absolutepath $pid_file                                 = $redis::params::pid_file,
@@ -332,19 +331,6 @@ class redis (
   Integer[0] $cluster_migration_barrier                          = 1,
   Hash[String[1], Hash] $instances                               = {},
 ) inherits redis::params {
-  if $package_ensure =~ /^([0-9]+:)?[0-9]+\.[0-9]/ {
-    if ':' in $package_ensure {
-      $_redis_version_real = split($package_ensure, ':')
-      $redis_version_real = $_redis_version_real[1]
-    } else {
-      $redis_version_real = $package_ensure
-    }
-  } else {
-    $redis_version_real = pick(getvar('redis_server_version'), $minimum_version)
-  }
-
-  $supports_protected_mode = !$redis_version_real or versioncmp($redis_version_real, '3.2.0') >= 0
-
   contain redis::preinstall
   contain redis::install
   contain redis::config
