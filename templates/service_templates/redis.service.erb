@@ -7,14 +7,8 @@ Wants=network-online.target
 [Service]
 RuntimeDirectory=redis
 RuntimeDirectoryMode=2755
-<%# Redis on Xenial is too old for systemd integration -%>
-<% if @facts['os']['name'] == 'Ubuntu' and @facts['os']['release']['major'] == '16.04' -%>
-Type=forking
-ExecStart=/usr/bin/redis-server <%= @redis_file_name %>
-<% else -%>
 Type=notify
 ExecStart=<%= scope['redis::params::bin_path'] %>/redis-server <%= @redis_file_name %> --supervised systemd
-<% end -%>
 ExecStop=<%= scope['redis::params::bin_path'] %>/redis-cli -p <%= @port %> shutdown
 Restart=always
 User=<%= @service_user %>

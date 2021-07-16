@@ -26,24 +26,14 @@ class redis::params inherits redis::globals {
       $sentinel_package_name     = 'redis-sentinel'
       $sentinel_log_file         = '/var/log/redis/redis-sentinel.log'
       $sentinel_working_dir      = '/var/lib/redis'
-      $sentinel_protected_mode   = true
 
       case $facts['os']['name'] {
         'Ubuntu': {
           $config_group = 'redis'
-          $minimum_version = $facts['os']['release']['major'] ? {
-            '16.04' => '3.0.5',
-            '18.04' => '4.0.9',
-            default => '5.0.7',
-          }
-          $sentinel_pid_file = $facts['os']['release']['major'] ? {
-            '16.04' => '/var/run/redis/redis-sentinel.pid',
-            default => '/var/run/sentinel/redis-sentinel.pid',
-          }
+          $sentinel_pid_file =  '/var/run/sentinel/redis-sentinel.pid'
         }
         default: {
           $config_group              = 'root'
-          $minimum_version           = '3.2.5'
           if versioncmp($facts['os']['release']['major'], '10') >= 0 {
             $sentinel_pid_file         = '/run/sentinel/redis-sentinel.pid'
           } else {
@@ -63,7 +53,6 @@ class redis::params inherits redis::globals {
 
       $sentinel_daemonize   = false
       $sentinel_working_dir = '/tmp'
-      $sentinel_protected_mode   = true
 
       $scl = $redis::globals::scl
       if $scl {
@@ -83,11 +72,6 @@ class redis::params inherits redis::globals {
         $sentinel_package_name     = $package_name
         $sentinel_pid_file         = "/var/opt/rh/${scl}/run/redis-sentinel.pid"
         $sentinel_log_file         = "/var/opt/rh/${scl}/log/redis/sentinel.log"
-
-        $minimum_version = $scl ? {
-          'rh-redis32' => '3.2.13',
-          default      => '5.0.5',
-        }
       } else {
         $config_dir                = '/etc/redis'
         $config_file               = '/etc/redis.conf'
@@ -105,9 +89,6 @@ class redis::params inherits redis::globals {
         $sentinel_package_name     = 'redis'
         $sentinel_pid_file         = '/var/run/redis/redis-sentinel.pid'
         $sentinel_log_file         = '/var/log/redis/sentinel.log'
-
-        # EPEL 7 and newer have 3.2 so we can assume all EL is 3.2+
-        $minimum_version           = '3.2.12'
       }
     }
 
@@ -137,10 +118,6 @@ class redis::params inherits redis::globals {
       $sentinel_pid_file         = '/var/run/redis/redis-sentinel.pid'
       $sentinel_log_file         = '/var/log/redis/sentinel.log'
       $sentinel_working_dir      = '/tmp'
-      $sentinel_protected_mode   = true
-
-      # pkg version
-      $minimum_version           = '3.2.4'
     }
 
     'Suse': {
@@ -168,10 +145,6 @@ class redis::params inherits redis::globals {
       $sentinel_pid_file         = '/var/run/redis/redis-sentinel.pid'
       $sentinel_log_file         = '/var/log/redis/sentinel.log'
       $sentinel_working_dir      = '/tmp'
-      $sentinel_protected_mode   = true
-
-      # suse package version
-      $minimum_version           = '3.0.5'
     }
 
     'Archlinux': {
@@ -200,10 +173,6 @@ class redis::params inherits redis::globals {
       $sentinel_pid_file         = '/var/run/redis/redis-sentinel.pid'
       $sentinel_log_file         = '/var/log/redis/sentinel.log'
       $sentinel_working_dir      = '/tmp'
-      $sentinel_protected_mode   = true
-
-      # pkg version
-      $minimum_version           = '3.2.4'
     }
     default: {
       fail "Operating system ${facts['os']['name']} is not supported yet."

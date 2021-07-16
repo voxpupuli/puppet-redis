@@ -349,7 +349,6 @@ define redis::instance (
   }
 
   $bind_arr = [$bind].flatten
-  $supports_protected_mode = $redis::supports_protected_mode
 
   file { $redis_file_name_orig:
     ensure  => file,

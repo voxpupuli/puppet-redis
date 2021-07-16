@@ -21,16 +21,12 @@ describe 'redis::sentinel' do
 
       let(:pidfile) do
         if facts[:operatingsystem] == 'Ubuntu'
-          facts[:operatingsystemmajrelease] == '16.04' ? '/var/run/redis/redis-sentinel.pid' : '/var/run/sentinel/redis-sentinel.pid'
+          '/var/run/sentinel/redis-sentinel.pid'
         elsif facts[:operatingsystem] == 'Debian'
           facts[:operatingsystemmajrelease] == '9' ? '/var/run/redis/redis-sentinel.pid' : '/run/sentinel/redis-sentinel.pid'
         else
           '/var/run/redis/redis-sentinel.pid'
         end
-      end
-
-      let(:protected_mode) do
-        facts[:operatingsystem] != 'Ubuntu' || facts[:operatingsystemmajrelease] != '16.04'
       end
 
       describe 'without parameters' do
@@ -40,7 +36,8 @@ port 26379
 dir #{facts[:osfamily] == 'Debian' ? '/var/lib/redis' : '/tmp'}
 daemonize #{facts[:osfamily] == 'RedHat' ? 'no' : 'yes'}
 pidfile #{pidfile}
-#{protected_mode ? "protected-mode yes\n" : ''}
+protected-mode yes
+
 sentinel monitor mymaster 127.0.0.1 6379 2
 sentinel down-after-milliseconds mymaster 30000
 sentinel parallel-syncs mymaster 1
@@ -97,7 +94,8 @@ port 26379
 dir /tmp/redis
 daemonize #{facts[:osfamily] == 'RedHat' ? 'no' : 'yes'}
 pidfile #{pidfile}
-#{protected_mode ? "protected-mode no\n" : ''}
+protected-mode no
+
 sentinel monitor cow 127.0.0.1 6379 2
 sentinel down-after-milliseconds cow 6000
 sentinel parallel-syncs cow 1
@@ -138,7 +136,8 @@ port 26379
 dir /tmp/redis
 daemonize #{facts[:osfamily] == 'RedHat' ? 'no' : 'yes'}
 pidfile #{pidfile}
-#{protected_mode ? "protected-mode yes\n" : ''}
+protected-mode yes
+
 sentinel monitor cow 127.0.0.1 6379 2
 sentinel down-after-milliseconds cow 6000
 sentinel parallel-syncs cow 1
