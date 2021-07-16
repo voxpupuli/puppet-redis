@@ -15,6 +15,7 @@ class redis::params inherits redis::globals {
       $package_name              = 'redis-server'
       $pid_file                  = '/var/run/redis/redis-server.pid'
       $workdir                   = '/var/lib/redis'
+      $bin_path                  = '/usr/bin'
       $daemonize                 = true
       $service_name              = 'redis-server'
 
@@ -74,6 +75,7 @@ class redis::params inherits redis::globals {
         $pid_file                  = "/var/opt/rh/${scl}/run/redis_6379.pid"
         $service_name              = "${scl}-redis"
         $workdir                   = "/var/opt/rh/${scl}/lib/redis"
+        $bin_path                  = "/opt/rh/${scl}/root/usr/bin"
 
         $sentinel_config_file      = "${config_dir}/redis-sentinel.conf"
         $sentinel_config_file_orig = "${config_dir}/redis-sentinel.conf.puppet"
@@ -95,6 +97,7 @@ class redis::params inherits redis::globals {
         $pid_file                  = '/var/run/redis_6379.pid'
         $service_name              = 'redis'
         $workdir                   = '/var/lib/redis'
+        $bin_path                  = '/usr/bin'
 
         $sentinel_config_file      = '/etc/redis-sentinel.conf'
         $sentinel_config_file_orig = '/etc/redis-sentinel.conf.puppet'
@@ -124,6 +127,7 @@ class redis::params inherits redis::globals {
       $daemonize                 = true
       $service_name              = 'redis'
       $workdir                   = '/var/db/redis'
+      $bin_path                  = '/usr/bin'
 
       $sentinel_config_file      = '/usr/local/etc/redis-sentinel.conf'
       $sentinel_config_file_orig = '/usr/local/etc/redis-sentinel.conf.puppet'
@@ -154,6 +158,7 @@ class redis::params inherits redis::globals {
       $daemonize                 = true
       $service_name              = 'redis'
       $workdir                   = '/var/lib/redis'
+      $bin_path                  = '/usr/bin'
 
       $sentinel_config_file      = '/etc/redis/redis-sentinel.conf'
       $sentinel_config_file_orig = '/etc/redis/redis-sentinel.conf.puppet'
@@ -185,6 +190,7 @@ class redis::params inherits redis::globals {
       $daemonize                 = true
       $service_name              = 'redis'
       $workdir                   = '/var/lib/redis'
+      $bin_path                  = '/usr/bin'
 
       $sentinel_config_file      = '/etc/redis/redis-sentinel.conf'
       $sentinel_config_file_orig = '/etc/redis/redis-sentinel.conf.puppet'
