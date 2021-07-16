@@ -13,9 +13,9 @@ Type=forking
 ExecStart=/usr/bin/redis-server <%= @redis_file_name %>
 <% else -%>
 Type=notify
-ExecStart=/usr/bin/redis-server <%= @redis_file_name %> --supervised systemd
+ExecStart=<%= scope['redis::params::bin_path'] %>/redis-server <%= @redis_file_name %> --supervised systemd
 <% end -%>
-ExecStop=/usr/bin/redis-cli -p <%= @port %> shutdown
+ExecStop=<%= scope['redis::params::bin_path'] %>/redis-cli -p <%= @port %> shutdown
 Restart=always
 User=<%= @service_user %>
 Group=<%= @service_user %>
