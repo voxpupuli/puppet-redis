@@ -242,7 +242,7 @@ class redis (
   Variant[Stdlib::IP::Address, Array[Stdlib::IP::Address]] $bind = ['127.0.0.1'],
   String[1] $output_buffer_limit_slave                           = '256mb 64mb 60',
   String[1] $output_buffer_limit_pubsub                          = '32mb 8mb 60',
-  String[1] $conf_template                                       = 'redis/redis.conf.erb',
+  String[1] $conf_template                                       = 'redis/redis.conf.epp',
   Stdlib::Absolutepath $config_dir                               = $redis::params::config_dir,
   Stdlib::Filemode $config_dir_mode                              = $redis::params::config_dir_mode,
   Stdlib::Absolutepath $config_file                              = $redis::params::config_file,
