@@ -4,6 +4,32 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v8.0.0](https://github.com/voxpupuli/puppet-redis/tree/v8.0.0) (2021-07-24)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v7.0.0...v8.0.0)
+
+**Breaking changes:**
+
+- Use EPP for Configfile [\#407](https://github.com/voxpupuli/puppet-redis/pull/407) ([cocker-cc](https://github.com/cocker-cc))
+- Drop Ubuntu 16.04 support [\#406](https://github.com/voxpupuli/puppet-redis/pull/406) ([ekohl](https://github.com/ekohl))
+- Drop Puppet 5 support [\#392](https://github.com/voxpupuli/puppet-redis/pull/392) ([ekohl](https://github.com/ekohl))
+
+**Implemented enhancements:**
+
+- Adding ability to secure Sentinel [\#399](https://github.com/voxpupuli/puppet-redis/pull/399) ([markasammut](https://github.com/markasammut))
+
+**Fixed bugs:**
+
+- set correct redis bin path in systemd for instances when using SCL [\#405](https://github.com/voxpupuli/puppet-redis/pull/405) ([alexskr](https://github.com/alexskr))
+
+**Closed issues:**
+
+- Missing ability to secure sentinel? [\#305](https://github.com/voxpupuli/puppet-redis/issues/305)
+
+**Merged pull requests:**
+
+- switch from camptocamp/systemd to voxpupuli/systemd [\#408](https://github.com/voxpupuli/puppet-redis/pull/408) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [v7.0.0](https://github.com/voxpupuli/puppet-redis/tree/v7.0.0) (2021-04-28)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v6.1.0...v7.0.0)
@@ -181,14 +207,14 @@ This is the first release since the module was migrated to the Vox Pupuli `puppe
 
 **Closed issues:**
 
+- Get acceptance tests running again [\#292](https://github.com/voxpupuli/puppet-redis/issues/292)
+- Convert function to API v4 ruby function [\#291](https://github.com/voxpupuli/puppet-redis/issues/291)
 - Transparent Huge Pages \(THP\) Not Disabled on RHEL [\#278](https://github.com/voxpupuli/puppet-redis/issues/278)
 - Looking for maintainer \[Help needed\] [\#277](https://github.com/voxpupuli/puppet-redis/issues/277)
 - Travis Credential issues... still :\( [\#267](https://github.com/voxpupuli/puppet-redis/issues/267)
 - Outdated dependency puppetlabs-apt \< 3.0.0 [\#264](https://github.com/voxpupuli/puppet-redis/issues/264)
 - cannot bind ipv4 and ipv6 [\#257](https://github.com/voxpupuli/puppet-redis/issues/257)
 - Deprecate Puppet 3.X Support [\#152](https://github.com/voxpupuli/puppet-redis/issues/152)
-- Get acceptance tests running again [\#292](https://github.com/voxpupuli/puppet-redis/issues/292)
-- Convert function to API v4 ruby function [\#291](https://github.com/voxpupuli/puppet-redis/issues/291)
 
 **Merged pull requests:**
 
