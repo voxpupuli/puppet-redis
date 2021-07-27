@@ -47,14 +47,12 @@ begin
   require 'github_changelog_generator/task'
   require 'puppet_blacksmith'
   GitHubChangelogGenerator::RakeTask.new :changelog do |config|
-    version = (Blacksmith::Modulefile.new).version
-    config.future_release = "v#{version}" if version =~ /^\d+\.\d+.\d+$/
+    metadata = Blacksmith::Modulefile.new
+    config.future_release = "v#{metadata.version}" if metadata.version =~ /^\d+\.\d+.\d+$/
     config.header = "# Changelog\n\nAll notable changes to this project will be documented in this file.\nEach new release typically also includes the latest modulesync defaults.\nThese should not affect the functionality of the module."
     config.exclude_labels = %w{duplicate question invalid wontfix wont-fix modulesync skip-changelog}
     config.user = 'voxpupuli'
-    metadata_json = File.join(File.dirname(__FILE__), 'metadata.json')
-    metadata = JSON.load(File.read(metadata_json))
-    config.project = metadata['name']
+    config.project = metadata.name
   end
 
   # Workaround for https://github.com/github-changelog-generator/github-changelog-generator/issues/715

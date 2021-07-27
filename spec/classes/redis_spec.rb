@@ -7,7 +7,7 @@ describe 'redis' do
     case facts[:osfamily]
     when 'Archlinux', 'Debian'
       '/etc/redis/redis.conf'
-    when 'FreeBSD',
+    when 'FreeBSD'
       '/usr/local/etc/redis.conf'
     when 'RedHat'
       '/etc/redis.conf'
@@ -42,12 +42,7 @@ describe 'redis' do
           end
         end
 
-        it do
-          is_expected.to contain_service(service_name).with(
-            'ensure'     => 'running',
-            'enable'     => 'true',
-          )
-        end
+        it { is_expected.to contain_service(service_name).with_ensure('running').with_enable('true') }
 
         context 'with SCL', if: facts[:osfamily] == 'RedHat' && facts[:operatingsystemmajrelease] < '8' do
           let(:pre_condition) do
@@ -111,11 +106,11 @@ describe 'redis' do
 
           it { is_expected.to compile.with_all_deps }
           it do
-            is_expected.to contain_file("/etc/systemd/system/#{service_name}.service.d/limit.conf")
-              .with_ensure('absent')
+            is_expected.to contain_file("/etc/systemd/system/#{service_name}.service.d/limit.conf").
+              with_ensure('absent')
 
             is_expected.to contain_systemd__service_limits("#{service_name}.service").
-              with_limits({ "LimitNOFILE" => 7777 }).
+              with_limits({ 'LimitNOFILE' => 7777 }).
               with_restart_service(false).
               with_ensure('present')
           end
@@ -757,9 +752,10 @@ describe 'redis' do
         context 'with a single rename' do
           let(:params) do
             {
-              rename_commands: { CONFIG: "\"\"" }
+              rename_commands: { CONFIG: '""' }
             }
           end
+
           it {
             is_expected.to contain_file(config_file_orig).with(
               'content' => %r{^rename-command CONFIG ""$}
@@ -769,9 +765,10 @@ describe 'redis' do
         context 'with multiple renames' do
           let(:params) do
             {
-              rename_commands: { CONFIG: "\"\"", RENAME: "\"\"" }
+              rename_commands: { CONFIG: '""', RENAME: '""' }
             }
           end
+
           it {
             is_expected.to contain_file(config_file_orig).with(
               'content' => %r{^rename-command CONFIG ""$}
@@ -784,9 +781,10 @@ describe 'redis' do
         context 'with empty hash' do
           let(:params) do
             {
-              "rename_commands" => {}
+              'rename_commands' => {}
             }
           end
+
           it { is_expected.not_to contain_file(config_file_orig).with_content(%r{^rename-command}) }
         end
       end
