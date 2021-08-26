@@ -27,7 +27,7 @@ describe 'redis' do
         it { is_expected.to contain_class('redis::config') }
         it { is_expected.to contain_class('redis::service') }
 
-        it { is_expected.to contain_package(package_name).with_ensure('present') }
+        it { is_expected.to contain_package(package_name).with_ensure('installed') }
 
         it do
           is_expected.to contain_file(config_file_orig).
