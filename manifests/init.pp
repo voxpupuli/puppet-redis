@@ -280,7 +280,7 @@ class redis (
   Optional[String[1]] $notify_keyspace_events                    = undef,
   Boolean $notify_service                                        = true,
   Boolean $managed_by_cluster_manager                            = false,
-  String[1] $package_ensure                                      = 'present',
+  String[1] $package_ensure                                      = 'installed',
   String[1] $package_name                                        = $redis::params::package_name,
   Stdlib::Absolutepath $pid_file                                 = $redis::params::pid_file,
   Stdlib::Port $port                                             = 6379,

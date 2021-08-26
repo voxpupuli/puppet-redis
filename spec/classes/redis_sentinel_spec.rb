@@ -65,7 +65,7 @@ CONFIG
         }
 
         if facts[:os]['family'] == 'Debian'
-          it { is_expected.to contain_package('redis-sentinel').with_ensure('present') }
+          it { is_expected.to contain_package('redis-sentinel').with_ensure('installed') }
         else
           it { is_expected.not_to contain_package('redis-sentinel') }
         end
