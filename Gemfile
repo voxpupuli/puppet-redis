@@ -4,12 +4,12 @@
 source ENV['GEM_SOURCE'] || "https://rubygems.org"
 
 group :test do
-  gem 'voxpupuli-test', '~> 2.1',     :require => false
-  gem 'coveralls',                    :require => false
-  gem 'simplecov-console',            :require => false
-  gem 'puppet_metadata', '~> 0.3.0',  :require => false
-  gem 'redis',                        :require => false
-  gem 'mock_redis',                   :require => false
+  gem 'voxpupuli-test', '~> 2.5',   :require => false
+  gem 'coveralls',                  :require => false
+  gem 'simplecov-console',          :require => false
+  gem 'puppet_metadata', '~> 1.0',  :require => false
+  gem 'redis',                      :require => false
+  gem 'mock_redis',                 :require => false
 end
 
 group :development do
@@ -22,9 +22,8 @@ group :system_tests do
 end
 
 group :release do
-  gem 'github_changelog_generator', '>= 1.16.1',  :require => false
-  gem 'puppet-blacksmith',                        :require => false
-  gem 'voxpupuli-release',                        :require => false
+  gem 'github_changelog_generator', '>= 1.16.1',  :require => false if RUBY_VERSION >= '2.5'
+  gem 'voxpupuli-release', '>= 1.0.2',            :require => false
   gem 'puppet-strings', '>= 2.2',                 :require => false
 end
 
