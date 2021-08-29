@@ -45,7 +45,7 @@
   Integer[0]                                         $auto_aof_rewrite_percentage,
   String[1]                                          $auto_aof_rewrite_min_size,
   Boolean                                            $aof_load_truncated,
-  Integer[0]                                         $slowlog_log_slower_than,
+  Integer[-1]                                        $slowlog_log_slower_than,
   Integer[0]                                         $slowlog_max_len,
   Integer[0]                                         $latency_monitor_threshold,
   Optional[String[1]]                                $notify_keyspace_events,

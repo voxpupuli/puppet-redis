@@ -1075,17 +1075,31 @@ describe 'redis' do
       end
 
       describe 'with parameter slowlog_log_slower_than' do
-        let(:params) do
-          {
-            slowlog_log_slower_than: 42
+        context 'set to a value great or equal to zero' do
+          let(:params) do
+            {
+              slowlog_log_slower_than: 42
+            }
+          end
+
+          it {
+            is_expected.to contain_file(config_file_orig).with(
+              'content' => %r{^slowlog-log-slower-than 42$}
+            )
           }
         end
 
-        it {
-          is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{^slowlog-log-slower-than 42$}
-          )
-        }
+        context 'set to -1 (disabled)' do
+          let(:params) do
+            { slowlog_log_slower_than: -1 }
+          end
+
+          it {
+            is_expected.to contain_file(config_file_orig).with(
+              'content' => %r{^slowlog-log-slower-than -1$}
+            )
+          }
+        end
       end
 
       describe 'with parameter slowlog_max_len' do
