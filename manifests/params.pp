@@ -16,13 +16,19 @@ class redis::params inherits redis::globals {
       $pid_file                  = '/var/run/redis/redis-server.pid'
       $workdir                   = '/var/lib/redis'
       $bin_path                  = '/usr/bin'
-      $daemonize                 = true
+      $daemonize                 = $facts['os']['distro']['codename'] ? {
+        'bullseye' => false,
+        default    => true,
+      }
       $service_name              = 'redis-server'
 
       $sentinel_config_file      = '/etc/redis/sentinel.conf'
       $sentinel_config_file_orig = '/etc/redis/redis-sentinel.conf.puppet'
       $sentinel_service_name     = 'redis-sentinel'
-      $sentinel_daemonize        = true
+      $sentinel_daemonize        = $facts['os']['distro']['codename'] ? {
+        'bullseye' => false,
+        default    => true,
+      }
       $sentinel_package_name     = 'redis-sentinel'
       $sentinel_log_file         = '/var/log/redis/redis-sentinel.log'
       $sentinel_working_dir      = '/var/lib/redis'
