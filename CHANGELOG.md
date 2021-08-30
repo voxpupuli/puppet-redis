@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v8.1.1](https://github.com/voxpupuli/puppet-redis/tree/v8.1.1) (2021-08-30)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v8.1.0...v8.1.1)
+
+**Fixed bugs:**
+
+- Honor redis::sentinel::package\_ensure [\#413](https://github.com/voxpupuli/puppet-redis/pull/413) ([kajinamit](https://github.com/kajinamit))
+
 ## [v8.1.0](https://github.com/voxpupuli/puppet-redis/tree/v8.1.0) (2021-08-29)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v8.0.0...v8.1.0)

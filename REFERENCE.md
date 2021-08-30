@@ -1260,7 +1260,7 @@ Data type: `String[1]`
 
 Do we ensure this package.
 
-Default value: `'present'`
+Default value: `'installed'`
 
 ##### <a name="parallel_sync"></a>`parallel_sync`
 
