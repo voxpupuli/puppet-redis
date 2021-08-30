@@ -56,7 +56,8 @@
 #   The name of the package that installs sentinel.
 #
 # @param package_ensure
-#   Do we ensure this package.
+#   Do we ensure this package. This parameter takes effect only if
+#   an independent package is required for sentinel.
 #
 # @param parallel_sync
 #   How many slaves can be reconfigured at the same time to use a
@@ -147,9 +148,11 @@ class redis::sentinel (
 
   require 'redis'
 
-  ensure_packages([$package_name], {
-    ensure => $package_ensure
-  })
+  if $package_name != $redis::package_name {
+    ensure_packages([$package_name], {
+      ensure => $package_ensure
+    })
+  }
   Package[$package_name] -> File[$config_file_orig]
 
   $sentinel_bind_arr = delete_undef_values([$sentinel_bind].flatten)
