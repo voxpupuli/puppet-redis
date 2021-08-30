@@ -29,6 +29,14 @@ describe 'redis::sentinel' do
         end
       end
 
+      let(:sentinel_package_name) do
+        if facts[:os]['family'] == 'Debian'
+          'redis-sentinel'
+        else
+          'redis'
+        end
+      end
+
       describe 'without parameters' do
         let(:expected_content) do
           <<CONFIG
@@ -64,14 +72,18 @@ CONFIG
             with_enable('true')
         }
 
-        if facts[:os]['family'] == 'Debian'
-          it { is_expected.to contain_package('redis-sentinel').with_ensure('installed') }
-        else
-          it { is_expected.not_to contain_package('redis-sentinel') }
-        end
+        it { is_expected.to contain_package(sentinel_package_name).with_ensure('installed') }
       end
 
       describe 'with custom parameters' do
+        let(:pre_condition) do
+          <<-PUPPET
+          class { 'redis':
+            package_ensure => 'latest',
+          }
+          PUPPET
+        end
+
         let(:params) do
           {
             auth_pass: 'password',
@@ -83,7 +95,8 @@ CONFIG
             log_file: '/tmp/barn-sentinel.log',
             failover_timeout: 28_000,
             notification_script: '/path/to/bar.sh',
-            client_reconfig_script: '/path/to/foo.sh'
+            client_reconfig_script: '/path/to/foo.sh',
+            package_ensure: 'latest'
           }
         end
 
@@ -112,6 +125,8 @@ CONFIG
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to create_class('redis::sentinel') }
         it { is_expected.to contain_file(config_file_orig).with_content(expected_content) }
+
+        it { is_expected.to contain_package(sentinel_package_name).with_ensure('latest') }
       end
 
       describe 'with array sentinel bind' do

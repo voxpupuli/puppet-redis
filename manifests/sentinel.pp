@@ -124,7 +124,7 @@ class redis::sentinel (
   Stdlib::Port $redis_port = 6379,
   Optional[String[1]] $requirepass = undef,
   String[1] $package_name = $redis::params::sentinel_package_name,
-  String[1] $package_ensure = 'present',
+  String[1] $package_ensure = 'installed',
   Integer[0] $parallel_sync = 1,
   Stdlib::Absolutepath $pid_file = $redis::params::sentinel_pid_file,
   Integer[1] $quorum = 2,
@@ -147,7 +147,9 @@ class redis::sentinel (
 
   require 'redis'
 
-  ensure_packages([$package_name])
+  ensure_packages([$package_name], {
+    ensure => $package_ensure
+  })
   Package[$package_name] -> File[$config_file_orig]
 
   $sentinel_bind_arr = delete_undef_values([$sentinel_bind].flatten)
