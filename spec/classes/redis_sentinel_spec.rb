@@ -29,6 +29,10 @@ describe 'redis::sentinel' do
         end
       end
 
+      let(:redis_package_name) do
+        'redis'
+      end
+
       let(:sentinel_package_name) do
         if facts[:os]['family'] == 'Debian'
           'redis-sentinel'
@@ -169,6 +173,32 @@ CONFIG
         it { is_expected.to compile.with_all_deps }
         it { is_expected.to create_class('redis::sentinel') }
         it { is_expected.to contain_file(config_file_orig).with_content(expected_content) }
+      end
+
+      describe 'with package_ensure different from redis::package_ensure' do
+        let(:pre_condition) do
+          <<-PUPPET
+          class { 'redis':
+            package_ensure => 'installed',
+          }
+          PUPPET
+        end
+
+        let(:params) do
+          {
+            package_ensure: 'latest'
+          }
+        end
+
+        let(:package_ensure) do
+          if facts[:os]['family'] == 'Debian'
+            'latest'
+          else
+            'installed'
+          end
+        end
+
+        it { is_expected.to contain_package(sentinel_package_name).with_ensure(package_ensure) }
       end
     end
   end
