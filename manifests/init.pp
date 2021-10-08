@@ -193,6 +193,30 @@
 #   TCP keepalive.
 # @param timeout
 #   Close the connection after a client is idle for N seconds (0 to disable).
+# @param tls_port
+#   Configure which TLS port to listen on.
+# @param tls_cert_file
+#   Specify which X.509 certificate file to use for TLS connections.
+# @param tls_key_file
+#   Specify which privaye key file to use for TLS connections.
+# @param tls_ca_cert_file
+#   Specify which X.509 CA certificate(s) bundle file to use.
+# @param tls_ca_cert_dir
+#   Specify which X.509 CA certificate(s) bundle directory to use.
+# @param tls_auth_clients
+#   Specify if clients and replicas are required to authenticate using valid client side certificates.
+# @param tls_replication
+#   Specify if TLS should be enabled on replication links.
+# @param tls_cluster
+#   Specify if TLS should be used for the bus protocol.
+# @param tls_ciphers
+#   Configure allowed ciphers for TLS <= TLSv1.2.
+# @param tls_ciphersuites
+#   Configure allowed TLSv1.3 ciphersuites.
+# @param tls_protocols
+#   Configure allowed TLS protocol versions.
+# @param tls_prefer_server_ciphers
+#   Specify if the server's preference should be used when choosing a cipher.
 # @param ulimit
 #   Limit the use of system-wide resources.
 # @param ulimit_managed
@@ -315,6 +339,18 @@ class redis (
   Integer[0] $tcp_backlog                                        = 511,
   Integer[0] $tcp_keepalive                                      = 0,
   Integer[0] $timeout                                            = 0,
+  Optional[Integer[0]] $tls_port                                 = undef,
+  String[0] $tls_cert_file                                       = '/etc/ssl/certs',
+  String[0] $tls_key_file                                        = 'ca-certificates.crt',
+  String[0] $tls_ca_cert_file                                    = 'ca-certificates.crt',
+  String[0] $tls_ca_cert_dir                                     = '/etc/ssl/certs',
+  Enum['yes', 'no', 'optional'] $tls_auth_clients                = 'no',
+  Boolean $tls_replication                                       = true,
+  Boolean $tls_cluster                                           = false,
+  Optional[String[0]] $tls_ciphers                               = undef,
+  Optional[String[0]] $tls_ciphersuites                          = undef,
+  Optional[String[0]] $tls_protocols                             = undef,
+  Boolean $tls_prefer_server_ciphers                             = false,
   Variant[Stdlib::Absolutepath, Enum['']] $unixsocket            = '/var/run/redis/redis.sock',
   Variant[Stdlib::Filemode, Enum['']] $unixsocketperm            = '0755',
   Integer[0] $ulimit                                             = 65536,
