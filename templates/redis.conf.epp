@@ -178,7 +178,7 @@ tls-cluster yes
 # "TLSv1.3" (OpenSSL >= 1.1.1) or any combination.
 # To enable only TLSv1.2 and TLSv1.3, use:
 #
-tls-protocols "<% $tls_protocols %>"
+tls-protocols "<%= $tls_protocols %>"
 <% } -%>
 
 <% if $tls_ciphers { -%>
@@ -187,7 +187,7 @@ tls-protocols "<% $tls_protocols %>"
 #
 # Note: this configuration applies only to <= TLSv1.2.
 #
-tls-ciphers <% $tls_ciphers %>
+tls-ciphers <%= $tls_ciphers %>
 <% } -%>
 
 <% if $tls_ciphersuites { -%>
@@ -195,7 +195,7 @@ tls-ciphers <% $tls_ciphers %>
 # information about the syntax of this string, and specifically for TLSv1.3
 # ciphersuites.
 #
-tls-ciphersuites <% $tls_ciphersuites %>
+tls-ciphersuites <%= $tls_ciphersuites %>
 <% } -%>
 
 <% if $tls_prefer_server_ciphers { -%>
