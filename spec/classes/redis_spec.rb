@@ -1398,6 +1398,174 @@ describe 'redis' do
 
         it { is_expected.not_to contain_systemd__unit_file("#{service_name}.service") }
       end
+
+      describe 'with parameter tls_port' do
+        let(:params) do
+          {
+            tls_port: 7777
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^tls_port 7777$}
+          )
+        }
+      end
+
+      describe 'with parameter tls_cert_file' do
+        let(:params) do
+          {
+            tls_cert_file: '/etc/pki/some/path/localhost.crt'
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{tls_cert_file.*\/etc\/pki\/some\/path\/localhost\.crt}
+          )
+        }
+      end
+
+      describe 'with parameter tls_key_file' do
+        let(:params) do
+          {
+            tls_key_file: '/etc/pki/some/path/localhost.key'
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{tls_key_file.*\/etc\/pki\/some\/path\/localhost\.key}
+          )
+        }
+      end
+
+      describe 'with parameter tls_ca_cert_file' do
+        let(:params) do
+          {
+            tls_ca_cert_file: '/etc/pki/some/path/ca.crt'
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{tls_ca_cert_file.*\/etc\/pki/some\/path\/ca\.crt}
+          )
+        }
+      end
+
+      describe 'with parameter tls_ca_cert_dir' do
+        let(:params) do
+          {
+            tls_cert_dir: '/etc/pki/some/path'
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{tls_cert_dir.*\/etc\/pki\/some\/path}
+          )
+        }
+      end
+
+      describe 'with parameter tls_auth_clients' do
+        let(:params) do
+          {
+            tls_auth_clients: 'no'
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{tls_auth_clients.*no}
+          )
+        }
+      end
+
+      describe 'with parameter tls_replication' do
+        let(:params) do
+          {
+            tls_replication: true
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{tls_replication.*yes}
+          )
+        }
+      end
+
+      describe 'with parameter tls_cluster' do
+        let(:params) do
+          {
+            tls_cluster: true
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{tls_cluster.*yes}
+          )
+        }
+      end
+
+      describe 'with parameter tls_ciphers' do
+        let(:params) do
+          {
+            tls_ciphers: 'DEFAULT:!MEDIUM'
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{tls_ciphers.*DEFAULT:!MEDIUM}
+          )
+        }
+      end
+
+      describe 'with parameter tls_ciphersuites' do
+        let(:params) do
+          {
+            tls_ciphersuites: 'TLS_CHACHA20_POLY1305_SHA256'
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{tls_ciphersuites.*TLS_CHACHA20_POLY1305_SHA256}
+          )
+        }
+      end
+
+      describe 'with parameter tls_protocols' do
+        let(:params) do
+          {
+            tls_protocols: 'TLSv1.2 TLSv1.3'
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{tls_protocols.*TLSv1\.2 TLSv1\.3}
+          )
+        }
+      end
+
+      describe 'with parameter tls_tls_prefer_server_ciphers' do
+        let(:params) do
+          {
+            tls_prefer_server_ciphers: true
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{tls_prefer_server_ciphers.*yes}
+          )
+        }
+      end
     end
   end
 end
