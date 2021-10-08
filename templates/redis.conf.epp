@@ -130,9 +130,6 @@ port <%= $port %>
 # By default, TLS/SSL is disabled. To enable it, the "tls-port" configuration
 # directive can be used to define TLS-listening ports. To enable TLS on the
 # default port, use:
-#
-# port
-# tls-port 6379
 tls-port <%= $tls_port %>
 
 # Configure a X.509 certificate and private key to use for authenticating the
