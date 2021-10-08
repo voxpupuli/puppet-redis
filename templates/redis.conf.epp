@@ -69,6 +69,18 @@
   Boolean                                            $cluster_require_full_coverage,
   Integer[0]                                         $cluster_migration_barrier,
   Optional[String]                                   $extra_config_file,
+  Optional[Stdlib::Port]                             $tls_port,
+  Optional[Stdlib::Absolutepath]                     $tls_cert_file,
+  Optional[Stdlib::Absolutepath]                     $tls_key_file,
+  Optional[Stdlib::Absolutepath]                     $tls_ca_cert_file,
+  Optional[Stdlib::Absolutepath]                     $tls_ca_cert_dir,
+  Optional[String[0]]                                $tls_ciphers,
+  Optional[String[0]]                                $tls_ciphersuites,
+  Optional[String[0]]                                $tls_protocols,
+  Enum['yes', 'no', 'optional']                      $tls_auth_clients,
+  Boolean                                            $tls_replication,
+  Boolean                                            $tls_cluster,
+  Boolean                                            $tls_prefer_server_ciphers,
 | -%>
 # Redis configuration file example
 
@@ -114,6 +126,89 @@ protected-mode <%= bool2str($protected_mode, 'yes', 'no') %>
 # Accept connections on the specified port, default is 6379.
 # If port 0 is specified Redis will not listen on a TCP socket.
 port <%= $port %>
+<% if $tls_port { -%>
+# By default, TLS/SSL is disabled. To enable it, the "tls-port" configuration
+# directive can be used to define TLS-listening ports. To enable TLS on the
+# default port, use:
+# port
+# tls-port 6379
+tls-port <%= $tls_port %>
+
+# Configure a X.509 certificate and private key to use for authenticating the
+# server to connected clients, masters or cluster peers.  These files should be
+# PEM formatted.
+tls-cert-file <%= $tls_cert_file %>
+tls-key-file <%= $tls_key_file %>
+
+# Configure a CA certificate(s) bundle or directory to authenticate TLS/SSL
+# clients and peers.  Redis requires an explicit configuration of at least one
+# of these, and will not implicitly use the system wide configuration.
+<% if $tls_ca_cert_file { -%>
+tls-ca-cert-file <%= $tls_ca_cert_file %>
+<% } -%>
+<% if $tls_ca_cert_dir { -%>
+tls-ca-cert-dir <%= $tls_ca_cert_dir %>
+<% } -%>
+
+# By default, clients (including replica servers) on a TLS port are required
+# to authenticate using valid client side certificates.
+#
+# If "no" is specified, client certificates are not required and not accepted.
+# If "optional" is specified, client certificates are accepted and must be
+# valid if provided, but are not required.
+tls-auth-clients <%= $tls_auth_clients %>
+
+<% if $tls_replication { -%>
+# By default, a Redis replica does not attempt to establish a TLS connection
+# with its master.
+#
+# Use the following directive to enable TLS on replication links.
+#
+tls-replication yes
+<% } -%>
+
+<% if $tls_cluster { -%>
+# By default, the Redis Cluster bus uses a plain TCP connection. To enable
+# TLS for the bus protocol, use the following directive:
+#
+tls-cluster yes
+<% } -%>
+
+<% if $tls_protocols { -%>
+# By default, only TLSv1.2 and TLSv1.3 are enabled and it is highly recommended
+# that older formally deprecated versions are kept disabled to reduce the attack surface.
+# You can explicitly specify TLS versions to support.
+# Allowed values are case insensitive and include "TLSv1", "TLSv1.1", "TLSv1.2",
+# "TLSv1.3" (OpenSSL >= 1.1.1) or any combination.
+# To enable only TLSv1.2 and TLSv1.3, use:
+#
+tls-protocols "<%= $tls_protocols %>"
+<% } -%>
+
+<% if $tls_ciphers { -%>
+# Configure allowed ciphers.  See the ciphers(1ssl) manpage for more information
+# about the syntax of this string.
+#
+# Note: this configuration applies only to <= TLSv1.2.
+#
+tls-ciphers <%= $tls_ciphers %>
+<% } -%>
+
+<% if $tls_ciphersuites { -%>
+# Configure allowed TLSv1.3 ciphersuites.  See the ciphers(1ssl) manpage for more
+# information about the syntax of this string, and specifically for TLSv1.3
+# ciphersuites.
+#
+tls-ciphersuites <%= $tls_ciphersuites %>
+<% } -%>
+
+<% if $tls_prefer_server_ciphers { -%>
+# When choosing a cipher, use the server's preference instead of the client
+# preference. By default, the server follows the client's preference.
+#
+tls-prefer-server-ciphers yes
+<% } -%>
+<% } -%>
 
 # TCP listen() backlog.
 #

@@ -161,6 +161,30 @@
 #   TCP keepalive.
 # @param timeout
 #   Close the connection after a client is idle for N seconds (0 to disable).
+# @param tls_port
+#   Configure which TLS port to listen on.
+# @param tls_cert_file
+#   Specify which X.509 certificate file to use for TLS connections.
+# @param tls_key_file
+#   Specify which privaye key file to use for TLS connections.
+# @param tls_ca_cert_file
+#   Specify which X.509 CA certificate(s) bundle file to use.
+# @param tls_ca_cert_dir
+#   Specify which X.509 CA certificate(s) bundle directory to use.
+# @param tls_auth_clients
+#   Specify if clients and replicas are required to authenticate using valid client side certificates.
+# @param tls_replication
+#   Specify if TLS should be enabled on replication links.
+# @param tls_cluster
+#   Specify if TLS should be used for the bus protocol.
+# @param tls_ciphers
+#   Configure allowed ciphers for TLS <= TLSv1.2.
+# @param tls_ciphersuites
+#   Configure allowed TLSv1.3 ciphersuites.
+# @param tls_protocols
+#   Configure allowed TLS protocol versions.
+# @param tls_prefer_server_ciphers
+#   Specify if the server's preference should be used when choosing a cipher.
 # @param ulimit
 #   Limit the use of system-wide resources.
 # @param ulimit_managed
@@ -264,7 +288,19 @@ define redis::instance (
   Integer[0] $tcp_backlog                                        = $redis::tcp_backlog,
   Integer[0] $tcp_keepalive                                      = $redis::tcp_keepalive,
   Integer[0] $timeout                                            = $redis::timeout,
-  Variant[Stdlib::Filemode , Enum['']] $unixsocketperm           = $redis::unixsocketperm,
+  Optional[Stdlib::Port] $tls_port                               = $redis::tls_port,
+  Optional[Stdlib::Absolutepath] $tls_cert_file                  = $redis::tls_cert_file,
+  Optional[Stdlib::Absolutepath] $tls_key_file                   = $redis::tls_key_file,
+  Optional[Stdlib::Absolutepath] $tls_ca_cert_file               = $redis::tls_ca_cert_file,
+  Optional[Stdlib::Absolutepath] $tls_ca_cert_dir                = $redis::tls_ca_cert_dir,
+  Optional[String[0]] $tls_ciphers                               = $redis::tls_ciphers,
+  Optional[String[0]] $tls_ciphersuites                          = $redis::tls_ciphersuites,
+  Optional[String[0]] $tls_protocols                             = $redis::tls_protocols,
+  Enum['yes', 'no', 'optional'] $tls_auth_clients                = $redis::tls_auth_clients,
+  Boolean $tls_replication                                       = $redis::tls_replication,
+  Boolean $tls_cluster                                           = $redis::tls_cluster,
+  Optional[Boolean] $tls_prefer_server_ciphers                   = $redis::tls_prefer_server_ciphers,
+  Variant[Stdlib::Filemode, Enum['']] $unixsocketperm            = $redis::unixsocketperm,
   Integer[0] $ulimit                                             = $redis::ulimit,
   Boolean $ulimit_managed                                        = $redis::ulimit_managed,
   Stdlib::Filemode $workdir_mode                                 = $redis::workdir_mode,
@@ -428,6 +464,18 @@ define redis::instance (
         cluster_require_full_coverage => $cluster_require_full_coverage,
         cluster_migration_barrier     => $cluster_migration_barrier,
         extra_config_file             => $extra_config_file,
+        tls_port                      => $tls_port,
+        tls_cert_file                 => $tls_cert_file,
+        tls_key_file                  => $tls_key_file,
+        tls_ca_cert_file              => $tls_ca_cert_file,
+        tls_ca_cert_dir               => $tls_ca_cert_dir,
+        tls_ciphers                   => $tls_ciphers,
+        tls_ciphersuites              => $tls_ciphersuites,
+        tls_protocols                  => $tls_protocols,
+        tls_auth_clients              => $tls_auth_clients,
+        tls_replication               => $tls_replication,
+        tls_cluster                   => $tls_cluster,
+        tls_prefer_server_ciphers     => $tls_prefer_server_ciphers,
       }
     ),
   }
