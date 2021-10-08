@@ -1472,7 +1472,7 @@ describe 'redis' do
       describe 'with parameter tls_auth_clients' do
         let(:params) do
           {
-            tls_auth_clients: 'no' 
+            tls_auth_clients: 'no'
           }
         end
 
