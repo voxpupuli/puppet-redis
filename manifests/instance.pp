@@ -471,7 +471,7 @@ define redis::instance (
         tls_ca_cert_dir               => $tls_ca_cert_dir,
         tls_ciphers                   => $tls_ciphers,
         tls_ciphersuites              => $tls_ciphersuites,
-        tls_versions                  => $tls_versions,
+        tls_protocols                  => $tls_protocols,
         tls_auth_clients              => $tls_auth_clients,
         tls_replication               => $tls_replication,
         tls_cluster                   => $tls_cluster,

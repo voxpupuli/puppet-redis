@@ -75,7 +75,7 @@
   String[0]                                          $tls_ca_cert_file,
   String[0]                                          $tls_ca_cert_dir,
   Optional[String[0]]                                $tls_ciphers,
-  Optional[String[0]]                                $tls_ciphers_suites,
+  Optional[String[0]]                                $tls_ciphersuites,
   Optional[String[0]]                                $tls_protocols,
   Enum['yes', 'no', 'optional']                      $tls_auth_clients,
   Boolean                                            $tls_replication,
