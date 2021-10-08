@@ -92,6 +92,7 @@ The following parameters are available in the `redis` class:
 * [`auto_aof_rewrite_min_size`](#auto_aof_rewrite_min_size)
 * [`auto_aof_rewrite_percentage`](#auto_aof_rewrite_percentage)
 * [`bind`](#bind)
+* [`bin_path`](#bin_path)
 * [`config_dir`](#config_dir)
 * [`config_dir_mode`](#config_dir_mode)
 * [`config_file_orig`](#config_file_orig)
@@ -164,6 +165,18 @@ The following parameters are available in the `redis` class:
 * [`tcp_backlog`](#tcp_backlog)
 * [`tcp_keepalive`](#tcp_keepalive)
 * [`timeout`](#timeout)
+* [`tls_port`](#tls_port)
+* [`tls_cert_file`](#tls_cert_file)
+* [`tls_key_file`](#tls_key_file)
+* [`tls_ca_cert_file`](#tls_ca_cert_file)
+* [`tls_ca_cert_dir`](#tls_ca_cert_dir)
+* [`tls_auth_clients`](#tls_auth_clients)
+* [`tls_replication`](#tls_replication)
+* [`tls_cluster`](#tls_cluster)
+* [`tls_ciphers`](#tls_ciphers)
+* [`tls_ciphersuites`](#tls_ciphersuites)
+* [`tls_protocols`](#tls_protocols)
+* [`tls_prefer_server_ciphers`](#tls_prefer_server_ciphers)
 * [`ulimit`](#ulimit)
 * [`ulimit_managed`](#ulimit_managed)
 * [`unixsocket`](#unixsocket)
@@ -254,6 +267,14 @@ Data type: `Variant[Stdlib::IP::Address, Array[Stdlib::IP::Address]]`
 Configure which IP address(es) to listen on. To bind on all interfaces, use an empty array.
 
 Default value: `['127.0.0.1']`
+
+##### <a name="bin_path"></a>`bin_path`
+
+Data type: `Stdlib::Absolutepath`
+
+Directory containing redis binary executables.
+
+Default value: `$redis::params::bin_path`
 
 ##### <a name="config_dir"></a>`config_dir`
 
@@ -843,6 +864,102 @@ Close the connection after a client is idle for N seconds (0 to disable).
 
 Default value: `0`
 
+##### <a name="tls_port"></a>`tls_port`
+
+Data type: `Optional[Stdlib::Port]`
+
+Configure which TLS port to listen on.
+
+Default value: ``undef``
+
+##### <a name="tls_cert_file"></a>`tls_cert_file`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+Specify which X.509 certificate file to use for TLS connections.
+
+Default value: ``undef``
+
+##### <a name="tls_key_file"></a>`tls_key_file`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+Specify which privaye key file to use for TLS connections.
+
+Default value: ``undef``
+
+##### <a name="tls_ca_cert_file"></a>`tls_ca_cert_file`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+Specify which X.509 CA certificate(s) bundle file to use.
+
+Default value: ``undef``
+
+##### <a name="tls_ca_cert_dir"></a>`tls_ca_cert_dir`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+Specify which X.509 CA certificate(s) bundle directory to use.
+
+Default value: ``undef``
+
+##### <a name="tls_auth_clients"></a>`tls_auth_clients`
+
+Data type: `Enum['yes', 'no', 'optional']`
+
+Specify if clients and replicas are required to authenticate using valid client side certificates.
+
+Default value: `'no'`
+
+##### <a name="tls_replication"></a>`tls_replication`
+
+Data type: `Boolean`
+
+Specify if TLS should be enabled on replication links.
+
+Default value: ``false``
+
+##### <a name="tls_cluster"></a>`tls_cluster`
+
+Data type: `Boolean`
+
+Specify if TLS should be used for the bus protocol.
+
+Default value: ``false``
+
+##### <a name="tls_ciphers"></a>`tls_ciphers`
+
+Data type: `Optional[String[1]]`
+
+Configure allowed ciphers for TLS <= TLSv1.2.
+
+Default value: ``undef``
+
+##### <a name="tls_ciphersuites"></a>`tls_ciphersuites`
+
+Data type: `Optional[String[1]]`
+
+Configure allowed TLSv1.3 ciphersuites.
+
+Default value: ``undef``
+
+##### <a name="tls_protocols"></a>`tls_protocols`
+
+Data type: `Optional[String[1]]`
+
+Configure allowed TLS protocol versions.
+
+Default value: ``undef``
+
+##### <a name="tls_prefer_server_ciphers"></a>`tls_prefer_server_ciphers`
+
+Data type: `Boolean`
+
+Specify if the server's preference should be used when choosing a cipher.
+
+Default value: ``false``
+
 ##### <a name="ulimit"></a>`ulimit`
 
 Data type: `Integer[0]`
@@ -1258,7 +1375,8 @@ Default value: `$redis::params::sentinel_package_name`
 
 Data type: `String[1]`
 
-Do we ensure this package.
+Do we ensure this package. This parameter takes effect only if
+an independent package is required for sentinel.
 
 Default value: `'installed'`
 
@@ -1461,6 +1579,18 @@ The following parameters are available in the `redis::instance` defined type:
 * [`tcp_backlog`](#tcp_backlog)
 * [`tcp_keepalive`](#tcp_keepalive)
 * [`timeout`](#timeout)
+* [`tls_port`](#tls_port)
+* [`tls_cert_file`](#tls_cert_file)
+* [`tls_key_file`](#tls_key_file)
+* [`tls_ca_cert_file`](#tls_ca_cert_file)
+* [`tls_ca_cert_dir`](#tls_ca_cert_dir)
+* [`tls_auth_clients`](#tls_auth_clients)
+* [`tls_replication`](#tls_replication)
+* [`tls_cluster`](#tls_cluster)
+* [`tls_ciphers`](#tls_ciphers)
+* [`tls_ciphersuites`](#tls_ciphersuites)
+* [`tls_protocols`](#tls_protocols)
+* [`tls_prefer_server_ciphers`](#tls_prefer_server_ciphers)
 * [`ulimit`](#ulimit)
 * [`ulimit_managed`](#ulimit_managed)
 * [`unixsocket`](#unixsocket)
@@ -2053,6 +2183,102 @@ Close the connection after a client is idle for N seconds (0 to disable).
 
 Default value: `$redis::timeout`
 
+##### <a name="tls_port"></a>`tls_port`
+
+Data type: `Optional[Stdlib::Port]`
+
+Configure which TLS port to listen on.
+
+Default value: `$redis::tls_port`
+
+##### <a name="tls_cert_file"></a>`tls_cert_file`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+Specify which X.509 certificate file to use for TLS connections.
+
+Default value: `$redis::tls_cert_file`
+
+##### <a name="tls_key_file"></a>`tls_key_file`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+Specify which privaye key file to use for TLS connections.
+
+Default value: `$redis::tls_key_file`
+
+##### <a name="tls_ca_cert_file"></a>`tls_ca_cert_file`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+Specify which X.509 CA certificate(s) bundle file to use.
+
+Default value: `$redis::tls_ca_cert_file`
+
+##### <a name="tls_ca_cert_dir"></a>`tls_ca_cert_dir`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+Specify which X.509 CA certificate(s) bundle directory to use.
+
+Default value: `$redis::tls_ca_cert_dir`
+
+##### <a name="tls_auth_clients"></a>`tls_auth_clients`
+
+Data type: `Enum['yes', 'no', 'optional']`
+
+Specify if clients and replicas are required to authenticate using valid client side certificates.
+
+Default value: `$redis::tls_auth_clients`
+
+##### <a name="tls_replication"></a>`tls_replication`
+
+Data type: `Boolean`
+
+Specify if TLS should be enabled on replication links.
+
+Default value: `$redis::tls_replication`
+
+##### <a name="tls_cluster"></a>`tls_cluster`
+
+Data type: `Boolean`
+
+Specify if TLS should be used for the bus protocol.
+
+Default value: `$redis::tls_cluster`
+
+##### <a name="tls_ciphers"></a>`tls_ciphers`
+
+Data type: `Optional[String[1]]`
+
+Configure allowed ciphers for TLS <= TLSv1.2.
+
+Default value: `$redis::tls_ciphers`
+
+##### <a name="tls_ciphersuites"></a>`tls_ciphersuites`
+
+Data type: `Optional[String[1]]`
+
+Configure allowed TLSv1.3 ciphersuites.
+
+Default value: `$redis::tls_ciphersuites`
+
+##### <a name="tls_protocols"></a>`tls_protocols`
+
+Data type: `Optional[String[1]]`
+
+Configure allowed TLS protocol versions.
+
+Default value: `$redis::tls_protocols`
+
+##### <a name="tls_prefer_server_ciphers"></a>`tls_prefer_server_ciphers`
+
+Data type: `Optional[Boolean]`
+
+Specify if the server's preference should be used when choosing a cipher.
+
+Default value: `$redis::tls_prefer_server_ciphers`
+
 ##### <a name="ulimit"></a>`ulimit`
 
 Data type: `Integer[0]`
@@ -2080,7 +2306,7 @@ Default value: `"/var/run/redis/redis-server-${name}.sock"`
 
 ##### <a name="unixsocketperm"></a>`unixsocketperm`
 
-Data type: `Variant[Stdlib::Filemode , Enum['']]`
+Data type: `Variant[Stdlib::Filemode, Enum['']]`
 
 Define unix socket file permissions
 
