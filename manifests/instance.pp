@@ -288,7 +288,7 @@ define redis::instance (
   Integer[0] $tcp_backlog                                        = $redis::tcp_backlog,
   Integer[0] $tcp_keepalive                                      = $redis::tcp_keepalive,
   Integer[0] $timeout                                            = $redis::timeout,
-  Optional[Integer[0]] $tls_port                                 = $redis::tls_port,
+  Optional[Stdlib::Port] $tls_port                               = $redis::tls_port,
   String[0] $tls_cert_file                                       = $redis::tls_cert_file,
   String[0] $tls_key_file                                        = $redis::tls_key_file,
   String[0] $tls_ca_cert_file                                    = $redis::tls_ca_cert_file,

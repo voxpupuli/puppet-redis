@@ -339,7 +339,7 @@ class redis (
   Integer[0] $tcp_backlog                                        = 511,
   Integer[0] $tcp_keepalive                                      = 0,
   Integer[0] $timeout                                            = 0,
-  Optional[Integer[0]] $tls_port                                 = undef,
+  Optional[Stdlib::Port] $tls_port                               = undef,
   String[0] $tls_cert_file                                       = '/etc/ssl/certs',
   String[0] $tls_key_file                                        = 'ca-certificates.crt',
   String[0] $tls_ca_cert_file                                    = 'ca-certificates.crt',
