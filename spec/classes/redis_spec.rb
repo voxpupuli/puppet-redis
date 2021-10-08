@@ -1353,6 +1353,41 @@ describe 'redis' do
         it { is_expected.to contain_file(config_file_orig).with_content(%r{cluster-migration-barrier.*1}) }
       end
 
+      describe 'with TLS related parameters' do
+        let(:params) do
+          {
+            tls_port: 7777,
+            tls_cert_file: '/etc/ssl/certs/dummy.crt',
+            tls_key_file: '/etc/ssl/private/dummy.key',
+            tls_ca_cert_file: '/etc/ssl/certs/ca_bundle.pem',
+            tls_ca_cert_dir: '/etc/ssl/some/dir',
+            tls_auth_clients: 'no',
+            tls_replication: true,
+            tls_cluster: true,
+            tls_ciphers: 'DEFAULT:!MEDIUM',
+            tls_ciphersuites: 'TLS_CHACHA20_POLY1305_SHA256',
+            tls_protocols: 'TLSv1.2 TLSv1.3',
+            tls_prefer_server_ciphers: true
+          }
+        end
+
+        it do
+          is_expected.to contain_file(config_file_orig).
+            with_content(%r{^tls-port 7777$}).
+            with_content(%r{^tls-cert-file\s*/etc/ssl/certs/dummy\.crt$}).
+            with_content(%r{^tls-key-file\s*/etc/ssl/private/dummy\.key$}).
+            with_content(%r{^tls-ca-cert-file\s*/etc/ssl/certs/ca_bundle\.pem$}).
+            with_content(%r{^tls-ca-cert-dir\s*/etc/ssl/some/dir$}).
+            with_content(%r{^tls-auth-clients\s*no$}).
+            with_content(%r{^tls-replication\s*yes$}).
+            with_content(%r{^tls-cluster\s*yes$}).
+            with_content(%r{^tls-ciphers\s*DEFAULT:!MEDIUM$}).
+            with_content(%r{^tls-ciphersuites\s*TLS_CHACHA20_POLY1305_SHA256$}).
+            with_content(%r{^tls-protocols\s*"TLSv1\.2\sTLSv1\.3"$}).
+            with_content(%r{^tls-prefer-server-ciphers\s*yes$})
+        end
+      end
+
       describe 'with parameter manage_service_file' do
         let(:params) do
           {
