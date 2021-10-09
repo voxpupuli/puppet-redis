@@ -8,8 +8,8 @@ Wants=network-online.target
 RuntimeDirectory=redis
 RuntimeDirectoryMode=2755
 Type=notify
-ExecStart=<%= scope['redis::params::bin_path'] %>/redis-server <%= @redis_file_name %> --supervised systemd
-ExecStop=<%= scope['redis::params::bin_path'] %>/redis-cli -p <%= @port %> shutdown
+ExecStart=<%= scope['redis::bin_path'] %>/redis-server <%= @redis_file_name %> --supervised systemd
+ExecStop=<%= scope['redis::bin_path'] %>/redis-cli -p <%= @port %> shutdown
 Restart=always
 User=<%= @service_user %>
 Group=<%= @service_user %>

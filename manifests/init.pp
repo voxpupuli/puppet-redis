@@ -37,6 +37,8 @@
 #   Adjust percentatge for auto-aof-rewrite.
 # @param bind
 #   Configure which IP address(es) to listen on. To bind on all interfaces, use an empty array.
+# @param bin_path
+#   Directory containing redis binary executables.
 # @param config_dir
 #   Directory containing the configuration files.
 # @param config_dir_mode
@@ -266,6 +268,7 @@ class redis (
   Variant[Stdlib::IP::Address, Array[Stdlib::IP::Address]] $bind = ['127.0.0.1'],
   String[1] $output_buffer_limit_slave                           = '256mb 64mb 60',
   String[1] $output_buffer_limit_pubsub                          = '32mb 8mb 60',
+  Stdlib::Absolutepath $bin_path                                 = $redis::params::bin_path,
   String[1] $conf_template                                       = 'redis/redis.conf.epp',
   Stdlib::Absolutepath $config_dir                               = $redis::params::config_dir,
   Stdlib::Filemode $config_dir_mode                              = $redis::params::config_dir_mode,
