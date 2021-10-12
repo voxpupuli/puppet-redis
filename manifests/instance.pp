@@ -318,8 +318,8 @@ define redis::instance (
   String[1] $service_group                                       = $redis::service_group,
   Boolean $manage_service_file                                   = true,
   String $log_file                                               = "redis-server-${name}.log",
-  Stdlib::Absolutepath $pid_file                                 = "/var/run/redis/redis-server-${name}.pid",
-  Variant[Stdlib::Absolutepath, Enum['']] $unixsocket            = "/var/run/redis/redis-server-${name}.sock",
+  Stdlib::Absolutepath $pid_file                                 = "/var/run/${service_name}/redis.pid",
+  Variant[Stdlib::Absolutepath, Enum['']] $unixsocket            = "/var/run/${service_name}/redis.sock",
   Stdlib::Absolutepath $workdir                                  = "${redis::workdir}/redis-server-${name}",
 ) {
   if $title == 'default' {
@@ -366,7 +366,19 @@ define redis::instance (
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      content => template('redis/service_templates/redis.service.erb'),
+      content => epp(
+        'redis/service_templates/redis.service.epp',
+        {
+          bin_path        => $redis::bin_path,
+          instance_title  => $name,
+          port            => $port,
+          redis_file_name => $redis_file_name,
+          service_name    => $service_name,
+          service_user    => $service_user,
+          ulimit          => $ulimit,
+          ulimit_managed  => $ulimit_managed,
+        }
+      ),
     }
   } else {
     if $ulimit_managed {

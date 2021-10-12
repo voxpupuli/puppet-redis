@@ -1406,7 +1406,7 @@ describe 'redis' do
             |Wants=network-online.target
             |
             |[Service]
-            |RuntimeDirectory=redis
+            |RuntimeDirectory=#{service_name}
             |RuntimeDirectoryMode=2755
             |Type=notify
             |ExecStart=/usr/bin/redis-server #{config_file} --supervised systemd
