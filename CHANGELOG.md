@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v8.2.0](https://github.com/voxpupuli/puppet-redis/tree/v8.2.0) (2021-10-11)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v8.1.1...v8.2.0)
+
+**Implemented enhancements:**
+
+- allow bin\_path overrides for custom redis installs [\#423](https://github.com/voxpupuli/puppet-redis/pull/423) ([aamerik](https://github.com/aamerik))
+- Add TLS support [\#421](https://github.com/voxpupuli/puppet-redis/pull/421) ([aamerik](https://github.com/aamerik))
+
+**Fixed bugs:**
+
+- Skip ensuring package if sentinel requires no additional package [\#417](https://github.com/voxpupuli/puppet-redis/pull/417) ([kajinamit](https://github.com/kajinamit))
+
 ## [v8.1.1](https://github.com/voxpupuli/puppet-redis/tree/v8.1.1) (2021-08-30)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v8.1.0...v8.1.1)
