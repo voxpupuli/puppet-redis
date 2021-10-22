@@ -1,0 +1,29 @@
+<%- |
+  Boolean                                            $ulimit_managed,
+  Integer[0]                                         $ulimit,
+  Stdlib::Absolutepath                               $bin_path,
+  Stdlib::Absolutepath                               $redis_file_name,
+  Stdlib::Port                                       $port,
+  String[1]                                          $instance_title,
+  String[1]                                          $service_name,
+  String[1]                                          $service_user,
+| -%>
+[Unit]
+Description=Redis Advanced key-value store for instance <%= $instance_title %>
+After=network.target
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+RuntimeDirectory=<%= $service_name %>
+RuntimeDirectoryMode=2755
+Type=notify
+ExecStart=<%= $bin_path %>/redis-server <%= $redis_file_name %> --supervised systemd
+ExecStop=<%= $bin_path %>/redis-cli -p <%= $port %> shutdown
+Restart=always
+User=<%= $service_user %>
+Group=<%= $service_user %>
+<%if $ulimit_managed { %>LimitNOFILE=<%= $ulimit %><% } %>
+
+[Install]
+WantedBy=multi-user.target

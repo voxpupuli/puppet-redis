@@ -33,7 +33,7 @@ describe 'redis::instance' do
             with_content(%r{^bind 127.0.0.1}).
             with_content(%r{^logfile /var/log/redis/redis-server-app2\.log}).
             with_content(%r{^dir /var/lib/redis/redis-server-app2}).
-            with_content(%r{^unixsocket /var/run/redis/redis-server-app2\.sock})
+            with_content(%r{^unixsocket /var/run/redis-server-app2/redis\.sock})
         end
         it { is_expected.to contain_file('/var/lib/redis/redis-server-app2') }
 
