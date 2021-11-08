@@ -1433,6 +1433,20 @@ describe 'redis' do
 
         it { is_expected.not_to contain_systemd__unit_file("#{service_name}.service") }
       end
+
+      describe 'with module loading' do
+        let(:params) do
+          {
+            modules: ['/root/nullmodule.so'],
+            service_manage: false
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).
+            with_content(%r{^loadmodule /root/nullmodule.so$})
+        }
+      end
     end
   end
 end

@@ -108,6 +108,8 @@
 #   The lag in seconds
 # @param min_slaves_to_write
 #   Minimum number of slaves to be in "online" state
+# @param modules
+#   Additional redis modules to load (.so path)
 # @param no_appendfsync_on_rewrite
 #   If you have latency problems turn this to 'true'. Otherwise leave it as
 # @param notify_keyspace_events
@@ -303,6 +305,7 @@ class redis (
   $maxmemory_samples                                             = undef,
   Integer[0] $min_slaves_max_lag                                 = 10,
   Integer[0] $min_slaves_to_write                                = 0,
+  Array[Stdlib::Absolutepath] $modules                           = [],
   Boolean $no_appendfsync_on_rewrite                             = false,
   Optional[String[1]] $notify_keyspace_events                    = undef,
   Boolean $notify_service                                        = true,

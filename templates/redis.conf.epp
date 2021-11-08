@@ -81,6 +81,7 @@
   Boolean                                            $tls_replication,
   Boolean                                            $tls_cluster,
   Boolean                                            $tls_prefer_server_ciphers,
+  Array[Stdlib::Absolutepath]                        $modules,
 | -%>
 # Redis configuration file example
 
@@ -950,6 +951,16 @@ cluster-require-full-coverage <%= bool2str($cluster_require_full_coverage, 'yes'
 cluster-migration-barrier <%= $cluster_migration_barrier %>
 <% } -%>
 
+################################## MODULES #####################################
+
+# Load modules at startup. If the server is not able to load modules
+# it will abort. It is possible to use multiple loadmodule directives.
+#
+# loadmodule /path/to/my_module.so
+# loadmodule /path/to/other_module.so
+<% $modules.each |$module_path| { -%>
+loadmodule <%= $module_path %>
+<% } -%>
 
 ################################## INCLUDES ###################################
 

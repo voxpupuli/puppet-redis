@@ -83,6 +83,8 @@
 #   The lag in seconds
 # @param min_slaves_to_write
 #   Minimum number of slaves to be in "online" state
+# @param modules
+#   Additional redis modules to load (.so path)
 # @param no_appendfsync_on_rewrite
 #   If you have latency problems turn this to 'true'. Otherwise leave it as
 # @param notify_keyspace_events
@@ -259,6 +261,7 @@ define redis::instance (
   Optional[Variant[Integer, String]] $maxmemory_samples          = $redis::maxmemory_samples,
   Integer[0] $min_slaves_max_lag                                 = $redis::min_slaves_max_lag,
   Integer[0] $min_slaves_to_write                                = $redis::min_slaves_to_write,
+  Array[Stdlib::Absolutepath] $modules                           = $redis::modules,
   Boolean $no_appendfsync_on_rewrite                             = $redis::no_appendfsync_on_rewrite,
   Optional[String[1]] $notify_keyspace_events                    = $redis::notify_keyspace_events,
   Boolean $managed_by_cluster_manager                            = $redis::managed_by_cluster_manager,
@@ -488,6 +491,7 @@ define redis::instance (
         tls_replication               => $tls_replication,
         tls_cluster                   => $tls_cluster,
         tls_prefer_server_ciphers     => $tls_prefer_server_ciphers,
+        modules                       => $modules,
       }
     ),
   }
