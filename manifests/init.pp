@@ -275,7 +275,7 @@ class redis (
   Stdlib::Absolutepath $config_dir                               = $redis::params::config_dir,
   Stdlib::Filemode $config_dir_mode                              = $redis::params::config_dir_mode,
   Stdlib::Absolutepath $config_file                              = $redis::params::config_file,
-  Stdlib::Filemode $config_file_mode                             = '0644',
+  Stdlib::Filemode $config_file_mode                             = '0640',
   Stdlib::Absolutepath $config_file_orig                         = $redis::params::config_file_orig,
   String[1] $config_group                                        = $redis::params::config_group,
   String[1] $config_owner                                        = $redis::params::config_owner,
