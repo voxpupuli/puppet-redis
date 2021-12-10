@@ -263,6 +263,10 @@
 #   above using the 'dbfilename' configuration directive.
 # @param workdir_mode
 #   Adjust mode for data directory.
+# @param workdir_group
+#   Adjust filesystem group for $workdir.
+# @param workdir_owner
+#   Adjust filesystem owner for $workdir.
 # @param zset_max_ziplist_entries
 #   Set max entries for sorted sets.
 # @param zset_max_ziplist_value
@@ -455,6 +459,8 @@ class redis (
   Boolean $ulimit_managed                                        = true,
   Stdlib::Absolutepath $workdir                                  = $redis::params::workdir,
   Stdlib::Filemode $workdir_mode                                 = '0750',
+  Optional[String[1]] $workdir_group                             = undef,
+  Optional[String[1]] $workdir_owner                             = undef,
   Integer[0] $zset_max_ziplist_entries                           = 128,
   Integer[0] $zset_max_ziplist_value                             = 64,
   Boolean $cluster_enabled                                       = false,

@@ -21,9 +21,9 @@ class redis::config {
 
   file { $redis::workdir:
     ensure => directory,
-    group  => $redis::service_group,
+    group  => pick($redis::workdir_group, $redis::service_group),
     mode   => $redis::workdir_mode,
-    owner  => $redis::service_user,
+    owner  => pick($redis::workdir_owner, $redis::service_user),
   }
 
   if $redis::default_install {
