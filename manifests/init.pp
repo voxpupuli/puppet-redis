@@ -267,6 +267,15 @@
 #   Adjust filesystem group for $workdir.
 # @param workdir_owner
 #   Adjust filesystem owner for $workdir.
+# @param debdefault_group
+#   group of /etc/defaults/redis on Debian systems
+#   if undef, $redis::config_group is taken
+# @param debdefault_file_mode
+#   filemode of /etc/defaults/redis on Debian systems
+#   if undef, $redis::config_file_mode is taken
+# @param debdefault_owner
+#   owner of /etc/defaults/redis on Debian systems
+#   if undef, $redis::config_owner is taken
 # @param zset_max_ziplist_entries
 #   Set max entries for sorted sets.
 # @param zset_max_ziplist_value
@@ -461,6 +470,9 @@ class redis (
   Stdlib::Filemode $workdir_mode                                 = '0750',
   Optional[String[1]] $workdir_group                             = undef,
   Optional[String[1]] $workdir_owner                             = undef,
+  Optional[String[1]] $debdefault_group                          = undef,
+  Optional[Stdlib::Filemode] $debdefault_file_mode               = undef,
+  Optional[String[1]] $debdefault_owner                          = undef,
   Integer[0] $zset_max_ziplist_entries                           = 128,
   Integer[0] $zset_max_ziplist_value                             = 64,
   Boolean $cluster_enabled                                       = false,

@@ -48,9 +48,9 @@ class redis::config {
     'Debian': {
       file { '/etc/default/redis-server':
         ensure => file,
-        group  => $redis::config_group,
-        mode   => $redis::config_file_mode,
-        owner  => $redis::config_owner,
+        group  => pick($redis::debdefault_group, $redis::config_group),
+        mode   => pick($redis::debdefault_file_mode, $redis::config_file_mode),
+        owner  => pick($redis::debdefault_owner, $redis::config_owner),
       }
     }
 
