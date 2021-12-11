@@ -450,12 +450,6 @@ define redis::instance (
     if $title != 'default' {
       $real_service_ensure = $service_ensure == 'running'
       $real_service_enable = $service_enable
-
-      if $notify_service {
-        Exec["copy ${redis_file_name_orig} to ${redis_file_name}"] ~> Service["${service_name}.service"]
-      } else {
-        Exec["copy ${redis_file_name_orig} to ${redis_file_name}"] -> Service["${service_name}.service"]
-      }
     } else {
       $real_service_ensure = undef
       $real_service_enable = undef
@@ -640,10 +634,20 @@ define redis::instance (
     content => $_content,
   }
 
-  exec { "copy ${redis_file_name_orig} to ${redis_file_name}":
-    path        => '/usr/bin:/bin',
-    command     => "cp -p ${redis_file_name_orig} ${redis_file_name}",
-    subscribe   => File[$redis_file_name_orig],
-    refreshonly => true,
+  if $redis_file_name_orig != $redis_file_name {
+    exec { "copy ${redis_file_name_orig} to ${redis_file_name}":
+      path        => '/usr/bin:/bin',
+      command     => "cp -p ${redis_file_name_orig} ${redis_file_name}",
+      subscribe   => File[$redis_file_name_orig],
+      refreshonly => true,
+    }
+
+    if $title != 'default' and $manage_service_file {
+      if $notify_service {
+        Exec["copy ${redis_file_name_orig} to ${redis_file_name}"] ~> Service["${service_name}.service"]
+      } else {
+        Exec["copy ${redis_file_name_orig} to ${redis_file_name}"] -> Service["${service_name}.service"]
+      }
+    }
   }
 }
