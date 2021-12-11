@@ -289,6 +289,9 @@
 # @param output_buffer_limit_pubsub
 #   Value of client-output-buffer-limit-pubsub in redis config
 #
+# @param custom_options
+#   hash of custom options, not available as direct parameter.
+#
 define redis::instance (
   Boolean $activerehashing                                       = $redis::activerehashing,
   Boolean $aof_load_truncated                                    = $redis::aof_load_truncated,
@@ -412,6 +415,7 @@ define redis::instance (
   Optional[Boolean] $jemalloc_bg_thread                          = $redis::jemalloc_bg_thread,
   Optional[Boolean] $rdb_save_incremental_fsync                  = $redis::rdb_save_incremental_fsync,
   Array[String[1]] $acls                                         = $redis::acls,
+  Hash[String[1],Variant[String[1], Integer]] $custom_options    = {},
 ) {
   if $title == 'default' {
     $redis_file_name_orig = $config_file_orig
@@ -604,6 +608,7 @@ define redis::instance (
         jemalloc_bg_thread            => $jemalloc_bg_thread,
         rdb_save_incremental_fsync    => $rdb_save_incremental_fsync,
         acls                          => $acls,
+        custom_options                => $custom_options,
       }
     ),
   }
