@@ -115,7 +115,7 @@
 # @param notify_keyspace_events
 #   Which events to notify Pub/Sub clients about events happening
 # @param notify_service
-#   You may disable service reloads when config files change if you
+#   You may disable service reloads when config files change
 # @param package_ensure
 #   Default action for package.
 # @param package_name

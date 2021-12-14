@@ -89,6 +89,8 @@
 #   If you have latency problems turn this to 'true'. Otherwise leave it as
 # @param notify_keyspace_events
 #   Which events to notify Pub/Sub clients about events happening
+# @param notify_service
+#   You may disable instance service reloads when config file changes
 # @param pid_file
 #   Where to store the pid.
 # @param port
@@ -264,6 +266,7 @@ define redis::instance (
   Array[Stdlib::Absolutepath] $modules                           = $redis::modules,
   Boolean $no_appendfsync_on_rewrite                             = $redis::no_appendfsync_on_rewrite,
   Optional[String[1]] $notify_keyspace_events                    = $redis::notify_keyspace_events,
+  Boolean $notify_service                                        = true,
   Boolean $managed_by_cluster_manager                            = $redis::managed_by_cluster_manager,
   Stdlib::Port $port                                             = $redis::port,
   Boolean $protected_mode                                        = $redis::protected_mode,
@@ -356,7 +359,11 @@ define redis::instance (
       $real_service_ensure = $service_ensure == 'running'
       $real_service_enable = $service_enable
 
-      Exec["cp -p ${redis_file_name_orig} ${redis_file_name}"] ~> Service["${service_name}.service"]
+      if $notify_service {
+        Exec["copy ${redis_file_name_orig} to ${redis_file_name}"] ~> Service["${service_name}.service"]
+      } else {
+        Exec["copy ${redis_file_name_orig} to ${redis_file_name}"] -> Service["${service_name}.service"]
+      }
     } else {
       $real_service_ensure = undef
       $real_service_enable = undef
@@ -496,8 +503,9 @@ define redis::instance (
     ),
   }
 
-  exec { "cp -p ${redis_file_name_orig} ${redis_file_name}":
+  exec { "copy ${redis_file_name_orig} to ${redis_file_name}":
     path        => '/usr/bin:/bin',
+    command     => "cp -p ${redis_file_name_orig} ${redis_file_name}",
     subscribe   => File[$redis_file_name_orig],
     refreshonly => true,
   }
