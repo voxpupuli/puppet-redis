@@ -15,7 +15,11 @@ describe 'redis::sentinel' do
         when 'FreeBSD'
           '/usr/local/etc/redis-sentinel.conf.puppet'
         when 'RedHat'
-          '/etc/redis-sentinel.conf.puppet'
+          if facts[:operatingsystemmajrelease].to_i > 8
+            '/etc/redis/sentinel.conf.puppet'
+          else
+            '/etc/redis-sentinel.conf.puppet'
+          end
         end
       end
 

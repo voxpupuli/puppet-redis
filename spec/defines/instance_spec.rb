@@ -18,7 +18,11 @@ describe 'redis::instance' do
         let(:config_file) do
           case facts[:osfamily]
           when 'RedHat'
-            '/etc/redis-server-app2.conf'
+            if facts[:operatingsystemmajrelease].to_i > 8
+              '/etc/redis/redis-server-app2.conf'
+            else
+              '/etc/redis-server-app2.conf'
+            end
           when 'FreeBSD'
             '/usr/local/etc/redis/redis-server-app2.conf'
           when 'Debian'

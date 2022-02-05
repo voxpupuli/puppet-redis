@@ -70,22 +70,31 @@ class redis::params inherits redis::globals {
         $sentinel_pid_file         = "/var/opt/rh/${scl}/run/redis-sentinel.pid"
         $sentinel_log_file         = "/var/opt/rh/${scl}/log/redis/sentinel.log"
       } else {
-        $config_dir                = '/etc/redis'
-        $config_file               = '/etc/redis.conf'
-        $config_file_orig          = '/etc/redis.conf.puppet'
-        $log_dir                   = '/var/log/redis'
-        $package_name              = 'redis'
-        $pid_file                  = '/var/run/redis_6379.pid'
-        $service_name              = 'redis'
-        $workdir                   = '/var/lib/redis'
-        $bin_path                  = '/usr/bin'
-
-        $sentinel_config_file      = '/etc/redis-sentinel.conf'
-        $sentinel_config_file_orig = '/etc/redis-sentinel.conf.puppet'
-        $sentinel_service_name     = 'redis-sentinel'
-        $sentinel_package_name     = 'redis'
-        $sentinel_pid_file         = '/var/run/redis/redis-sentinel.pid'
-        $sentinel_log_file         = '/var/log/redis/sentinel.log'
+        $config_dir                  = '/etc/redis'
+        if (versioncmp($facts['os']['release']['major'], '9') >= 0) {
+          $config_file               = '/etc/redis/redis.conf'
+          $config_file_orig          = '/etc/redis/redis.conf.puppet'
+        } else {
+          $config_file               = '/etc/redis.conf'
+          $config_file_orig          = '/etc/redis.conf.puppet'
+        }
+        $log_dir                     = '/var/log/redis'
+        $package_name                = 'redis'
+        $pid_file                    = '/var/run/redis_6379.pid'
+        $service_name                = 'redis'
+        $workdir                     = '/var/lib/redis'
+        $bin_path                    = '/usr/bin'
+        if (versioncmp($facts['os']['release']['major'], '9') >= 0) {
+          $sentinel_config_file      = '/etc/redis/sentinel.conf'
+          $sentinel_config_file_orig = '/etc/redis/sentinel.conf.puppet'
+        } else {
+          $sentinel_config_file      = '/etc/redis-sentinel.conf'
+          $sentinel_config_file_orig = '/etc/redis-sentinel.conf.puppet'
+        }
+        $sentinel_service_name       = 'redis-sentinel'
+        $sentinel_package_name       = 'redis'
+        $sentinel_pid_file           = '/var/run/redis/redis-sentinel.pid'
+        $sentinel_log_file           = '/var/log/redis/sentinel.log'
       }
     }
 

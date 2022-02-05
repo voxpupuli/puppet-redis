@@ -10,7 +10,11 @@ describe 'redis' do
     when 'FreeBSD'
       '/usr/local/etc/redis.conf'
     when 'RedHat'
-      '/etc/redis.conf'
+      if facts[:operatingsystemmajrelease].to_i > 8
+        '/etc/redis/redis.conf'
+      else
+        '/etc/redis.conf'
+      end
     end
   end
   let(:config_file_orig) { "#{config_file}.puppet" }
@@ -44,7 +48,7 @@ describe 'redis' do
 
         it { is_expected.to contain_service(service_name).with_ensure('running').with_enable('true') }
 
-        context 'with SCL', if: facts[:osfamily] == 'RedHat' && facts[:operatingsystemmajrelease] < '8' do
+        context 'with SCL', if: facts[:osfamily] == 'RedHat' && facts[:operatingsystemmajrelease].to_i < 8 do
           let(:pre_condition) do
             <<-PUPPET
             class { 'redis::globals':
