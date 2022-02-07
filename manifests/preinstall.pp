@@ -14,7 +14,7 @@ class redis::preinstall {
           require 'epel'
         }
       }
-    } elsif $facts['os']['name'] == 'Ubuntu' {
+    } elsif $facts['os']['name'] == 'Ubuntu' and $redis::ppa_repo {
       contain 'apt'
       apt::ppa { $redis::ppa_repo:
       }

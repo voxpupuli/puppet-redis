@@ -466,11 +466,20 @@ describe 'redis' do
       describe 'with parameter: manage_repo' do
         let(:params) { { manage_repo: true } }
 
-        case facts[:operatingsystem]
-        when 'Ubuntu'
-          it { is_expected.to contain_apt__ppa('ppa:chris-lea/redis-server') }
-        when 'RedHat', 'CentOS', 'Scientific', 'OEL', 'Amazon'
+        if facts[:osfamily] == 'RedHat'
           it { is_expected.to contain_class('epel') }
+        else
+          it { is_expected.not_to contain_class('epel') }
+        end
+
+        describe 'with ppa' do
+          let(:params) { super().merge(ppa_repo: 'ppa:rwky/redis') }
+
+          if facts[:operatingsystem] == 'Ubuntu'
+            it { is_expected.to contain_apt__ppa('ppa:rwky/redis') }
+          else
+            it { is_expected.not_to contain_apt__ppa('ppa:rwky/redis') }
+          end
         end
       end
 
