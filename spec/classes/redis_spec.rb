@@ -1,16 +1,20 @@
 require 'spec_helper'
 
 describe 'redis' do
-  let(:package_name) { facts[:osfamily] == 'Debian' ? 'redis-server' : 'redis' }
+  let(:package_name) { facts[:os]['family'] == 'Debian' ? 'redis-server' : 'redis' }
   let(:service_name) { package_name }
   let(:config_file) do
-    case facts[:osfamily]
+    case facts[:os]['family']
     when 'Archlinux', 'Debian'
       '/etc/redis/redis.conf'
     when 'FreeBSD'
       '/usr/local/etc/redis.conf'
     when 'RedHat'
-      '/etc/redis.conf'
+      if facts[:os]['release']['major'].to_i > 8
+        '/etc/redis/redis.conf'
+      else
+        '/etc/redis.conf'
+      end
     end
   end
   let(:config_file_orig) { "#{config_file}.puppet" }
@@ -35,7 +39,7 @@ describe 'redis' do
             with_content(%r{logfile /var/log/redis/redis\.log}).
             without_content(%r{undef})
 
-          if facts[:osfamily] == 'FreeBSD'
+          if facts[:os]['family'] == 'FreeBSD'
             is_expected.to contain_file(config_file_orig).
               with_content(%r{dir /var/db/redis}).
               with_content(%r{pidfile /var/run/redis/redis\.pid})
@@ -44,7 +48,7 @@ describe 'redis' do
 
         it { is_expected.to contain_service(service_name).with_ensure('running').with_enable('true') }
 
-        context 'with SCL', if: facts[:osfamily] == 'RedHat' && facts[:operatingsystemmajrelease] < '8' do
+        context 'with SCL', if: facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'].to_i < 8 do
           let(:pre_condition) do
             <<-PUPPET
             class { 'redis::globals':
@@ -470,7 +474,7 @@ describe 'redis' do
       describe 'with parameter: manage_repo' do
         let(:params) { { manage_repo: true } }
 
-        if facts[:osfamily] == 'RedHat' && facts[:operatingsystemmajrelease].to_i <= 7
+        if facts[:osfamily] == 'RedHat' && facts[:os]['release']['major'].to_i <= 7
           it { is_expected.to contain_class('epel') }
         else
           it { is_expected.not_to contain_class('epel') }

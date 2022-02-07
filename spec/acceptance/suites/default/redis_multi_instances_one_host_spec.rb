@@ -2,14 +2,26 @@ require 'spec_helper_acceptance'
 
 describe 'redis::instance example' do
   instances = [6379, 6380, 6381, 6382]
-  case fact('osfamily')
-  when 'Debian'
-    config_path = '/etc/redis'
-    redis_name = 'redis-server'
-  else
-    config_path = '/etc'
-    redis_name = 'redis'
-  end
+
+  config_path = case fact('os.family')
+                when 'Debian'
+                  '/etc/redis'
+                when 'RedHat'
+                  if fact('os.release.major').to_i >= 9
+                    '/etc/redis'
+                  else
+                    '/etc'
+                  end
+                else
+                  '/etc'
+                end
+
+  redis_name = case fact('os.family')
+               when 'Debian'
+                 'redis-server'
+               else
+                 'redis'
+               end
 
   it 'runs successfully' do
     pp = <<-EOS

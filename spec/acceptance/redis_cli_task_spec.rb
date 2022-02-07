@@ -16,31 +16,33 @@ describe 'redis-cli task' do
     apply_manifest(pp, catch_changes: true)
   end
 
-  describe 'ping' do
-    let(:params) { 'command="ping"' }
+  unless fact('os.family') == 'RedHat' && fact('os.release.major').to_i >= 9
+    describe 'ping' do
+      let(:params) { 'command="ping"' }
 
-    it 'execute ping' do
-      is_expected.to match(%r{{\s*"status":\s*"PONG"\s*}})
-      is_expected.to match(%r{Ran on 1 target in .+ sec})
-    end
-  end
-
-  describe 'security' do
-    describe 'command with semi colon' do
-      let(:params) { 'command="ping; cat /etc/passwd"' }
-
-      it 'stops script injections and escapes' do
-        is_expected.to match(%r!{\s*"status":\s*"ERR unknown command ('|`)ping; cat /etc/passwd('|`)!)
+      it 'execute ping' do
+        is_expected.to match(%r{{\s*"status":\s*"PONG"\s*}})
         is_expected.to match(%r{Ran on 1 target in .+ sec})
       end
     end
 
-    describe 'command with double ampersand' do
-      let(:params) { 'command="ping && cat /etc/passwd"' }
+    describe 'security' do
+      describe 'command with semi colon' do
+        let(:params) { 'command="ping; cat /etc/passwd"' }
 
-      it 'stops script injections and escapes' do
-        is_expected.to match(%r!{\s*"status":\s*"ERR unknown command ('|`)ping && cat /etc/passwd('|`)!)
-        is_expected.to match(%r{Ran on 1 target in .+ sec})
+        it 'stops script injections and escapes' do
+          is_expected.to match(%r!{\s*"status":\s*"ERR unknown command ('|`)ping; cat /etc/passwd('|`)!)
+          is_expected.to match(%r{Ran on 1 target in .+ sec})
+        end
+      end
+
+      describe 'command with double ampersand' do
+        let(:params) { 'command="ping && cat /etc/passwd"' }
+
+        it 'stops script injections and escapes' do
+          is_expected.to match(%r!{\s*"status":\s*"ERR unknown command ('|`)ping && cat /etc/passwd('|`)!)
+          is_expected.to match(%r{Ran on 1 target in .+ sec})
+        end
       end
     end
   end

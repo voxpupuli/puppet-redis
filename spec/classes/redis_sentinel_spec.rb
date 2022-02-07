@@ -5,7 +5,7 @@ describe 'redis::sentinel' do
     context "on #{os}" do
       let(:facts) { facts }
       let(:config_file_orig) do
-        case facts[:osfamily]
+        case facts[:os]['family']
         when 'Archlinux'
           '/etc/redis/redis-sentinel.conf.puppet'
         when 'Debian'
@@ -15,15 +15,19 @@ describe 'redis::sentinel' do
         when 'FreeBSD'
           '/usr/local/etc/redis-sentinel.conf.puppet'
         when 'RedHat'
-          '/etc/redis-sentinel.conf.puppet'
+          if facts[:os]['release']['major'].to_i > 8
+            '/etc/redis/sentinel.conf.puppet'
+          else
+            '/etc/redis-sentinel.conf.puppet'
+          end
         end
       end
 
       let(:pidfile) do
-        if facts[:operatingsystem] == 'Ubuntu'
+        if facts[:os]['name'] == 'Ubuntu'
           '/var/run/sentinel/redis-sentinel.pid'
-        elsif facts[:operatingsystem] == 'Debian'
-          facts[:operatingsystemmajrelease] == '9' ? '/var/run/redis/redis-sentinel.pid' : '/run/sentinel/redis-sentinel.pid'
+        elsif facts[:os]['name'] == 'Debian'
+          facts[:os]['release']['major'].to_i == 9 ? '/var/run/redis/redis-sentinel.pid' : '/run/sentinel/redis-sentinel.pid'
         else
           '/var/run/redis/redis-sentinel.pid'
         end
@@ -45,8 +49,8 @@ describe 'redis::sentinel' do
         let(:expected_content) do
           <<CONFIG
 port 26379
-dir #{facts[:osfamily] == 'Debian' ? '/var/lib/redis' : '/tmp'}
-daemonize #{facts[:osfamily] == 'RedHat' ? 'no' : 'yes'}
+dir #{facts[:os]['family'] == 'Debian' ? '/var/lib/redis' : '/tmp'}
+daemonize #{facts[:os]['family'] == 'RedHat' ? 'no' : 'yes'}
 pidfile #{pidfile}
 protected-mode yes
 
@@ -56,7 +60,7 @@ sentinel parallel-syncs mymaster 1
 sentinel failover-timeout mymaster 180000
 
 loglevel notice
-logfile #{facts[:osfamily] == 'Debian' ? '/var/log/redis/redis-sentinel.log' : '/var/log/redis/sentinel.log'}
+logfile #{facts[:os]['family'] == 'Debian' ? '/var/log/redis/redis-sentinel.log' : '/var/log/redis/sentinel.log'}
 CONFIG
         end
 
@@ -109,7 +113,7 @@ CONFIG
 bind 192.0.2.10
 port 26379
 dir /tmp/redis
-daemonize #{facts[:osfamily] == 'RedHat' ? 'no' : 'yes'}
+daemonize #{facts[:os]['family'] == 'RedHat' ? 'no' : 'yes'}
 pidfile #{pidfile}
 protected-mode no
 
@@ -153,7 +157,7 @@ CONFIG
 bind 192.0.2.10 192.168.1.1
 port 26379
 dir /tmp/redis
-daemonize #{facts[:osfamily] == 'RedHat' ? 'no' : 'yes'}
+daemonize #{facts[:os]['family'] == 'RedHat' ? 'no' : 'yes'}
 pidfile #{pidfile}
 protected-mode yes
 
