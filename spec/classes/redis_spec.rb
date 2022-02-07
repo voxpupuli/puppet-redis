@@ -61,11 +61,15 @@ describe 'redis' do
               with_service_name('rh-redis5-redis')
           end
 
-          context 'manage_repo => true', if: facts[:operatingsystem] == 'CentOS' do
+          context 'manage_repo => true' do
             let(:params) { { manage_repo: true } }
 
             it { is_expected.to compile.with_all_deps }
-            it { is_expected.to contain_package('centos-release-scl-rh') }
+            if facts[:operatingsystem] == 'CentOS'
+              it { is_expected.to contain_package('centos-release-scl-rh') }
+            else
+              it { is_expected.not_to contain_package('centos-release-scl-rh') }
+            end
           end
         end
       end
@@ -466,7 +470,7 @@ describe 'redis' do
       describe 'with parameter: manage_repo' do
         let(:params) { { manage_repo: true } }
 
-        if facts[:osfamily] == 'RedHat'
+        if facts[:osfamily] == 'RedHat' && facts[:operatingsystemmajrelease].to_i <= 7
           it { is_expected.to contain_class('epel') }
         else
           it { is_expected.not_to contain_class('epel') }
