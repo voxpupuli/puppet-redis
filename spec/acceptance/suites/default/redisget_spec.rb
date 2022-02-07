@@ -3,28 +3,28 @@
 require 'spec_helper_acceptance'
 
 describe 'redis::get() function' do
-  it 'runs successfully' do
-    pp = <<-EOS
-    include redis
+  include_examples 'an idempotent resource' do
+    let(:manifest) do
+      <<-PUPPET
+      include redis
 
-    package { 'redis-rubygem' :
-      ensure   => '3.3.3',
-      name     => 'redis',
-      provider => if fact('aio_agent_version') =~ String[1] { 'puppet_gem' } else { 'gem' },
-    }
-    EOS
-
-    # Apply twice to ensure no errors the second time.
-    apply_manifest(pp, catch_failures: true)
-    apply_manifest(pp, catch_changes: true)
+      package { 'redis-rubygem' :
+        ensure   => '3.3.3',
+        name     => 'redis',
+        provider => if fact('aio_agent_version') =~ String[1] { 'puppet_gem' } else { 'gem' },
+      }
+      PUPPET
+    end
   end
 
-  describe command('redis-cli SET mykey "Hello"') do
-    its(:stdout) { is_expected.to match(%r{OK}) }
+  specify do
+    expect(command('redis-cli SET mykey "Hello"')).
+      to have_attributes(stdout: %r{OK})
   end
 
-  describe command('redis-cli GET mykey') do
-    its(:stdout) { is_expected.to match('Hello') }
+  specify do
+    expect(command('redis-cli GET mykey')).
+      to have_attributes(stdout: %r{Hello})
   end
 
   context 'with mykey set to Hello' do

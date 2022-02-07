@@ -11,33 +11,24 @@ describe 'redis', if: %w[centos redhat].include?(os[:family]) && os[:release].to
     apply_manifest('service{"rh-redis5-redis" : ensure => stopped, enable => false}')
   end
 
-  it 'runs successfully' do
-    pp = <<-PUPPET
+  include_examples 'an idempotent resource' do
+    let(:manifest) do
+      <<-PUPPET
       class { 'redis::globals':
         scl => 'rh-redis5',
       }
       class { 'redis':
         manage_repo => true,
       }
-    PUPPET
-
-    # Apply twice to ensure no errors the second time.
-    apply_manifest(pp, catch_failures: true)
-    apply_manifest(pp, catch_changes: true)
-  end
-
-  describe package('rh-redis5-redis') do
-    it { is_expected.to be_installed }
-  end
-
-  describe service('rh-redis5-redis') do
-    it { is_expected.to be_running }
-    it { is_expected.to be_enabled }
-  end
-
-  context 'redis should respond to ping command' do
-    describe command('scl enable rh-redis5 -- redis-cli ping') do
-      its(:stdout) { is_expected.to match %r{PONG} }
+      PUPPET
     end
+  end
+
+  specify { expect(package('rh-redis5-redis')).to be_installed }
+  specify { expect(service('rh-redis5-redis')).to be_running.and be_enabled }
+
+  it 'redis should respond to ping command' do
+    expect(command('scl enable rh-redis5 -- redis-cli ping')).
+      to have_attributes(stdout: %r{PONG})
   end
 end
