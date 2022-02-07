@@ -3,8 +3,6 @@
 class redis::params inherits redis::globals {
   case $facts['os']['family'] {
     'Debian': {
-      $ppa_repo                  = 'ppa:chris-lea/redis-server'
-
       $config_dir                = '/etc/redis'
       $config_dir_mode           = '0755'
       $config_file               = '/etc/redis/redis.conf'
@@ -44,7 +42,6 @@ class redis::params inherits redis::globals {
     }
 
     'RedHat': {
-      $ppa_repo             = undef
       $daemonize            = false
       $config_owner         = 'redis'
       $config_group         = 'root'
@@ -93,8 +90,6 @@ class redis::params inherits redis::globals {
     }
 
     'FreeBSD': {
-      $ppa_repo                  = undef
-
       $config_dir                = '/usr/local/etc/redis'
       $config_dir_mode           = '0755'
       $config_file               = '/usr/local/etc/redis.conf'
@@ -121,8 +116,6 @@ class redis::params inherits redis::globals {
     }
 
     'Suse': {
-      $ppa_repo                  = undef
-
       $config_dir                = '/etc/redis'
       $config_dir_mode           = '0750'
       $config_file               = '/etc/redis/redis-server.conf'
@@ -148,8 +141,6 @@ class redis::params inherits redis::globals {
     }
 
     'Archlinux': {
-      $ppa_repo                  = undef
-
       $config_dir                = '/etc/redis'
       $config_dir_mode           = '0755'
       $config_file               = '/etc/redis/redis.conf'

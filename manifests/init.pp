@@ -315,7 +315,7 @@ class redis (
   Stdlib::Absolutepath $pid_file                                 = $redis::params::pid_file,
   Stdlib::Port $port                                             = 6379,
   Boolean $protected_mode                                        = true,
-  Optional[String] $ppa_repo                                     = $redis::params::ppa_repo,
+  Optional[String] $ppa_repo                                     = undef,
   Boolean $rdbcompression                                        = true,
   Hash[String,String] $rename_commands                           = {},
   String[1] $repl_backlog_size                                   = '1mb',

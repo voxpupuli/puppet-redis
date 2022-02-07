@@ -102,7 +102,7 @@ class { '::redis':
 }
 ```
 
-On Ubuntu, "chris-lea/redis-server" ppa repo will be added. You can change it by using ppa_repo parameter:
+On Ubuntu, you can use a PPA by using the `ppa_repo` parameter:
 
 ```puppet
 class { '::redis':
@@ -111,7 +111,7 @@ class { '::redis':
 }
 ```
 
-**Warning** note that it requires [puppetlabs/apt](https://forge.puppet.com/puppetlabs/apt) on Ubuntu distros. On Red Hat [puppet/epel](https://forge.puppet.com/puppet/epel) is needed unless the installation is using Software Collections. In that case will install `centos-release-scl-rh` from CentOS extras. For RHEL or other RHEL-derivatives this isn't managed.
+**Warning** note that PPA usage requires [puppetlabs/apt](https://forge.puppet.com/puppetlabs/apt) on Ubuntu distros. On EL7 [puppet/epel](https://forge.puppet.com/puppet/epel) is needed unless the installation is using Software Collections. In that case will install `centos-release-scl-rh` from CentOS extras. For RHEL or other RHEL-derivatives this isn't managed.
 
 ### Redis Sentinel
 
