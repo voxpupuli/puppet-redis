@@ -10,7 +10,7 @@ describe 'redis::get() function' do
     package { 'redis-rubygem' :
       ensure   => '3.3.3',
       name     => 'redis',
-      provider => 'puppet_gem',
+      provider => if fact('aio_agent_version') =~ String[1] { 'puppet_gem' } else { 'gem' },
     }
     EOS
 
