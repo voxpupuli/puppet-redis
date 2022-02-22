@@ -18,7 +18,7 @@ Wants=network-online.target
 RuntimeDirectory=<%= $service_name %>
 RuntimeDirectoryMode=2755
 Type=notify
-ExecStart=<%= $bin_path %>/redis-server <%= $redis_file_name %> --supervised systemd
+ExecStart=<%= $bin_path %>/redis-server <%= $redis_file_name %> --supervised systemd --daemonize no
 ExecStop=<%= $bin_path %>/redis-cli -p <%= $port %> shutdown
 Restart=always
 User=<%= $service_user %>
