@@ -1,6 +1,10 @@
 require 'spec_helper_acceptance'
 
 describe 'redis::instance example' do
+  # TODO: SELinux
+  # semanage port --add --type redis_port_t --proto tcp 6380-6382
+  # Label /run/redis-server-\d+(/.+)? as redis_var_run_t
+
   instances = [6379, 6380, 6381, 6382]
 
   config_path = case fact('os.family')
