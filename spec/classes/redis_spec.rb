@@ -1426,7 +1426,7 @@ describe 'redis' do
             |RuntimeDirectory=#{service_name}
             |RuntimeDirectoryMode=2755
             |Type=notify
-            |ExecStart=/usr/bin/redis-server #{config_file} --supervised systemd
+            |ExecStart=/usr/bin/redis-server #{config_file} --supervised systemd --daemonize no
             |ExecStop=/usr/bin/redis-cli -p 6379 shutdown
             |Restart=always
             |User=redis
