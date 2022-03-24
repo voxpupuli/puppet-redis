@@ -94,6 +94,7 @@ CONFIG
 
         let(:params) do
           {
+            sentinel_tls_port: 26_380,
             auth_pass: 'password',
             sentinel_bind: '192.0.2.10',
             protected_mode: false,
@@ -104,7 +105,15 @@ CONFIG
             failover_timeout: 28_000,
             notification_script: '/path/to/bar.sh',
             client_reconfig_script: '/path/to/foo.sh',
-            package_ensure: 'latest'
+            package_ensure: 'latest',
+            sentinel_announce_hostnames: 'yes',
+            sentinel_resolve_hostnames: 'yes',
+            tls_cert_file: '/etc/pki/cert.pem',
+            tls_key_file: '/etc/pki/privkey.pem',
+            tls_ca_cert_file: '/etc/pki/cacert.pem',
+            tls_ca_cert_dir: '/etc/pki/cacerts',
+            tls_auth_clients: 'yes',
+            tls_replication: true,
           }
         end
 
@@ -112,11 +121,14 @@ CONFIG
           <<CONFIG
 bind 192.0.2.10
 port 26379
+tls-port 26380
 dir /tmp/redis
 daemonize #{facts[:os]['family'] == 'RedHat' ? 'no' : 'yes'}
 pidfile #{pidfile}
 protected-mode no
 
+sentinel announce-hostnames yes
+sentinel resolve-hostnames yes
 sentinel monitor cow 127.0.0.1 6379 2
 sentinel down-after-milliseconds cow 6000
 sentinel parallel-syncs cow 1
@@ -124,6 +136,13 @@ sentinel failover-timeout cow 28000
 sentinel auth-pass cow password
 sentinel notification-script cow /path/to/bar.sh
 sentinel client-reconfig-script cow /path/to/foo.sh
+
+tls-cert-file /etc/pki/cert.pem
+tls-key-file /etc/pki/privkey.pem
+tls-ca-cert-file /etc/pki/cacert.pem
+tls-ca-cert-dir /etc/pki/cacerts
+tls-auth-clients yes
+tls-replication yes
 
 loglevel notice
 logfile /tmp/barn-sentinel.log

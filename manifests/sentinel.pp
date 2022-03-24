@@ -70,12 +70,22 @@
 #   Number of sentinels that must agree that a master is down to
 #   signal sdown state.
 #
+# @param sentinel_announce_hostnames
+#   Whether or not sentinels will announce hostnames instead of ip addresses
+#   to clients.  This can be required for TLS.
+#
 # @param sentinel_bind
 #   Allow optional sentinel server ip binding.  Can help overcome
 #   issues arising from protect-mode added Redis 3.2
 #
 # @param sentinel_port
 #   The port of sentinel server.
+#
+# @param sentinel_resolve_hostnames
+#   Whether or not sentinels can resolve hostnames to ip addresses.
+#
+# @param sentinel_tls_port
+#   Configure which TLS port to listen on.
 #
 # @param service_group
 #   The group of the config file.
@@ -88,6 +98,24 @@
 #
 # @param service_enable
 #   Enable the service at boot time.
+#
+# @param tls_cert_file
+#   Specify which X.509 certificate file to use for TLS connections.
+#
+# @param tls_key_file
+#   Specify which privaye key file to use for TLS connections.
+#
+# @param tls_ca_cert_file
+#   Specify which X.509 CA certificate(s) bundle file to use.
+#
+# @param tls_ca_cert_dir
+#   Specify which X.509 CA certificate(s) bundle directory to use.
+#
+# @param tls_auth_clients
+#   Specify if clients and replicas are required to authenticate using valid client side certificates.
+#
+# @param tls_replication
+#   Specify if TLS should be enabled on replication links.
 #
 # @param working_dir
 #   The directory into which sentinel will change to avoid mount
@@ -129,13 +157,22 @@ class redis::sentinel (
   Integer[0] $parallel_sync = 1,
   Stdlib::Absolutepath $pid_file = $redis::params::sentinel_pid_file,
   Integer[1] $quorum = 2,
+  Optional[Enum['yes', 'no']] $sentinel_announce_hostnames = undef,
   Variant[Undef, Stdlib::IP::Address, Array[Stdlib::IP::Address]] $sentinel_bind = undef,
   Stdlib::Port $sentinel_port = 26379,
+  Optional[Enum['yes', 'no']] $sentinel_resolve_hostnames = undef,
+  Optional[Stdlib::Port::Unprivileged] $sentinel_tls_port = undef,
   String[1] $service_group = 'redis',
   String[1] $service_name = $redis::params::sentinel_service_name,
   Stdlib::Ensure::Service $service_ensure = 'running',
   Boolean $service_enable = true,
   String[1] $service_user = 'redis',
+  Optional[Stdlib::Absolutepath] $tls_cert_file = undef,
+  Optional[Stdlib::Absolutepath] $tls_key_file = undef,
+  Optional[Stdlib::Absolutepath] $tls_ca_cert_file = undef,
+  Optional[Stdlib::Absolutepath] $tls_ca_cert_dir = undef,
+  Enum['yes', 'no', 'optional'] $tls_auth_clients = 'no',
+  Boolean $tls_replication = false,
   Stdlib::Absolutepath $working_dir = $redis::params::sentinel_working_dir,
   Optional[Stdlib::Absolutepath] $notification_script = undef,
   Optional[Stdlib::Absolutepath] $client_reconfig_script = undef,
