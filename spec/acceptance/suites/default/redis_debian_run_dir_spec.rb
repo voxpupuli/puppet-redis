@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 
 # since this test polutes others, we'll only run it if specifically asked

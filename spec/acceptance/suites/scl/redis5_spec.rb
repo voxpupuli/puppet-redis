@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 
 describe 'redis', if: %w[centos redhat].include?(os[:family]) && os[:release].to_i == 7 do

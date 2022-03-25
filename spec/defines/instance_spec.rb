@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'redis::instance' do
@@ -39,6 +41,7 @@ describe 'redis::instance' do
             with_content(%r{^dir /var/lib/redis/redis-server-app2}).
             with_content(%r{^unixsocket /var/run/redis-server-app2/redis\.sock})
         end
+
         it { is_expected.to contain_file('/var/lib/redis/redis-server-app2') }
 
         it do

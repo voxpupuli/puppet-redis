@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'redis' do
@@ -58,6 +60,7 @@ describe 'redis' do
           end
 
           it { is_expected.to compile.with_all_deps }
+
           it do
             is_expected.to create_class('redis').
               with_package_name('rh-redis5-redis').
@@ -69,6 +72,7 @@ describe 'redis' do
             let(:params) { { manage_repo: true } }
 
             it { is_expected.to compile.with_all_deps }
+
             if facts[:operatingsystem] == 'CentOS'
               it { is_expected.to contain_package('centos-release-scl-rh') }
             else
@@ -82,12 +86,13 @@ describe 'redis' do
         let(:params) { { managed_by_cluster_manager: true } }
 
         it { is_expected.to compile.with_all_deps }
+
         it do
           is_expected.to contain_file('/etc/security/limits.d/redis.conf').with(
-            'ensure'  => 'file',
-            'owner'   => 'root',
-            'group'   => 'root',
-            'mode'    => '0644',
+            'ensure' => 'file',
+            'owner' => 'root',
+            'group' => 'root',
+            'mode' => '0644',
             'content' => "redis soft nofile 65536\nredis hard nofile 65536\n"
           )
         end
@@ -96,12 +101,13 @@ describe 'redis' do
           let(:params) { super().merge(service_manage: false, notify_service: false) }
 
           it { is_expected.to compile.with_all_deps }
+
           it do
             is_expected.to contain_file('/etc/security/limits.d/redis.conf').with(
-              'ensure'  => 'file',
-              'owner'   => 'root',
-              'group'   => 'root',
-              'mode'    => '0644',
+              'ensure' => 'file',
+              'owner' => 'root',
+              'group' => 'root',
+              'mode' => '0644',
               'content' => "redis soft nofile 65536\nredis hard nofile 65536\n"
             )
           end
@@ -113,6 +119,7 @@ describe 'redis' do
           let(:params) { { ulimit: 7777, ulimit_managed: true } }
 
           it { is_expected.to compile.with_all_deps }
+
           it do
             is_expected.to contain_file("/etc/systemd/system/#{service_name}.service.d/limit.conf").
               with_ensure('absent')
@@ -128,6 +135,7 @@ describe 'redis' do
           let(:params) { { ulimit_managed: false } }
 
           it { is_expected.to compile.with_all_deps }
+
           it do
             is_expected.not_to contain_systemd__service_limits("#{service_name}.service")
           end
@@ -220,11 +228,13 @@ describe 'redis' do
             is_expected.to contain_file(config_file_orig).with_content(%r{bind 127\.0\.0\.1$})
           end
         end
+
         context 'with a single IP address' do
           let(:params) { { bind: '10.0.0.1' } }
 
           it { is_expected.to contain_file(config_file_orig).with_content(%r{bind 10\.0\.0\.1$}) }
         end
+
         context 'with array of IP addresses' do
           let(:params) do
             {
@@ -234,6 +244,7 @@ describe 'redis' do
 
           it { is_expected.to contain_file(config_file_orig).with_content(%r{bind 127\.0\.0\.1 ::1}) }
         end
+
         context 'with empty array' do
           let(:params) { { bind: [] } }
 
@@ -779,6 +790,7 @@ describe 'redis' do
             )
           }
         end
+
         context 'with multiple renames' do
           let(:params) do
             {
@@ -795,6 +807,7 @@ describe 'redis' do
             )
           }
         end
+
         context 'with empty hash' do
           let(:params) do
             {
@@ -931,6 +944,7 @@ describe 'redis' do
 
             it { is_expected.to contain_file(config_file_orig).with('content' => %r{save 900 1}) }
             it { is_expected.to contain_file(config_file_orig).with('content' => %r{save 300 10}) }
+
             it {
               is_expected.to contain_file(config_file_orig).with('content' => %r{save 60 10000})
             }
@@ -946,6 +960,7 @@ describe 'redis' do
 
             it { is_expected.to contain_file(config_file_orig).with('content' => %r{save 900 2}) }
             it { is_expected.to contain_file(config_file_orig).with('content' => %r{save 300 11}) }
+
             it {
               is_expected.to contain_file(config_file_orig).with('content' => %r{save 60 10011})
             }
