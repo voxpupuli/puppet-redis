@@ -27,9 +27,7 @@ describe 'redis::instance' do
             end
           when 'FreeBSD'
             '/usr/local/etc/redis/redis-server-app2.conf'
-          when 'Debian'
-            '/etc/redis/redis-server-app2.conf'
-          when 'Archlinux'
+          when 'Debian', 'Archlinux'
             '/etc/redis/redis-server-app2.conf'
           end
         end

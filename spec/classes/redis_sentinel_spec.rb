@@ -2,17 +2,14 @@
 
 require 'spec_helper'
 
+# rubocop:disable RSpec/MultipleMemoizedHelpers
 describe 'redis::sentinel' do
   on_supported_os.each do |os, facts|
     context "on #{os}" do
       let(:facts) { facts }
       let(:config_file_orig) do
         case facts[:os]['family']
-        when 'Archlinux'
-          '/etc/redis/redis-sentinel.conf.puppet'
-        when 'Debian'
-          '/etc/redis/redis-sentinel.conf.puppet'
-        when 'Suse'
+        when 'Archlinux', 'Debian', 'Suse'
           '/etc/redis/redis-sentinel.conf.puppet'
         when 'FreeBSD'
           '/usr/local/etc/redis-sentinel.conf.puppet'
@@ -229,3 +226,4 @@ describe 'redis::sentinel' do
     end
   end
 end
+# rubocop:enable RSpec/MultipleMemoizedHelpers

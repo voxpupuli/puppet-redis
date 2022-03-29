@@ -76,9 +76,6 @@ describe 'redis::instance example' do
 
     describe service("redis-server-#{instance}") do
       it { is_expected.to be_enabled }
-    end
-
-    describe service("redis-server-#{instance}") do
       it { is_expected.to be_running }
     end
 

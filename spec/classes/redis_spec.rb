@@ -2,6 +2,7 @@
 
 require 'spec_helper'
 
+# rubocop:disable RSpec/MultipleMemoizedHelpers
 describe 'redis' do
   let(:package_name) { facts[:os]['family'] == 'Debian' ? 'redis-server' : 'redis' }
   let(:service_name) { package_name }
@@ -950,7 +951,7 @@ describe 'redis' do
             }
           end
 
-          context 'default' do
+          context 'and with save_db_to_disk_interval' do
             let(:params) do
               {
                 save_db_to_disk: true,
@@ -968,17 +969,15 @@ describe 'redis' do
         end
 
         context 'with save_db_to_disk false' do
-          context 'default' do
-            let(:params) do
-              {
-                save_db_to_disk: false
-              }
-            end
-
-            it { is_expected.to contain_file(config_file_orig).without('content' => %r{save 900 1}) }
-            it { is_expected.to contain_file(config_file_orig).without('content' => %r{save 300 10}) }
-            it { is_expected.to contain_file(config_file_orig).without('content' => %r{save 60 10000}) }
+          let(:params) do
+            {
+              save_db_to_disk: false
+            }
           end
+
+          it { is_expected.to contain_file(config_file_orig).without('content' => %r{save 900 1}) }
+          it { is_expected.to contain_file(config_file_orig).without('content' => %r{save 300 10}) }
+          it { is_expected.to contain_file(config_file_orig).without('content' => %r{save 60 10000}) }
         end
       end
 
@@ -1318,7 +1317,7 @@ describe 'redis' do
         }
       end
 
-      describe 'with parameter cluster_config_file' do
+      describe 'with parameter cluster_node_timeout' do
         let(:params) do
           {
             cluster_enabled: true,
@@ -1333,7 +1332,7 @@ describe 'redis' do
         }
       end
 
-      describe 'with parameter cluster_config_file' do
+      describe 'with parameter cluster_slave_validity_factor' do
         let(:params) do
           {
             cluster_enabled: true,
@@ -1348,7 +1347,7 @@ describe 'redis' do
         }
       end
 
-      describe 'with parameter cluster_config_file' do
+      describe 'with parameter cluster_require_full_coverage true' do
         let(:params) do
           {
             cluster_enabled: true,
@@ -1363,7 +1362,7 @@ describe 'redis' do
         }
       end
 
-      describe 'with parameter cluster_config_file' do
+      describe 'with parameter cluster_require_full_coverage false' do
         let(:params) do
           {
             cluster_enabled: true,
@@ -1374,7 +1373,7 @@ describe 'redis' do
         it { is_expected.to contain_file(config_file_orig).with_content(%r{cluster-require-full-coverage.*no}) }
       end
 
-      describe 'with parameter cluster_config_file' do
+      describe 'with parameter cluster_migration_barrier' do
         let(:params) do
           {
             cluster_enabled: true,
@@ -1482,3 +1481,4 @@ describe 'redis' do
     end
   end
 end
+# rubocop:enable RSpec/MultipleMemoizedHelpers

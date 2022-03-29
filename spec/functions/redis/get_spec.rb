@@ -91,10 +91,6 @@ describe 'redis::get' do
       context "specifing second parameter as <#{p}>" do
         it { is_expected.to run.with_params('valid', p).and_raise_error(ArgumentError) }
       end
-
-      context "specifing third parameter as <#{p}>" do
-        it { is_expected.to run.with_params('valid', p).and_raise_error(ArgumentError) }
-      end
     end
   end
 end
