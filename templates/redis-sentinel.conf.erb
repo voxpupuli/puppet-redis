@@ -2,11 +2,20 @@
 bind <%= @sentinel_bind_arr.join(' ') %>
 <% end -%>
 port <%= @sentinel_port %>
+<% if @sentinel_tls_port -%>
+tls-port <%= @sentinel_tls_port %>
+<% end -%>
 dir <%= @working_dir %>
 daemonize <%= @daemonize ? 'yes' : 'no' %>
 pidfile <%= @pid_file %>
 protected-mode <%= @protected_mode ? 'yes' : 'no' %>
 
+<% if @sentinel_announce_hostnames -%>
+sentinel announce-hostnames <%= @sentinel_announce_hostnames %>
+<% end -%>
+<% if @sentinel_resolve_hostnames -%>
+sentinel resolve-hostnames <%= @sentinel_resolve_hostnames %>
+<% end -%>
 sentinel monitor <%= @master_name %> <%= @redis_host %> <%= @redis_port %> <%= @quorum %>
 sentinel down-after-milliseconds <%= @master_name %> <%= @down_after %>
 sentinel parallel-syncs <%= @master_name %> <%= @parallel_sync %>
@@ -22,6 +31,21 @@ sentinel client-reconfig-script <%= @master_name %> <%= @client_reconfig_script 
 <% end -%>
 <% if @requirepass -%>
 requirepass <%= @requirepass %>
+<% end -%>
+<% if @sentinel_tls_port -%>
+
+tls-cert-file <%= @tls_cert_file %>
+tls-key-file <%= @tls_key_file %>
+<% if @tls_ca_cert_file -%>
+tls-ca-cert-file <%= @tls_ca_cert_file %>
+<% end -%>
+<% if @tls_ca_cert_dir -%>
+tls-ca-cert-dir <%= @tls_ca_cert_dir %>
+<% end -%>
+tls-auth-clients <%= @tls_auth_clients %>
+<% if @tls_replication -%>
+tls-replication <%= @tls_replication ? 'yes' : 'no' %>
+<% end -%>
 <% end -%>
 
 loglevel <%= @log_level %>
