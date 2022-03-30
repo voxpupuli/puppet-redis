@@ -127,6 +127,7 @@ The following parameters are available in the `redis` class:
 * [`maxmemory_samples`](#maxmemory_samples)
 * [`min_slaves_max_lag`](#min_slaves_max_lag)
 * [`min_slaves_to_write`](#min_slaves_to_write)
+* [`modules`](#modules)
 * [`no_appendfsync_on_rewrite`](#no_appendfsync_on_rewrite)
 * [`notify_keyspace_events`](#notify_keyspace_events)
 * [`notify_service`](#notify_service)
@@ -314,7 +315,7 @@ Data type: `Stdlib::Filemode`
 
 Adjust permissions for configuration files.
 
-Default value: `'0644'`
+Default value: `'0640'`
 
 ##### <a name="config_group"></a>`config_group`
 
@@ -549,6 +550,14 @@ Minimum number of slaves to be in "online" state
 
 Default value: `0`
 
+##### <a name="modules"></a>`modules`
+
+Data type: `Array[Stdlib::Absolutepath]`
+
+Additional redis modules to load (.so path)
+
+Default value: `[]`
+
 ##### <a name="no_appendfsync_on_rewrite"></a>`no_appendfsync_on_rewrite`
 
 Data type: `Boolean`
@@ -569,7 +578,7 @@ Default value: ``undef``
 
 Data type: `Boolean`
 
-You may disable service reloads when config files change if you
+You may disable service reloads when config files change
 
 Default value: ``true``
 
@@ -619,7 +628,7 @@ Data type: `Optional[String]`
 
 Specify upstream (Ubuntu) PPA entry.
 
-Default value: `$redis::params::ppa_repo`
+Default value: ``undef``
 
 ##### <a name="rdbcompression"></a>`rdbcompression`
 
@@ -1546,8 +1555,10 @@ The following parameters are available in the `redis::instance` defined type:
 * [`maxmemory_samples`](#maxmemory_samples)
 * [`min_slaves_max_lag`](#min_slaves_max_lag)
 * [`min_slaves_to_write`](#min_slaves_to_write)
+* [`modules`](#modules)
 * [`no_appendfsync_on_rewrite`](#no_appendfsync_on_rewrite)
 * [`notify_keyspace_events`](#notify_keyspace_events)
+* [`notify_service`](#notify_service)
 * [`pid_file`](#pid_file)
 * [`port`](#port)
 * [`protected_mode`](#protected_mode)
@@ -1907,6 +1918,14 @@ Minimum number of slaves to be in "online" state
 
 Default value: `$redis::min_slaves_to_write`
 
+##### <a name="modules"></a>`modules`
+
+Data type: `Array[Stdlib::Absolutepath]`
+
+Additional redis modules to load (.so path)
+
+Default value: `$redis::modules`
+
 ##### <a name="no_appendfsync_on_rewrite"></a>`no_appendfsync_on_rewrite`
 
 Data type: `Boolean`
@@ -1923,13 +1942,21 @@ Which events to notify Pub/Sub clients about events happening
 
 Default value: `$redis::notify_keyspace_events`
 
+##### <a name="notify_service"></a>`notify_service`
+
+Data type: `Boolean`
+
+You may disable instance service reloads when config file changes
+
+Default value: ``true``
+
 ##### <a name="pid_file"></a>`pid_file`
 
 Data type: `Stdlib::Absolutepath`
 
 Where to store the pid.
 
-Default value: `"/var/run/redis/redis-server-${name}.pid"`
+Default value: `"/var/run/${service_name}/redis.pid"`
 
 ##### <a name="port"></a>`port`
 
@@ -2302,7 +2329,7 @@ Data type: `Variant[Stdlib::Absolutepath, Enum['']]`
 
 Define unix socket path
 
-Default value: `"/var/run/redis/redis-server-${name}.sock"`
+Default value: `"/var/run/${service_name}/redis.sock"`
 
 ##### <a name="unixsocketperm"></a>`unixsocketperm`
 
@@ -2436,31 +2463,31 @@ Default value: ``true``
 
 Type: Ruby 4.x API
 
-Takes two arguments with an optional third. The first being a string
-value of the key to be looked up, the second is the URL to the Redis service
-and the third optional argument is a default value to be used if the lookup
-fails.
+Returns the value of the key being looked up or `undef` if the key does not exist.
 
-example usage
-```
+#### Examples
+
+##### Get the version
+
+```puppet
 $version = redis::get('version.myapp', 'redis://redis.example.com:6379')
 $version_with_default = redis::get('version.myapp', 'redis://redis.example.com:6379', $::myapp_version)
 ```
 
 #### `redis::get(String[1] $key, Redis::RedisUrl $url, Optional[String] $default)`
 
-Takes two arguments with an optional third. The first being a string
-value of the key to be looked up, the second is the URL to the Redis service
-and the third optional argument is a default value to be used if the lookup
-fails.
+The redis::get function.
 
-example usage
-```
+Returns: `Optional[String]` Returns the value of the key from Redis
+
+##### Examples
+
+###### Get the version
+
+```puppet
 $version = redis::get('version.myapp', 'redis://redis.example.com:6379')
 $version_with_default = redis::get('version.myapp', 'redis://redis.example.com:6379', $::myapp_version)
 ```
-
-Returns: `Optional[String]` Returns the value of the key from Redis
 
 ##### `key`
 
