@@ -1,16 +1,15 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
+# rubocop:disable RSpec/MultipleMemoizedHelpers
 describe 'redis::sentinel' do
   on_supported_os.each do |os, facts|
     context "on #{os}" do
       let(:facts) { facts }
       let(:config_file_orig) do
         case facts[:os]['family']
-        when 'Archlinux'
-          '/etc/redis/redis-sentinel.conf.puppet'
-        when 'Debian'
-          '/etc/redis/redis-sentinel.conf.puppet'
-        when 'Suse'
+        when 'Archlinux', 'Debian', 'Suse'
           '/etc/redis/redis-sentinel.conf.puppet'
         when 'FreeBSD'
           '/usr/local/etc/redis-sentinel.conf.puppet'
@@ -24,9 +23,10 @@ describe 'redis::sentinel' do
       end
 
       let(:pidfile) do
-        if facts[:os]['name'] == 'Ubuntu'
+        case facts[:os]['name']
+        when 'Ubuntu'
           '/var/run/sentinel/redis-sentinel.pid'
-        elsif facts[:os]['name'] == 'Debian'
+        when 'Debian'
           facts[:os]['release']['major'].to_i == 9 ? '/var/run/redis/redis-sentinel.pid' : '/run/sentinel/redis-sentinel.pid'
         else
           '/var/run/redis/redis-sentinel.pid'
@@ -47,21 +47,21 @@ describe 'redis::sentinel' do
 
       describe 'without parameters' do
         let(:expected_content) do
-          <<CONFIG
-port 26379
-dir #{facts[:os]['family'] == 'Debian' ? '/var/lib/redis' : '/tmp'}
-daemonize #{facts[:os]['family'] == 'RedHat' ? 'no' : 'yes'}
-pidfile #{pidfile}
-protected-mode yes
+          <<~CONFIG
+            port 26379
+            dir #{facts[:os]['family'] == 'Debian' ? '/var/lib/redis' : '/tmp'}
+            daemonize #{facts[:os]['family'] == 'RedHat' ? 'no' : 'yes'}
+            pidfile #{pidfile}
+            protected-mode yes
 
-sentinel monitor mymaster 127.0.0.1 6379 2
-sentinel down-after-milliseconds mymaster 30000
-sentinel parallel-syncs mymaster 1
-sentinel failover-timeout mymaster 180000
+            sentinel monitor mymaster 127.0.0.1 6379 2
+            sentinel down-after-milliseconds mymaster 30000
+            sentinel parallel-syncs mymaster 1
+            sentinel failover-timeout mymaster 180000
 
-loglevel notice
-logfile #{facts[:os]['family'] == 'Debian' ? '/var/log/redis/redis-sentinel.log' : '/var/log/redis/sentinel.log'}
-CONFIG
+            loglevel notice
+            logfile #{facts[:os]['family'] == 'Debian' ? '/var/log/redis/redis-sentinel.log' : '/var/log/redis/sentinel.log'}
+          CONFIG
         end
 
         it { is_expected.to create_class('redis::sentinel') }
@@ -118,35 +118,35 @@ CONFIG
         end
 
         let(:expected_content) do
-          <<CONFIG
-bind 192.0.2.10
-port 26379
-tls-port 26380
-dir /tmp/redis
-daemonize #{facts[:os]['family'] == 'RedHat' ? 'no' : 'yes'}
-pidfile #{pidfile}
-protected-mode no
+          <<~CONFIG
+            bind 192.0.2.10
+            port 26379
+            tls-port 26380
+            dir /tmp/redis
+            daemonize #{facts[:os]['family'] == 'RedHat' ? 'no' : 'yes'}
+            pidfile #{pidfile}
+            protected-mode no
 
-sentinel announce-hostnames yes
-sentinel resolve-hostnames yes
-sentinel monitor cow 127.0.0.1 6379 2
-sentinel down-after-milliseconds cow 6000
-sentinel parallel-syncs cow 1
-sentinel failover-timeout cow 28000
-sentinel auth-pass cow password
-sentinel notification-script cow /path/to/bar.sh
-sentinel client-reconfig-script cow /path/to/foo.sh
+            sentinel announce-hostnames yes
+            sentinel resolve-hostnames yes
+            sentinel monitor cow 127.0.0.1 6379 2
+            sentinel down-after-milliseconds cow 6000
+            sentinel parallel-syncs cow 1
+            sentinel failover-timeout cow 28000
+            sentinel auth-pass cow password
+            sentinel notification-script cow /path/to/bar.sh
+            sentinel client-reconfig-script cow /path/to/foo.sh
 
-tls-cert-file /etc/pki/cert.pem
-tls-key-file /etc/pki/privkey.pem
-tls-ca-cert-file /etc/pki/cacert.pem
-tls-ca-cert-dir /etc/pki/cacerts
-tls-auth-clients yes
-tls-replication yes
+            tls-cert-file /etc/pki/cert.pem
+            tls-key-file /etc/pki/privkey.pem
+            tls-ca-cert-file /etc/pki/cacert.pem
+            tls-ca-cert-dir /etc/pki/cacerts
+            tls-auth-clients yes
+            tls-replication yes
 
-loglevel notice
-logfile /tmp/barn-sentinel.log
-CONFIG
+            loglevel notice
+            logfile /tmp/barn-sentinel.log
+          CONFIG
         end
 
         it { is_expected.to compile.with_all_deps }
@@ -172,25 +172,25 @@ CONFIG
         end
 
         let(:expected_content) do
-          <<CONFIG
-bind 192.0.2.10 192.168.1.1
-port 26379
-dir /tmp/redis
-daemonize #{facts[:os]['family'] == 'RedHat' ? 'no' : 'yes'}
-pidfile #{pidfile}
-protected-mode yes
+          <<~CONFIG
+            bind 192.0.2.10 192.168.1.1
+            port 26379
+            dir /tmp/redis
+            daemonize #{facts[:os]['family'] == 'RedHat' ? 'no' : 'yes'}
+            pidfile #{pidfile}
+            protected-mode yes
 
-sentinel monitor cow 127.0.0.1 6379 2
-sentinel down-after-milliseconds cow 6000
-sentinel parallel-syncs cow 1
-sentinel failover-timeout cow 28000
-sentinel auth-pass cow password
-sentinel notification-script cow /path/to/bar.sh
-sentinel client-reconfig-script cow /path/to/foo.sh
+            sentinel monitor cow 127.0.0.1 6379 2
+            sentinel down-after-milliseconds cow 6000
+            sentinel parallel-syncs cow 1
+            sentinel failover-timeout cow 28000
+            sentinel auth-pass cow password
+            sentinel notification-script cow /path/to/bar.sh
+            sentinel client-reconfig-script cow /path/to/foo.sh
 
-loglevel notice
-logfile /tmp/barn-sentinel.log
-CONFIG
+            loglevel notice
+            logfile /tmp/barn-sentinel.log
+          CONFIG
         end
 
         it { is_expected.to compile.with_all_deps }
@@ -226,3 +226,4 @@ CONFIG
     end
   end
 end
+# rubocop:enable RSpec/MultipleMemoizedHelpers

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'redis'
 
 # @summary Returns the value of the key being looked up or `undef` if the key does not exist.
@@ -26,6 +28,7 @@ Puppet::Functions.create_function(:'redis::get') do
     Redis.new(url: url).get(key) || default
   rescue Redis::CannotConnectError, SocketError => e
     raise Puppet::Error, "connection to redis server failed - #{e}" unless default
+
     Puppet.debug "Connection to redis failed with #{e} - Returning default value of #{default}"
     default
   end

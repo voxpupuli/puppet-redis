@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 
 describe 'redis::sentinel' do
@@ -29,7 +31,7 @@ describe 'redis::sentinel' do
     it { is_expected.to be_running }
   end
 
-  describe service('redis-sentinel') do
+  describe service('redis-sentinel'), :sentinel do
     it { is_expected.to be_running }
   end
 

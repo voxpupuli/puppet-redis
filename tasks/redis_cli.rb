@@ -1,4 +1,6 @@
 #!/opt/puppetlabs/puppet/bin/ruby
+# frozen_string_literal: true
+
 require 'json'
 require 'open3'
 require 'puppet'
@@ -6,10 +8,11 @@ require 'puppet'
 def redis_cli(command)
   stdout, stderr, status = Open3.capture3('redis-cli', command)
   raise Puppet::Error, stderr if status != 0
+
   { status: stdout.strip }
 end
 
-params = JSON.parse(STDIN.read)
+params = JSON.parse($stdin.read)
 command = params['command']
 
 begin

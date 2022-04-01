@@ -1,7 +1,10 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'redis_server_version', type: :fact do
   before { Facter.clear }
+
   after { Facter.clear }
 
   it 'is 3.2.9 according to output' do
