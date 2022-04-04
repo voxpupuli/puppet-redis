@@ -1234,12 +1234,21 @@ The following parameters are available in the `redis::sentinel` class:
 * [`parallel_sync`](#parallel_sync)
 * [`pid_file`](#pid_file)
 * [`quorum`](#quorum)
+* [`sentinel_announce_hostnames`](#sentinel_announce_hostnames)
 * [`sentinel_bind`](#sentinel_bind)
 * [`sentinel_port`](#sentinel_port)
+* [`sentinel_resolve_hostnames`](#sentinel_resolve_hostnames)
+* [`sentinel_tls_port`](#sentinel_tls_port)
 * [`service_group`](#service_group)
 * [`service_name`](#service_name)
 * [`service_user`](#service_user)
 * [`service_enable`](#service_enable)
+* [`tls_cert_file`](#tls_cert_file)
+* [`tls_key_file`](#tls_key_file)
+* [`tls_ca_cert_file`](#tls_ca_cert_file)
+* [`tls_ca_cert_dir`](#tls_ca_cert_dir)
+* [`tls_auth_clients`](#tls_auth_clients)
+* [`tls_replication`](#tls_replication)
 * [`working_dir`](#working_dir)
 * [`notification_script`](#notification_script)
 * [`client_reconfig_script`](#client_reconfig_script)
@@ -1415,6 +1424,15 @@ signal sdown state.
 
 Default value: `2`
 
+##### <a name="sentinel_announce_hostnames"></a>`sentinel_announce_hostnames`
+
+Data type: `Optional[Enum['yes', 'no']]`
+
+Whether or not sentinels will announce hostnames instead of ip addresses
+to clients.  This can be required for TLS.
+
+Default value: ``undef``
+
 ##### <a name="sentinel_bind"></a>`sentinel_bind`
 
 Data type: `Variant[Undef, Stdlib::IP::Address, Array[Stdlib::IP::Address]]`
@@ -1431,6 +1449,22 @@ Data type: `Stdlib::Port`
 The port of sentinel server.
 
 Default value: `26379`
+
+##### <a name="sentinel_resolve_hostnames"></a>`sentinel_resolve_hostnames`
+
+Data type: `Optional[Enum['yes', 'no']]`
+
+Whether or not sentinels can resolve hostnames to ip addresses.
+
+Default value: ``undef``
+
+##### <a name="sentinel_tls_port"></a>`sentinel_tls_port`
+
+Data type: `Optional[Stdlib::Port::Unprivileged]`
+
+Configure which TLS port to listen on.
+
+Default value: ``undef``
 
 ##### <a name="service_group"></a>`service_group`
 
@@ -1463,6 +1497,54 @@ Data type: `Boolean`
 Enable the service at boot time.
 
 Default value: ``true``
+
+##### <a name="tls_cert_file"></a>`tls_cert_file`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+Specify which X.509 certificate file to use for TLS connections.
+
+Default value: ``undef``
+
+##### <a name="tls_key_file"></a>`tls_key_file`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+Specify which privaye key file to use for TLS connections.
+
+Default value: ``undef``
+
+##### <a name="tls_ca_cert_file"></a>`tls_ca_cert_file`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+Specify which X.509 CA certificate(s) bundle file to use.
+
+Default value: ``undef``
+
+##### <a name="tls_ca_cert_dir"></a>`tls_ca_cert_dir`
+
+Data type: `Optional[Stdlib::Absolutepath]`
+
+Specify which X.509 CA certificate(s) bundle directory to use.
+
+Default value: ``undef``
+
+##### <a name="tls_auth_clients"></a>`tls_auth_clients`
+
+Data type: `Enum['yes', 'no', 'optional']`
+
+Specify if clients and replicas are required to authenticate using valid client side certificates.
+
+Default value: `'no'`
+
+##### <a name="tls_replication"></a>`tls_replication`
+
+Data type: `Boolean`
+
+Specify if TLS should be enabled on replication links.
+
+Default value: ``false``
 
 ##### <a name="working_dir"></a>`working_dir`
 
