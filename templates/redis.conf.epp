@@ -82,6 +82,20 @@
   Boolean                                            $tls_cluster,
   Boolean                                            $tls_prefer_server_ciphers,
   Array[Stdlib::Absolutepath]                        $modules,
+  Optional[Integer[1]]                               $io_threads,
+  Optional[Boolean]                                  $io_threads_do_reads,
+  Optional[Boolean]                                  $cluster_allow_reads_when_down,
+  Optional[Boolean]                                  $cluster_replica_no_failover,
+  Optional[Boolean]                                  $dynamic_hz,
+  Optional[Boolean]                                  $activedefrag,
+  String[1]                                          $active_defrag_ignore_bytes,
+  Integer[1, 100]                                    $active_defrag_threshold_lower,
+  Integer[1, 100]                                    $active_defrag_threshold_upper,
+  Integer[1, 100]                                    $active_defrag_cycle_min,
+  Integer[1, 100]                                    $active_defrag_cycle_max,
+  Integer[1]                                         $active_defrag_max_scan_fields,
+  Optional[Boolean]                                  $jemalloc_bg_thread,
+  Optional[Boolean]                                  $rdb_save_incremental_fsync,
 | -%>
 # Redis configuration file example
 
@@ -935,11 +949,33 @@ client-output-buffer-limit pubsub <%= $output_buffer_limit_pubsub %>
 # 100 only in environments where very low latency is required.
 hz <%= $hz %>
 
+# Normally it is useful to have an HZ value which is proportional to the
+# number of clients connected. This is useful in order, for instance, to
+# avoid too many clients are processed for each background task invocation
+# in order to avoid latency spikes.
+#
+# Since the default HZ value by default is conservatively set to 10, Redis
+# offers, and enables by default, the ability to use an adaptive HZ value
+# which will temporarily raise when there are many connected clients.
+#
+# When dynamic HZ is enabled, the actual configured HZ will be used
+# as a baseline, but multiples of the configured HZ value will be actually
+# used as needed once more clients are connected. In this way an idle
+# instance will use very little CPU time while a busy instance will be
+# more responsive.
+<% if $dynamic_hz { -%>dynamic-hz <%= $dynamic_hz ? {true => 'yes', default => 'no'} %><% } -%>
+
 # When a child rewrites the AOF file, if the following option is enabled
 # the file will be fsync-ed every 32 MB of data generated. This is useful
 # in order to commit the file to the disk more incrementally and avoid
 # big latency spikes.
 aof-rewrite-incremental-fsync <%= bool2str($aof_rewrite_incremental_fsync, 'yes', 'no') -%>
+
+# When redis saves RDB file, if the following option is enabled
+# the file will be fsync-ed every 32 MB of data generated. This is useful
+# in order to commit the file to the disk more incrementally and avoid
+# big latency spikes.
+<% if $rdb_save_incremental_fsync { -%>rdb-save-incremental-fsync <%= $rdb_save_incremental_fsync ? {true => 'yes', default => 'no'} %><% } -%>
 
 # Redis Cluster Settings
 <% if $cluster_enabled { -%>
@@ -949,7 +985,143 @@ cluster-node-timeout <%= $cluster_node_timeout %>
 cluster-slave-validity-factor <%= $cluster_slave_validity_factor %>
 cluster-require-full-coverage <%= bool2str($cluster_require_full_coverage, 'yes', 'no') %>
 cluster-migration-barrier <%= $cluster_migration_barrier %>
+<% if $cluster_allow_reads_when_down { -%>cluster-allow-reads-when-down <%= $cluster_allow_reads_when_down ? {true => 'yes', default => 'no'} %><% } %>
+<% if $cluster_replica_no_failover { -%>cluster-replica-no-failover <%= $cluster_replica_no_failover ? {true => 'yes', default => 'no'} %><% } %>
 <% } -%>
+
+################################ THREADED I/O #################################
+
+# Redis is mostly single threaded, however there are certain threaded
+# operations such as UNLINK, slow I/O accesses and other things that are
+# performed on side threads.
+#
+# Now it is also possible to handle Redis clients socket reads and writes
+# in different I/O threads. Since especially writing is so slow, normally
+# Redis users use pipelining in order to speed up the Redis performances per
+# core, and spawn multiple instances in order to scale more. Using I/O
+# threads it is possible to easily speedup two times Redis without resorting
+# to pipelining nor sharding of the instance.
+#
+# By default threading is disabled, we suggest enabling it only in machines
+# that have at least 4 or more cores, leaving at least one spare core.
+# Using more than 8 threads is unlikely to help much. We also recommend using
+# threaded I/O only if you actually have performance problems, with Redis
+# instances being able to use a quite big percentage of CPU time, otherwise
+# there is no point in using this feature.
+#
+# So for instance if you have a four cores boxes, try to use 2 or 3 I/O
+# threads, if you have a 8 cores, try to use 6 threads. In order to
+# enable I/O threads use the following configuration directive:
+#
+# io-threads 4
+<% if $io_threads { -%>io-threads <%= $io_threads %><% } -%>
+
+# Setting io-threads to 1 will just use the main thread as usual.
+# When I/O threads are enabled, we only use threads for writes, that is
+# to thread the write(2) syscall and transfer the client buffers to the
+# socket. However it is also possible to enable threading of reads and
+# protocol parsing using the following configuration directive, by setting
+# it to yes:
+#
+# io-threads-do-reads no
+#
+# Usually threading reads doesn't help much.
+#
+# NOTE 1: This configuration directive cannot be changed at runtime via
+# CONFIG SET. Aso this feature currently does not work when SSL is
+# enabled.
+#
+# NOTE 2: If you want to test the Redis speedup using redis-benchmark, make
+# sure you also run the benchmark itself in threaded mode, using the
+# --threads option to match the number of Redis threads, otherwise you'll not
+# be able to notice the improvements.
+<% if $io_threads_do_reads { -%>io-threads-do-reads <%= $io_threads_do_reads ? {true => 'yes', default => 'no'} %><% } -%>
+
+########################### ACTIVE DEFRAGMENTATION #######################
+#
+# What is active defragmentation?
+# -------------------------------
+#
+# Active (online) defragmentation allows a Redis server to compact the
+# spaces left between small allocations and deallocations of data in memory,
+# thus allowing to reclaim back memory.
+#
+# Fragmentation is a natural process that happens with every allocator (but
+# less so with Jemalloc, fortunately) and certain workloads. Normally a server
+# restart is needed in order to lower the fragmentation, or at least to flush
+# away all the data and create it again. However thanks to this feature
+# implemented by Oran Agra for Redis 4.0 this process can happen at runtime
+# in a "hot" way, while the server is running.
+#
+# Basically when the fragmentation is over a certain level (see the
+# configuration options below) Redis will start to create new copies of the
+# values in contiguous memory regions by exploiting certain specific Jemalloc
+# features (in order to understand if an allocation is causing fragmentation
+# and to allocate it in a better place), and at the same time, will release the
+# old copies of the data. This process, repeated incrementally for all the keys
+# will cause the fragmentation to drop back to normal values.
+#
+# Important things to understand:
+#
+# 1. This feature is disabled by default, and only works if you compiled Redis
+#    to use the copy of Jemalloc we ship with the source code of Redis.
+#    This is the default with Linux builds.
+#
+# 2. You never need to enable this feature if you don't have fragmentation
+#    issues.
+#
+# 3. Once you experience fragmentation, you can enable this feature when
+#    needed with the command "CONFIG SET activedefrag yes".
+#
+# The configuration parameters are able to fine tune the behavior of the
+# defragmentation process. If you are not sure about what they mean it is
+# a good idea to leave the defaults untouched.
+
+# Enabled active defragmentation
+# activedefrag no
+<% if $activedefrag { -%>activedefrag <%= $activedefrag ? {true => 'yes', default => 'no'} %><% } -%>
+
+# Minimum amount of fragmentation waste to start active defrag
+# active-defrag-ignore-bytes 100mb
+<% if $activedefrag { -%>
+active-defrag-ignore-bytes <%= $active_defrag_ignore_bytes %>
+<% } %>
+
+# Minimum percentage of fragmentation to start active defrag
+# active-defrag-threshold-lower 10
+<% if $activedefrag { -%>
+active-defrag-threshold-lower <%= $active_defrag_threshold_lower %>
+<% } %>
+
+# Maximum percentage of fragmentation at which we use maximum effort
+# active-defrag-threshold-upper 100
+<% if $activedefrag { -%>
+active-defrag-threshold-upper <%= $active_defrag_threshold_upper %>
+<% } %>
+
+# Minimal effort for defrag in CPU percentage, to be used when the lower
+# threshold is reached
+# active-defrag-cycle-min 1
+<% if $activedefrag { -%>
+active-defrag-cycle-min <%= $active_defrag_cycle_min %>
+<% } %>
+
+# Maximal effort for defrag in CPU percentage, to be used when the upper
+# threshold is reached
+# active-defrag-cycle-max 25
+<% if $activedefrag { -%>
+active-defrag-cycle-max <%= $active_defrag_cycle_max %>
+<% } %>
+
+# Maximum number of set/hash/zset/list fields that will be processed from
+# the main dictionary scan
+# active-defrag-max-scan-fields 1000
+<% if $activedefrag { -%>
+active-defrag-max-scan-fields <%= $active_defrag_max_scan_fields %>
+<% } %>
+
+# Jemalloc background thread for purging will be enabled by default
+<% if $jemalloc_bg_thread { -%>jemalloc-bg-thread <%= $jemalloc_bg_thread ? {true => 'yes', default => 'no'} %><% } -%>
 
 ################################## MODULES #####################################
 
