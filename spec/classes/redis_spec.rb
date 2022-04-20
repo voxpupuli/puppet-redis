@@ -576,13 +576,13 @@ describe 'redis' do
       describe 'with parameter maxmemory_policy' do
         let(:params) do
           {
-            maxmemory_policy: '_VALUE_'
+            maxmemory_policy: 'noeviction'
           }
         end
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{maxmemory-policy.*_VALUE_}
+            'content' => %r{maxmemory-policy.*noeviction}
           )
         }
       end
@@ -590,13 +590,13 @@ describe 'redis' do
       describe 'with parameter maxmemory_samples' do
         let(:params) do
           {
-            maxmemory_samples: '_VALUE_'
+            maxmemory_samples: 9
           }
         end
 
         it {
           is_expected.to contain_file(config_file_orig).with(
-            'content' => %r{maxmemory-samples.*_VALUE_}
+            'content' => %r{maxmemory-samples.*9}
           )
         }
       end
@@ -1477,6 +1477,142 @@ describe 'redis' do
           is_expected.to contain_file(config_file_orig).
             with_content(%r{^loadmodule /root/nullmodule.so$})
         }
+      end
+
+      describe 'test io-threads for redis6' do
+        let(:params) do
+          {
+            io_threads: 4
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^io-threads 4$}
+          )
+        }
+      end
+
+      describe 'test io-threads-do-reads for redis6' do
+        let(:params) do
+          {
+            io_threads_do_reads: true,
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^io-threads-do-reads yes$}
+          )
+        }
+      end
+
+      describe 'test dynamic-hz for redis6' do
+        let(:params) do
+          {
+            dynamic_hz: true,
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^dynamic-hz yes$}
+          )
+        }
+      end
+
+      describe 'test activedefrag for redis6' do
+        let(:params) do
+          {
+            activedefrag: true,
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^activedefrag yes$}
+          )
+        }
+      end
+
+      describe 'test jemalloc-bg-thread for redis6' do
+        let(:params) do
+          {
+            jemalloc_bg_thread: true,
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^jemalloc-bg-thread yes$}
+          )
+        }
+      end
+
+      describe 'test activedefrag configuration for redis6' do
+        let(:params) do
+          {
+            activedefrag: true,
+            active_defrag_ignore_bytes: '200mb',
+            active_defrag_threshold_lower: 11,
+            active_defrag_threshold_upper: 99,
+            active_defrag_cycle_min: 7,
+            active_defrag_cycle_max: 23,
+            active_defrag_max_scan_fields: 1341,
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^activedefrag yes$}
+          )
+        }
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^active-defrag-ignore-bytes 200mb$}
+          )
+        }
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^active-defrag-threshold-lower 11$}
+          )
+        }
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^active-defrag-threshold-upper 99$}
+          )
+        }
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^active-defrag-cycle-min 7$}
+          )
+        }
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^active-defrag-cycle-max 23$}
+          )
+        }
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^active-defrag-max-scan-fields 1341$}
+          )
+        }
+      end
+
+      describe 'test rdb-save-incremental-fsync for redis6' do
+        let(:params) do
+          {
+            rdb_save_incremental_fsync: true,
+          }
+        end
+
+        it { is_expected.to contain_file(config_file_orig).with('content' => %r{^rdb-save-incremental-fsync yes$}) }
       end
     end
   end

@@ -224,6 +224,46 @@
 #   Minimum number of slaves master will remain connected with, for another
 #   slave to migrate to a  master which is no longer covered by any slave Only
 #   set if cluster_enabled is true
+# @param io_threads
+#   Number of threads to handle IO operations in Redis
+# @param io_threads_do_reads
+#   Enabled/disable io_threads to handle reads
+# @param cluster_allow_reads_when_down
+#   Allows nodes to serve read data while cluster status is down
+# @param cluster_replica_no_failover
+#   Disabled automatic failover for replica
+# @param dynamic_hz
+#   When dynamic HZ is enabled, the actual configured HZ will be used
+#   as a baseline, but multiples of the configured HZ value will be actually
+#   used as needed once more clients are connected.
+# @param activedefrag
+#   Enable/disable active defragmentation
+# @param active_defrag_ignore_bytes
+#   Minimum amount of fragmentation waste to start active defrag
+#   Only set if activedefrag is true
+# @param active_defrag_threshold_lower
+#   Minimum percentage of fragmentation to start active defrag
+#   Only set if activedefrag is true
+# @param active_defrag_threshold_upper
+#   Maximum percentage of fragmentation at which we use maximum effort
+#   Only set if activedefrag is true
+# @param active_defrag_cycle_min
+#   Minimal effort for defrag in CPU percentage, to be used when the lower
+#   threshold is reached
+#   Only set if activedefrag is true
+# @param active_defrag_cycle_max
+#   Maximal effort for defrag in CPU percentage, to be used when the upper
+#   threshold is reached
+#   Only set if activedefrag is true
+# @param active_defrag_max_scan_fields
+#   Maximum number of set/hash/zset/list fields that will be processed from
+#   the main dictionary scan
+#   Only set if activedefrag is true
+# @param jemalloc_bg_thread
+#   Jemalloc background thread for purging will be enabled by default
+# @param rdb_save_incremental_fsync
+#   When redis saves RDB file, if the following option is enabled
+#   the file will be fsync-ed every 32 MB of data generated.
 define redis::instance (
   Boolean $activerehashing                                       = $redis::activerehashing,
   Boolean $aof_load_truncated                                    = $redis::aof_load_truncated,
@@ -259,8 +299,8 @@ define redis::instance (
   Optional[Variant[String[1], Sensitive[String[1]]]] $masterauth = $redis::masterauth,
   Integer[1] $maxclients                                         = $redis::maxclients,
   Optional[Variant[Integer, String]] $maxmemory                  = $redis::maxmemory,
-  Optional[String] $maxmemory_policy                             = $redis::maxmemory_policy,
-  Optional[Variant[Integer, String]] $maxmemory_samples          = $redis::maxmemory_samples,
+  Optional[Redis::MemoryPolicy] $maxmemory_policy                = $redis::maxmemory_policy,
+  Optional[Integer[1, 10]] $maxmemory_samples                    = $redis::maxmemory_samples,
   Integer[0] $min_slaves_max_lag                                 = $redis::min_slaves_max_lag,
   Integer[0] $min_slaves_to_write                                = $redis::min_slaves_to_write,
   Array[Stdlib::Absolutepath] $modules                           = $redis::modules,
@@ -327,6 +367,20 @@ define redis::instance (
   Stdlib::Absolutepath $pid_file                                 = "/var/run/${service_name}/redis.pid",
   Variant[Stdlib::Absolutepath, Enum['']] $unixsocket            = "/var/run/${service_name}/redis.sock",
   Stdlib::Absolutepath $workdir                                  = "${redis::workdir}/redis-server-${name}",
+  Optional[Integer[1]] $io_threads                               = $redis::io_threads,
+  Optional[Boolean] $io_threads_do_reads                         = $redis::io_threads_do_reads,
+  Optional[Boolean] $cluster_allow_reads_when_down               = $redis::cluster_allow_reads_when_down,
+  Optional[Boolean] $cluster_replica_no_failover                 = $redis::cluster_replica_no_failover,
+  Optional[Boolean] $dynamic_hz                                  = $redis::dynamic_hz,
+  Optional[Boolean] $activedefrag                                = $redis::activedefrag,
+  String[1] $active_defrag_ignore_bytes                          = $redis::active_defrag_ignore_bytes,
+  Integer[1, 100] $active_defrag_threshold_lower                 = $redis::active_defrag_threshold_lower,
+  Integer[1, 100] $active_defrag_threshold_upper                 = $redis::active_defrag_threshold_upper,
+  Integer[1, 100] $active_defrag_cycle_min                       = $redis::active_defrag_cycle_min,
+  Integer[1, 100] $active_defrag_cycle_max                       = $redis::active_defrag_cycle_max,
+  Integer[1] $active_defrag_max_scan_fields                      = $redis::active_defrag_max_scan_fields,
+  Optional[Boolean] $jemalloc_bg_thread                          = $redis::jemalloc_bg_thread,
+  Optional[Boolean] $rdb_save_incremental_fsync                  = $redis::rdb_save_incremental_fsync,
 ) {
   if $title == 'default' {
     $redis_file_name_orig = $config_file_orig
@@ -499,6 +553,20 @@ define redis::instance (
         tls_cluster                   => $tls_cluster,
         tls_prefer_server_ciphers     => $tls_prefer_server_ciphers,
         modules                       => $modules,
+        io_threads                    => $io_threads,
+        io_threads_do_reads           => $io_threads_do_reads,
+        cluster_allow_reads_when_down => $cluster_allow_reads_when_down,
+        cluster_replica_no_failover   => $cluster_replica_no_failover,
+        dynamic_hz                    => $dynamic_hz,
+        activedefrag                  => $activedefrag,
+        active_defrag_ignore_bytes    => $active_defrag_ignore_bytes,
+        active_defrag_threshold_lower => $active_defrag_threshold_lower,
+        active_defrag_threshold_upper => $active_defrag_threshold_upper,
+        active_defrag_cycle_min       => $active_defrag_cycle_min,
+        active_defrag_cycle_max       => $active_defrag_cycle_max,
+        active_defrag_max_scan_fields => $active_defrag_max_scan_fields,
+        jemalloc_bg_thread            => $jemalloc_bg_thread,
+        rdb_save_incremental_fsync    => $rdb_save_incremental_fsync,
       }
     ),
   }
