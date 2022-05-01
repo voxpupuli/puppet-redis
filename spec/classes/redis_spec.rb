@@ -1614,6 +1614,19 @@ describe 'redis' do
 
         it { is_expected.to contain_file(config_file_orig).with('content' => %r{^rdb-save-incremental-fsync yes$}) }
       end
+
+      describe 'test systemd service timeouts' do
+        let(:params) do
+          {
+            manage_service_file: true,
+            service_timeout_start: 600,
+            service_timeout_stop: 300,
+          }
+        end
+
+        it { is_expected.to contain_systemd__unit_file("#{service_name}.service").with('content' => %r{^TimeoutStartSec=600$}) }
+        it { is_expected.to contain_systemd__unit_file("#{service_name}.service").with('content' => %r{^TimeoutStopSec=300$}) }
+      end
     end
   end
 end

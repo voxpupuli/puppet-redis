@@ -160,6 +160,10 @@
 #   Specify the service name for Init or Systemd.
 # @param service_user
 #   Specify which user to run as.
+# @param service_timeout_start
+#   Specify the time after which a service startup should be considered as failed.
+# @param service_timeout_stop
+#   Specify the time after which a service stop should be considered as failed.
 # @param set_max_intset_entries
 #   The following configuration setting sets the limit in the size of the set
 #   in order to use this special memory saving encoding.
@@ -373,6 +377,8 @@ class redis (
   Boolean $service_manage                                        = true,
   String[1] $service_name                                        = $redis::params::service_name,
   String[1] $service_user                                        = 'redis',
+  Optional[Integer[0]] $service_timeout_start                    = undef,
+  Optional[Integer[0]] $service_timeout_stop                     = undef,
   Integer[0] $set_max_intset_entries                             = 512,
   Integer[0] $slave_priority                                     = 100,
   Boolean $slave_read_only                                       = true,
