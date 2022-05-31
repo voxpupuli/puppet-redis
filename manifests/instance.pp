@@ -128,6 +128,10 @@
 #   Specify which group to run as.
 # @param service_user
 #   Specify which user to run as.
+# @param service_timeout_start
+#   Specify the time after which a service startup should be considered as failed.
+# @param service_timeout_stop
+#   Specify the time after which a service stop should be considered as failed.
 # @param set_max_intset_entries
 #   The following configuration setting sets the limit in the size of the set
 #   in order to use this special memory saving encoding.
@@ -362,6 +366,8 @@ define redis::instance (
   Stdlib::Ensure::Service $service_ensure                        = $redis::service_ensure,
   Boolean $service_enable                                        = $redis::service_enable,
   String[1] $service_group                                       = $redis::service_group,
+  Optional[Integer[0]] $service_timeout_start                    = $redis::service_timeout_start,
+  Optional[Integer[0]] $service_timeout_stop                     = $redis::service_timeout_stop,
   Boolean $manage_service_file                                   = true,
   String $log_file                                               = "redis-server-${name}.log",
   Stdlib::Absolutepath $pid_file                                 = "/var/run/${service_name}/redis.pid",
@@ -433,14 +439,16 @@ define redis::instance (
       content => epp(
         'redis/service_templates/redis.service.epp',
         {
-          bin_path        => $redis::bin_path,
-          instance_title  => $name,
-          port            => $port,
-          redis_file_name => $redis_file_name,
-          service_name    => $service_name,
-          service_user    => $service_user,
-          ulimit          => $ulimit,
-          ulimit_managed  => $ulimit_managed,
+          bin_path              => $redis::bin_path,
+          instance_title        => $name,
+          port                  => $port,
+          redis_file_name       => $redis_file_name,
+          service_name          => $service_name,
+          service_user          => $service_user,
+          service_timeout_start => $service_timeout_start,
+          service_timeout_stop  => $service_timeout_stop,
+          ulimit                => $ulimit,
+          ulimit_managed        => $ulimit_managed,
         }
       ),
     }
