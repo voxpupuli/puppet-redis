@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v8.4.0](https://github.com/voxpupuli/puppet-redis/tree/v8.4.0) (2022-05-31)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v8.3.0...v8.4.0)
+
+**Implemented enhancements:**
+
+- Add support for systemd service timeouts [\#447](https://github.com/voxpupuli/puppet-redis/pull/447) ([fraenki](https://github.com/fraenki))
+- Add support for Redis6 features [\#445](https://github.com/voxpupuli/puppet-redis/pull/445) ([fraenki](https://github.com/fraenki))
+
+**Closed issues:**
+
+- Rediscluster on Ubuntu 20.04 [\#402](https://github.com/voxpupuli/puppet-redis/issues/402)
+
 ## [v8.3.0](https://github.com/voxpupuli/puppet-redis/tree/v8.3.0) (2022-04-04)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v8.2.0...v8.3.0)
@@ -327,7 +340,7 @@ This is the first release since the module was migrated to the Vox Pupuli `puppe
 - Bumped apt version dependency to version \< 5.0.0 [\#237](https://github.com/voxpupuli/puppet-redis/pull/237) ([c4m4](https://github.com/c4m4))
 - Updates for EL6 [\#236](https://github.com/voxpupuli/puppet-redis/pull/236) ([petems](https://github.com/petems))
 - Pin version of redis gem [\#235](https://github.com/voxpupuli/puppet-redis/pull/235) ([petems](https://github.com/petems))
-- Added configuration options for client-output-buffer-limit [\#233](https://github.com/voxpupuli/puppet-redis/pull/233) ([Mike-Petersen](https://github.com/Mike-Petersen))
+- Added configuration options for client-output-buffer-limit [\#233](https://github.com/voxpupuli/puppet-redis/pull/233) ([mike-petersen](https://github.com/mike-petersen))
 - Allow `slaveof` when binding to localhost [\#231](https://github.com/voxpupuli/puppet-redis/pull/231) ([joshuaspence](https://github.com/joshuaspence))
 - Fix issues with missing locale for Debian box [\#224](https://github.com/voxpupuli/puppet-redis/pull/224) ([petems](https://github.com/petems))
 - Instance service improvements [\#222](https://github.com/voxpupuli/puppet-redis/pull/222) ([kwevers](https://github.com/kwevers))
