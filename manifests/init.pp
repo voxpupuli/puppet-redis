@@ -183,7 +183,7 @@
 # @param slaveof
 #   Use slaveof to make a Redis instance a copy of another Redis server.
 # @param replicaof
-    Use replicaof to make a Redis instance a copy of another Redis server.
+#   Use replicaof to make a Redis instance a copy of another Redis server.
 # @param slowlog_log_slower_than
 #   Tells Redis what is the execution time, in microseconds, to exceed in order
 #   for the command to get logged.
