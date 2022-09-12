@@ -131,6 +131,7 @@ The following parameters are available in the `redis` class:
 * [`slave_read_only`](#slave_read_only)
 * [`slave_serve_stale_data`](#slave_serve_stale_data)
 * [`slaveof`](#slaveof)
+* [`replicaof`](#replicaof)
 * [`slowlog_log_slower_than`](#slowlog_log_slower_than)
 * [`slowlog_max_len`](#slowlog_max_len)
 * [`stop_writes_on_bgsave_error`](#stop_writes_on_bgsave_error)
@@ -814,6 +815,14 @@ Data type: `Boolean`
 Default value: ``true``
 
 ##### <a name="slaveof"></a>`slaveof`
+
+Data type: `Optional[String[1]]`
+
+
+
+Default value: ``undef``
+
+##### <a name="replicaof"></a>`replicaof`
 
 Data type: `Optional[String[1]]`
 

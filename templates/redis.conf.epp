@@ -21,6 +21,7 @@
   Variant[String[1], Boolean]                        $dbfilename,
   Stdlib::Absolutepath                               $workdir,
   Optional[String[1]]                                $slaveof,
+  Optional[String[1]]                                $replicaof,
   Optional[Variant[String[1], Sensitive[String[1]]]] $masterauth,
   Boolean                                            $slave_serve_stale_data,
   Boolean                                            $slave_read_only,
@@ -376,6 +377,7 @@ dir <%= $workdir %>
 #
 # slaveof <masterip> <masterport>
 <% if $slaveof { -%>slaveof <%= $slaveof %><% } -%>
+<% if $replicaof { -%>replicaof <%= $replicaof %><% } -%>
 
 # If the master is password protected (using the "requirepass" configuration
 # directive below) it is possible to tell the slave to authenticate before

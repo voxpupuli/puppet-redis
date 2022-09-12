@@ -1105,6 +1105,38 @@ describe 'redis' do
         end
       end
 
+      describe 'with parameter: replicaof' do
+        context 'binding to localhost' do
+          let(:params) do
+            {
+              bind: '127.0.0.1',
+              replicaof: '_VALUE_'
+            }
+          end
+
+          it {
+            is_expected.to contain_file(config_file_orig).with(
+              'content' => %r{^replicaof _VALUE_}
+            )
+          }
+        end
+
+        context 'binding to external ip' do
+          let(:params) do
+            {
+              bind: '10.0.0.1',
+              replicaof: '_VALUE_'
+            }
+          end
+
+          it {
+            is_expected.to contain_file(config_file_orig).with(
+              'content' => %r{^replicaof _VALUE_}
+            )
+          }
+        end
+      end
+
       describe 'with parameter slowlog_log_slower_than' do
         context 'set to a value great or equal to zero' do
           let(:params) do
