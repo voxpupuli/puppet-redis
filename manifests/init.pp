@@ -302,7 +302,9 @@
 # @param rdb_save_incremental_fsync
 #   When redis saves RDB file, if the following option is enabled
 #   the file will be fsync-ed every 32 MB of data generated.
-
+# @param dnf_module_stream
+#   Manage the DNF module and set the version. This only makes sense on distributions
+#   that use DNF package manager, such as EL8 or Fedora.
 class redis (
   Boolean $activerehashing                                       = true,
   Boolean $aof_load_truncated                                    = true,
@@ -433,6 +435,7 @@ class redis (
   Integer[1] $active_defrag_max_scan_fields                      = 1000,
   Optional[Boolean] $jemalloc_bg_thread                          = undef,
   Optional[Boolean] $rdb_save_incremental_fsync                  = undef,
+  Optional[String[1]] $dnf_module_stream                         = undef,
 ) inherits redis::params {
   contain redis::preinstall
   contain redis::install

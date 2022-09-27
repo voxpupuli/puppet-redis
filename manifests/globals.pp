@@ -1,7 +1,7 @@
 # @summary Set a global config for Redis
 #
 # @param scl
-#   Use a specific Software CoLlection on Red Hat based systems
+#   Use a specific Software Collection on Red Hat 7 based systems
 class redis::globals (
   Optional[String] $scl = undef,
 ) {
