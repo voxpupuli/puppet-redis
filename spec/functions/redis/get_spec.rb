@@ -10,7 +10,7 @@ REMOTE_BROKEN_URL = 'redis://redis.example.com:1234'
 
 describe 'redis::get' do
   context 'should error if connection to remote redis server cannot be made and no default is specified' do
-    it { is_expected.to run.with_params('nonexistent_key', REMOTE_BROKEN_URL).and_raise_error(Puppet::Error, %r{connection to redis server failed - Error connecting to Redis on redis.example.com:1234 \(SocketError\)}) }
+    it { is_expected.to run.with_params('nonexistent_key', REMOTE_BROKEN_URL).and_raise_error(Puppet::Error, %r{connection to redis server failed - getaddrinfo: Name or service not known}) }
   end
 
   context 'should return default value if connection to remote redis server cannot be made and default is specified' do
@@ -18,7 +18,7 @@ describe 'redis::get' do
   end
 
   context 'should error if connection to local redis server cannot be made and no default is specified' do
-    it { is_expected.to run.with_params('nonexistent_key', LOCAL_BROKEN_URL).and_raise_error(Puppet::Error, %r{connection to redis server failed - Error connecting to Redis on localhost:1234}) }
+    it { is_expected.to run.with_params('nonexistent_key', LOCAL_BROKEN_URL).and_raise_error(Puppet::Error, %r{connection to redis server failed - Connection refused - connect\(2\) for 127.0.0.1:1234}) }
   end
 
   context 'should return default value if connection to local redis server cannot be made and default is specified' do
