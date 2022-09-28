@@ -81,6 +81,21 @@ describe 'redis' do
             end
           end
         end
+
+        describe 'with manage_dnf_module true', if: facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'].to_i == 8 do
+          let(:pre_condition) do
+            <<-PUPPET
+            class { 'redis':
+              manage_package    => true,
+              dnf_module_stream => '6',
+            }
+            PUPPET
+          end
+
+          it { is_expected.to compile.with_all_deps }
+          it { is_expected.to contain_package('redis dnf module').with_ensure('6').that_comes_before('Package[redis]') }
+          it { is_expected.to contain_package('redis').with_name('redis') }
+        end
       end
 
       context 'with managed_by_cluster_manager true' do
