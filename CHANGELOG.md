@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v8.5.0](https://github.com/voxpupuli/puppet-redis/tree/v8.5.0) (2022-10-28)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v8.4.0...v8.5.0)
+
+**Implemented enhancements:**
+
+- Use a single regular expression in the Redis fact [\#451](https://github.com/voxpupuli/puppet-redis/pull/451) ([ekohl](https://github.com/ekohl))
+- Add support for managing Redis dnfmodule on EL 8+ [\#450](https://github.com/voxpupuli/puppet-redis/pull/450) ([ehelms](https://github.com/ehelms))
+
+**Merged pull requests:**
+
+- Fix get function tests [\#452](https://github.com/voxpupuli/puppet-redis/pull/452) ([ehelms](https://github.com/ehelms))
+
 ## [v8.4.0](https://github.com/voxpupuli/puppet-redis/tree/v8.4.0) (2022-05-31)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v8.3.0...v8.4.0)
