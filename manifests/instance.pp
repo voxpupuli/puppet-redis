@@ -414,7 +414,7 @@ define redis::instance (
     }
   }
 
-  if $manage_service_file {
+  if $manage_service_file and and $facts['service_provider'] == 'systemd' {
     if $title != 'default' {
       $real_service_ensure = $service_ensure == 'running'
       $real_service_enable = $service_enable
@@ -453,7 +453,7 @@ define redis::instance (
       ),
     }
   } else {
-    if $ulimit_managed {
+    if $ulimit_managed and $facts['service_provider'] == 'systemd' {
       systemd::service_limits { "${service_name}.service":
         limits          => {
           'LimitNOFILE' => $ulimit,
