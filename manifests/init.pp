@@ -378,7 +378,7 @@ class redis (
   Boolean $redis_apt_repo                                        = false,
   Stdlib::HTTPSUrl $apt_location                                 = 'https://packages.redis.io/deb/',
   String[1] $apt_repos                                           = 'main',
-  Optional[String] $apt_release                                  = $facts.dig('os', 'distro', 'codename'),
+  Optional[String] $apt_release                                  = undef,
   String[1] $apt_key_id                                          = '54318FA4052D1E61A6B6F7BB5F4349D6BF53AA0C',
   String[1] $apt_key_server                                      = 'hkp://keyserver.ubuntu.com/',
   Boolean $rdbcompression                                        = true,
