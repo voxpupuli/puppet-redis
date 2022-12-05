@@ -685,7 +685,7 @@ Data type: `Optional[String]`
 
 Specify the os codename.
 
-Default value: `$facts.dig('os', 'distro', 'codename')`
+Default value: `undef`
 
 ##### <a name="-redis--apt_key_id"></a>`apt_key_id`
 
