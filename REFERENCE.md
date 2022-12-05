@@ -665,7 +665,7 @@ Default value: `false`
 
 ##### <a name="-redis--apt_location"></a>`apt_location`
 
-Data type: `String`
+Data type: `Stdlib::HTTPSUrl`
 
 Specify the URL of the apt repository.
 
@@ -673,7 +673,7 @@ Default value: `'https://packages.redis.io/deb/'`
 
 ##### <a name="-redis--apt_repos"></a>`apt_repos`
 
-Data type: `String`
+Data type: `String[1]`
 
 Specify the repository to use for apt. Defaults to 'main'.
 
@@ -689,7 +689,7 @@ Default value: `$facts.dig('os', 'distro', 'codename')`
 
 ##### <a name="-redis--apt_key_id"></a>`apt_key_id`
 
-Data type: `String`
+Data type: `String[1]`
 
 Specify the PGP key id to use for apt.
 
@@ -697,7 +697,7 @@ Default value: `'54318FA4052D1E61A6B6F7BB5F4349D6BF53AA0C'`
 
 ##### <a name="-redis--apt_key_server"></a>`apt_key_server`
 
-Data type: `String`
+Data type: `String[1]`
 
 Specify the PGP key server to use for apt.
 
