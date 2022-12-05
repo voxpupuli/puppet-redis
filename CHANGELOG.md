@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v8.6.0](https://github.com/voxpupuli/puppet-redis/tree/v8.6.0) (2022-12-05)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v8.5.0...v8.6.0)
+
+**Implemented enhancements:**
+
+- Add support for managing Redis APT repo [\#456](https://github.com/voxpupuli/puppet-redis/pull/456) ([zaben903](https://github.com/zaben903))
+
 ## [v8.5.0](https://github.com/voxpupuli/puppet-redis/tree/v8.5.0) (2022-10-28)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v8.4.0...v8.5.0)
