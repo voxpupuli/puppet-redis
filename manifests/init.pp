@@ -128,6 +128,18 @@
 #   Whether protected mode is enabled or not.  Only applicable when no bind is set.
 # @param ppa_repo
 #   Specify upstream (Ubuntu) PPA entry.
+# @param redis_apt_repo
+#   If you want to use the redis apt repository.
+# @param apt_location
+#   Specify the URL of the apt repository.
+# @param apt_repos
+#  Specify the repository to use for apt. Defaults to 'main'.
+# @param apt_release
+#   Specify the os codename.
+# @param apt_key_id
+#   Specify the PGP key id to use for apt.
+# @param apt_key_server
+#   Specify the PGP key server to use for apt.
 # @param rdbcompression
 #   Enable/disable compression of string objects using LZF when dumping.
 # @param rename_commands
@@ -363,6 +375,12 @@ class redis (
   Stdlib::Port $port                                             = 6379,
   Boolean $protected_mode                                        = true,
   Optional[String] $ppa_repo                                     = undef,
+  Boolean $redis_apt_repo                                        = false,
+  String $apt_location                                           = 'https://packages.redis.io/deb/',
+  String $apt_repos                                              = 'main',
+  Optional[String] $apt_release                                  = $facts.dig('os', 'distro', 'codename'),
+  String $apt_key_id                                             = '54318FA4052D1E61A6B6F7BB5F4349D6BF53AA0C',
+  String $apt_key_server                                         = 'hkp://keyserver.ubuntu.com/',
   Boolean $rdbcompression                                        = true,
   Hash[String,String] $rename_commands                           = {},
   String[1] $repl_backlog_size                                   = '1mb',

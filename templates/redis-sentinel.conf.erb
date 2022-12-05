@@ -7,6 +7,7 @@ tls-port <%= @sentinel_tls_port %>
 <% end -%>
 dir <%= @working_dir %>
 daemonize <%= @daemonize ? 'yes' : 'no' %>
+supervised auto
 pidfile <%= @pid_file %>
 protected-mode <%= @protected_mode ? 'yes' : 'no' %>
 

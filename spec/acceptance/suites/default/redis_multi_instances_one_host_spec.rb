@@ -37,6 +37,8 @@ describe 'redis::instance example' do
       default_install => false,
       service_enable  => false,
       service_ensure  => 'stopped',
+      protected_mode  => false,
+      bind            => [],
     }
 
     $listening_ports.each |$port| {

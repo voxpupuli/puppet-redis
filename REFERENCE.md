@@ -139,6 +139,12 @@ The following parameters are available in the `redis` class:
 * [`port`](#-redis--port)
 * [`protected_mode`](#-redis--protected_mode)
 * [`ppa_repo`](#-redis--ppa_repo)
+* [`redis_apt_repo`](#-redis--redis_apt_repo)
+* [`apt_location`](#-redis--apt_location)
+* [`apt_repos`](#-redis--apt_repos)
+* [`apt_release`](#-redis--apt_release)
+* [`apt_key_id`](#-redis--apt_key_id)
+* [`apt_key_server`](#-redis--apt_key_server)
 * [`rdbcompression`](#-redis--rdbcompression)
 * [`rename_commands`](#-redis--rename_commands)
 * [`repl_backlog_size`](#-redis--repl_backlog_size)
@@ -648,6 +654,54 @@ Data type: `Optional[String]`
 Specify upstream (Ubuntu) PPA entry.
 
 Default value: `undef`
+
+##### <a name="-redis--redis_apt_repo"></a>`redis_apt_repo`
+
+Data type: `Boolean`
+
+If you want to use the redis apt repository.
+
+Default value: `false`
+
+##### <a name="-redis--apt_location"></a>`apt_location`
+
+Data type: `String`
+
+Specify the URL of the apt repository.
+
+Default value: `'https://packages.redis.io/deb/'`
+
+##### <a name="-redis--apt_repos"></a>`apt_repos`
+
+Data type: `String`
+
+Specify the repository to use for apt. Defaults to 'main'.
+
+Default value: `'main'`
+
+##### <a name="-redis--apt_release"></a>`apt_release`
+
+Data type: `Optional[String]`
+
+Specify the os codename.
+
+Default value: `$facts.dig('os', 'distro', 'codename')`
+
+##### <a name="-redis--apt_key_id"></a>`apt_key_id`
+
+Data type: `String`
+
+Specify the PGP key id to use for apt.
+
+Default value: `'54318FA4052D1E61A6B6F7BB5F4349D6BF53AA0C'`
+
+##### <a name="-redis--apt_key_server"></a>`apt_key_server`
+
+Data type: `String`
+
+Specify the PGP key server to use for apt.
+
+Default value: `'hkp://keyserver.ubuntu.com/'`
 
 ##### <a name="-redis--rdbcompression"></a>`rdbcompression`
 

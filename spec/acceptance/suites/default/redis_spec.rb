@@ -44,4 +44,17 @@ describe 'redis' do
       its(:stdout) { is_expected.to match %r{PONG} }
     end
   end
+
+  it 'runs successfully when using Redis apt repository', if: (fact('os.family') == 'Debian') do
+    pp = <<-EOS
+      class { '::redis':
+        manage_repo    => true,
+        redis_apt_repo => true,
+      }
+    EOS
+
+    # Apply twice to ensure no errors the second time.
+    apply_manifest(pp, catch_failures: true)
+    apply_manifest(pp, catch_changes: true)
+  end
 end
