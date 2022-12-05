@@ -51,6 +51,7 @@ describe 'redis::sentinel' do
             port 26379
             dir #{facts[:os]['family'] == 'Debian' ? '/var/lib/redis' : '/tmp'}
             daemonize #{facts[:os]['family'] == 'RedHat' ? 'no' : 'yes'}
+            supervised auto
             pidfile #{pidfile}
             protected-mode yes
 
@@ -124,6 +125,7 @@ describe 'redis::sentinel' do
             tls-port 26380
             dir /tmp/redis
             daemonize #{facts[:os]['family'] == 'RedHat' ? 'no' : 'yes'}
+            supervised auto
             pidfile #{pidfile}
             protected-mode no
 
@@ -177,6 +179,7 @@ describe 'redis::sentinel' do
             port 26379
             dir /tmp/redis
             daemonize #{facts[:os]['family'] == 'RedHat' ? 'no' : 'yes'}
+            supervised auto
             pidfile #{pidfile}
             protected-mode yes
 

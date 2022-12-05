@@ -14,7 +14,18 @@ class redis::preinstall {
       }
     } elsif $facts['os']['name'] == 'Ubuntu' and $redis::ppa_repo {
       contain 'apt'
-      apt::ppa { $redis::ppa_repo:
+      apt::ppa { $redis::ppa_repo: }
+    } elsif $facts['os']['family'] == 'Debian' and $redis::redis_apt_repo {
+      include 'apt'
+
+      apt::source { 'redis':
+        location => $redis::apt_location,
+        release  => $redis::apt_release,
+        repos    => $redis::apt_repos,
+        key      => {
+          id     => $redis::apt_key_id,
+          server => $redis::apt_key_server,
+        },
       }
     }
   }

@@ -115,6 +115,24 @@
 # Note that Redis will write a pid file in /var/run/redis.pid when daemonized.
 daemonize <%= bool2str($daemonize, 'yes', 'no') -%>
 
+# If you run Redis from upstart or systemd, Redis can interact with your
+# supervision tree. Options:
+#   supervised no      - no supervision interaction
+#   supervised upstart - signal upstart by putting Redis into SIGSTOP mode
+#                        requires "expect stop" in your upstart job config
+#   supervised systemd - signal systemd by writing READY=1 to $NOTIFY_SOCKET
+#                        on startup, and updating Redis status on a regular
+#                        basis.
+#   supervised auto    - detect upstart or systemd method based on
+#                        UPSTART_JOB or NOTIFY_SOCKET environment variables
+# Note: these supervision methods only signal "process is ready."
+#       They do not enable continuous pings back to your supervisor.
+#
+# The default is "no". To run under upstart/systemd, you can simply uncomment
+# the line below:
+#
+supervised auto
+
 # When running daemonized, Redis writes a pid file in /var/run/redis.pid by
 # default. You can specify a custom pid file location here.
 pidfile <%= $pid_file %>
