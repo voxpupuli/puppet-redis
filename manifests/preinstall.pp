@@ -16,7 +16,7 @@ class redis::preinstall {
       contain 'apt'
       apt::ppa { $redis::ppa_repo: }
     } elsif $facts['os']['family'] == 'Debian' and $redis::redis_apt_repo {
-      contain 'apt'
+      include 'apt'
 
       apt::source { 'redis':
         location => $redis::apt_location,
