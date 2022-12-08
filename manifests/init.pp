@@ -144,6 +144,10 @@
 #   Enable/disable compression of string objects using LZF when dumping.
 # @param rename_commands
 #   A list of Redis commands to rename or disable for security reasons
+# @param repl_announce_ip
+#   The specific IP or hostname a replica will report to its master
+# @param repl_announce_port
+#   The specific port a replica will report to its master
 # @param repl_backlog_size
 #   The replication backlog size
 # @param repl_backlog_ttl
@@ -383,6 +387,8 @@ class redis (
   String[1] $apt_key_server                                      = 'hkp://keyserver.ubuntu.com/',
   Boolean $rdbcompression                                        = true,
   Hash[String,String] $rename_commands                           = {},
+  Optional[Stdlib::Host] $repl_announce_ip                       = undef,
+  Optional[Stdlib::Port] $repl_announce_port                     = undef,
   String[1] $repl_backlog_size                                   = '1mb',
   Integer[0] $repl_backlog_ttl                                   = 3600,
   Boolean $repl_disable_tcp_nodelay                              = false,

@@ -74,6 +74,9 @@
 #   Whether or not sentinels will announce hostnames instead of ip addresses
 #   to clients.  This can be required for TLS.
 #
+# @param sentinel_announce_ip
+#   Specify the IP or hostname that Sentinel will announce
+#
 # @param sentinel_bind
 #   Allow optional sentinel server ip binding.  Can help overcome
 #   issues arising from protect-mode added Redis 3.2
@@ -158,6 +161,7 @@ class redis::sentinel (
   Stdlib::Absolutepath $pid_file = $redis::params::sentinel_pid_file,
   Integer[1] $quorum = 2,
   Optional[Enum['yes', 'no']] $sentinel_announce_hostnames = undef,
+  Optional[Stdlib::Host] $sentinel_announce_ip = undef,
   Variant[Undef, Stdlib::IP::Address, Array[Stdlib::IP::Address]] $sentinel_bind = undef,
   Stdlib::Port $sentinel_port = 26379,
   Optional[Enum['yes', 'no']] $sentinel_resolve_hostnames = undef,

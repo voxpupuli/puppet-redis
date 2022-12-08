@@ -101,6 +101,10 @@
 #   Enable/disable compression of string objects using LZF when dumping.
 # @param rename_commands
 #   A list of Redis commands to rename or disable for security reasons
+# @param repl_announce_ip
+#   The specific IP or hostname a replica will report to its master
+# @param repl_announce_port
+#   The specific port a replica will report to its master
 # @param repl_backlog_size
 #   The replication backlog size
 # @param repl_backlog_ttl
@@ -316,6 +320,8 @@ define redis::instance (
   Boolean $protected_mode                                        = $redis::protected_mode,
   Boolean $rdbcompression                                        = $redis::rdbcompression,
   Hash[String,String] $rename_commands                           = $redis::rename_commands,
+  Optional[Stdlib::Host] $repl_announce_ip                       = $redis::repl_announce_ip,
+  Optional[Stdlib::Port] $repl_announce_port                     = $redis::repl_announce_port,
   String[1] $repl_backlog_size                                   = $redis::repl_backlog_size,
   Integer[0] $repl_backlog_ttl                                   = $redis::repl_backlog_ttl,
   Boolean $repl_disable_tcp_nodelay                              = $redis::repl_disable_tcp_nodelay,
@@ -503,6 +509,8 @@ define redis::instance (
         masterauth                    => $masterauth,
         slave_serve_stale_data        => $slave_serve_stale_data,
         slave_read_only               => $slave_read_only,
+        repl_announce_ip              => $repl_announce_ip,
+        repl_announce_port            => $repl_announce_port,
         repl_ping_slave_period        => $repl_ping_slave_period,
         repl_timeout                  => $repl_timeout,
         repl_disable_tcp_nodelay      => $repl_disable_tcp_nodelay,

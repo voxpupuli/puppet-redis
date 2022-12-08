@@ -905,6 +905,34 @@ describe 'redis' do
         }
       end
 
+      describe 'with parameter repl_announce_ip' do
+        let(:params) do
+          {
+            repl_announce_ip: 'my.hostname.name.or.ip'
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{replica-announce-ip.*my\.hostname\.name\.or\.ip}
+          )
+        }
+      end
+
+      describe 'with parameter repl_announce_port' do
+        let(:params) do
+          {
+            repl_announce_port: 1234
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{replica-announce-port.*1234}
+          )
+        }
+      end
+
       describe 'with parameter requirepass' do
         let(:params) do
           {
