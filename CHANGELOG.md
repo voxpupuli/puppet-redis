@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v8.7.0](https://github.com/voxpupuli/puppet-redis/tree/v8.7.0) (2022-12-09)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v8.6.0...v8.7.0)
+
+**Implemented enhancements:**
+
+- Allow custom replica announce IP/port and Sentinel announce IP [\#459](https://github.com/voxpupuli/puppet-redis/pull/459) ([pierre-claranet](https://github.com/pierre-claranet))
+
 ## [v8.6.0](https://github.com/voxpupuli/puppet-redis/tree/v8.6.0) (2022-12-05)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v8.5.0...v8.6.0)

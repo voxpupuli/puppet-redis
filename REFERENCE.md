@@ -147,6 +147,8 @@ The following parameters are available in the `redis` class:
 * [`apt_key_server`](#-redis--apt_key_server)
 * [`rdbcompression`](#-redis--rdbcompression)
 * [`rename_commands`](#-redis--rename_commands)
+* [`repl_announce_ip`](#-redis--repl_announce_ip)
+* [`repl_announce_port`](#-redis--repl_announce_port)
 * [`repl_backlog_size`](#-redis--repl_backlog_size)
 * [`repl_backlog_ttl`](#-redis--repl_backlog_ttl)
 * [`repl_disable_tcp_nodelay`](#-redis--repl_disable_tcp_nodelay)
@@ -718,6 +720,22 @@ Data type: `Hash[String,String]`
 A list of Redis commands to rename or disable for security reasons
 
 Default value: `{}`
+
+##### <a name="-redis--repl_announce_ip"></a>`repl_announce_ip`
+
+Data type: `Optional[Stdlib::Host]`
+
+The specific IP or hostname a replica will report to its master
+
+Default value: `undef`
+
+##### <a name="-redis--repl_announce_port"></a>`repl_announce_port`
+
+Data type: `Optional[Stdlib::Port]`
+
+The specific port a replica will report to its master
+
+Default value: `undef`
 
 ##### <a name="-redis--repl_backlog_size"></a>`repl_backlog_size`
 
@@ -1457,6 +1475,7 @@ The following parameters are available in the `redis::sentinel` class:
 * [`pid_file`](#-redis--sentinel--pid_file)
 * [`quorum`](#-redis--sentinel--quorum)
 * [`sentinel_announce_hostnames`](#-redis--sentinel--sentinel_announce_hostnames)
+* [`sentinel_announce_ip`](#-redis--sentinel--sentinel_announce_ip)
 * [`sentinel_bind`](#-redis--sentinel--sentinel_bind)
 * [`sentinel_port`](#-redis--sentinel--sentinel_port)
 * [`sentinel_resolve_hostnames`](#-redis--sentinel--sentinel_resolve_hostnames)
@@ -1652,6 +1671,14 @@ Data type: `Optional[Enum['yes', 'no']]`
 
 Whether or not sentinels will announce hostnames instead of ip addresses
 to clients.  This can be required for TLS.
+
+Default value: `undef`
+
+##### <a name="-redis--sentinel--sentinel_announce_ip"></a>`sentinel_announce_ip`
+
+Data type: `Optional[Stdlib::Host]`
+
+Specify the IP or hostname that Sentinel will announce
 
 Default value: `undef`
 
@@ -1868,6 +1895,8 @@ The following parameters are available in the `redis::instance` defined type:
 * [`protected_mode`](#-redis--instance--protected_mode)
 * [`rdbcompression`](#-redis--instance--rdbcompression)
 * [`rename_commands`](#-redis--instance--rename_commands)
+* [`repl_announce_ip`](#-redis--instance--repl_announce_ip)
+* [`repl_announce_port`](#-redis--instance--repl_announce_port)
 * [`repl_backlog_size`](#-redis--instance--repl_backlog_size)
 * [`repl_backlog_ttl`](#-redis--instance--repl_backlog_ttl)
 * [`repl_disable_tcp_nodelay`](#-redis--instance--repl_disable_tcp_nodelay)
@@ -2309,6 +2338,22 @@ Data type: `Hash[String,String]`
 A list of Redis commands to rename or disable for security reasons
 
 Default value: `$redis::rename_commands`
+
+##### <a name="-redis--instance--repl_announce_ip"></a>`repl_announce_ip`
+
+Data type: `Optional[Stdlib::Host]`
+
+The specific IP or hostname a replica will report to its master
+
+Default value: `$redis::repl_announce_ip`
+
+##### <a name="-redis--instance--repl_announce_port"></a>`repl_announce_port`
+
+Data type: `Optional[Stdlib::Port]`
+
+The specific port a replica will report to its master
+
+Default value: `$redis::repl_announce_port`
 
 ##### <a name="-redis--instance--repl_backlog_size"></a>`repl_backlog_size`
 
