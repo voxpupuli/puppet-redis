@@ -128,6 +128,7 @@ class redis::params inherits redis::globals {
       $config_dir                = '/etc/redis'
       $config_dir_mode           = '0750'
       $config_file               = '/etc/redis/redis-server.conf'
+      $config_file_orig          = '/etc/redis/redis-server.conf.puppet'
       $config_group              = 'redis'
       $config_owner              = 'redis'
       $log_dir                   = '/var/log/redis'
