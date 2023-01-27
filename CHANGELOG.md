@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v8.8.0](https://github.com/voxpupuli/puppet-redis/tree/v8.8.0) (2023-01-27)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v8.7.0...v8.8.0)
+
+**Implemented enhancements:**
+
+- bump puppet/systemd to \< 5.0.0 [\#463](https://github.com/voxpupuli/puppet-redis/pull/463) ([jhoblitt](https://github.com/jhoblitt))
+
+**Fixed bugs:**
+
+- add missing default config\_file\_orig for SUSE [\#462](https://github.com/voxpupuli/puppet-redis/pull/462) ([lbetz](https://github.com/lbetz))
+
 ## [v8.7.0](https://github.com/voxpupuli/puppet-redis/tree/v8.7.0) (2022-12-09)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v8.6.0...v8.7.0)
