@@ -412,7 +412,7 @@ class redis (
   Boolean $slave_read_only                                       = true,
   Boolean $slave_serve_stale_data                                = true,
   Optional[String[1]] $slaveof                                   = undef,
-  Optional[String[1]] $replicaof                                   = undef,
+  Optional[String[1]] $replicaof                                 = undef,
   Integer[-1] $slowlog_log_slower_than                           = 10000,
   Integer[0] $slowlog_max_len                                    = 1024,
   Boolean $stop_writes_on_bgsave_error                           = true,
