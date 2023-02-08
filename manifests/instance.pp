@@ -154,6 +154,8 @@
 #      but to INFO and SLAVEOF.
 # @param slaveof
 #   Use slaveof to make a Redis instance a copy of another Redis server.
+# @param replicaof
+#   Use replicaof to make a Redis instance a copy of another Redis server.
 # @param slowlog_log_slower_than
 #   Tells Redis what is the execution time, in microseconds, to exceed in order
 #   for the command to get logged.
@@ -336,6 +338,7 @@ define redis::instance (
   Boolean $slave_read_only                                       = $redis::slave_read_only,
   Boolean $slave_serve_stale_data                                = $redis::slave_serve_stale_data,
   Optional[String[1]] $slaveof                                   = $redis::slaveof,
+  Optional[String[1]] $replicaof                                 = $redis::replicaof,
   Integer[-1] $slowlog_log_slower_than                           = $redis::slowlog_log_slower_than,
   Integer[0] $slowlog_max_len                                    = $redis::slowlog_max_len,
   Boolean $stop_writes_on_bgsave_error                           = $redis::stop_writes_on_bgsave_error,
@@ -506,6 +509,7 @@ define redis::instance (
         dbfilename                    => $dbfilename,
         workdir                       => $workdir,
         slaveof                       => $slaveof,
+        replicaof                     => $replicaof,
         masterauth                    => $masterauth,
         slave_serve_stale_data        => $slave_serve_stale_data,
         slave_read_only               => $slave_read_only,
