@@ -171,6 +171,7 @@ The following parameters are available in the `redis` class:
 * [`slave_read_only`](#-redis--slave_read_only)
 * [`slave_serve_stale_data`](#-redis--slave_serve_stale_data)
 * [`slaveof`](#-redis--slaveof)
+* [`replicaof`](#-redis--replicaof)
 * [`slowlog_log_slower_than`](#-redis--slowlog_log_slower_than)
 * [`slowlog_max_len`](#-redis--slowlog_max_len)
 * [`stop_writes_on_bgsave_error`](#-redis--stop_writes_on_bgsave_error)
@@ -919,6 +920,14 @@ Default value: `true`
 Data type: `Optional[String[1]]`
 
 Use slaveof to make a Redis instance a copy of another Redis server.
+
+Default value: `undef`
+
+##### <a name="-redis--replicaof"></a>`replicaof`
+
+Data type: `Optional[String[1]]`
+
+Use replicaof to make a Redis instance a copy of another Redis server.
 
 Default value: `undef`
 
@@ -1926,6 +1935,7 @@ The following parameters are available in the `redis::instance` defined type:
 * [`slave_read_only`](#-redis--instance--slave_read_only)
 * [`slave_serve_stale_data`](#-redis--instance--slave_serve_stale_data)
 * [`slaveof`](#-redis--instance--slaveof)
+* [`replicaof`](#-redis--instance--replicaof)
 * [`slowlog_log_slower_than`](#-redis--instance--slowlog_log_slower_than)
 * [`slowlog_max_len`](#-redis--instance--slowlog_max_len)
 * [`stop_writes_on_bgsave_error`](#-redis--instance--stop_writes_on_bgsave_error)
@@ -2532,6 +2542,14 @@ Data type: `Optional[String[1]]`
 Use slaveof to make a Redis instance a copy of another Redis server.
 
 Default value: `$redis::slaveof`
+
+##### <a name="-redis--instance--replicaof"></a>`replicaof`
+
+Data type: `Optional[String[1]]`
+
+Use replicaof to make a Redis instance a copy of another Redis server.
+
+Default value: `$redis::replicaof`
 
 ##### <a name="-redis--instance--slowlog_log_slower_than"></a>`slowlog_log_slower_than`
 
