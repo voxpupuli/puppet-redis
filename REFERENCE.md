@@ -145,6 +145,7 @@ The following parameters are available in the `redis` class:
 * [`apt_release`](#-redis--apt_release)
 * [`apt_key_id`](#-redis--apt_key_id)
 * [`apt_key_server`](#-redis--apt_key_server)
+* [`apt_key_options`](#-redis--apt_key_options)
 * [`rdbcompression`](#-redis--rdbcompression)
 * [`rename_commands`](#-redis--rename_commands)
 * [`repl_announce_ip`](#-redis--repl_announce_ip)
@@ -170,6 +171,7 @@ The following parameters are available in the `redis` class:
 * [`slave_read_only`](#-redis--slave_read_only)
 * [`slave_serve_stale_data`](#-redis--slave_serve_stale_data)
 * [`slaveof`](#-redis--slaveof)
+* [`replicaof`](#-redis--replicaof)
 * [`slowlog_log_slower_than`](#-redis--slowlog_log_slower_than)
 * [`slowlog_max_len`](#-redis--slowlog_max_len)
 * [`stop_writes_on_bgsave_error`](#-redis--stop_writes_on_bgsave_error)
@@ -705,6 +707,14 @@ Specify the PGP key server to use for apt.
 
 Default value: `'hkp://keyserver.ubuntu.com/'`
 
+##### <a name="-redis--apt_key_options"></a>`apt_key_options`
+
+Data type: `Optional[String]`
+
+Passes additional options to `apt-key adv --keyserver-options`.
+
+Default value: `undef`
+
 ##### <a name="-redis--rdbcompression"></a>`rdbcompression`
 
 Data type: `Boolean`
@@ -910,6 +920,14 @@ Default value: `true`
 Data type: `Optional[String[1]]`
 
 Use slaveof to make a Redis instance a copy of another Redis server.
+
+Default value: `undef`
+
+##### <a name="-redis--replicaof"></a>`replicaof`
+
+Data type: `Optional[String[1]]`
+
+Use replicaof to make a Redis instance a copy of another Redis server.
 
 Default value: `undef`
 
@@ -1917,6 +1935,7 @@ The following parameters are available in the `redis::instance` defined type:
 * [`slave_read_only`](#-redis--instance--slave_read_only)
 * [`slave_serve_stale_data`](#-redis--instance--slave_serve_stale_data)
 * [`slaveof`](#-redis--instance--slaveof)
+* [`replicaof`](#-redis--instance--replicaof)
 * [`slowlog_log_slower_than`](#-redis--instance--slowlog_log_slower_than)
 * [`slowlog_max_len`](#-redis--instance--slowlog_max_len)
 * [`stop_writes_on_bgsave_error`](#-redis--instance--stop_writes_on_bgsave_error)
@@ -2523,6 +2542,14 @@ Data type: `Optional[String[1]]`
 Use slaveof to make a Redis instance a copy of another Redis server.
 
 Default value: `$redis::slaveof`
+
+##### <a name="-redis--instance--replicaof"></a>`replicaof`
+
+Data type: `Optional[String[1]]`
+
+Use replicaof to make a Redis instance a copy of another Redis server.
+
+Default value: `$redis::replicaof`
 
 ##### <a name="-redis--instance--slowlog_log_slower_than"></a>`slowlog_log_slower_than`
 
