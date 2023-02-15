@@ -145,6 +145,7 @@ The following parameters are available in the `redis` class:
 * [`apt_release`](#-redis--apt_release)
 * [`apt_key_id`](#-redis--apt_key_id)
 * [`apt_key_server`](#-redis--apt_key_server)
+* [`apt_key_options`](#-redis--apt_key_options)
 * [`rdbcompression`](#-redis--rdbcompression)
 * [`rename_commands`](#-redis--rename_commands)
 * [`repl_announce_ip`](#-redis--repl_announce_ip)
@@ -704,6 +705,14 @@ Data type: `String[1]`
 Specify the PGP key server to use for apt.
 
 Default value: `'hkp://keyserver.ubuntu.com/'`
+
+##### <a name="-redis--apt_key_options"></a>`apt_key_options`
+
+Data type: `Optional[String]`
+
+Passes additional options to `apt-key adv --keyserver-options`.
+
+Default value: `$apt::params::key_options`
 
 ##### <a name="-redis--rdbcompression"></a>`rdbcompression`
 
