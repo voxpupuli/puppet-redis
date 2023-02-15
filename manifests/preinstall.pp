@@ -19,10 +19,10 @@ class redis::preinstall {
       include 'apt'
 
       apt::source { 'redis':
-        location      => $redis::apt_location,
-        release       => $redis::apt_release,
-        repos         => $redis::apt_repos,
-        key           => {
+        location => $redis::apt_location,
+        release  => $redis::apt_release,
+        repos    => $redis::apt_repos,
+        key      => {
           id          => $redis::apt_key_id,
           server      => $redis::apt_key_server,
           key_options => $redis::apt_key_options,
