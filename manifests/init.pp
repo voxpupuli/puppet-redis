@@ -389,7 +389,7 @@ class redis (
   Optional[String] $apt_release                                  = undef,
   String[1] $apt_key_id                                          = '54318FA4052D1E61A6B6F7BB5F4349D6BF53AA0C',
   String[1] $apt_key_server                                      = 'hkp://keyserver.ubuntu.com/',
-  Optional[String] $apt_key_options                              = $apt::params::key_options,
+  Optional[String] $apt_key_options                              = undef,
   Boolean $rdbcompression                                        = true,
   Hash[String,String] $rename_commands                           = {},
   Optional[Stdlib::Host] $repl_announce_ip                       = undef,

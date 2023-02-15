@@ -712,7 +712,7 @@ Data type: `Optional[String]`
 
 Passes additional options to `apt-key adv --keyserver-options`.
 
-Default value: `$apt::params::key_options`
+Default value: `undef`
 
 ##### <a name="-redis--rdbcompression"></a>`rdbcompression`
 
