@@ -16,10 +16,5 @@ configure_beaker do |host|
   if fact_on(host, 'osfamily') == 'Debian'
     # APT required for Debian based systems where `$redis::manage_repo` is `true`
     install_module_from_forge_on(host, 'puppetlabs/apt', '>= 9.0.0')
-
-    if Gem::Version.new(fact_on(host, 'facterversion')) < Gem::Version.new('4.0.0')
-      # Install prerequisites where Facter 3 is used
-      host.install_package('lsb-release')
-    end
   end
 end
