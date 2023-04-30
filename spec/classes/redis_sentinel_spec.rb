@@ -27,7 +27,7 @@ describe 'redis::sentinel' do
         when 'Ubuntu'
           '/var/run/sentinel/redis-sentinel.pid'
         when 'Debian'
-          facts[:os]['release']['major'].to_i == 9 ? '/var/run/redis/redis-sentinel.pid' : '/run/sentinel/redis-sentinel.pid'
+          '/run/sentinel/redis-sentinel.pid'
         else
           '/var/run/redis/redis-sentinel.pid'
         end

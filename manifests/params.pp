@@ -32,11 +32,7 @@ class redis::params inherits redis::globals {
         }
         default: {
           $config_group              = 'root'
-          if versioncmp($facts['os']['release']['major'], '10') >= 0 {
-            $sentinel_pid_file         = '/run/sentinel/redis-sentinel.pid'
-          } else {
-            $sentinel_pid_file         = '/var/run/redis/redis-sentinel.pid'
-          }
+          $sentinel_pid_file         = '/run/sentinel/redis-sentinel.pid'
         }
       }
     }
