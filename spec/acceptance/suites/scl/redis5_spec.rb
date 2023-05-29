@@ -4,11 +4,11 @@ require 'spec_helper_acceptance'
 
 describe 'redis', if: %w[centos redhat].include?(os[:family]) && os[:release].to_i == 7 do
   before(:all) do
-    on hosts, puppet_resource('service', 'redis', 'ensure=stopped', 'enable=false')
+    apply_manifest_on(hosts, 'service{"redis" : ensure => stopped, enable => false}')
   end
 
   after(:all) do
-    on hosts, puppet_resource('service', 'rh-redis5-redis', 'ensure=stopped', 'enable=false')
+    apply_manifest('service{"rh-redis5-redis" : ensure => stopped, enable => false}')
   end
 
   it 'runs successfully' do
