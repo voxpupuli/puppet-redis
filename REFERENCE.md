@@ -525,7 +525,7 @@ Default value: `false`
 
 ##### <a name="-redis--masterauth"></a>`masterauth`
 
-Data type: `Optional[Variant[String[1], Sensitive[String[1]]]]`
+Data type: `Optional[Variant[String[1], Sensitive[String[1]], Deferred]]`
 
 If the master is password protected (using the "requirepass" configuration
 
@@ -789,7 +789,7 @@ Default value: `60`
 
 ##### <a name="-redis--requirepass"></a>`requirepass`
 
-Data type: `Optional[String]`
+Data type: `Optional[Variant[String, Deferred]]`
 
 Require clients to issue AUTH <PASSWORD> before processing any other commands.
 
@@ -2232,7 +2232,7 @@ Default value: `$redis::log_level`
 
 ##### <a name="-redis--instance--masterauth"></a>`masterauth`
 
-Data type: `Optional[Variant[String[1], Sensitive[String[1]]]]`
+Data type: `Optional[Variant[String[1], Sensitive[String[1]], Deferred]]`
 
 If the master is password protected (using the "requirepass" configuration
 
@@ -2416,7 +2416,7 @@ Default value: `$redis::repl_timeout`
 
 ##### <a name="-redis--instance--requirepass"></a>`requirepass`
 
-Data type: `Optional[String]`
+Data type: `Optional[Variant[String, Deferred]]`
 
 Require clients to issue AUTH <PASSWORD> before processing any other
 commands.
