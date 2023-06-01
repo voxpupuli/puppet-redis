@@ -971,7 +971,7 @@ describe 'redis' do
 
           it {
             is_expected.to contain_file(config_file_orig).with(
-              'content' => %r{^(?!save)}
+              'content' => %r{^save ""$}
             )
           }
         end
