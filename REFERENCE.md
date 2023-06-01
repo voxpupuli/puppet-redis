@@ -36,7 +36,7 @@ repositories.
 
 * [`Redis::LogLevel`](#Redis--LogLevel): Specify the server verbosity level.
 * [`Redis::MemoryPolicy`](#Redis--MemoryPolicy): Specify the server maxmemory_policy.
-* [`Redis::RedisUrl`](#Redis--RedisUrl)
+* [`Redis::RedisUrl`](#Redis--RedisUrl): validate URL matches redis protocol
 
 ### Tasks
 
@@ -133,6 +133,8 @@ The following parameters are available in the `redis` class:
 * [`no_appendfsync_on_rewrite`](#-redis--no_appendfsync_on_rewrite)
 * [`notify_keyspace_events`](#-redis--notify_keyspace_events)
 * [`notify_service`](#-redis--notify_service)
+* [`output_buffer_limit_slave`](#-redis--output_buffer_limit_slave)
+* [`output_buffer_limit_pubsub`](#-redis--output_buffer_limit_pubsub)
 * [`package_ensure`](#-redis--package_ensure)
 * [`package_name`](#-redis--package_name)
 * [`pid_file`](#-redis--pid_file)
@@ -222,8 +224,6 @@ The following parameters are available in the `redis` class:
 * [`jemalloc_bg_thread`](#-redis--jemalloc_bg_thread)
 * [`rdb_save_incremental_fsync`](#-redis--rdb_save_incremental_fsync)
 * [`dnf_module_stream`](#-redis--dnf_module_stream)
-* [`output_buffer_limit_slave`](#-redis--output_buffer_limit_slave)
-* [`output_buffer_limit_pubsub`](#-redis--output_buffer_limit_pubsub)
 * [`manage_service_file`](#-redis--manage_service_file)
 
 ##### <a name="-redis--activerehashing"></a>`activerehashing`
@@ -610,6 +610,22 @@ Data type: `Boolean`
 You may disable service reloads when config files change
 
 Default value: `true`
+
+##### <a name="-redis--output_buffer_limit_slave"></a>`output_buffer_limit_slave`
+
+Data type: `String[1]`
+
+Value of client-output-buffer-limit-slave in redis config
+
+Default value: `'256mb 64mb 60'`
+
+##### <a name="-redis--output_buffer_limit_pubsub"></a>`output_buffer_limit_pubsub`
+
+Data type: `String[1]`
+
+Value of client-output-buffer-limit-pubsub in redis config
+
+Default value: `'32mb 8mb 60'`
 
 ##### <a name="-redis--package_ensure"></a>`package_ensure`
 
@@ -1354,27 +1370,11 @@ that use DNF package manager, such as EL8 or Fedora.
 
 Default value: `undef`
 
-##### <a name="-redis--output_buffer_limit_slave"></a>`output_buffer_limit_slave`
-
-Data type: `String[1]`
-
-
-
-Default value: `'256mb 64mb 60'`
-
-##### <a name="-redis--output_buffer_limit_pubsub"></a>`output_buffer_limit_pubsub`
-
-Data type: `String[1]`
-
-
-
-Default value: `'32mb 8mb 60'`
-
 ##### <a name="-redis--manage_service_file"></a>`manage_service_file`
 
 Data type: `Boolean`
 
-
+Determine if the systemd service file should be managed
 
 Default value: `false`
 
@@ -1897,6 +1897,8 @@ The following parameters are available in the `redis::instance` defined type:
 * [`log_dir_mode`](#-redis--instance--log_dir_mode)
 * [`log_file`](#-redis--instance--log_file)
 * [`log_level`](#-redis--instance--log_level)
+* [`managed_by_cluster_manager`](#-redis--instance--managed_by_cluster_manager)
+* [`manage_service_file`](#-redis--instance--manage_service_file)
 * [`masterauth`](#-redis--instance--masterauth)
 * [`maxclients`](#-redis--instance--maxclients)
 * [`maxmemory`](#-redis--instance--maxmemory)
@@ -1986,8 +1988,6 @@ The following parameters are available in the `redis::instance` defined type:
 * [`rdb_save_incremental_fsync`](#-redis--instance--rdb_save_incremental_fsync)
 * [`output_buffer_limit_slave`](#-redis--instance--output_buffer_limit_slave)
 * [`output_buffer_limit_pubsub`](#-redis--instance--output_buffer_limit_pubsub)
-* [`managed_by_cluster_manager`](#-redis--instance--managed_by_cluster_manager)
-* [`manage_service_file`](#-redis--instance--manage_service_file)
 
 ##### <a name="-redis--instance--activerehashing"></a>`activerehashing`
 
@@ -2229,6 +2229,22 @@ Data type: `Redis::LogLevel`
 Specify the server verbosity level.
 
 Default value: `$redis::log_level`
+
+##### <a name="-redis--instance--managed_by_cluster_manager"></a>`managed_by_cluster_manager`
+
+Data type: `Boolean`
+
+Choose if redis will be managed by a cluster manager such as pacemaker or rgmanager
+
+Default value: `$redis::managed_by_cluster_manager`
+
+##### <a name="-redis--instance--manage_service_file"></a>`manage_service_file`
+
+Data type: `Boolean`
+
+Determine if the systemd service file should be managed
+
+Default value: `true`
 
 ##### <a name="-redis--instance--masterauth"></a>`masterauth`
 
@@ -2961,7 +2977,7 @@ Default value: `$redis::rdb_save_incremental_fsync`
 
 Data type: `String[1]`
 
-
+Value of client-output-buffer-limit-slave in redis config
 
 Default value: `$redis::output_buffer_limit_slave`
 
@@ -2969,25 +2985,9 @@ Default value: `$redis::output_buffer_limit_slave`
 
 Data type: `String[1]`
 
-
+Value of client-output-buffer-limit-pubsub in redis config
 
 Default value: `$redis::output_buffer_limit_pubsub`
-
-##### <a name="-redis--instance--managed_by_cluster_manager"></a>`managed_by_cluster_manager`
-
-Data type: `Boolean`
-
-
-
-Default value: `$redis::managed_by_cluster_manager`
-
-##### <a name="-redis--instance--manage_service_file"></a>`manage_service_file`
-
-Data type: `Boolean`
-
-
-
-Default value: `true`
 
 ## Functions
 
@@ -3067,7 +3067,7 @@ Alias of `Enum['volatile-lru', 'allkeys-lru', 'volatile-lfu', 'allkeys-lfu', 'vo
 
 ### <a name="Redis--RedisUrl"></a>`Redis::RedisUrl`
 
-The Redis::RedisUrl data type.
+validate URL matches redis protocol
 
 Alias of `Pattern[/(^redis:\/\/)/]`
 
