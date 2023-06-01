@@ -306,7 +306,7 @@ define redis::instance (
   Stdlib::Absolutepath $log_dir                                  = $redis::log_dir,
   Stdlib::Filemode $log_dir_mode                                 = $redis::log_dir_mode,
   Redis::LogLevel $log_level                                     = $redis::log_level,
-  Optional[Variant[String[1], Sensitive[String[1]]]] $masterauth = $redis::masterauth,
+  Optional[Variant[String[1], Sensitive[String[1]], Deferred]] $masterauth = $redis::masterauth,
   Integer[1] $maxclients                                         = $redis::maxclients,
   Optional[Variant[Integer, String]] $maxmemory                  = $redis::maxmemory,
   Optional[Redis::MemoryPolicy] $maxmemory_policy                = $redis::maxmemory_policy,
@@ -329,7 +329,7 @@ define redis::instance (
   Boolean $repl_disable_tcp_nodelay                              = $redis::repl_disable_tcp_nodelay,
   Integer[1] $repl_ping_slave_period                             = $redis::repl_ping_slave_period,
   Integer[1] $repl_timeout                                       = $redis::repl_timeout,
-  Optional[String] $requirepass                                  = $redis::requirepass,
+  Optional[Variant[String, Deferred]] $requirepass               = $redis::requirepass,
   Boolean $save_db_to_disk                                       = $redis::save_db_to_disk,
   Hash $save_db_to_disk_interval                                 = $redis::save_db_to_disk_interval,
   String[1] $service_user                                        = $redis::service_user,
@@ -484,7 +484,7 @@ define redis::instance (
     owner   => $config_owner,
     group   => $config_group,
     mode    => $config_file_mode,
-    content => epp(
+    content => stdlib::deferrable_epp(
       $conf_template,
       {
         daemonize                     => $daemonize,
