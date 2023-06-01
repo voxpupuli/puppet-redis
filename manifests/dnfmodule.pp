@@ -4,6 +4,12 @@
 # multiple versions on the same OS. Only one DNF module stream can be active at the
 # same time.
 #
+# @param ensure
+#   Value of ensure parameter for redis dns module package
+#
+# @param module
+#   Name of the redis dns package
+#
 # @api private
 class redis::dnfmodule (
   String[1] $ensure = 'installed',

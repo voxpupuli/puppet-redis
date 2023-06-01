@@ -69,6 +69,10 @@
 #   with log_dir but absolute paths are also accepted.
 # @param log_level
 #   Specify the server verbosity level.
+# @param managed_by_cluster_manager
+#   Choose if redis will be managed by a cluster manager such as pacemaker or rgmanager
+# @param manage_service_file
+#   Determine if the systemd service file should be managed
 # @param masterauth
 #   If the master is password protected (using the "requirepass" configuration
 # @param maxclients
@@ -274,6 +278,11 @@
 # @param rdb_save_incremental_fsync
 #   When redis saves RDB file, if the following option is enabled
 #   the file will be fsync-ed every 32 MB of data generated.
+# @param output_buffer_limit_slave
+#   Value of client-output-buffer-limit-slave in redis config
+# @param output_buffer_limit_pubsub
+#   Value of client-output-buffer-limit-pubsub in redis config
+#
 define redis::instance (
   Boolean $activerehashing                                       = $redis::activerehashing,
   Boolean $aof_load_truncated                                    = $redis::aof_load_truncated,

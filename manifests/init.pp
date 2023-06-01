@@ -116,6 +116,10 @@
 #   Which events to notify Pub/Sub clients about events happening
 # @param notify_service
 #   You may disable service reloads when config files change
+# @param output_buffer_limit_slave
+#   Value of client-output-buffer-limit-slave in redis config
+# @param output_buffer_limit_pubsub
+#   Value of client-output-buffer-limit-pubsub in redis config
 # @param package_ensure
 #   Default action for package.
 # @param package_name
@@ -325,6 +329,9 @@
 # @param dnf_module_stream
 #   Manage the DNF module and set the version. This only makes sense on distributions
 #   that use DNF package manager, such as EL8 or Fedora.
+# @param manage_service_file
+#   Determine if the systemd service file should be managed
+#
 class redis (
   Boolean $activerehashing                                       = true,
   Boolean $aof_load_truncated                                    = true,
