@@ -4,6 +4,37 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [Unreleased](https://github.com/voxpupuli/puppet-redis/tree/HEAD)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v8.8.0...HEAD)
+
+**Breaking changes:**
+
+- Drop EoL Debian 9 support [\#469](https://github.com/voxpupuli/puppet-redis/pull/469) ([bastelfreak](https://github.com/bastelfreak))
+- Drop Puppet 6 support [\#468](https://github.com/voxpupuli/puppet-redis/pull/468) ([bastelfreak](https://github.com/bastelfreak))
+
+**Implemented enhancements:**
+
+- Add param to pass to apt-key adv [\#466](https://github.com/voxpupuli/puppet-redis/pull/466) ([pwf](https://github.com/pwf))
+
+**Fixed bugs:**
+
+- Fix missing puppet strings [\#481](https://github.com/voxpupuli/puppet-redis/pull/481) ([ghoneycutt](https://github.com/ghoneycutt))
+- Fix for redis.conf.epp bug: save\_db\_to\_disk = false does not work.  [\#478](https://github.com/voxpupuli/puppet-redis/pull/478) ([pankajr](https://github.com/pankajr))
+
+**Closed issues:**
+
+- save\_db\_to\_disk = false does not work [\#477](https://github.com/voxpupuli/puppet-redis/issues/477)
+- Support deferred values for requirepass [\#473](https://github.com/voxpupuli/puppet-redis/issues/473)
+- Replace `slaveof` with `replicaof` [\#401](https://github.com/voxpupuli/puppet-redis/issues/401)
+
+**Merged pull requests:**
+
+- Allow deferrables for masterauth & requirepass [\#476](https://github.com/voxpupuli/puppet-redis/pull/476) ([ThiefMaster](https://github.com/ThiefMaster))
+- CI: Switch sysctl module to new namespace & cleanup .fixtures.yml [\#471](https://github.com/voxpupuli/puppet-redis/pull/471) ([bastelfreak](https://github.com/bastelfreak))
+- Drop Puppet 6 CI leftovers [\#470](https://github.com/voxpupuli/puppet-redis/pull/470) ([bastelfreak](https://github.com/bastelfreak))
+- add replicaof parameter\(v2\) [\#465](https://github.com/voxpupuli/puppet-redis/pull/465) ([jonasbartho](https://github.com/jonasbartho))
+
 ## [v8.8.0](https://github.com/voxpupuli/puppet-redis/tree/v8.8.0) (2023-01-27)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v8.7.0...v8.8.0)
