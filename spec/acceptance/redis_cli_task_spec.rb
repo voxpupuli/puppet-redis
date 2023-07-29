@@ -4,7 +4,7 @@ require 'spec_helper_acceptance'
 
 describe 'redis-cli task' do
   subject do
-    on(default, "bolt task run --modulepath /etc/puppetlabs/code/modules --targets localhost #{task_name} #{params}", acceptable_exit_codes: [0, 1]).stdout
+    on(default, "bolt task run --modulepath /etc/puppetlabs/code/environments/production/modules --targets localhost #{task_name} #{params}", acceptable_exit_codes: [0, 1]).stdout
   end
 
   let(:task_name) { 'redis::redis_cli' }
