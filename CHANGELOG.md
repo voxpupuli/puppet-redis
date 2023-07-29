@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v9.1.0](https://github.com/voxpupuli/puppet-redis/tree/v9.1.0) (2023-07-29)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v9.0.0...v9.1.0)
+
+**Implemented enhancements:**
+
+- puppetlabs/stdlib: Allow 9.x [\#483](https://github.com/voxpupuli/puppet-redis/pull/483) ([bastelfreak](https://github.com/bastelfreak))
+
+**Merged pull requests:**
+
+- Add Rocky/AlmaLinux support [\#487](https://github.com/voxpupuli/puppet-redis/pull/487) ([bastelfreak](https://github.com/bastelfreak))
+- Specify environment module path for bolt [\#475](https://github.com/voxpupuli/puppet-redis/pull/475) ([traylenator](https://github.com/traylenator))
+
 ## [v9.0.0](https://github.com/voxpupuli/puppet-redis/tree/v9.0.0) (2023-06-01)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v8.8.0...v9.0.0)
