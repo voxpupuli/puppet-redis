@@ -5,10 +5,10 @@
 # same time.
 #
 # @param ensure
-#   Value of ensure parameter for redis dns module package
+#   Value of ensure parameter for redis dnf module package
 #
 # @param module
-#   Name of the redis dns package
+#   Name of the redis dnf package
 #
 # @api private
 class redis::dnfmodule (
