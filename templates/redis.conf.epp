@@ -1030,7 +1030,7 @@ aof-rewrite-incremental-fsync <%= bool2str($aof_rewrite_incremental_fsync, 'yes'
 # the file will be fsync-ed every 32 MB of data generated. This is useful
 # in order to commit the file to the disk more incrementally and avoid
 # big latency spikes.
-<% if $rdb_save_incremental_fsync { -%>rdb-save-incremental-fsync <%= $rdb_save_incremental_fsync ? {true => 'yes', default => 'no'} %><% } -%>
+rdb-save-incremental-fsync <%= bool2str($rdb_save_incremental_fsync, 'yes', 'no') -%>
 
 # Redis Cluster Settings
 <% if $cluster_enabled { -%>
