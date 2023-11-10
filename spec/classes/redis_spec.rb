@@ -1708,7 +1708,6 @@ describe 'redis' do
         end
 
         it { is_expected.not_to contain_file(config_file_orig).with('content' => %r{^rdb-save-incremental-fsync}) }
-
       end
 
       describe 'test systemd service timeouts' do
