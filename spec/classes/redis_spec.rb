@@ -1693,11 +1693,11 @@ describe 'redis' do
       describe 'test rdb-save-incremental-fsync disabled for redis6' do 
          let(:params) do 
            { 
-             rdb_save_incremental_fsync: false  , 
+             rdb_save_incremental_fsync: false, 
            } 
          end 
         
-         it { is_expected.to contain_file(config_file_orig).with('content' => %r{^rdb-save-incremental-fsync ino$}) } 
+         it { is_expected.to contain_file(config_file_orig).with('content' => %r{^rdb-save-incremental-fsync no$}) } 
        end 
 
 
