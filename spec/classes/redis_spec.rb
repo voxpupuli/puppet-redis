@@ -1700,6 +1700,17 @@ describe 'redis' do
         it { is_expected.to contain_file(config_file_orig).with('content' => %r{^rdb-save-incremental-fsync no$}) }
       end
 
+      describe 'test rdb-save-incremental-fsync Undef for redis6' do
+        let(:params) do
+          {
+            rdb_save_incremental_fsync: Undef,
+          }
+        end
+
+        it { is_expected.not_to contain_file(config_file_orig).with('content' => %r{^rdb-save-incremental-fsync}) }
+
+      end
+
       describe 'test systemd service timeouts' do
         let(:params) do
           {
