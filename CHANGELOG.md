@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v9.3.0](https://github.com/voxpupuli/puppet-redis/tree/v9.3.0) (2023-11-14)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v9.2.0...v9.3.0)
+
+**Implemented enhancements:**
+
+- Add Puppet 8 support [\#484](https://github.com/voxpupuli/puppet-redis/pull/484) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [v9.2.0](https://github.com/voxpupuli/puppet-redis/tree/v9.2.0) (2023-11-03)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v9.1.0...v9.2.0)
