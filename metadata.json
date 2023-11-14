@@ -1,6 +1,6 @@
 {
   "name": "puppet-redis",
-  "version": "9.3.0",
+  "version": "9.3.1-rc0",
   "author": "Vox Pupuli",
   "summary": "Redis module",
   "license": "Apache-2.0",
