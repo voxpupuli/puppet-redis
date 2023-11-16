@@ -1680,6 +1680,16 @@ describe 'redis' do
         }
       end
 
+      describe 'test rdb-save-incremental-fsync undef' do
+        let(:params) do
+          {
+            rdb_save_incremental_fsync: 'undef',
+          }
+        end
+
+        it { is_expected.to contain_file(config_file_orig).with('content' => %r{^#rdb-save-incremental-fsync yes}) }
+      end
+
       describe 'test rdb-save-incremental-fsync enabled' do
         let(:params) do
           {
