@@ -1679,6 +1679,15 @@ describe 'redis' do
           )
         }
       end
+      describe 'test rdb-save-incremental-fsync Undef' do
+        let(:params) do
+          {
+            rdb_save_incremental_fsync: nil,
+          }
+        end
+
+        it { is_expected.to contain_file(config_file_orig).without('content' => %r{^rdb-save-incremental-fsync.*$}) }
+      end
 
       describe 'test rdb-save-incremental-fsync enabled' do
         let(:params) do
@@ -1698,16 +1707,6 @@ describe 'redis' do
         end
 
         it { is_expected.to contain_file(config_file_orig).with('content' => %r{^rdb-save-incremental-fsync no$}) }
-      end
-
-      describe 'test rdb-save-incremental-fsync Undef' do
-        let(:params) do
-          {
-            rdb_save_incremental_fsync: nil,
-          }
-        end
-
-        it { is_expected.to contain_file(config_file_orig).without('content' => %r{^rdb-save-incremental-fsync.*$}) }
       end
 
       describe 'test systemd service timeouts' do
