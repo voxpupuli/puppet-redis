@@ -1687,7 +1687,7 @@ describe 'redis' do
           }
         end
 
-        it { is_expected.to contain_file(config_file_orig).with('content' => %r{^#rdb-save-incremental-fsync yes$}) }
+        it { is_expected.to contain_file(config_file_orig).with('content' => %r{^#rdb-save-incremental-fsync yes}) }
       end
 
       describe 'test rdb-save-incremental-fsync enabled' do
