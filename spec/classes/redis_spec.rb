@@ -1680,7 +1680,7 @@ describe 'redis' do
         }
       end
 
-      describe 'test rdb-save-incremental-fsync enabled for redis6' do
+      describe 'test rdb-save-incremental-fsync enabled' do
         let(:params) do
           {
             rdb_save_incremental_fsync: true,
@@ -1690,7 +1690,7 @@ describe 'redis' do
         it { is_expected.to contain_file(config_file_orig).with('content' => %r{^rdb-save-incremental-fsync yes$}) }
       end
 
-      describe 'test rdb-save-incremental-fsync disabled for redis6' do
+      describe 'test rdb-save-incremental-fsync disabled' do
         let(:params) do
           {
             rdb_save_incremental_fsync: false,
@@ -1700,7 +1700,7 @@ describe 'redis' do
         it { is_expected.to contain_file(config_file_orig).with('content' => %r{^rdb-save-incremental-fsync no$}) }
       end
 
-      describe 'test rdb-save-incremental-fsync Undef for redis6' do
+      describe 'test rdb-save-incremental-fsync Undef' do
         let(:params) do
           {
             rdb_save_incremental_fsync: Undef,
