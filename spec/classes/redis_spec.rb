@@ -1683,7 +1683,7 @@ describe 'redis' do
       describe 'test rdb-save-incremental-fsync undef' do
         let(:params) do
           {
-            rdb_save_incremental_fsync: 'undef',
+            rdb_save_incremental_fsync: Undef,
           }
         end
 
