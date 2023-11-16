@@ -98,7 +98,7 @@
   Integer[1, 100]                                    $active_defrag_cycle_max,
   Integer[1]                                         $active_defrag_max_scan_fields,
   Optional[Boolean]                                  $jemalloc_bg_thread,
-  Optional[Variant[Boolean,String]]                  $rdb_save_incremental_fsync,
+  Optional[Boolean]                                  $rdb_save_incremental_fsync,
 | -%>
 # Redis configuration file example
 
@@ -1031,7 +1031,7 @@ aof-rewrite-incremental-fsync <%= bool2str($aof_rewrite_incremental_fsync, 'yes'
 # in order to commit the file to the disk more incrementally and avoid
 # big latency spikes.
 <% unless $rdb_save_incremental_fsync == undef { -%>
-rdb_save_incremental_fsync <%= bool2str($rdb_save_incremental_fsync, 'yes', 'no') %>
+rdb-save-incremental-fsync <%= bool2str($rdb_save_incremental_fsync, 'yes', 'no') %>
 <% } -%>
 
 # Redis Cluster Settings
