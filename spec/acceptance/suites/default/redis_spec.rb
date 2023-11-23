@@ -47,7 +47,7 @@ describe 'redis' do
 
   it 'runs successfully when using Redis apt repository', if: (fact('os.family') == 'Debian') do
     pp = <<-EOS
-      class { '::redis':
+      class { 'redis':
         manage_repo    => true,
         redis_apt_repo => true,
       }
