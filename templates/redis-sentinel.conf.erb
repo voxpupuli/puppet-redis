@@ -54,3 +54,7 @@ tls-replication <%= @tls_replication ? 'yes' : 'no' %>
 
 loglevel <%= @log_level %>
 logfile <%= @log_file %>
+
+<% if @acls -%>
+<%= @acls %>
+<% end -%>

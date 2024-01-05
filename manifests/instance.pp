@@ -405,6 +405,7 @@ define redis::instance (
   Integer[1] $active_defrag_max_scan_fields                      = $redis::active_defrag_max_scan_fields,
   Optional[Boolean] $jemalloc_bg_thread                          = $redis::jemalloc_bg_thread,
   Optional[Boolean] $rdb_save_incremental_fsync                  = $redis::rdb_save_incremental_fsync,
+  Optional[String[1]] $acls                                      = $redis::acls,
 ) {
   if $title == 'default' {
     $redis_file_name_orig = $config_file_orig
@@ -596,6 +597,7 @@ define redis::instance (
         active_defrag_max_scan_fields => $active_defrag_max_scan_fields,
         jemalloc_bg_thread            => $jemalloc_bg_thread,
         rdb_save_incremental_fsync    => $rdb_save_incremental_fsync,
+        acls                          => $acls,
       }
     ),
   }

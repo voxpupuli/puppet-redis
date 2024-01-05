@@ -35,6 +35,7 @@ class redis::config {
       daemonize           => $redis::daemonize,
       service_name        => $redis::service_name,
       manage_service_file => $redis::manage_service_file,
+      acls                => $redis::acls,
     }
   }
 
