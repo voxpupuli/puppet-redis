@@ -329,6 +329,11 @@
 # @param dnf_module_stream
 #   Manage the DNF module and set the version. This only makes sense on distributions
 #   that use DNF package manager, such as EL8 or Fedora.
+# @param acls
+#   This is a way to pass raw ACLs to Redis. Must be in the form of
+#
+#     user USERNAME1 [additional ACL options]
+#     user USERNAME2 [additional ACL options]
 # @param manage_service_file
 #   Determine if the systemd service file should be managed
 #

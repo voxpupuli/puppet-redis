@@ -130,6 +130,12 @@
 # @param client_reconfig_script
 #   Path to the client-reconfig script
 #
+# @param acls
+#   This is a way to pass raw ACLs to Redis. Must be in the form of
+#
+#     user USERNAME1 [additional ACL options]
+#     user USERNAME2 [additional ACL options]
+#
 # @example Basic inclusion
 #   include redis::sentinel
 #
