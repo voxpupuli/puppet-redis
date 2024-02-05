@@ -186,7 +186,7 @@ class redis::sentinel (
   Stdlib::Absolutepath $working_dir = $redis::params::sentinel_working_dir,
   Optional[Stdlib::Absolutepath] $notification_script = undef,
   Optional[Stdlib::Absolutepath] $client_reconfig_script = undef,
-  Optional[String[1]] $acls = undef,
+  Array[String[1]] $acls = [],
 ) inherits redis::params {
   $auth_pass_unsensitive = if $auth_pass =~ Sensitive {
     $auth_pass.unwrap

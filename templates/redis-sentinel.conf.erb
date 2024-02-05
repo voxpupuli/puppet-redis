@@ -54,7 +54,9 @@ tls-replication <%= @tls_replication ? 'yes' : 'no' %>
 
 loglevel <%= @log_level %>
 logfile <%= @log_file %>
+<% unless @acls.empty? -%>
 
-<% if @acls -%>
-<%= @acls %>
+<%   @acls.each do |acl| -%>
+<%= acl %>
+<%   end -%>
 <% end -%>

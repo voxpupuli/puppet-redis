@@ -224,6 +224,7 @@ The following parameters are available in the `redis` class:
 * [`jemalloc_bg_thread`](#-redis--jemalloc_bg_thread)
 * [`rdb_save_incremental_fsync`](#-redis--rdb_save_incremental_fsync)
 * [`dnf_module_stream`](#-redis--dnf_module_stream)
+* [`acls`](#-redis--acls)
 * [`manage_service_file`](#-redis--manage_service_file)
 
 ##### <a name="-redis--activerehashing"></a>`activerehashing`
@@ -1370,6 +1371,17 @@ that use DNF package manager, such as EL8 or Fedora.
 
 Default value: `undef`
 
+##### <a name="-redis--acls"></a>`acls`
+
+Data type: `Array[String[1]]`
+
+This is a way to pass raw ACLs to Redis. Must be in the form of
+
+  user USERNAME1 [additional ACL options]
+  user USERNAME2 [additional ACL options]
+
+Default value: `[]`
+
 ##### <a name="-redis--manage_service_file"></a>`manage_service_file`
 
 Data type: `Boolean`
@@ -1511,6 +1523,7 @@ The following parameters are available in the `redis::sentinel` class:
 * [`working_dir`](#-redis--sentinel--working_dir)
 * [`notification_script`](#-redis--sentinel--notification_script)
 * [`client_reconfig_script`](#-redis--sentinel--client_reconfig_script)
+* [`acls`](#-redis--sentinel--acls)
 * [`service_ensure`](#-redis--sentinel--service_ensure)
 
 ##### <a name="-redis--sentinel--auth_pass"></a>`auth_pass`
@@ -1838,6 +1851,17 @@ Path to the client-reconfig script
 
 Default value: `undef`
 
+##### <a name="-redis--sentinel--acls"></a>`acls`
+
+Data type: `Array[String[1]]`
+
+This is a way to pass raw ACLs to Redis. Must be in the form of
+
+  user USERNAME1 [additional ACL options]
+  user USERNAME2 [additional ACL options]
+
+Default value: `[]`
+
 ##### <a name="-redis--sentinel--service_ensure"></a>`service_ensure`
 
 Data type: `Stdlib::Ensure::Service`
@@ -1986,6 +2010,7 @@ The following parameters are available in the `redis::instance` defined type:
 * [`active_defrag_max_scan_fields`](#-redis--instance--active_defrag_max_scan_fields)
 * [`jemalloc_bg_thread`](#-redis--instance--jemalloc_bg_thread)
 * [`rdb_save_incremental_fsync`](#-redis--instance--rdb_save_incremental_fsync)
+* [`acls`](#-redis--instance--acls)
 * [`output_buffer_limit_slave`](#-redis--instance--output_buffer_limit_slave)
 * [`output_buffer_limit_pubsub`](#-redis--instance--output_buffer_limit_pubsub)
 
@@ -2972,6 +2997,17 @@ When redis saves RDB file, if the following option is enabled
 the file will be fsync-ed every 32 MB of data generated.
 
 Default value: `$redis::rdb_save_incremental_fsync`
+
+##### <a name="-redis--instance--acls"></a>`acls`
+
+Data type: `Array[String[1]]`
+
+This is a way to pass raw ACLs to Redis. Must be in the form of
+
+  user USERNAME1 [additional ACL options]
+  user USERNAME2 [additional ACL options]
+
+Default value: `$redis::acls`
 
 ##### <a name="-redis--instance--output_buffer_limit_slave"></a>`output_buffer_limit_slave`
 

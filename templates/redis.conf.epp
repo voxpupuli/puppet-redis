@@ -99,7 +99,7 @@
   Integer[1]                                         $active_defrag_max_scan_fields,
   Optional[Boolean]                                  $jemalloc_bg_thread,
   Optional[Boolean]                                  $rdb_save_incremental_fsync,
-  Optional[String[1]]                                $acls,
+  Array[String[1]]                                   $acls,
 | -%>
 # Redis configuration file example
 
@@ -1202,7 +1202,9 @@ loadmodule <%= $module_path %>
 <% if $extra_config_file { -%>
 include <%= $extra_config_file %>
 <% } -%>
+<% unless $acls.empty { -%>
 
-<% if $acls { -%>
-<%= $acls %>
+<%   $acls.each |$acl| { -%>
+<%= $acl %>
+<%   } -%>
 <% } -%>
