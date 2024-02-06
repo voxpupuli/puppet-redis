@@ -279,10 +279,11 @@
 #   When redis saves RDB file, if the following option is enabled
 #   the file will be fsync-ed every 32 MB of data generated.
 # @param acls
-#   This is a way to pass raw ACLs to Redis. Must be in the form of
+#   This is a way to pass an array of raw ACLs to Redis. The ACLs must be
+#   in the form of:
 #
-#     user USERNAME1 [additional ACL options]
-#     user USERNAME2 [additional ACL options]
+#     user USERNAME [additional ACL options]
+#
 # @param output_buffer_limit_slave
 #   Value of client-output-buffer-limit-slave in redis config
 # @param output_buffer_limit_pubsub
