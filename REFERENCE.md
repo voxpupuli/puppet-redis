@@ -1855,10 +1855,10 @@ Default value: `undef`
 
 Data type: `Array[String[1]]`
 
-This is a way to pass raw ACLs to Redis. Must be in the form of
+This is a way to pass an array of raw ACLs to Sentinel. The ACLs must be
+in the form of:
 
-  user USERNAME1 [additional ACL options]
-  user USERNAME2 [additional ACL options]
+  user USERNAME [additional ACL options]
 
 Default value: `[]`
 
@@ -3002,10 +3002,10 @@ Default value: `$redis::rdb_save_incremental_fsync`
 
 Data type: `Array[String[1]]`
 
-This is a way to pass raw ACLs to Redis. Must be in the form of
+This is a way to pass an array of raw ACLs to Redis. The ACLs must be
+in the form of:
 
-  user USERNAME1 [additional ACL options]
-  user USERNAME2 [additional ACL options]
+  user USERNAME [additional ACL options]
 
 Default value: `$redis::acls`
 
