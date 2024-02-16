@@ -33,7 +33,7 @@ describe 'redis::instance example' do
     pp = <<-EOS
     $listening_ports = #{instances}
 
-    class { '::redis':
+    class { 'redis':
       default_install => false,
       service_enable  => false,
       service_ensure  => 'stopped',

@@ -59,7 +59,7 @@ include redis
 ##### Slave Node
 
 ```puppet
-class { '::redis':
+class { 'redis':
   bind    => '10.0.1.2',
   slaveof => '10.0.1.1 6379',
 }

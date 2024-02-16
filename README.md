@@ -13,13 +13,13 @@
 ### Standalone
 
 ```puppet
-include ::redis
+include redis
 ```
 
 ### Master node
 
 ```puppet
-class { '::redis':
+class { 'redis':
   bind => '10.0.1.1',
 }
 ```
@@ -27,7 +27,7 @@ class { '::redis':
 With authentication
 
 ```puppet
-class { '::redis':
+class { 'redis':
   bind       => '10.0.1.1',
   masterauth => 'secret',
 }
@@ -36,7 +36,7 @@ class { '::redis':
 ### Slave node
 
 ```puppet
-class { '::redis':
+class { 'redis':
   bind    => '10.0.1.2',
   slaveof => '10.0.1.1 6379',
 }
@@ -45,7 +45,7 @@ class { '::redis':
 With authentication
 
 ```puppet
-class { '::redis':
+class { 'redis':
   bind       => '10.0.1.2',
   slaveof    => '10.0.1.1 6379',
   masterauth => 'secret',
@@ -55,7 +55,7 @@ class { '::redis':
 ### Redis 3.0 Clustering
 
 ```puppet
-class { '::redis':
+class { 'redis':
   bind                 => '10.0.1.2',
   appendonly           => true,
   cluster_enabled      => true,
@@ -70,7 +70,7 @@ class { '::redis':
 ```puppet
 $listening_ports = [6379,6380,6381,6382]
 
-class { '::redis':
+class { 'redis':
   default_install => false,
   service_enable  => false,
   service_ensure  => 'stopped',
@@ -97,7 +97,7 @@ Disabled by default but if you really want the module to manage the required
 repositories you can use this snippet:
 
 ```puppet
-class { '::redis':
+class { 'redis':
   manage_repo => true,
 }
 ```
@@ -105,7 +105,7 @@ class { '::redis':
 On Ubuntu, you can use a PPA by using the `ppa_repo` parameter:
 
 ```puppet
-class { '::redis':
+class { 'redis':
   manage_repo => true,
   ppa_repo    => 'ppa:rwky/redis',
 }
@@ -120,13 +120,13 @@ Optionally install and configuration a redis-sentinel server.
 With default settings:
 
 ```puppet
-include ::redis::sentinel
+include redis::sentinel
 ```
 
 With adjustments:
 
 ```puppet
-class { '::redis::sentinel':
+class { 'redis::sentinel':
   master_name      => 'cow',
   redis_host       => '192.168.1.5',
   failover_timeout => 30000,
