@@ -1554,6 +1554,19 @@ describe 'redis' do
         }
       end
 
+      describe 'with acls' do
+        let(:params) do
+          {
+            acls: ['user readolny on nopass ~* resetchannels -@all +get'],
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).
+            with_content(%r{^user readolny on nopass ~\* resetchannels -@all \+get$})
+        }
+      end
+
       describe 'test io-threads for redis6' do
         let(:params) do
           {

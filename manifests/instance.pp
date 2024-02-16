@@ -278,6 +278,12 @@
 # @param rdb_save_incremental_fsync
 #   When redis saves RDB file, if the following option is enabled
 #   the file will be fsync-ed every 32 MB of data generated.
+# @param acls
+#   This is a way to pass an array of raw ACLs to Redis. The ACLs must be
+#   in the form of:
+#
+#     user USERNAME [additional ACL options]
+#
 # @param output_buffer_limit_slave
 #   Value of client-output-buffer-limit-slave in redis config
 # @param output_buffer_limit_pubsub
@@ -405,6 +411,7 @@ define redis::instance (
   Integer[1] $active_defrag_max_scan_fields                      = $redis::active_defrag_max_scan_fields,
   Optional[Boolean] $jemalloc_bg_thread                          = $redis::jemalloc_bg_thread,
   Optional[Boolean] $rdb_save_incremental_fsync                  = $redis::rdb_save_incremental_fsync,
+  Array[String[1]] $acls                                         = $redis::acls,
 ) {
   if $title == 'default' {
     $redis_file_name_orig = $config_file_orig
@@ -596,6 +603,7 @@ define redis::instance (
         active_defrag_max_scan_fields => $active_defrag_max_scan_fields,
         jemalloc_bg_thread            => $jemalloc_bg_thread,
         rdb_save_incremental_fsync    => $rdb_save_incremental_fsync,
+        acls                          => $acls,
       }
     ),
   }

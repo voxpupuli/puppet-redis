@@ -329,6 +329,12 @@
 # @param dnf_module_stream
 #   Manage the DNF module and set the version. This only makes sense on distributions
 #   that use DNF package manager, such as EL8 or Fedora.
+# @param acls
+#   This is a way to pass an array of raw ACLs to Redis. The ACLs must be
+#   in the form of:
+# 
+#     user USERNAME [additional ACL options]
+#
 # @param manage_service_file
 #   Determine if the systemd service file should be managed
 #
@@ -473,6 +479,7 @@ class redis (
   Optional[Boolean] $jemalloc_bg_thread                          = undef,
   Optional[Boolean] $rdb_save_incremental_fsync                  = undef,
   Optional[String[1]] $dnf_module_stream                         = undef,
+  Array[String[1]] $acls                                         = [],
 ) inherits redis::params {
   contain redis::preinstall
   contain redis::install
