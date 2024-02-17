@@ -29,66 +29,61 @@ describe 'redis::instance example' do
                  'redis'
                end
 
-  it 'runs successfully' do
-    pp = <<-EOS
-    $listening_ports = #{instances}
+  include_examples 'an idempotent resource' do
+    let(:manifest) do
+      <<~PUPPET
+        $listening_ports = #{instances}
 
-    class { 'redis':
-      default_install => false,
-      service_enable  => false,
-      service_ensure  => 'stopped',
-      protected_mode  => false,
-      bind            => [],
-    }
+        class { 'redis':
+          default_install => false,
+          service_enable  => false,
+          service_ensure  => 'stopped',
+          protected_mode  => false,
+          bind            => [],
+        }
 
-    $listening_ports.each |$port| {
-      $port_string = sprintf('%d',$port)
-      redis::instance { $port_string:
-        service_enable => true,
-        service_ensure => 'running',
-        port           => $port,
-        bind           => $facts['networking']['ip'],
-        dbfilename     => "${port}-dump.rdb",
-        appendfilename => "${port}-appendonly.aof",
-        appendfsync    => 'always',
-        require        => Class['Redis'],
-      }
-    }
-
-    EOS
-
-    # Apply twice to ensure no errors the second time.
-    apply_manifest(pp, catch_failures: true)
-    apply_manifest(pp, catch_changes: true)
+        $listening_ports.each |$port| {
+          $port_string = sprintf('%d',$port)
+          redis::instance { $port_string:
+            service_enable => true,
+            service_ensure => 'running',
+            port           => $port,
+            bind           => $facts['networking']['ip'],
+            dbfilename     => "${port}-dump.rdb",
+            appendfilename => "${port}-appendonly.aof",
+            appendfsync    => 'always',
+            require        => Class['Redis'],
+          }
+        }
+      PUPPET
+    end
   end
 
-  describe package(redis_name) do
-    it { is_expected.to be_installed }
-  end
+  specify { expect(package(redis_name)).to be_installed }
 
-  describe service(redis_name) do
-    it { is_expected.not_to be_enabled }
-    it { is_expected.not_to be_running }
+  specify do
+    expect(service(redis_name)).not_to be_enabled
+    expect(service(redis_name)).not_to be_running
   end
 
   instances.each do |instance|
-    describe file("/etc/systemd/system/redis-server-#{instance}.service") do
-      its(:content) { is_expected.to match %r{redis-server-#{instance}.conf} }
+    specify do
+      expect(file("/etc/systemd/system/redis-server-#{instance}.service")).
+        to be_file.
+        and have_attributes(content: include("redis-server-#{instance}.conf"))
     end
 
-    describe service("redis-server-#{instance}") do
-      it { is_expected.to be_enabled }
-      it { is_expected.to be_running }
+    specify { expect(service("redis-server-#{instance}")).to be_enabled.and be_running }
+
+    specify do
+      expect(file("#{config_path}/redis-server-#{instance}.conf")).
+        to be_file.
+        and have_attributes(content: include("port #{instance}"))
     end
 
-    describe file("#{config_path}/redis-server-#{instance}.conf") do
-      its(:content) { is_expected.to match %r{port #{instance}} }
-    end
-
-    context "redis instance #{instance} should respond to ping command" do
-      describe command("redis-cli -h #{fact('networking.ip')} -p #{instance} ping") do
-        its(:stdout) { is_expected.to match %r{PONG} }
-      end
+    specify "redis instance #{instance} should respond to ping command" do
+      expect(command("redis-cli -h #{fact('networking.ip')} -p #{instance} ping")).
+        to have_attributes(stdout: %r{PONG})
     end
   end
 end
