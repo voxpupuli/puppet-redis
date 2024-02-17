@@ -74,7 +74,7 @@ describe 'redis' do
 
             it { is_expected.to compile.with_all_deps }
 
-            if facts[:operatingsystem] == 'CentOS'
+            if facts[:os]['name'] == 'CentOS'
               it { is_expected.to contain_package('centos-release-scl-rh') }
             else
               it { is_expected.not_to contain_package('centos-release-scl-rh') }
@@ -501,7 +501,7 @@ describe 'redis' do
       describe 'with parameter: manage_repo' do
         let(:params) { { manage_repo: true } }
 
-        if facts[:osfamily] == 'RedHat' && facts[:os]['release']['major'].to_i <= 7
+        if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'].to_i <= 7
           it { is_expected.to contain_class('epel') }
         else
           it { is_expected.not_to contain_class('epel') }
@@ -510,7 +510,7 @@ describe 'redis' do
         describe 'with ppa' do
           let(:params) { super().merge(ppa_repo: 'ppa:rwky/redis') }
 
-          if facts[:operatingsystem] == 'Ubuntu'
+          if facts[:os]['name'] == 'Ubuntu'
             it { is_expected.to contain_apt__ppa('ppa:rwky/redis') }
           else
             it { is_expected.not_to contain_apt__ppa('ppa:rwky/redis') }
