@@ -17,7 +17,7 @@
 class redis::ulimit {
   assert_private('The redis::ulimit class is only to be called from the redis::config class')
 
-  if $redis::managed_by_cluster_manager {
+  if $redis::managed_by_cluster_manager and $facts['kernel'] == 'Linux' {
     file { '/etc/security/limits.d/redis.conf':
       ensure  => 'file',
       owner   => 'root',
