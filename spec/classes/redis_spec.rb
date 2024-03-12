@@ -1715,6 +1715,63 @@ describe 'redis' do
         it { is_expected.to contain_systemd__unit_file("#{service_name}.service").with('content' => %r{^TimeoutStartSec=600$}) }
         it { is_expected.to contain_systemd__unit_file("#{service_name}.service").with('content' => %r{^TimeoutStopSec=300$}) }
       end
+
+      describe 'with non default ownership' do
+        let :params do
+          {
+            workdir: '/tmp/rediswork',
+            workdir_group: 'wdirgroup',
+            workdir_owner: 'wdirowner',
+            config_group: 'cfggroup',
+          }
+        end
+
+        it {
+          is_expected.to contain_file('/tmp/rediswork').with(
+            'ensure' => 'directory',
+            'owner' => 'wdirowner',
+            'group' => 'wdirgroup',
+            'mode' => '0750'
+          )
+        }
+
+        if facts[:os]['family'] == 'Debian'
+          it {
+            is_expected.to contain_file('/etc/default/redis-server').
+              with(
+                'ensure' => 'file',
+                'owner' => 'redis',
+                'group' => 'cfggroup',
+                'mode' => '0640'
+              )
+          }
+        end
+      end
+
+      describe 'overwrite debian directory config' do
+        let :params do
+          {
+            config_owner: 'redis',
+            config_group: 'cfggroup',
+            config_file_mode: '0333',
+            debdefault_group: 'dd_group',
+            debdefault_owner: 'dd_owner',
+            debdefault_file_mode: '0242',
+          }
+        end
+
+        if facts[:os]['family'] == 'Debian'
+          it {
+            is_expected.to contain_file('/etc/default/redis-server').
+              with(
+                'ensure' => 'file',
+                'owner' => 'dd_owner',
+                'group' => 'dd_group',
+                'mode' => '0242'
+              )
+          }
+        end
+      end
     end
   end
 end

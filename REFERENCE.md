@@ -200,6 +200,11 @@ The following parameters are available in the `redis` class:
 * [`unixsocketperm`](#-redis--unixsocketperm)
 * [`workdir`](#-redis--workdir)
 * [`workdir_mode`](#-redis--workdir_mode)
+* [`workdir_group`](#-redis--workdir_group)
+* [`workdir_owner`](#-redis--workdir_owner)
+* [`debdefault_group`](#-redis--debdefault_group)
+* [`debdefault_file_mode`](#-redis--debdefault_file_mode)
+* [`debdefault_owner`](#-redis--debdefault_owner)
 * [`zset_max_ziplist_entries`](#-redis--zset_max_ziplist_entries)
 * [`zset_max_ziplist_value`](#-redis--zset_max_ziplist_value)
 * [`cluster_enabled`](#-redis--cluster_enabled)
@@ -1160,6 +1165,49 @@ Data type: `Stdlib::Filemode`
 Adjust mode for data directory.
 
 Default value: `'0750'`
+
+##### <a name="-redis--workdir_group"></a>`workdir_group`
+
+Data type: `Optional[String[1]]`
+
+Adjust filesystem group for $workdir.
+
+Default value: `undef`
+
+##### <a name="-redis--workdir_owner"></a>`workdir_owner`
+
+Data type: `Optional[String[1]]`
+
+Adjust filesystem owner for $workdir.
+
+Default value: `undef`
+
+##### <a name="-redis--debdefault_group"></a>`debdefault_group`
+
+Data type: `Optional[String[1]]`
+
+group of /etc/defaults/redis on Debian systems
+if undef, $redis::config_group is taken
+
+Default value: `undef`
+
+##### <a name="-redis--debdefault_file_mode"></a>`debdefault_file_mode`
+
+Data type: `Optional[Stdlib::Filemode]`
+
+filemode of /etc/defaults/redis on Debian systems
+if undef, $redis::config_file_mode is taken
+
+Default value: `undef`
+
+##### <a name="-redis--debdefault_owner"></a>`debdefault_owner`
+
+Data type: `Optional[String[1]]`
+
+owner of /etc/defaults/redis on Debian systems
+if undef, $redis::config_owner is taken
+
+Default value: `undef`
 
 ##### <a name="-redis--zset_max_ziplist_entries"></a>`zset_max_ziplist_entries`
 
