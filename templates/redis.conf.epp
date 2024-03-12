@@ -100,6 +100,7 @@
   Optional[Boolean]                                  $jemalloc_bg_thread,
   Optional[Boolean]                                  $rdb_save_incremental_fsync,
   Array[String[1]]                                   $acls,
+  Hash[String[1],Variant[String[1], Integer]]        $custom_options,
 | -%>
 # Redis configuration file example
 
@@ -1178,6 +1179,9 @@ active-defrag-max-scan-fields <%= $active_defrag_max_scan_fields %>
 
 # Jemalloc background thread for purging will be enabled by default
 <% if $jemalloc_bg_thread { -%>jemalloc-bg-thread <%= $jemalloc_bg_thread ? {true => 'yes', default => 'no'} %><% } -%>
+<% $custom_options.each |String $k, String $v| { -%>
+<%= $k %> <%= $v %>
+<% } -%>
 
 ################################## MODULES #####################################
 
