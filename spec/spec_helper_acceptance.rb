@@ -5,7 +5,6 @@ require 'voxpupuli/acceptance/spec_helper_acceptance'
 configure_beaker do |host|
   # sysctl is untestable in docker
   install_puppet_module_via_pmt_on(host, 'puppet-augeasproviders_sysctl') unless host['hypervisor'] == 'docker'
-  install_puppet_module_via_pmt_on(host, 'puppet-epel') if fact_on(host, 'os.family') == 'RedHat' && fact_on(host, 'os.release.major').to_i == 7
 
   unless fact_on(host, 'os.family') == 'RedHat' && fact_on(host, 'os.release.major').to_i >= 9
     # puppet-bolt rpm for CentOS 9 is not yet available

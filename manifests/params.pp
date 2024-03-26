@@ -1,6 +1,6 @@
 # @summary This class provides a number of parameters.
 # @api private
-class redis::params inherits redis::globals {
+class redis::params {
   case $facts['os']['family'] {
     'Debian': {
       $config_dir                = '/etc/redis'
@@ -47,51 +47,31 @@ class redis::params inherits redis::globals {
       $sentinel_daemonize   = false
       $sentinel_working_dir = '/tmp'
 
-      $scl = $redis::globals::scl
-      if $scl {
-        $config_dir                = "/etc/opt/rh/${scl}"
-        $config_file               = "/etc/opt/rh/${scl}/redis.conf"
-        $config_file_orig          = "/etc/opt/rh/${scl}/redis.conf.puppet"
-        $log_dir                   = "/var/opt/rh/${scl}/log/redis"
-        $package_name              = "${scl}-redis"
-        $pid_file                  = "/var/opt/rh/${scl}/run/redis_6379.pid"
-        $service_name              = "${scl}-redis"
-        $workdir                   = "/var/opt/rh/${scl}/lib/redis"
-        $bin_path                  = "/opt/rh/${scl}/root/usr/bin"
-
-        $sentinel_config_file      = "${config_dir}/redis-sentinel.conf"
-        $sentinel_config_file_orig = "${config_dir}/redis-sentinel.conf.puppet"
-        $sentinel_service_name     = "${scl}-redis-sentinel"
-        $sentinel_package_name     = $package_name
-        $sentinel_pid_file         = "/var/opt/rh/${scl}/run/redis-sentinel.pid"
-        $sentinel_log_file         = "/var/opt/rh/${scl}/log/redis/sentinel.log"
+      $config_dir                  = '/etc/redis'
+      if (versioncmp($facts['os']['release']['major'], '9') >= 0) {
+        $config_file               = '/etc/redis/redis.conf'
+        $config_file_orig          = '/etc/redis/redis.conf.puppet'
       } else {
-        $config_dir                  = '/etc/redis'
-        if (versioncmp($facts['os']['release']['major'], '9') >= 0) {
-          $config_file               = '/etc/redis/redis.conf'
-          $config_file_orig          = '/etc/redis/redis.conf.puppet'
-        } else {
-          $config_file               = '/etc/redis.conf'
-          $config_file_orig          = '/etc/redis.conf.puppet'
-        }
-        $log_dir                     = '/var/log/redis'
-        $package_name                = 'redis'
-        $pid_file                    = '/var/run/redis_6379.pid'
-        $service_name                = 'redis'
-        $workdir                     = '/var/lib/redis'
-        $bin_path                    = '/usr/bin'
-        if (versioncmp($facts['os']['release']['major'], '9') >= 0) {
-          $sentinel_config_file      = '/etc/redis/sentinel.conf'
-          $sentinel_config_file_orig = '/etc/redis/sentinel.conf.puppet'
-        } else {
-          $sentinel_config_file      = '/etc/redis-sentinel.conf'
-          $sentinel_config_file_orig = '/etc/redis-sentinel.conf.puppet'
-        }
-        $sentinel_service_name       = 'redis-sentinel'
-        $sentinel_package_name       = 'redis'
-        $sentinel_pid_file           = '/var/run/redis/redis-sentinel.pid'
-        $sentinel_log_file           = '/var/log/redis/sentinel.log'
+        $config_file               = '/etc/redis.conf'
+        $config_file_orig          = '/etc/redis.conf.puppet'
       }
+      $log_dir                     = '/var/log/redis'
+      $package_name                = 'redis'
+      $pid_file                    = '/var/run/redis_6379.pid'
+      $service_name                = 'redis'
+      $workdir                     = '/var/lib/redis'
+      $bin_path                    = '/usr/bin'
+      if (versioncmp($facts['os']['release']['major'], '9') >= 0) {
+        $sentinel_config_file      = '/etc/redis/sentinel.conf'
+        $sentinel_config_file_orig = '/etc/redis/sentinel.conf.puppet'
+      } else {
+        $sentinel_config_file      = '/etc/redis-sentinel.conf'
+        $sentinel_config_file_orig = '/etc/redis-sentinel.conf.puppet'
+      }
+      $sentinel_service_name       = 'redis-sentinel'
+      $sentinel_package_name       = 'redis'
+      $sentinel_pid_file           = '/var/run/redis/redis-sentinel.pid'
+      $sentinel_log_file           = '/var/log/redis/sentinel.log'
     }
 
     'FreeBSD': {

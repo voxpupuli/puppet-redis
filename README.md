@@ -111,7 +111,7 @@ class { 'redis':
 }
 ```
 
-**Warning** note that PPA usage requires [puppetlabs/apt](https://forge.puppet.com/puppetlabs/apt) on Ubuntu distros. On EL7 [puppet/epel](https://forge.puppet.com/puppet/epel) is needed unless the installation is using Software Collections. In that case will install `centos-release-scl-rh` from CentOS extras. For RHEL or other RHEL-derivatives this isn't managed.
+**Warning** note that PPA usage requires [puppetlabs/apt](https://forge.puppet.com/puppetlabs/apt) on Ubuntu distros
 
 ### Redis Sentinel
 
@@ -135,7 +135,7 @@ class { 'redis::sentinel':
 
 ### Soft dependency
 
-When managing the repo, it either needs [puppetlabs/apt](https://forge.puppet.com/puppetlabs/apt) or [puppet/epel](https://forge.puppet.com/puppet/epel).
+When managing the repo, it needs [puppetlabs/apt](https://forge.puppet.com/puppetlabs/apt).
 
 For administration of sysctl it depends on [herculesteam/augeasproviders_sysctl](https://forge.puppet.com/herculesteam/augeasproviders_sysctl).
 

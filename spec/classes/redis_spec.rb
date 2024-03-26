@@ -51,37 +51,6 @@ describe 'redis' do
 
         it { is_expected.to contain_service(service_name).with_ensure('running').with_enable('true') }
 
-        context 'with SCL', if: facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'].to_i < 8 do
-          let(:pre_condition) do
-            <<-PUPPET
-            class { 'redis::globals':
-              scl => 'rh-redis5',
-            }
-            PUPPET
-          end
-
-          it { is_expected.to compile.with_all_deps }
-
-          it do
-            is_expected.to create_class('redis').
-              with_package_name('rh-redis5-redis').
-              with_config_file('/etc/opt/rh/rh-redis5/redis.conf').
-              with_service_name('rh-redis5-redis')
-          end
-
-          context 'manage_repo => true' do
-            let(:params) { { manage_repo: true } }
-
-            it { is_expected.to compile.with_all_deps }
-
-            if facts[:os]['name'] == 'CentOS'
-              it { is_expected.to contain_package('centos-release-scl-rh') }
-            else
-              it { is_expected.not_to contain_package('centos-release-scl-rh') }
-            end
-          end
-        end
-
         describe 'with manage_dnf_module true', if: facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'].to_i == 8 do
           let(:pre_condition) do
             <<-PUPPET
@@ -500,12 +469,6 @@ describe 'redis' do
 
       describe 'with parameter: manage_repo' do
         let(:params) { { manage_repo: true } }
-
-        if facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'].to_i <= 7
-          it { is_expected.to contain_class('epel') }
-        else
-          it { is_expected.not_to contain_class('epel') }
-        end
 
         describe 'with ppa' do
           let(:params) { super().merge(ppa_repo: 'ppa:rwky/redis') }
