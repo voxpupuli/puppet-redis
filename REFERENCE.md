@@ -10,7 +10,6 @@
 
 * [`redis`](#redis): This class installs redis
 * [`redis::administration`](#redis--administration): Allows various administrative settings for Redis
-* [`redis::globals`](#redis--globals): Set a global config for Redis
 * [`redis::sentinel`](#redis--sentinel): Install redis-sentinel
 
 #### Private Classes
@@ -1488,24 +1487,6 @@ Data type: `Integer[0]`
 Set somaxconn value
 
 Default value: `65535`
-
-### <a name="redis--globals"></a>`redis::globals`
-
-Set a global config for Redis
-
-#### Parameters
-
-The following parameters are available in the `redis::globals` class:
-
-* [`scl`](#-redis--globals--scl)
-
-##### <a name="-redis--globals--scl"></a>`scl`
-
-Data type: `Optional[String]`
-
-Use a specific Software Collection on Red Hat 7 based systems
-
-Default value: `undef`
 
 ### <a name="redis--sentinel"></a>`redis::sentinel`
 
