@@ -35,7 +35,7 @@
   Integer[0]                                         $slave_priority,
   Integer[0]                                         $min_slaves_to_write,
   Integer[0]                                         $min_slaves_max_lag,
-  Optional[String[1]]                                $requirepass,
+  Optional[Variant[String[1],Sensitive[String[1]]]]  $requirepass,
   Hash[String,String]                                $rename_commands,
   Integer[1]                                         $maxclients,
   Optional[Variant[Integer, String]]                 $maxmemory,
