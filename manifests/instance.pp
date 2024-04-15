@@ -483,11 +483,13 @@ define redis::instance (
     }
   } else {
     if $ulimit_managed {
-      systemd::service_limits { "${service_name}.service":
-        limits          => {
+      systemd::manage_dropin { "${service_name}-90-limits.conf":
+        ensure         => present,
+        unit           => "${service_name}.service",
+        service_entry  => {
           'LimitNOFILE' => $ulimit,
         },
-        restart_service => false,
+        notify_service => false,
       }
     }
   }

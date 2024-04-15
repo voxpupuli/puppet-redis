@@ -109,10 +109,10 @@ describe 'redis' do
             is_expected.to contain_file("/etc/systemd/system/#{service_name}.service.d/limit.conf").
               with_ensure('absent')
 
-            is_expected.to contain_systemd__service_limits("#{service_name}.service").
-              with_limits({ 'LimitNOFILE' => 7777 }).
-              with_restart_service(false).
-              with_ensure('present')
+            is_expected.to contain_systemd__manage_dropin("#{service_name}-90-limits.conf").
+              with_service_entry({ 'LimitNOFILE' => 7777 }).
+              with_ensure('present').
+              with_unit("#{service_name}.service")
           end
         end
 
