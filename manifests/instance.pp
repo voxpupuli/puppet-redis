@@ -347,7 +347,7 @@ define redis::instance (
   Boolean $repl_disable_tcp_nodelay                              = $redis::repl_disable_tcp_nodelay,
   Integer[1] $repl_ping_slave_period                             = $redis::repl_ping_slave_period,
   Integer[1] $repl_timeout                                       = $redis::repl_timeout,
-  Optional[Variant[String, Deferred]] $requirepass               = $redis::requirepass,
+  Optional[Variant[String, Sensitive[String[1]], Deferred]] $requirepass = $redis::requirepass,
   Boolean $save_db_to_disk                                       = $redis::save_db_to_disk,
   Hash $save_db_to_disk_interval                                 = $redis::save_db_to_disk_interval,
   String[1] $service_user                                        = $redis::service_user,

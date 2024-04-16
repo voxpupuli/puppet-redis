@@ -810,7 +810,7 @@ Default value: `60`
 
 ##### <a name="-redis--requirepass"></a>`requirepass`
 
-Data type: `Optional[Variant[String, Deferred]]`
+Data type: `Optional[Variant[String, Sensitive[String[1]], Deferred]]`
 
 Require clients to issue AUTH <PASSWORD> before processing any other commands.
 
@@ -2487,7 +2487,7 @@ Default value: `$redis::repl_timeout`
 
 ##### <a name="-redis--instance--requirepass"></a>`requirepass`
 
-Data type: `Optional[Variant[String, Deferred]]`
+Data type: `Optional[Variant[String, Sensitive[String[1]], Deferred]]`
 
 Require clients to issue AUTH <PASSWORD> before processing any other
 commands.

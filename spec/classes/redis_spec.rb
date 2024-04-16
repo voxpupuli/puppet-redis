@@ -910,6 +910,20 @@ describe 'redis' do
         }
       end
 
+      describe 'with parameter requirepass marked as sensitive' do
+        let(:params) do
+          {
+            requirepass: sensitive('_VALUE_')
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => sensitive(%r{requirepass.*_VALUE_})
+          )
+        }
+      end
+
       describe 'with parameter save_db_to_disk' do
         context 'true' do
           let(:params) do

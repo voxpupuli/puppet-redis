@@ -425,7 +425,7 @@ class redis (
   Boolean $repl_disable_tcp_nodelay                              = false,
   Integer[1] $repl_ping_slave_period                             = 10,
   Integer[1] $repl_timeout                                       = 60,
-  Optional[Variant[String, Deferred]] $requirepass               = undef,
+  Optional[Variant[String, Sensitive[String[1]], Deferred]] $requirepass = undef,
   Boolean $save_db_to_disk                                       = true,
   Hash $save_db_to_disk_interval                                 = { '900' => '1', '300' => '10', '60' => '10000' },
   Boolean $service_enable                                        = true,
