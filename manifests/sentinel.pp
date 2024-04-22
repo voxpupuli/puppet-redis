@@ -194,12 +194,13 @@ class redis::sentinel (
     $auth_pass
   }
 
-  require 'redis'
+  contain 'redis'
 
   if $package_name != $redis::package_name {
     ensure_packages([$package_name], {
         ensure => $package_ensure
     })
+    Package[$package_name] -> Class['redis']
   }
   Package[$package_name] -> File[$config_file_orig]
 
