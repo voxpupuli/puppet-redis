@@ -3,21 +3,10 @@
 require 'spec_helper_acceptance'
 
 describe 'redis' do
-  redis_name = case fact('osfamily')
-               when 'Debian'
-                 'redis-server'
-               else
-                 'redis'
-               end
+  redis_name = fact('os.family') == 'Debian' ? 'redis-server' : 'redis'
 
-  it 'runs successfully' do
-    pp = <<-EOS
-    include redis
-    EOS
-
-    # Apply twice to ensure no errors the second time.
-    apply_manifest(pp, catch_failures: true)
-    apply_manifest(pp, catch_changes: true)
+  include_examples 'an idempotent resource' do
+    let(:manifest) { 'include redis' }
   end
 
   it 'returns a fact' do
@@ -31,23 +20,17 @@ describe 'redis' do
     end
   end
 
-  describe package(redis_name) do
-    it { is_expected.to be_installed }
-  end
+  specify { expect(package(redis_name)).to be_installed }
+  specify { expect(service(redis_name)).to be_running }
 
-  describe service(redis_name) do
-    it { is_expected.to be_running }
-  end
-
-  context 'redis should respond to ping command' do
-    describe command('redis-cli ping') do
-      its(:stdout) { is_expected.to match %r{PONG} }
-    end
+  specify 'redis should respond to ping command' do
+    expect(command('redis-cli ping')).
+      to have_attributes(stdout: %r{PONG})
   end
 
   it 'runs successfully when using Redis apt repository', if: (fact('os.family') == 'Debian') do
     pp = <<-EOS
-      class { '::redis':
+      class { 'redis':
         manage_repo    => true,
         redis_apt_repo => true,
       }

@@ -51,37 +51,6 @@ describe 'redis' do
 
         it { is_expected.to contain_service(service_name).with_ensure('running').with_enable('true') }
 
-        context 'with SCL', if: facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'].to_i < 8 do
-          let(:pre_condition) do
-            <<-PUPPET
-            class { 'redis::globals':
-              scl => 'rh-redis5',
-            }
-            PUPPET
-          end
-
-          it { is_expected.to compile.with_all_deps }
-
-          it do
-            is_expected.to create_class('redis').
-              with_package_name('rh-redis5-redis').
-              with_config_file('/etc/opt/rh/rh-redis5/redis.conf').
-              with_service_name('rh-redis5-redis')
-          end
-
-          context 'manage_repo => true' do
-            let(:params) { { manage_repo: true } }
-
-            it { is_expected.to compile.with_all_deps }
-
-            if facts[:operatingsystem] == 'CentOS'
-              it { is_expected.to contain_package('centos-release-scl-rh') }
-            else
-              it { is_expected.not_to contain_package('centos-release-scl-rh') }
-            end
-          end
-        end
-
         describe 'with manage_dnf_module true', if: facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'].to_i == 8 do
           let(:pre_condition) do
             <<-PUPPET
@@ -140,10 +109,10 @@ describe 'redis' do
             is_expected.to contain_file("/etc/systemd/system/#{service_name}.service.d/limit.conf").
               with_ensure('absent')
 
-            is_expected.to contain_systemd__service_limits("#{service_name}.service").
-              with_limits({ 'LimitNOFILE' => 7777 }).
-              with_restart_service(false).
-              with_ensure('present')
+            is_expected.to contain_systemd__manage_dropin("#{service_name}-90-limits.conf").
+              with_service_entry({ 'LimitNOFILE' => 7777 }).
+              with_ensure('present').
+              with_unit("#{service_name}.service")
           end
         end
 
@@ -501,16 +470,10 @@ describe 'redis' do
       describe 'with parameter: manage_repo' do
         let(:params) { { manage_repo: true } }
 
-        if facts[:osfamily] == 'RedHat' && facts[:os]['release']['major'].to_i <= 7
-          it { is_expected.to contain_class('epel') }
-        else
-          it { is_expected.not_to contain_class('epel') }
-        end
-
         describe 'with ppa' do
           let(:params) { super().merge(ppa_repo: 'ppa:rwky/redis') }
 
-          if facts[:operatingsystem] == 'Ubuntu'
+          if facts[:os]['name'] == 'Ubuntu'
             it { is_expected.to contain_apt__ppa('ppa:rwky/redis') }
           else
             it { is_expected.not_to contain_apt__ppa('ppa:rwky/redis') }
@@ -943,6 +906,20 @@ describe 'redis' do
         it {
           is_expected.to contain_file(config_file_orig).with(
             'content' => %r{requirepass.*_VALUE_}
+          )
+        }
+      end
+
+      describe 'with parameter requirepass marked as sensitive' do
+        let(:params) do
+          {
+            requirepass: sensitive('_VALUE_')
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => sensitive(%r{requirepass.*_VALUE_})
           )
         }
       end
@@ -1554,6 +1531,19 @@ describe 'redis' do
         }
       end
 
+      describe 'with acls' do
+        let(:params) do
+          {
+            acls: ['user readolny on nopass ~* resetchannels -@all +get'],
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).
+            with_content(%r{^user readolny on nopass ~\* resetchannels -@all \+get$})
+        }
+      end
+
       describe 'test io-threads for redis6' do
         let(:params) do
           {
@@ -1701,6 +1691,63 @@ describe 'redis' do
 
         it { is_expected.to contain_systemd__unit_file("#{service_name}.service").with('content' => %r{^TimeoutStartSec=600$}) }
         it { is_expected.to contain_systemd__unit_file("#{service_name}.service").with('content' => %r{^TimeoutStopSec=300$}) }
+      end
+
+      describe 'with non default ownership' do
+        let :params do
+          {
+            workdir: '/tmp/rediswork',
+            workdir_group: 'wdirgroup',
+            workdir_owner: 'wdirowner',
+            config_group: 'cfggroup',
+          }
+        end
+
+        it {
+          is_expected.to contain_file('/tmp/rediswork').with(
+            'ensure' => 'directory',
+            'owner' => 'wdirowner',
+            'group' => 'wdirgroup',
+            'mode' => '0750'
+          )
+        }
+
+        if facts[:os]['family'] == 'Debian'
+          it {
+            is_expected.to contain_file('/etc/default/redis-server').
+              with(
+                'ensure' => 'file',
+                'owner' => 'redis',
+                'group' => 'cfggroup',
+                'mode' => '0640'
+              )
+          }
+        end
+      end
+
+      describe 'overwrite debian directory config' do
+        let :params do
+          {
+            config_owner: 'redis',
+            config_group: 'cfggroup',
+            config_file_mode: '0333',
+            debdefault_group: 'dd_group',
+            debdefault_owner: 'dd_owner',
+            debdefault_file_mode: '0242',
+          }
+        end
+
+        if facts[:os]['family'] == 'Debian'
+          it {
+            is_expected.to contain_file('/etc/default/redis-server').
+              with(
+                'ensure' => 'file',
+                'owner' => 'dd_owner',
+                'group' => 'dd_group',
+                'mode' => '0242'
+              )
+          }
+        end
       end
     end
   end

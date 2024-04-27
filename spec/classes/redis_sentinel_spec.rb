@@ -84,6 +84,19 @@ describe 'redis::sentinel' do
         it { is_expected.to contain_package(sentinel_package_name).with_ensure('installed') }
       end
 
+      describe 'with acls' do
+        let(:params) do
+          {
+            acls: ['user readolny on nopass ~* resetchannels -@all +get'],
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).
+            with_content(%r{^user readolny on nopass ~\* resetchannels -@all \+get$})
+        }
+      end
+
       describe 'with custom parameters' do
         let(:pre_condition) do
           <<-PUPPET

@@ -4,6 +4,43 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v10.0.0](https://github.com/voxpupuli/puppet-redis/tree/v10.0.0) (2024-02-16)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v9.3.0...v10.0.0)
+
+**Breaking changes:**
+
+- remove legacy Debian 10 / Ubuntu 18.04 / CentOS 7 [\#504](https://github.com/voxpupuli/puppet-redis/pull/504) ([rwaffen](https://github.com/rwaffen))
+
+**Implemented enhancements:**
+
+- Add Ubuntu 22.04 [\#505](https://github.com/voxpupuli/puppet-redis/pull/505) ([rwaffen](https://github.com/rwaffen))
+- Implement rudimentary Redis and Sentinel ACLs [\#502](https://github.com/voxpupuli/puppet-redis/pull/502) ([TwizzyDizzy](https://github.com/TwizzyDizzy))
+
+**Merged pull requests:**
+
+- Remove legacy top-scope syntax [\#498](https://github.com/voxpupuli/puppet-redis/pull/498) ([smortex](https://github.com/smortex))
+
+## [v9.3.0](https://github.com/voxpupuli/puppet-redis/tree/v9.3.0) (2023-11-14)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v9.2.0...v9.3.0)
+
+**Implemented enhancements:**
+
+- Add Puppet 8 support [\#484](https://github.com/voxpupuli/puppet-redis/pull/484) ([bastelfreak](https://github.com/bastelfreak))
+
+## [v9.2.0](https://github.com/voxpupuli/puppet-redis/tree/v9.2.0) (2023-11-03)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v9.1.0...v9.2.0)
+
+**Implemented enhancements:**
+
+- Allow puppet/systemd 6.x [\#490](https://github.com/voxpupuli/puppet-redis/pull/490) ([evgeni](https://github.com/evgeni))
+
+**Merged pull requests:**
+
+- fix spelling of "redis dnf module" [\#491](https://github.com/voxpupuli/puppet-redis/pull/491) ([evgeni](https://github.com/evgeni))
+
 ## [v9.1.0](https://github.com/voxpupuli/puppet-redis/tree/v9.1.0) (2023-07-29)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v9.0.0...v9.1.0)

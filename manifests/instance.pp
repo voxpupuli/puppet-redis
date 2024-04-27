@@ -278,10 +278,19 @@
 # @param rdb_save_incremental_fsync
 #   When redis saves RDB file, if the following option is enabled
 #   the file will be fsync-ed every 32 MB of data generated.
+# @param acls
+#   This is a way to pass an array of raw ACLs to Redis. The ACLs must be
+#   in the form of:
+#
+#     user USERNAME [additional ACL options]
+#
 # @param output_buffer_limit_slave
 #   Value of client-output-buffer-limit-slave in redis config
 # @param output_buffer_limit_pubsub
 #   Value of client-output-buffer-limit-pubsub in redis config
+#
+# @param custom_options
+#   hash of custom options, not available as direct parameter.
 #
 define redis::instance (
   Boolean $activerehashing                                       = $redis::activerehashing,
@@ -338,7 +347,7 @@ define redis::instance (
   Boolean $repl_disable_tcp_nodelay                              = $redis::repl_disable_tcp_nodelay,
   Integer[1] $repl_ping_slave_period                             = $redis::repl_ping_slave_period,
   Integer[1] $repl_timeout                                       = $redis::repl_timeout,
-  Optional[Variant[String, Deferred]] $requirepass               = $redis::requirepass,
+  Optional[Variant[String, Sensitive[String[1]], Deferred]] $requirepass = $redis::requirepass,
   Boolean $save_db_to_disk                                       = $redis::save_db_to_disk,
   Hash $save_db_to_disk_interval                                 = $redis::save_db_to_disk_interval,
   String[1] $service_user                                        = $redis::service_user,
@@ -405,6 +414,8 @@ define redis::instance (
   Integer[1] $active_defrag_max_scan_fields                      = $redis::active_defrag_max_scan_fields,
   Optional[Boolean] $jemalloc_bg_thread                          = $redis::jemalloc_bg_thread,
   Optional[Boolean] $rdb_save_incremental_fsync                  = $redis::rdb_save_incremental_fsync,
+  Array[String[1]] $acls                                         = $redis::acls,
+  Hash[String[1],Variant[String[1], Integer]] $custom_options    = {},
 ) {
   if $title == 'default' {
     $redis_file_name_orig = $config_file_orig
@@ -472,11 +483,13 @@ define redis::instance (
     }
   } else {
     if $ulimit_managed {
-      systemd::service_limits { "${service_name}.service":
-        limits          => {
+      systemd::manage_dropin { "${service_name}-90-limits.conf":
+        ensure         => present,
+        unit           => "${service_name}.service",
+        service_entry  => {
           'LimitNOFILE' => $ulimit,
         },
-        restart_service => false,
+        notify_service => false,
       }
     }
   }
@@ -488,116 +501,139 @@ define redis::instance (
 
   $bind_arr = [$bind].flatten
 
+  $_template_params = {
+    daemonize                     => $daemonize,
+    pid_file                      => $pid_file,
+    protected_mode                => $protected_mode,
+    port                          => $port,
+    tcp_backlog                   => $tcp_backlog,
+    bind_arr                      => $bind_arr,
+    unixsocket                    => $unixsocket,
+    unixsocketperm                => $unixsocketperm,
+    timeout                       => $timeout,
+    tcp_keepalive                 => $tcp_keepalive,
+    log_level                     => $log_level,
+    log_file                      => $_real_log_file,
+    syslog_enabled                => $syslog_enabled,
+    syslog_facility               => $syslog_facility,
+    databases                     => $databases,
+    save_db_to_disk               => $save_db_to_disk,
+    save_db_to_disk_interval      => $save_db_to_disk_interval,
+    stop_writes_on_bgsave_error   => $stop_writes_on_bgsave_error,
+    rdbcompression                => $rdbcompression,
+    dbfilename                    => $dbfilename,
+    workdir                       => $workdir,
+    slaveof                       => $slaveof,
+    replicaof                     => $replicaof,
+    masterauth                    => $masterauth,
+    slave_serve_stale_data        => $slave_serve_stale_data,
+    slave_read_only               => $slave_read_only,
+    repl_announce_ip              => $repl_announce_ip,
+    repl_announce_port            => $repl_announce_port,
+    repl_ping_slave_period        => $repl_ping_slave_period,
+    repl_timeout                  => $repl_timeout,
+    repl_disable_tcp_nodelay      => $repl_disable_tcp_nodelay,
+    repl_backlog_size             => $repl_backlog_size,
+    repl_backlog_ttl              => $repl_backlog_ttl,
+    slave_priority                => $slave_priority,
+    min_slaves_to_write           => $min_slaves_to_write,
+    min_slaves_max_lag            => $min_slaves_max_lag,
+    requirepass                   => $requirepass,
+    rename_commands               => $rename_commands,
+    maxclients                    => $maxclients,
+    maxmemory                     => $maxmemory,
+    maxmemory_policy              => $maxmemory_policy,
+    maxmemory_samples             => $maxmemory_samples,
+    appendonly                    => $appendonly,
+    appendfilename                => $appendfilename,
+    appendfsync                   => $appendfsync,
+    no_appendfsync_on_rewrite     => $no_appendfsync_on_rewrite,
+    auto_aof_rewrite_percentage   => $auto_aof_rewrite_percentage,
+    auto_aof_rewrite_min_size     => $auto_aof_rewrite_min_size,
+    aof_load_truncated            => $aof_load_truncated,
+    slowlog_log_slower_than       => $slowlog_log_slower_than,
+    slowlog_max_len               => $slowlog_max_len,
+    latency_monitor_threshold     => $latency_monitor_threshold,
+    notify_keyspace_events        => $notify_keyspace_events,
+    hash_max_ziplist_entries      => $hash_max_ziplist_entries,
+    hash_max_ziplist_value        => $hash_max_ziplist_value,
+    list_max_ziplist_entries      => $list_max_ziplist_entries,
+    list_max_ziplist_value        => $list_max_ziplist_value,
+    set_max_intset_entries        => $set_max_intset_entries,
+    zset_max_ziplist_entries      => $zset_max_ziplist_entries,
+    zset_max_ziplist_value        => $zset_max_ziplist_value,
+    hll_sparse_max_bytes          => $hll_sparse_max_bytes,
+    activerehashing               => $activerehashing,
+    output_buffer_limit_slave     => $output_buffer_limit_slave,
+    output_buffer_limit_pubsub    => $output_buffer_limit_pubsub,
+    hz                            => $hz,
+    aof_rewrite_incremental_fsync => $aof_rewrite_incremental_fsync,
+    cluster_enabled               => $cluster_enabled,
+    cluster_config_file           => $cluster_config_file,
+    cluster_node_timeout          => $cluster_node_timeout,
+    cluster_slave_validity_factor => $cluster_slave_validity_factor,
+    cluster_require_full_coverage => $cluster_require_full_coverage,
+    cluster_migration_barrier     => $cluster_migration_barrier,
+    extra_config_file             => $extra_config_file,
+    tls_port                      => $tls_port,
+    tls_cert_file                 => $tls_cert_file,
+    tls_key_file                  => $tls_key_file,
+    tls_ca_cert_file              => $tls_ca_cert_file,
+    tls_ca_cert_dir               => $tls_ca_cert_dir,
+    tls_ciphers                   => $tls_ciphers,
+    tls_ciphersuites              => $tls_ciphersuites,
+    tls_protocols                 => $tls_protocols,
+    tls_auth_clients              => $tls_auth_clients,
+    tls_replication               => $tls_replication,
+    tls_cluster                   => $tls_cluster,
+    tls_prefer_server_ciphers     => $tls_prefer_server_ciphers,
+    modules                       => $modules,
+    io_threads                    => $io_threads,
+    io_threads_do_reads           => $io_threads_do_reads,
+    cluster_allow_reads_when_down => $cluster_allow_reads_when_down,
+    cluster_replica_no_failover   => $cluster_replica_no_failover,
+    dynamic_hz                    => $dynamic_hz,
+    activedefrag                  => $activedefrag,
+    active_defrag_ignore_bytes    => $active_defrag_ignore_bytes,
+    active_defrag_threshold_lower => $active_defrag_threshold_lower,
+    active_defrag_threshold_upper => $active_defrag_threshold_upper,
+    active_defrag_cycle_min       => $active_defrag_cycle_min,
+    active_defrag_cycle_max       => $active_defrag_cycle_max,
+    active_defrag_max_scan_fields => $active_defrag_max_scan_fields,
+    jemalloc_bg_thread            => $jemalloc_bg_thread,
+    rdb_save_incremental_fsync    => $rdb_save_incremental_fsync,
+    acls                          => $acls,
+    custom_options                => $custom_options,
+  }
+
+  # TODO: Rely on https://github.com/puppetlabs/puppetlabs-stdlib/pull/1425
+  # once available.
+  if $_template_params.any |$_key, $_value| { $_value.is_a(Deferred) } {
+    $_template_params_escaped = $_template_params.map | $_var , $_value | {
+      if $_value.is_a(Deferred) {
+        { $_var => "<%= \$${_var} %>" }
+      } else {
+        { $_var => $_value }
+      }
+    }.reduce | $_memo, $_kv | { $_memo + $_kv }
+
+    $_content = Deferred(
+      'inline_epp',
+      [
+        epp($conf_template,$_template_params_escaped),
+        $_template_params,
+      ]
+    )
+  } else {
+    $_content = epp($conf_template, $_template_params)
+  }
+
   file { $redis_file_name_orig:
     ensure  => file,
     owner   => $config_owner,
     group   => $config_group,
     mode    => $config_file_mode,
-    content => stdlib::deferrable_epp(
-      $conf_template,
-      {
-        daemonize                     => $daemonize,
-        pid_file                      => $pid_file,
-        protected_mode                => $protected_mode,
-        port                          => $port,
-        tcp_backlog                   => $tcp_backlog,
-        bind_arr                      => $bind_arr,
-        unixsocket                    => $unixsocket,
-        unixsocketperm                => $unixsocketperm,
-        timeout                       => $timeout,
-        tcp_keepalive                 => $tcp_keepalive,
-        log_level                     => $log_level,
-        log_file                      => $_real_log_file,
-        syslog_enabled                => $syslog_enabled,
-        syslog_facility               => $syslog_facility,
-        databases                     => $databases,
-        save_db_to_disk               => $save_db_to_disk,
-        save_db_to_disk_interval      => $save_db_to_disk_interval,
-        stop_writes_on_bgsave_error   => $stop_writes_on_bgsave_error,
-        rdbcompression                => $rdbcompression,
-        dbfilename                    => $dbfilename,
-        workdir                       => $workdir,
-        slaveof                       => $slaveof,
-        replicaof                     => $replicaof,
-        masterauth                    => $masterauth,
-        slave_serve_stale_data        => $slave_serve_stale_data,
-        slave_read_only               => $slave_read_only,
-        repl_announce_ip              => $repl_announce_ip,
-        repl_announce_port            => $repl_announce_port,
-        repl_ping_slave_period        => $repl_ping_slave_period,
-        repl_timeout                  => $repl_timeout,
-        repl_disable_tcp_nodelay      => $repl_disable_tcp_nodelay,
-        repl_backlog_size             => $repl_backlog_size,
-        repl_backlog_ttl              => $repl_backlog_ttl,
-        slave_priority                => $slave_priority,
-        min_slaves_to_write           => $min_slaves_to_write,
-        min_slaves_max_lag            => $min_slaves_max_lag,
-        requirepass                   => $requirepass,
-        rename_commands               => $rename_commands,
-        maxclients                    => $maxclients,
-        maxmemory                     => $maxmemory,
-        maxmemory_policy              => $maxmemory_policy,
-        maxmemory_samples             => $maxmemory_samples,
-        appendonly                    => $appendonly,
-        appendfilename                => $appendfilename,
-        appendfsync                   => $appendfsync,
-        no_appendfsync_on_rewrite     => $no_appendfsync_on_rewrite,
-        auto_aof_rewrite_percentage   => $auto_aof_rewrite_percentage,
-        auto_aof_rewrite_min_size     => $auto_aof_rewrite_min_size,
-        aof_load_truncated            => $aof_load_truncated,
-        slowlog_log_slower_than       => $slowlog_log_slower_than,
-        slowlog_max_len               => $slowlog_max_len,
-        latency_monitor_threshold     => $latency_monitor_threshold,
-        notify_keyspace_events        => $notify_keyspace_events,
-        hash_max_ziplist_entries      => $hash_max_ziplist_entries,
-        hash_max_ziplist_value        => $hash_max_ziplist_value,
-        list_max_ziplist_entries      => $list_max_ziplist_entries,
-        list_max_ziplist_value        => $list_max_ziplist_value,
-        set_max_intset_entries        => $set_max_intset_entries,
-        zset_max_ziplist_entries      => $zset_max_ziplist_entries,
-        zset_max_ziplist_value        => $zset_max_ziplist_value,
-        hll_sparse_max_bytes          => $hll_sparse_max_bytes,
-        activerehashing               => $activerehashing,
-        output_buffer_limit_slave     => $output_buffer_limit_slave,
-        output_buffer_limit_pubsub    => $output_buffer_limit_pubsub,
-        hz                            => $hz,
-        aof_rewrite_incremental_fsync => $aof_rewrite_incremental_fsync,
-        cluster_enabled               => $cluster_enabled,
-        cluster_config_file           => $cluster_config_file,
-        cluster_node_timeout          => $cluster_node_timeout,
-        cluster_slave_validity_factor => $cluster_slave_validity_factor,
-        cluster_require_full_coverage => $cluster_require_full_coverage,
-        cluster_migration_barrier     => $cluster_migration_barrier,
-        extra_config_file             => $extra_config_file,
-        tls_port                      => $tls_port,
-        tls_cert_file                 => $tls_cert_file,
-        tls_key_file                  => $tls_key_file,
-        tls_ca_cert_file              => $tls_ca_cert_file,
-        tls_ca_cert_dir               => $tls_ca_cert_dir,
-        tls_ciphers                   => $tls_ciphers,
-        tls_ciphersuites              => $tls_ciphersuites,
-        tls_protocols                 => $tls_protocols,
-        tls_auth_clients              => $tls_auth_clients,
-        tls_replication               => $tls_replication,
-        tls_cluster                   => $tls_cluster,
-        tls_prefer_server_ciphers     => $tls_prefer_server_ciphers,
-        modules                       => $modules,
-        io_threads                    => $io_threads,
-        io_threads_do_reads           => $io_threads_do_reads,
-        cluster_allow_reads_when_down => $cluster_allow_reads_when_down,
-        cluster_replica_no_failover   => $cluster_replica_no_failover,
-        dynamic_hz                    => $dynamic_hz,
-        activedefrag                  => $activedefrag,
-        active_defrag_ignore_bytes    => $active_defrag_ignore_bytes,
-        active_defrag_threshold_lower => $active_defrag_threshold_lower,
-        active_defrag_threshold_upper => $active_defrag_threshold_upper,
-        active_defrag_cycle_min       => $active_defrag_cycle_min,
-        active_defrag_cycle_max       => $active_defrag_cycle_max,
-        active_defrag_max_scan_fields => $active_defrag_max_scan_fields,
-        jemalloc_bg_thread            => $jemalloc_bg_thread,
-        rdb_save_incremental_fsync    => $rdb_save_incremental_fsync,
-      }
-    ),
+    content => $_content,
   }
 
   exec { "copy ${redis_file_name_orig} to ${redis_file_name}":

@@ -3,54 +3,38 @@
 require 'spec_helper_acceptance'
 
 describe 'redis::sentinel' do
-  redis_name = case fact('osfamily')
-               when 'Debian'
-                 'redis-server'
-               else
-                 'redis'
-               end
+  redis_name = fact('os.family') == 'Debian' ? 'redis-server' : 'redis'
 
-  it 'runs successfully' do
-    pp = <<-EOS
-    class { 'redis::sentinel':
-      master_name      => 'mymaster',
-      redis_host       => '127.0.0.1',
-      failover_timeout => 10000,
-    }
-    EOS
-
-    apply_manifest(pp, catch_failures: true)
-    apply_manifest(pp, catch_changes: true)
-  end
-
-  describe package(redis_name) do
-    it { is_expected.to be_installed }
-  end
-
-  describe service(redis_name) do
-    it { is_expected.to be_running }
-  end
-
-  describe service('redis-sentinel'), :sentinel do
-    it { is_expected.to be_running }
-  end
-
-  case fact('osfamily')
-  when 'Debian'
-    describe package('redis-sentinel') do
-      it { is_expected.to be_installed }
+  include_examples 'an idempotent resource' do
+    let(:manifest) do
+      <<-PUPPET
+      class { 'redis::sentinel':
+        master_name      => 'mymaster',
+        redis_host       => '127.0.0.1',
+        failover_timeout => 10000,
+      }
+      PUPPET
     end
   end
 
-  context 'redis should respond to ping command' do
-    describe command('redis-cli ping') do
-      its(:stdout) { is_expected.to match %r{PONG} }
-    end
+  specify { expect(package(redis_name)).to be_installed }
+  specify { expect(service(redis_name)).to be_running }
+
+  specify 'redis should respond to ping command' do
+    expect(command('redis-cli ping')).
+      to have_attributes(stdout: %r{PONG})
   end
 
-  context 'redis-sentinel should return correct sentinel master' do
-    describe command('redis-cli -p 26379 SENTINEL masters') do
-      its(:stdout) { is_expected.to match %r{^mymaster} }
-    end
+  specify { expect(service('redis-sentinel')).to be_running }
+
+  if redis_name == 'redis-server'
+    specify { expect(package('redis-sentinel')).to be_installed }
+  else
+    specify { expect(package('redis-sentinel')).not_to be_installed }
+  end
+
+  specify 'redis-sentinel should return correct sentinel master' do
+    expect(command('redis-cli -p 26379 SENTINEL masters')).
+      to have_attributes(stdout: %r{^mymaster})
   end
 end

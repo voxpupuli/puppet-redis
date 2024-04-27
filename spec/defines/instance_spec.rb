@@ -49,6 +49,23 @@ describe 'redis::instance' do
 
         it { is_expected.to contain_service('redis-server-app2.service').with_ensure(true).with_enable(true) }
       end
+
+      context 'with custom options' do
+        let(:title) { 'default' }
+        let(:params) do
+          {
+            config_file_orig: '/tmp/myorig.conf',
+            custom_options: { 'myoption' => 'avalue', 'anotheroption' => 'anothervalue' },
+          }
+        end
+
+        it do
+          is_expected.to contain_file('/tmp/myorig.conf').
+            with_content(%r{^bind 127.0.0.1}).
+            with_content(%r{^myoption avalue}).
+            with_content(%r{^anotheroption anothervalue})
+        end
+      end
     end
   end
 end

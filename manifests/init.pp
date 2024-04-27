@@ -4,7 +4,7 @@
 #   include redis
 #
 # @example Slave Node
-#   class { '::redis':
+#   class { 'redis':
 #     bind    => '10.0.1.2',
 #     slaveof => '10.0.1.1 6379',
 #   }
@@ -263,6 +263,19 @@
 #   above using the 'dbfilename' configuration directive.
 # @param workdir_mode
 #   Adjust mode for data directory.
+# @param workdir_group
+#   Adjust filesystem group for $workdir.
+# @param workdir_owner
+#   Adjust filesystem owner for $workdir.
+# @param debdefault_group
+#   group of /etc/defaults/redis on Debian systems
+#   if undef, $redis::config_group is taken
+# @param debdefault_file_mode
+#   filemode of /etc/defaults/redis on Debian systems
+#   if undef, $redis::config_file_mode is taken
+# @param debdefault_owner
+#   owner of /etc/defaults/redis on Debian systems
+#   if undef, $redis::config_owner is taken
 # @param zset_max_ziplist_entries
 #   Set max entries for sorted sets.
 # @param zset_max_ziplist_value
@@ -329,6 +342,12 @@
 # @param dnf_module_stream
 #   Manage the DNF module and set the version. This only makes sense on distributions
 #   that use DNF package manager, such as EL8 or Fedora.
+# @param acls
+#   This is a way to pass an array of raw ACLs to Redis. The ACLs must be
+#   in the form of:
+# 
+#     user USERNAME [additional ACL options]
+#
 # @param manage_service_file
 #   Determine if the systemd service file should be managed
 #
@@ -406,7 +425,7 @@ class redis (
   Boolean $repl_disable_tcp_nodelay                              = false,
   Integer[1] $repl_ping_slave_period                             = 10,
   Integer[1] $repl_timeout                                       = 60,
-  Optional[Variant[String, Deferred]] $requirepass               = undef,
+  Optional[Variant[String, Sensitive[String[1]], Deferred]] $requirepass = undef,
   Boolean $save_db_to_disk                                       = true,
   Hash $save_db_to_disk_interval                                 = { '900' => '1', '300' => '10', '60' => '10000' },
   Boolean $service_enable                                        = true,
@@ -449,6 +468,11 @@ class redis (
   Boolean $ulimit_managed                                        = true,
   Stdlib::Absolutepath $workdir                                  = $redis::params::workdir,
   Stdlib::Filemode $workdir_mode                                 = '0750',
+  Optional[String[1]] $workdir_group                             = undef,
+  Optional[String[1]] $workdir_owner                             = undef,
+  Optional[String[1]] $debdefault_group                          = undef,
+  Optional[Stdlib::Filemode] $debdefault_file_mode               = undef,
+  Optional[String[1]] $debdefault_owner                          = undef,
   Integer[0] $zset_max_ziplist_entries                           = 128,
   Integer[0] $zset_max_ziplist_value                             = 64,
   Boolean $cluster_enabled                                       = false,
@@ -473,6 +497,7 @@ class redis (
   Optional[Boolean] $jemalloc_bg_thread                          = undef,
   Optional[Boolean] $rdb_save_incremental_fsync                  = undef,
   Optional[String[1]] $dnf_module_stream                         = undef,
+  Array[String[1]] $acls                                         = [],
 ) inherits redis::params {
   contain redis::preinstall
   contain redis::install

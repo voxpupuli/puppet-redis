@@ -10,7 +10,6 @@
 
 * [`redis`](#redis): This class installs redis
 * [`redis::administration`](#redis--administration): Allows various administrative settings for Redis
-* [`redis::globals`](#redis--globals): Set a global config for Redis
 * [`redis::sentinel`](#redis--sentinel): Install redis-sentinel
 
 #### Private Classes
@@ -59,7 +58,7 @@ include redis
 ##### Slave Node
 
 ```puppet
-class { '::redis':
+class { 'redis':
   bind    => '10.0.1.2',
   slaveof => '10.0.1.1 6379',
 }
@@ -200,6 +199,11 @@ The following parameters are available in the `redis` class:
 * [`unixsocketperm`](#-redis--unixsocketperm)
 * [`workdir`](#-redis--workdir)
 * [`workdir_mode`](#-redis--workdir_mode)
+* [`workdir_group`](#-redis--workdir_group)
+* [`workdir_owner`](#-redis--workdir_owner)
+* [`debdefault_group`](#-redis--debdefault_group)
+* [`debdefault_file_mode`](#-redis--debdefault_file_mode)
+* [`debdefault_owner`](#-redis--debdefault_owner)
 * [`zset_max_ziplist_entries`](#-redis--zset_max_ziplist_entries)
 * [`zset_max_ziplist_value`](#-redis--zset_max_ziplist_value)
 * [`cluster_enabled`](#-redis--cluster_enabled)
@@ -224,6 +228,7 @@ The following parameters are available in the `redis` class:
 * [`jemalloc_bg_thread`](#-redis--jemalloc_bg_thread)
 * [`rdb_save_incremental_fsync`](#-redis--rdb_save_incremental_fsync)
 * [`dnf_module_stream`](#-redis--dnf_module_stream)
+* [`acls`](#-redis--acls)
 * [`manage_service_file`](#-redis--manage_service_file)
 
 ##### <a name="-redis--activerehashing"></a>`activerehashing`
@@ -805,7 +810,7 @@ Default value: `60`
 
 ##### <a name="-redis--requirepass"></a>`requirepass`
 
-Data type: `Optional[Variant[String, Deferred]]`
+Data type: `Optional[Variant[String, Sensitive[String[1]], Deferred]]`
 
 Require clients to issue AUTH <PASSWORD> before processing any other commands.
 
@@ -1160,6 +1165,49 @@ Adjust mode for data directory.
 
 Default value: `'0750'`
 
+##### <a name="-redis--workdir_group"></a>`workdir_group`
+
+Data type: `Optional[String[1]]`
+
+Adjust filesystem group for $workdir.
+
+Default value: `undef`
+
+##### <a name="-redis--workdir_owner"></a>`workdir_owner`
+
+Data type: `Optional[String[1]]`
+
+Adjust filesystem owner for $workdir.
+
+Default value: `undef`
+
+##### <a name="-redis--debdefault_group"></a>`debdefault_group`
+
+Data type: `Optional[String[1]]`
+
+group of /etc/defaults/redis on Debian systems
+if undef, $redis::config_group is taken
+
+Default value: `undef`
+
+##### <a name="-redis--debdefault_file_mode"></a>`debdefault_file_mode`
+
+Data type: `Optional[Stdlib::Filemode]`
+
+filemode of /etc/defaults/redis on Debian systems
+if undef, $redis::config_file_mode is taken
+
+Default value: `undef`
+
+##### <a name="-redis--debdefault_owner"></a>`debdefault_owner`
+
+Data type: `Optional[String[1]]`
+
+owner of /etc/defaults/redis on Debian systems
+if undef, $redis::config_owner is taken
+
+Default value: `undef`
+
 ##### <a name="-redis--zset_max_ziplist_entries"></a>`zset_max_ziplist_entries`
 
 Data type: `Integer[0]`
@@ -1370,6 +1418,17 @@ that use DNF package manager, such as EL8 or Fedora.
 
 Default value: `undef`
 
+##### <a name="-redis--acls"></a>`acls`
+
+Data type: `Array[String[1]]`
+
+This is a way to pass an array of raw ACLs to Redis. The ACLs must be
+in the form of:
+
+  user USERNAME [additional ACL options]
+
+Default value: `[]`
+
 ##### <a name="-redis--manage_service_file"></a>`manage_service_file`
 
 Data type: `Boolean`
@@ -1428,24 +1487,6 @@ Data type: `Integer[0]`
 Set somaxconn value
 
 Default value: `65535`
-
-### <a name="redis--globals"></a>`redis::globals`
-
-Set a global config for Redis
-
-#### Parameters
-
-The following parameters are available in the `redis::globals` class:
-
-* [`scl`](#-redis--globals--scl)
-
-##### <a name="-redis--globals--scl"></a>`scl`
-
-Data type: `Optional[String]`
-
-Use a specific Software Collection on Red Hat 7 based systems
-
-Default value: `undef`
 
 ### <a name="redis--sentinel"></a>`redis::sentinel`
 
@@ -1511,6 +1552,7 @@ The following parameters are available in the `redis::sentinel` class:
 * [`working_dir`](#-redis--sentinel--working_dir)
 * [`notification_script`](#-redis--sentinel--notification_script)
 * [`client_reconfig_script`](#-redis--sentinel--client_reconfig_script)
+* [`acls`](#-redis--sentinel--acls)
 * [`service_ensure`](#-redis--sentinel--service_ensure)
 
 ##### <a name="-redis--sentinel--auth_pass"></a>`auth_pass`
@@ -1838,6 +1880,17 @@ Path to the client-reconfig script
 
 Default value: `undef`
 
+##### <a name="-redis--sentinel--acls"></a>`acls`
+
+Data type: `Array[String[1]]`
+
+This is a way to pass an array of raw ACLs to Sentinel. The ACLs must be
+in the form of:
+
+  user USERNAME [additional ACL options]
+
+Default value: `[]`
+
 ##### <a name="-redis--sentinel--service_ensure"></a>`service_ensure`
 
 Data type: `Stdlib::Ensure::Service`
@@ -1986,8 +2039,10 @@ The following parameters are available in the `redis::instance` defined type:
 * [`active_defrag_max_scan_fields`](#-redis--instance--active_defrag_max_scan_fields)
 * [`jemalloc_bg_thread`](#-redis--instance--jemalloc_bg_thread)
 * [`rdb_save_incremental_fsync`](#-redis--instance--rdb_save_incremental_fsync)
+* [`acls`](#-redis--instance--acls)
 * [`output_buffer_limit_slave`](#-redis--instance--output_buffer_limit_slave)
 * [`output_buffer_limit_pubsub`](#-redis--instance--output_buffer_limit_pubsub)
+* [`custom_options`](#-redis--instance--custom_options)
 
 ##### <a name="-redis--instance--activerehashing"></a>`activerehashing`
 
@@ -2432,7 +2487,7 @@ Default value: `$redis::repl_timeout`
 
 ##### <a name="-redis--instance--requirepass"></a>`requirepass`
 
-Data type: `Optional[Variant[String, Deferred]]`
+Data type: `Optional[Variant[String, Sensitive[String[1]], Deferred]]`
 
 Require clients to issue AUTH <PASSWORD> before processing any other
 commands.
@@ -2973,6 +3028,17 @@ the file will be fsync-ed every 32 MB of data generated.
 
 Default value: `$redis::rdb_save_incremental_fsync`
 
+##### <a name="-redis--instance--acls"></a>`acls`
+
+Data type: `Array[String[1]]`
+
+This is a way to pass an array of raw ACLs to Redis. The ACLs must be
+in the form of:
+
+  user USERNAME [additional ACL options]
+
+Default value: `$redis::acls`
+
 ##### <a name="-redis--instance--output_buffer_limit_slave"></a>`output_buffer_limit_slave`
 
 Data type: `String[1]`
@@ -2988,6 +3054,14 @@ Data type: `String[1]`
 Value of client-output-buffer-limit-pubsub in redis config
 
 Default value: `$redis::output_buffer_limit_pubsub`
+
+##### <a name="-redis--instance--custom_options"></a>`custom_options`
+
+Data type: `Hash[String[1],Variant[String[1], Integer]]`
+
+hash of custom options, not available as direct parameter.
+
+Default value: `{}`
 
 ## Functions
 

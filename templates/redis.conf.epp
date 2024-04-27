@@ -35,7 +35,7 @@
   Integer[0]                                         $slave_priority,
   Integer[0]                                         $min_slaves_to_write,
   Integer[0]                                         $min_slaves_max_lag,
-  Optional[String[1]]                                $requirepass,
+  Optional[Variant[String[1],Sensitive[String[1]]]]  $requirepass,
   Hash[String,String]                                $rename_commands,
   Integer[1]                                         $maxclients,
   Optional[Variant[Integer, String]]                 $maxmemory,
@@ -99,6 +99,8 @@
   Integer[1]                                         $active_defrag_max_scan_fields,
   Optional[Boolean]                                  $jemalloc_bg_thread,
   Optional[Boolean]                                  $rdb_save_incremental_fsync,
+  Array[String[1]]                                   $acls,
+  Hash[String[1],Variant[String[1], Integer]]        $custom_options,
 | -%>
 # Redis configuration file example
 
@@ -1177,6 +1179,9 @@ active-defrag-max-scan-fields <%= $active_defrag_max_scan_fields %>
 
 # Jemalloc background thread for purging will be enabled by default
 <% if $jemalloc_bg_thread { -%>jemalloc-bg-thread <%= $jemalloc_bg_thread ? {true => 'yes', default => 'no'} %><% } -%>
+<% $custom_options.each |String $k, String $v| { -%>
+<%= $k %> <%= $v %>
+<% } -%>
 
 ################################## MODULES #####################################
 
@@ -1200,4 +1205,10 @@ loadmodule <%= $module_path %>
 # include /path/to/other.conf
 <% if $extra_config_file { -%>
 include <%= $extra_config_file %>
+<% } -%>
+<% unless $acls.empty { -%>
+
+<%   $acls.each |$acl| { -%>
+<%= $acl %>
+<%   } -%>
 <% } -%>
