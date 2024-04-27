@@ -6,9 +6,8 @@ configure_beaker do |host|
   # sysctl is untestable in docker
   install_puppet_module_via_pmt_on(host, 'puppet-augeasproviders_sysctl') unless host['hypervisor'] == 'docker'
 
-  unless fact_on(host, 'os.family') == 'RedHat' && fact_on(host, 'os.release.major').to_i >= 9
-    # puppet-bolt rpm for CentOS 9 is not yet available
-    # https://tickets.puppetlabs.com/browse/MODULES-11275
+  unless fact_on(host, 'os.name') == 'Debian' && fact_on(host, 'os.release.major').to_i >= 12
+    # puppet-bolt for Debian 12 is not yet available
     host.install_package('puppet-bolt')
   end
 
