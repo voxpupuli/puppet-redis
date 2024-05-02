@@ -9,7 +9,7 @@ describe 'redis-cli task' do
 
   let(:task_name) { 'redis::redis_cli' }
 
-  unless fact('os.family') == 'RedHat' && fact('os.release.major').to_i >= 9
+  if bolt_supported?
     include_examples 'an idempotent resource' do
       let(:manifest) { 'include redis' }
     end
