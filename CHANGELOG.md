@@ -4,6 +4,30 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v11.0.0](https://github.com/voxpupuli/puppet-redis/tree/v11.0.0) (2024-05-08)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v10.0.0...v11.0.0)
+
+**Breaking changes:**
+
+- Drop support for EoL CentOS 8 [\#525](https://github.com/voxpupuli/puppet-redis/pull/525) ([evgeni](https://github.com/evgeni))
+- Drop EL7 compatibility code [\#509](https://github.com/voxpupuli/puppet-redis/pull/509) ([ekohl](https://github.com/ekohl))
+
+**Implemented enhancements:**
+
+- Add Debian 12 Support [\#520](https://github.com/voxpupuli/puppet-redis/pull/520) ([traylenator](https://github.com/traylenator))
+- update puppet-systemd upper bound to 8.0.0 [\#518](https://github.com/voxpupuli/puppet-redis/pull/518) ([TheMeier](https://github.com/TheMeier))
+- Avoid deprecated systemd::service\_limits [\#514](https://github.com/voxpupuli/puppet-redis/pull/514) ([traylenator](https://github.com/traylenator))
+- Allow `requirepass` to be set as a Sensitive string [\#512](https://github.com/voxpupuli/puppet-redis/pull/512) ([traylenator](https://github.com/traylenator))
+- Modernize the acceptance tests [\#438](https://github.com/voxpupuli/puppet-redis/pull/438) ([ekohl](https://github.com/ekohl))
+- add custom options parameter to instance [\#431](https://github.com/voxpupuli/puppet-redis/pull/431) ([trefzer](https://github.com/trefzer))
+- Add some additional parameters for ownerships [\#429](https://github.com/voxpupuli/puppet-redis/pull/429) ([trefzer](https://github.com/trefzer))
+
+**Fixed bugs:**
+
+- Install redis-sentinal package before redis [\#516](https://github.com/voxpupuli/puppet-redis/pull/516) ([traylenator](https://github.com/traylenator))
+- Support rich datatypes and deferred password values [\#515](https://github.com/voxpupuli/puppet-redis/pull/515) ([traylenator](https://github.com/traylenator))
+
 ## [v10.0.0](https://github.com/voxpupuli/puppet-redis/tree/v10.0.0) (2024-02-16)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v9.3.0...v10.0.0)
