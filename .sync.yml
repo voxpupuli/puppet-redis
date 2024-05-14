@@ -9,3 +9,5 @@ Gemfile:
       - gem: 'mock_redis'
 spec/spec_helper.rb:
   mock_with: ":mocha"
+.github/workflows/ci.yml:
+  unit_runs_on: 'cern-self-hosted'
