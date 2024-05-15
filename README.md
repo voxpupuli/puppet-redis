@@ -33,6 +33,16 @@ class { 'redis':
 }
 ```
 
+With ACL authentication
+
+```puppet
+class { 'redis':
+  bind       => '10.0.1.1',
+  masterauth => 'secret',
+  masteruser => 'username',
+}
+```
+
 ### Slave node
 
 ```puppet
