@@ -539,7 +539,7 @@ Default value: `undef`
 
 ##### <a name="-redis--masteruser"></a>`masteruser`
 
-Data type: `Optional[Variant[String[1], Sensitive[String[1]], Deferred]]`
+Data type: `Optional[String[1]]`
 
 If the master is password protected and a user is defined (using the "user" configuration)
 
@@ -1575,7 +1575,7 @@ Default value: `undef`
 
 ##### <a name="-redis--sentinel--auth_user"></a>`auth_user`
 
-Data type: `Optional[Variant[String[1], Sensitive[String[1]]]]`
+Data type: `Optional[String[1]]`
 
 The username to use to authenticate with the master and slaves.
 
@@ -2330,7 +2330,7 @@ Default value: `$redis::masterauth`
 
 ##### <a name="-redis--instance--masteruser"></a>`masteruser`
 
-Data type: `Optional[Variant[String[1], Sensitive[String[1]], Deferred]]`
+Data type: `Optional[String[1]]`
 
 If the master is password protected and a user is defined (using the "user" configuration)
 

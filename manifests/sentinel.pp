@@ -150,7 +150,7 @@
 #
 class redis::sentinel (
   Optional[Variant[String[1], Sensitive[String[1]]]] $auth_pass = undef,
-  Optional[Variant[String[1], Sensitive[String[1]]]] $auth_user = undef,
+  Optional[String[1]] $auth_user = undef,
   Stdlib::Absolutepath $config_file = $redis::params::sentinel_config_file,
   Stdlib::Absolutepath $config_file_orig = $redis::params::sentinel_config_file_orig,
   Stdlib::Filemode $config_file_mode = '0644',
@@ -196,11 +196,6 @@ class redis::sentinel (
     $auth_pass.unwrap
   } else {
     $auth_pass
-  }
-  $auth_user_unsensitive = if $auth_user =~ Sensitive {
-    $auth_user.unwrap
-  } else {
-    $auth_user
   }
 
   contain 'redis'

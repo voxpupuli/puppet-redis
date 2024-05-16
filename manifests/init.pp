@@ -394,7 +394,7 @@ class redis (
   Boolean $manage_package                                        = true,
   Boolean $manage_repo                                           = false,
   Optional[Variant[String[1], Sensitive[String[1]], Deferred]] $masterauth = undef,
-  Optional[Variant[String[1], Sensitive[String[1]], Deferred]] $masteruser = undef,
+  Optional[String[1]] $masteruser                                = undef,
   Integer[1] $maxclients                                         = 10000,
   $maxmemory                                                     = undef,
   Optional[Redis::MemoryPolicy] $maxmemory_policy                = undef,

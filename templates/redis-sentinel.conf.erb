@@ -27,8 +27,8 @@ sentinel failover-timeout <%= @master_name %> <%= @failover_timeout %>
 <% if @auth_pass_unsensitive -%>
 sentinel auth-pass <%= @master_name %> <%= @auth_pass_unsensitive %>
 <% end -%>
-<% if @auth_user_unsensitive -%>
-sentinel auth-user <%= @master_name %> <%= @auth_user_unsensitive %>
+<% if @auth_user -%>
+sentinel auth-user <%= @master_name %> <%= @auth_user %>
 <% end -%>
 <% if @notification_script -%>
 sentinel notification-script <%= @master_name %> <%= @notification_script %>

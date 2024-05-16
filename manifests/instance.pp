@@ -327,7 +327,7 @@ define redis::instance (
   Stdlib::Filemode $log_dir_mode                                 = $redis::log_dir_mode,
   Redis::LogLevel $log_level                                     = $redis::log_level,
   Optional[Variant[String[1], Sensitive[String[1]], Deferred]] $masterauth = $redis::masterauth,
-  Optional[Variant[String[1], Sensitive[String[1]], Deferred]] $masteruser = $redis::masteruser,
+  Optional[String[1]] $masteruser                                = $redis::masteruser,
   Integer[1] $maxclients                                         = $redis::maxclients,
   Optional[Variant[Integer, String]] $maxmemory                  = $redis::maxmemory,
   Optional[Redis::MemoryPolicy] $maxmemory_policy                = $redis::maxmemory_policy,
