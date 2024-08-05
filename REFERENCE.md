@@ -1509,6 +1509,15 @@ class {'redis::sentinel':
 }
 ```
 
+If installation without redis-server is desired, set `require_redis` parameter to false, i.e
+```puppet
+class { 'redis::sentinel':
+  ...
+  require_redis => false,
+  ...
+}
+```
+
 #### Parameters
 
 The following parameters are available in the `redis::sentinel` class:
@@ -1907,6 +1916,14 @@ Data type: `Stdlib::Ensure::Service`
 
 
 Default value: `'running'`
+
+##### <a name="-redis--sentinel--require_redis"></a>`require_redis`
+
+Data type: `Boolean`
+
+Require redis base class. If set to false, sentinel is installed without redis server.
+
+Default value: `true`
 
 ## Defined types
 
