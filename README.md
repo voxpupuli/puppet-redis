@@ -133,11 +133,11 @@ class { 'redis::sentinel':
 }
 ```
 
-If installation without redis-server is desired, set `require_redis` parameter to false, i.e
+If installation without redis-server is desired, set `contain_redis` parameter to false, i.e
 ```puppet
 class { 'redis::sentinel':
   ...
-  require_redis => false,
+  contain_redis => false,
   ...
 }
 ```
