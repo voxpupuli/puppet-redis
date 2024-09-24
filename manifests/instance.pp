@@ -66,7 +66,8 @@
 #   Adjust mode for directory containing log files.
 # @param log_file
 #   Specify file where to write log entries. Relative paths will be prepended
-#   with log_dir but absolute paths are also accepted.
+#   with log_dir but absolute paths are also accepted. Boolean false means only
+#   log to systemd-journald.
 # @param log_level
 #   Specify the server verbosity level.
 # @param managed_by_cluster_manager
@@ -396,7 +397,7 @@ define redis::instance (
   Optional[Integer[0]] $service_timeout_start                    = $redis::service_timeout_start,
   Optional[Integer[0]] $service_timeout_stop                     = $redis::service_timeout_stop,
   Boolean $manage_service_file                                   = true,
-  String $log_file                                               = "redis-server-${name}.log",
+  Variant[Boolean[false], String[1]] $log_file                   = "redis-server-${name}.log",
   Stdlib::Absolutepath $pid_file                                 = "/var/run/${service_name}/redis.pid",
   Variant[Stdlib::Absolutepath, Enum['']] $unixsocket            = "/var/run/${service_name}/redis.sock",
   Stdlib::Absolutepath $workdir                                  = "${redis::workdir}/redis-server-${name}",
@@ -496,6 +497,7 @@ define redis::instance (
 
   $_real_log_file = $log_file ? {
     Stdlib::Absolutepath => $log_file,
+    Boolean              => false,
     default              => "${log_dir}/${log_file}",
   }
 
