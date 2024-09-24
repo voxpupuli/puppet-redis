@@ -85,7 +85,8 @@
 #   Adjust mode for directory containing log files.
 # @param log_file
 #   Specify file where to write log entries. Relative paths will be prepended
-#   with log_dir but absolute paths are also accepted.
+#   with log_dir but absolute paths are also accepted. Boolean false means only
+#   log to systemd-journald.
 # @param log_level
 #   Specify the server verbosity level.
 # @param manage_repo
@@ -386,7 +387,7 @@ class redis (
   Integer[0] $list_max_ziplist_value                             = 64,
   Stdlib::Absolutepath $log_dir                                  = $redis::params::log_dir,
   Stdlib::Filemode $log_dir_mode                                 = $redis::params::log_dir_mode,
-  String $log_file                                               = 'redis.log',
+  Variant[Boolean[false], String[1]] $log_file                   = 'redis.log',
   Redis::LogLevel $log_level                                     = 'notice',
   Boolean $manage_service_file                                   = false,
   Boolean $manage_package                                        = true,
