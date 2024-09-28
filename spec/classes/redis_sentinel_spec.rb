@@ -4,17 +4,17 @@ require 'spec_helper'
 
 # rubocop:disable RSpec/MultipleMemoizedHelpers
 describe 'redis::sentinel' do
-  on_supported_os.each do |os, facts|
+  on_supported_os.each do |os, os_facts|
     context "on #{os}" do
-      let(:facts) { facts }
+      let(:facts) { os_facts }
       let(:config_file_orig) do
-        case facts[:os]['family']
+        case facts['os']['family']
         when 'Archlinux', 'Debian', 'Suse'
           '/etc/redis/redis-sentinel.conf.puppet'
         when 'FreeBSD'
           '/usr/local/etc/redis-sentinel.conf.puppet'
         when 'RedHat'
-          if facts[:os]['release']['major'].to_i > 8
+          if facts['os']['release']['major'].to_i > 8
             '/etc/redis/sentinel.conf.puppet'
           else
             '/etc/redis-sentinel.conf.puppet'
@@ -23,7 +23,7 @@ describe 'redis::sentinel' do
       end
 
       let(:pidfile) do
-        case facts[:os]['name']
+        case facts['os']['name']
         when 'Ubuntu'
           '/var/run/sentinel/redis-sentinel.pid'
         when 'Debian'
@@ -38,7 +38,7 @@ describe 'redis::sentinel' do
       end
 
       let(:sentinel_package_name) do
-        if facts[:os]['family'] == 'Debian'
+        if facts['os']['family'] == 'Debian'
           'redis-sentinel'
         else
           'redis'
@@ -49,8 +49,8 @@ describe 'redis::sentinel' do
         let(:expected_content) do
           <<~CONFIG
             port 26379
-            dir #{facts[:os]['family'] == 'Debian' ? '/var/lib/redis' : '/tmp'}
-            daemonize #{facts[:os]['family'] == 'RedHat' ? 'no' : 'yes'}
+            dir #{facts['os']['family'] == 'Debian' ? '/var/lib/redis' : '/tmp'}
+            daemonize #{facts['os']['family'] == 'RedHat' ? 'no' : 'yes'}
             supervised auto
             pidfile #{pidfile}
             protected-mode yes
@@ -61,7 +61,7 @@ describe 'redis::sentinel' do
             sentinel failover-timeout mymaster 180000
 
             loglevel notice
-            logfile #{facts[:os]['family'] == 'Debian' ? '/var/log/redis/redis-sentinel.log' : '/var/log/redis/sentinel.log'}
+            logfile #{facts['os']['family'] == 'Debian' ? '/var/log/redis/redis-sentinel.log' : '/var/log/redis/sentinel.log'}
           CONFIG
         end
 
@@ -139,7 +139,7 @@ describe 'redis::sentinel' do
             port 26379
             tls-port 26380
             dir /tmp/redis
-            daemonize #{facts[:os]['family'] == 'RedHat' ? 'no' : 'yes'}
+            daemonize #{facts['os']['family'] == 'RedHat' ? 'no' : 'yes'}
             supervised auto
             pidfile #{pidfile}
             protected-mode no
@@ -195,7 +195,7 @@ describe 'redis::sentinel' do
             bind 192.0.2.10 192.168.1.1
             port 26379
             dir /tmp/redis
-            daemonize #{facts[:os]['family'] == 'RedHat' ? 'no' : 'yes'}
+            daemonize #{facts['os']['family'] == 'RedHat' ? 'no' : 'yes'}
             supervised auto
             pidfile #{pidfile}
             protected-mode yes
@@ -234,7 +234,7 @@ describe 'redis::sentinel' do
         end
 
         let(:package_ensure) do
-          if facts[:os]['family'] == 'Debian'
+          if facts['os']['family'] == 'Debian'
             'latest'
           else
             'installed'
