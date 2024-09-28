@@ -4,16 +4,16 @@ require 'spec_helper'
 
 # rubocop:disable RSpec/MultipleMemoizedHelpers
 describe 'redis' do
-  let(:package_name) { facts[:os]['family'] == 'Debian' ? 'redis-server' : 'redis' }
+  let(:package_name) { facts['os']['family'] == 'Debian' ? 'redis-server' : 'redis' }
   let(:service_name) { package_name }
   let(:config_file) do
-    case facts[:os]['family']
+    case facts['os']['family']
     when 'Archlinux', 'Debian'
       '/etc/redis/redis.conf'
     when 'FreeBSD'
       '/usr/local/etc/redis.conf'
     when 'RedHat'
-      if facts[:os]['release']['major'].to_i > 8
+      if facts['os']['release']['major'].to_i > 8
         '/etc/redis/redis.conf'
       else
         '/etc/redis.conf'
@@ -42,7 +42,7 @@ describe 'redis' do
             with_content(%r{logfile /var/log/redis/redis\.log}).
             without_content(%r{undef})
 
-          if facts[:os]['family'] == 'FreeBSD'
+          if facts['os']['family'] == 'FreeBSD'
             is_expected.to contain_file(config_file_orig).
               with_content(%r{dir /var/db/redis}).
               with_content(%r{pidfile /var/run/redis/redis\.pid})
@@ -51,7 +51,7 @@ describe 'redis' do
 
         it { is_expected.to contain_service(service_name).with_ensure('running').with_enable('true') }
 
-        describe 'with manage_dnf_module true', if: facts[:os]['family'] == 'RedHat' && facts[:os]['release']['major'].to_i == 8 do
+        describe 'with manage_dnf_module true', if: facts['os']['family'] == 'RedHat' && facts['os']['release']['major'].to_i == 8 do
           let(:pre_condition) do
             <<-PUPPET
             class { 'redis':
@@ -473,7 +473,7 @@ describe 'redis' do
         describe 'with ppa' do
           let(:params) { super().merge(ppa_repo: 'ppa:rwky/redis') }
 
-          if facts[:os]['name'] == 'Ubuntu'
+          if facts['os']['name'] == 'Ubuntu'
             it { is_expected.to contain_apt__ppa('ppa:rwky/redis') }
           else
             it { is_expected.not_to contain_apt__ppa('ppa:rwky/redis') }
@@ -1712,7 +1712,7 @@ describe 'redis' do
           )
         }
 
-        if facts[:os]['family'] == 'Debian'
+        if facts['os']['family'] == 'Debian'
           it {
             is_expected.to contain_file('/etc/default/redis-server').
               with(
@@ -1737,7 +1737,7 @@ describe 'redis' do
           }
         end
 
-        if facts[:os]['family'] == 'Debian'
+        if facts['os']['family'] == 'Debian'
           it {
             is_expected.to contain_file('/etc/default/redis-server').
               with(
