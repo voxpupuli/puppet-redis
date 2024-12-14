@@ -451,6 +451,20 @@ describe 'redis' do
             )
           }
         end
+
+        describe 'as false' do
+          let(:params) do
+            {
+              log_file: false
+            }
+          end
+
+          it {
+            is_expected.to contain_file(config_file_orig).with(
+              'content' => %r{^logfile ""$}
+            )
+          }
+        end
       end
 
       describe 'with parameter log_level' do
