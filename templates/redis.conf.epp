@@ -10,7 +10,7 @@
   Integer[0]                                         $timeout,
   Integer[0]                                         $tcp_keepalive,
   Redis::LogLevel                                    $log_level,
-  Stdlib::Absolutepath                               $log_file,
+  Variant[Stdlib::Absolutepath, Boolean[false]]      $log_file,
   Boolean                                            $syslog_enabled,
   Optional[String[1]]                                $syslog_facility,
   Integer[1]                                         $databases,
@@ -304,7 +304,11 @@ loglevel <%= $log_level %>
 # Specify the log file name. Also 'stdout' can be used to force
 # Redis to log on the standard output. Note that if you use standard
 # output for logging but daemonize, logs will be sent to /dev/null
-logfile <%= $log_file %>
+logfile <% if $log_file { -%>
+<%= $log_file %>
+<% } else { -%>
+""
+<% } -%>
 
 # To enable logging to the system logger, just set 'syslog-enabled' to yes,
 # and optionally update the other syslog parameters to suit your needs.
