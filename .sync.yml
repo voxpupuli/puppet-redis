@@ -6,3 +6,4 @@ Gemfile:
       - gem: 'mock_redis'
 spec/spec_helper.rb:
   mock_with: ":mocha"
+  facterdb_string_keys: true
