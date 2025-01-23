@@ -133,6 +133,15 @@ class { 'redis::sentinel':
 }
 ```
 
+If installation without redis-server is desired, set `contain_redis` parameter to false, i.e
+```puppet
+class { 'redis::sentinel':
+  ...
+  contain_redis => false,
+  ...
+}
+```
+
 ### Soft dependency
 
 When managing the repo, it needs [puppetlabs/apt](https://forge.puppet.com/puppetlabs/apt).
