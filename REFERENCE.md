@@ -1554,6 +1554,7 @@ The following parameters are available in the `redis::sentinel` class:
 * [`client_reconfig_script`](#-redis--sentinel--client_reconfig_script)
 * [`acls`](#-redis--sentinel--acls)
 * [`service_ensure`](#-redis--sentinel--service_ensure)
+* [`require_redis`](#-redis--sentinel--require_redis)
 
 ##### <a name="-redis--sentinel--auth_pass"></a>`auth_pass`
 
@@ -1895,9 +1896,17 @@ Default value: `[]`
 
 Data type: `Stdlib::Ensure::Service`
 
-
+Specify if the server should be running.
 
 Default value: `'running'`
+
+##### <a name="-redis--sentinel--require_redis"></a>`require_redis`
+
+Data type: `Boolean`
+
+Require redis base class. If set to false, sentinel is installed without redis server.
+
+Default value: `true`
 
 ## Defined types
 
