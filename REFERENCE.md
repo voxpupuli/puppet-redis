@@ -465,6 +465,14 @@ Latency monitoring threshold in milliseconds
 
 Default value: `0`
 
+##### <a name="-redis--latency_tracking"></a>`latency_tracking`
+
+Data type: `Boolean`
+
+Enable or disable latency tracking
+
+Default value: `yes`
+
 ##### <a name="-redis--list_max_ziplist_entries"></a>`list_max_ziplist_entries`
 
 Data type: `Integer[0]`
@@ -787,6 +795,14 @@ The replication backlog size
 Default value: `'1mb'`
 
 ##### <a name="-redis--repl_backlog_ttl"></a>`repl_backlog_ttl`
+
+Data type: `Integer[0]`
+
+The number of seconds to elapse before freeing backlog buffer
+
+Default value: `3600`
+
+##### <a name="-redis--repl_diskless_sync"></a>`repl_diskless_sync`
 
 Data type: `Integer[0]`
 
