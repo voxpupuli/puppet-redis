@@ -32,6 +32,7 @@
   Boolean                                            $repl_disable_tcp_nodelay,
   String[1]                                          $repl_backlog_size,
   Integer[0]                                         $repl_backlog_ttl,
+  Variant[Boolean, Enum["yes", "no"]]                $repl_diskless_sync,
   Integer[0]                                         $slave_priority,
   Integer[0]                                         $min_slaves_to_write,
   Integer[0]                                         $min_slaves_max_lag,
@@ -51,6 +52,7 @@
   Integer[-1]                                        $slowlog_log_slower_than,
   Integer[0]                                         $slowlog_max_len,
   Integer[0]                                         $latency_monitor_threshold,
+  Boolean                                            $latency_tracking,
   Optional[String[1]]                                $notify_keyspace_events,
   Integer[0]                                         $hash_max_ziplist_entries,
   Integer[0]                                         $hash_max_ziplist_value,
@@ -566,6 +568,36 @@ slave-priority <%= $slave_priority %>
 min-slaves-to-write <%= $min_slaves_to_write %>
 min-slaves-max-lag <%= $min_slaves_max_lag %>
 
+# Replication SYNC strategy: disk or socket.
+#
+# New replicas and reconnecting replicas that are not able to continue the
+# replication process just receiving differences, need to do what is called a
+# "full synchronization". An RDB file is transmitted from the master to the
+# replicas.
+#
+# The transmission can happen in two different ways:
+#
+# 1) Disk-backed: The Redis master creates a new process that writes the RDB
+#                 file on disk. Later the file is transferred by the parent
+#                 process to the replicas incrementally.
+# 2) Diskless: The Redis master creates a new process that directly writes the
+#              RDB file to replica sockets, without touching the disk at all.
+#
+# With disk-backed replication, while the RDB file is generated, more replicas
+# can be queued and served with the RDB file as soon as the current child
+# producing the RDB file finishes its work. With diskless replication instead
+# once the transfer starts, new replicas arriving will be queued and a new
+# transfer will start when the current one terminates.
+#
+# When diskless replication is used, the master waits a configurable amount of
+# time (in seconds) before starting the transfer in the hope that multiple
+# replicas will arrive and the transfer can be parallelized.
+#
+# With slow disks and fast (large bandwidth) networks, diskless replication
+# works better.
+repl-diskless-sync <%= $repl_diskless_sync %>
+
+
 ################################## SECURITY ###################################
 
 # Require clients to issue AUTH <PASSWORD> before processing any other
@@ -848,6 +880,16 @@ slowlog-max-len <%= $slowlog_max_len %>
 # monitoring can easily be enalbed at runtime using the command
 # "CONFIG SET latency-monitor-threshold <milliseconds>" if needed.
 latency-monitor-threshold <%= $latency_monitor_threshold %>
+
+################################ LATENCY TRACKING ##############################
+
+# The Redis extended latency monitoring tracks the per command latencies and enables
+# exporting the percentile distribution via the INFO latencystats command,
+# and cumulative latency distributions (histograms) via the LATENCY command.
+#
+# By default, the extended latency monitoring is enabled since the overhead
+# of keeping track of the command latency is very small.
+latency-tracking <%= $latency_tracking %>
 
 ############################# Event notification ##############################
 
