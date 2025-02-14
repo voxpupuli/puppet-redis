@@ -804,11 +804,11 @@ Default value: `3600`
 
 ##### <a name="-redis--repl_diskless_sync"></a>`repl_diskless_sync`
 
-Data type: `Integer[0]`
+Data type: `Boolean`
 
-The number of seconds to elapse before freeing backlog buffer
+Replication SYNC strategy: disk or socket.
 
-Default value: `3600`
+Default value: `yes`
 
 ##### <a name="-redis--repl_disable_tcp_nodelay"></a>`repl_disable_tcp_nodelay`
 
