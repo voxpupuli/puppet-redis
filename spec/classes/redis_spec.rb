@@ -756,6 +756,20 @@ describe 'redis' do
         }
       end
 
+      describe 'with parameter latency_tracking' do
+        let(:params) do
+          {
+            latency_tracking: yes
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^latency-tracking yes$}
+          )
+        }
+      end
+
       describe 'with parameter rdbcompression' do
         let(:params) do
           {
@@ -837,6 +851,20 @@ describe 'redis' do
         it {
           is_expected.to contain_file(config_file_orig).with(
             'content' => %r{^repl-backlog-ttl 42$}
+          )
+        }
+      end
+
+      describe 'with parameter repl_diskless_sync' do
+        let(:params) do
+          {
+            repl_diskless_sync: yes
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{^repl-diskless-sync yes$}
           )
         }
       end

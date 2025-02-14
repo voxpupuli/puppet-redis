@@ -56,6 +56,8 @@
 #   Set redis background tasks frequency
 # @param latency_monitor_threshold
 #   Latency monitoring threshold in milliseconds
+# @param latency_tracking
+#   Latency monitoring enabled
 # @param list_max_ziplist_entries
 #   Set max ziplist entries for lists.
 # @param list_max_ziplist_value
@@ -113,6 +115,8 @@
 #   The replication backlog size
 # @param repl_backlog_ttl
 #   The number of seconds to elapse before freeing backlog buffer
+# @param repl_diskless_sync
+#   Enable/disable diskless replication
 # @param repl_disable_tcp_nodelay
 #   Enable/disable TCP_NODELAY on the slave socket after SYNC
 # @param repl_ping_slave_period
@@ -321,6 +325,7 @@ define redis::instance (
   Integer[0] $hll_sparse_max_bytes                               = $redis::hll_sparse_max_bytes,
   Integer[1, 500] $hz                                            = $redis::hz,
   Integer[0] $latency_monitor_threshold                          = $redis::latency_monitor_threshold,
+  Boolean $latency_tracking                                      = $redis::latency_tracking,
   Integer[0] $list_max_ziplist_entries                           = $redis::list_max_ziplist_entries,
   Integer[0] $list_max_ziplist_value                             = $redis::list_max_ziplist_value,
   Stdlib::Absolutepath $log_dir                                  = $redis::log_dir,
@@ -346,6 +351,7 @@ define redis::instance (
   Optional[Stdlib::Port] $repl_announce_port                     = $redis::repl_announce_port,
   String[1] $repl_backlog_size                                   = $redis::repl_backlog_size,
   Integer[0] $repl_backlog_ttl                                   = $redis::repl_backlog_ttl,
+  Boolean $repl_diskless_sync                                    = $redis::repl_diskless_sync,
   Boolean $repl_disable_tcp_nodelay                              = $redis::repl_disable_tcp_nodelay,
   Integer[1] $repl_ping_slave_period                             = $redis::repl_ping_slave_period,
   Integer[1] $repl_timeout                                       = $redis::repl_timeout,
