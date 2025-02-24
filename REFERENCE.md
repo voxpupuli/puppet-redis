@@ -113,6 +113,7 @@ The following parameters are available in the `redis` class:
 * [`hll_sparse_max_bytes`](#-redis--hll_sparse_max_bytes)
 * [`hz`](#-redis--hz)
 * [`latency_monitor_threshold`](#-redis--latency_monitor_threshold)
+* [`latency_tracking`](#-redis--latency_tracking)
 * [`list_max_ziplist_entries`](#-redis--list_max_ziplist_entries)
 * [`list_max_ziplist_value`](#-redis--list_max_ziplist_value)
 * [`log_dir`](#-redis--log_dir)
@@ -154,6 +155,7 @@ The following parameters are available in the `redis` class:
 * [`repl_announce_port`](#-redis--repl_announce_port)
 * [`repl_backlog_size`](#-redis--repl_backlog_size)
 * [`repl_backlog_ttl`](#-redis--repl_backlog_ttl)
+* [`repl_diskless_sync`](#-redis--repl_diskless_sync)
 * [`repl_disable_tcp_nodelay`](#-redis--repl_disable_tcp_nodelay)
 * [`repl_ping_slave_period`](#-redis--repl_ping_slave_period)
 * [`repl_timeout`](#-redis--repl_timeout)
@@ -464,6 +466,14 @@ Data type: `Integer[0]`
 Latency monitoring threshold in milliseconds
 
 Default value: `0`
+
+##### <a name="-redis--latency_tracking"></a>`latency_tracking`
+
+Data type: `Boolean`
+
+Latency monitoring enabled
+
+Default value: `yes`
 
 ##### <a name="-redis--list_max_ziplist_entries"></a>`list_max_ziplist_entries`
 
@@ -793,6 +803,14 @@ Data type: `Integer[0]`
 The number of seconds to elapse before freeing backlog buffer
 
 Default value: `3600`
+
+##### <a name="-redis--repl_diskless_sync"></a>`repl_diskless_sync`
+
+Data type: `Boolean`
+
+Enable/disable diskless replication
+
+Default value: `yes`
 
 ##### <a name="-redis--repl_disable_tcp_nodelay"></a>`repl_disable_tcp_nodelay`
 
@@ -2000,6 +2018,7 @@ The following parameters are available in the `redis::instance` defined type:
 * [`hll_sparse_max_bytes`](#-redis--instance--hll_sparse_max_bytes)
 * [`hz`](#-redis--instance--hz)
 * [`latency_monitor_threshold`](#-redis--instance--latency_monitor_threshold)
+* [`latency_tracking`](#-redis--instance--latency_tracking)
 * [`list_max_ziplist_entries`](#-redis--instance--list_max_ziplist_entries)
 * [`list_max_ziplist_value`](#-redis--instance--list_max_ziplist_value)
 * [`log_dir`](#-redis--instance--log_dir)
@@ -2028,6 +2047,7 @@ The following parameters are available in the `redis::instance` defined type:
 * [`repl_announce_port`](#-redis--instance--repl_announce_port)
 * [`repl_backlog_size`](#-redis--instance--repl_backlog_size)
 * [`repl_backlog_ttl`](#-redis--instance--repl_backlog_ttl)
+* [`repl_diskless_sync`](#-redis--instance--repl_diskless_sync)
 * [`repl_disable_tcp_nodelay`](#-redis--instance--repl_disable_tcp_nodelay)
 * [`repl_ping_slave_period`](#-redis--instance--repl_ping_slave_period)
 * [`repl_timeout`](#-redis--instance--repl_timeout)
@@ -2293,6 +2313,14 @@ Latency monitoring threshold in milliseconds
 
 Default value: `$redis::latency_monitor_threshold`
 
+##### <a name="-redis--instance--latency_tracking"></a>`latency_tracking`
+
+Data type: `Boolean`
+
+Latency monitoring enabled
+
+Default value: `$redis::latency_tracking`
+
 ##### <a name="-redis--instance--list_max_ziplist_entries"></a>`list_max_ziplist_entries`
 
 Data type: `Integer[0]`
@@ -2517,6 +2545,14 @@ Data type: `Integer[0]`
 The number of seconds to elapse before freeing backlog buffer
 
 Default value: `$redis::repl_backlog_ttl`
+
+##### <a name="-redis--instance--repl_diskless_sync"></a>`repl_diskless_sync`
+
+Data type: `Boolean`
+
+Enable/disable diskless replication
+
+Default value: `$redis::repl_diskless_sync`
 
 ##### <a name="-redis--instance--repl_disable_tcp_nodelay"></a>`repl_disable_tcp_nodelay`
 
