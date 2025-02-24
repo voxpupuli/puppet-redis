@@ -113,7 +113,6 @@ The following parameters are available in the `redis` class:
 * [`hll_sparse_max_bytes`](#-redis--hll_sparse_max_bytes)
 * [`hz`](#-redis--hz)
 * [`latency_monitor_threshold`](#-redis--latency_monitor_threshold)
-* [`latency_tracking`](#-redis--latency_tracking)
 * [`list_max_ziplist_entries`](#-redis--list_max_ziplist_entries)
 * [`list_max_ziplist_value`](#-redis--list_max_ziplist_value)
 * [`log_dir`](#-redis--log_dir)
@@ -155,7 +154,6 @@ The following parameters are available in the `redis` class:
 * [`repl_announce_port`](#-redis--repl_announce_port)
 * [`repl_backlog_size`](#-redis--repl_backlog_size)
 * [`repl_backlog_ttl`](#-redis--repl_backlog_ttl)
-* [`repl_diskless_sync`](#-redis--repl_diskless_sync)
 * [`repl_disable_tcp_nodelay`](#-redis--repl_disable_tcp_nodelay)
 * [`repl_ping_slave_period`](#-redis--repl_ping_slave_period)
 * [`repl_timeout`](#-redis--repl_timeout)
@@ -466,14 +464,6 @@ Data type: `Integer[0]`
 Latency monitoring threshold in milliseconds
 
 Default value: `0`
-
-##### <a name="-redis--latency_tracking"></a>`latency_tracking`
-
-Data type: `Boolean`
-
-Enable or disable latency tracking
-
-Default value: `yes`
 
 ##### <a name="-redis--list_max_ziplist_entries"></a>`list_max_ziplist_entries`
 
@@ -803,14 +793,6 @@ Data type: `Integer[0]`
 The number of seconds to elapse before freeing backlog buffer
 
 Default value: `3600`
-
-##### <a name="-redis--repl_diskless_sync"></a>`repl_diskless_sync`
-
-Data type: `Boolean`
-
-Replication SYNC strategy: disk or socket.
-
-Default value: `yes`
 
 ##### <a name="-redis--repl_disable_tcp_nodelay"></a>`repl_disable_tcp_nodelay`
 
@@ -3243,4 +3225,3 @@ Executes a redis-cli command on the target system
 Data type: `String[1]`
 
 The command to run, including all arguments
-
