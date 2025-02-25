@@ -473,7 +473,7 @@ Data type: `Boolean`
 
 Latency monitoring enabled
 
-Default value: `yes`
+Default value: `true`
 
 ##### <a name="-redis--list_max_ziplist_entries"></a>`list_max_ziplist_entries`
 
@@ -810,7 +810,7 @@ Data type: `Boolean`
 
 Enable/disable diskless replication
 
-Default value: `yes`
+Default value: `true`
 
 ##### <a name="-redis--repl_disable_tcp_nodelay"></a>`repl_disable_tcp_nodelay`
 
