@@ -744,7 +744,7 @@ describe 'redis' do
       describe 'with parameter latency_tracking' do
         let(:params) do
           {
-            latency_tracking: yes
+            latency_tracking: true
           }
         end
 
@@ -843,7 +843,7 @@ describe 'redis' do
       describe 'with parameter repl_diskless_sync' do
         let(:params) do
           {
-            repl_diskless_sync: yes
+            repl_diskless_sync: true
           }
         end
 
