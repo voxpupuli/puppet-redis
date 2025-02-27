@@ -595,7 +595,7 @@ min-slaves-max-lag <%= $min_slaves_max_lag %>
 #
 # With slow disks and fast (large bandwidth) networks, diskless replication
 # works better.
-repl-diskless-sync <%= bool2str($repl-diskless-sync, 'yes', 'no') -%>
+repl-diskless-sync <%= bool2str($repl_diskless_sync, 'yes', 'no') -%>
 
 ################################## SECURITY ###################################
 
@@ -888,7 +888,7 @@ latency-monitor-threshold <%= $latency_monitor_threshold %>
 #
 # By default, the extended latency monitoring is enabled since the overhead
 # of keeping track of the command latency is very small.
-latency-tracking <%= bool2str($latency-tracking, 'yes', 'no') -%>
+latency-tracking <%= bool2str($latency_tracking, 'yes', 'no') -%>
 
 ############################# Event notification ##############################
 
