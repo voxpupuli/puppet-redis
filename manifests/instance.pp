@@ -505,6 +505,9 @@ define redis::instance (
 
   $bind_arr = [$bind].flatten
 
+  $default_redis_version = '8.0.0'
+  $redis_version = $facts.get('redis_server_version', $instance::default_version_var)
+
   $_template_params = {
     daemonize                     => $daemonize,
     pid_file                      => $pid_file,
@@ -611,6 +614,7 @@ define redis::instance (
     rdb_save_incremental_fsync    => $rdb_save_incremental_fsync,
     acls                          => $acls,
     custom_options                => $custom_options,
+    redis_version                 => $redis_version,
   }
 
   # TODO: Rely on https://github.com/puppetlabs/puppetlabs-stdlib/pull/1425

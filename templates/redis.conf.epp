@@ -104,6 +104,7 @@
   Optional[Boolean]                                  $rdb_save_incremental_fsync,
   Array[String[1]]                                   $acls,
   Hash[String[1],Variant[String[1], Integer]]        $custom_options,
+  String[1]                                          $redis_version
 | -%>
 # Redis configuration file example
 
@@ -595,7 +596,7 @@ min-slaves-max-lag <%= $min_slaves_max_lag %>
 #
 # With slow disks and fast (large bandwidth) networks, diskless replication
 # works better.
-<%- if  versioncmp($facts['redis_server_version'], '7.0.0') >= 0 { -%>
+<%- if  versioncmp($redis_version, '7.0.0') >= 0 { -%>
 repl-diskless-sync <%= bool2str($repl_diskless_sync, 'yes', 'no') -%>
 <%- } -%>
 
@@ -890,7 +891,7 @@ latency-monitor-threshold <%= $latency_monitor_threshold %>
 #
 # By default, the extended latency monitoring is enabled since the overhead
 # of keeping track of the command latency is very small.
-<% if  versioncmp($facts['redis_server_version'], '7.0.0') >= 0 { %>
+<% if  versioncmp($redis_version, '7.0.0') >= 0 { %>
 latency-tracking <%= bool2str($latency_tracking, 'yes', 'no') -%>
 <% } %>
 
