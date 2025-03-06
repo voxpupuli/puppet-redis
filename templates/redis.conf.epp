@@ -890,9 +890,9 @@ latency-monitor-threshold <%= $latency_monitor_threshold %>
 #
 # By default, the extended latency monitoring is enabled since the overhead
 # of keeping track of the command latency is very small.
-<%- if  versioncmp($facts['redis_server_version'], '7.0.0') >= 0 { -%>
+<% if  versioncmp($facts['redis_server_version'], '7.0.0') >= 0 { %>
 latency-tracking <%= bool2str($latency_tracking, 'yes', 'no') -%>
-<%- } -%>
+<% } %>
 
 ############################# Event notification ##############################
 
