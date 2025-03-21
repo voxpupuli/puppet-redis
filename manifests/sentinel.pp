@@ -77,6 +77,9 @@
 # @param sentinel_announce_ip
 #   Specify the IP or hostname that Sentinel will announce
 #
+# @param sentinel_announce_port
+#   Specify the port that Sentinel will announce
+#
 # @param sentinel_bind
 #   Allow optional sentinel server ip binding.  Can help overcome
 #   issues arising from protect-mode added Redis 3.2
@@ -133,7 +136,7 @@
 # @param acls
 #   This is a way to pass an array of raw ACLs to Sentinel. The ACLs must be
 #   in the form of:
-#   
+#
 #     user USERNAME [additional ACL options]
 #
 # @example Basic inclusion
@@ -168,6 +171,7 @@ class redis::sentinel (
   Integer[1] $quorum = 2,
   Optional[Enum['yes', 'no']] $sentinel_announce_hostnames = undef,
   Optional[Stdlib::Host] $sentinel_announce_ip = undef,
+  Optional[Stdlib::Port] $sentinel_announce_port = undef,
   Variant[Undef, Stdlib::IP::Address, Array[Stdlib::IP::Address]] $sentinel_bind = undef,
   Stdlib::Port $sentinel_port = 26379,
   Optional[Enum['yes', 'no']] $sentinel_resolve_hostnames = undef,

@@ -123,6 +123,7 @@ describe 'redis::sentinel' do
             sentinel_announce_hostnames: 'yes',
             sentinel_resolve_hostnames: 'yes',
             sentinel_announce_ip: 'myhostnameOrIP',
+            sentinel_announce_port: '1234',
             tls_cert_file: '/etc/pki/cert.pem',
             tls_key_file: '/etc/pki/privkey.pem',
             tls_ca_cert_file: '/etc/pki/cacert.pem',
@@ -145,6 +146,7 @@ describe 'redis::sentinel' do
 
             sentinel announce-hostnames yes
             sentinel announce-ip myhostnameOrIP
+            sentinel announce-port 1234
             sentinel resolve-hostnames yes
             sentinel monitor cow 127.0.0.1 6379 2
             sentinel down-after-milliseconds cow 6000

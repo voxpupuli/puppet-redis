@@ -1451,13 +1451,13 @@ Note that this class requires the herculesteam/augeasproviders_sysctl module.
 
 #### Examples
 
-##### 
+#####
 
 ```puppet
 include redis::administration
 ```
 
-##### 
+#####
 
 ```puppet
 class {'redis::administration':
@@ -1535,6 +1535,7 @@ The following parameters are available in the `redis::sentinel` class:
 * [`quorum`](#-redis--sentinel--quorum)
 * [`sentinel_announce_hostnames`](#-redis--sentinel--sentinel_announce_hostnames)
 * [`sentinel_announce_ip`](#-redis--sentinel--sentinel_announce_ip)
+* [`sentinel_announce_port`](#-redis--sentinel--sentinel_announce_port)
 * [`sentinel_bind`](#-redis--sentinel--sentinel_bind)
 * [`sentinel_port`](#-redis--sentinel--sentinel_port)
 * [`sentinel_resolve_hostnames`](#-redis--sentinel--sentinel_resolve_hostnames)
@@ -1742,6 +1743,14 @@ Specify the IP or hostname that Sentinel will announce
 
 Default value: `undef`
 
+##### <a name="-redis--sentinel--sentinel_announce_port"></a>`sentinel_announce_port`
+
+Data type: `Optional[Stdlib::Port]`
+
+Specify the port that Sentinel will announce
+
+Default value: `undef`
+
 ##### <a name="-redis--sentinel--sentinel_bind"></a>`sentinel_bind`
 
 Data type: `Variant[Undef, Stdlib::IP::Address, Array[Stdlib::IP::Address]]`
@@ -1908,7 +1917,7 @@ multiple redis instances on one machine without conflicts
 
 #### Examples
 
-##### 
+#####
 
 ```puppet
 redis::instance {'6380':
