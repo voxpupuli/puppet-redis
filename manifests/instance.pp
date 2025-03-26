@@ -74,7 +74,9 @@
 # @param manage_service_file
 #   Determine if the systemd service file should be managed
 # @param masterauth
-#   If the master is password protected (using the "requirepass" configuration
+#   If the master is password protected (using the "requirepass" configuration)
+# @param masteruser
+#   If the master is password protected and a user is defined (using the "user" configuration)
 # @param maxclients
 #   Set the max number of connected clients at the same time.
 # @param maxmemory
@@ -325,6 +327,7 @@ define redis::instance (
   Stdlib::Filemode $log_dir_mode                                 = $redis::log_dir_mode,
   Redis::LogLevel $log_level                                     = $redis::log_level,
   Optional[Variant[String[1], Sensitive[String[1]], Deferred]] $masterauth = $redis::masterauth,
+  Optional[String[1]] $masteruser                                = $redis::masteruser,
   Integer[1] $maxclients                                         = $redis::maxclients,
   Optional[Variant[Integer, String]] $maxmemory                  = $redis::maxmemory,
   Optional[Redis::MemoryPolicy] $maxmemory_policy                = $redis::maxmemory_policy,
@@ -526,6 +529,7 @@ define redis::instance (
     slaveof                       => $slaveof,
     replicaof                     => $replicaof,
     masterauth                    => $masterauth,
+    masteruser                    => $masteruser,
     slave_serve_stale_data        => $slave_serve_stale_data,
     slave_read_only               => $slave_read_only,
     repl_announce_ip              => $repl_announce_ip,
