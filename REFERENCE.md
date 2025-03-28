@@ -1535,6 +1535,7 @@ The following parameters are available in the `redis::sentinel` class:
 * [`quorum`](#-redis--sentinel--quorum)
 * [`sentinel_announce_hostnames`](#-redis--sentinel--sentinel_announce_hostnames)
 * [`sentinel_announce_ip`](#-redis--sentinel--sentinel_announce_ip)
+* [`sentinel_announce_port`](#-redis--sentinel--sentinel_announce_port)
 * [`sentinel_bind`](#-redis--sentinel--sentinel_bind)
 * [`sentinel_port`](#-redis--sentinel--sentinel_port)
 * [`sentinel_resolve_hostnames`](#-redis--sentinel--sentinel_resolve_hostnames)
@@ -1739,6 +1740,14 @@ Default value: `undef`
 Data type: `Optional[Stdlib::Host]`
 
 Specify the IP or hostname that Sentinel will announce
+
+Default value: `undef`
+
+##### <a name="-redis--sentinel--sentinel_announce_port"></a>`sentinel_announce_port`
+
+Data type: `Optional[Stdlib::Port]`
+
+Specify the port that Sentinel will announce
 
 Default value: `undef`
 
