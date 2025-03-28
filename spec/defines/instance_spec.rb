@@ -11,16 +11,16 @@ describe 'redis::instance' do
     PUPPET
   end
 
-  on_supported_os.each do |os, facts|
+  on_supported_os.each do |os, os_facts|
     context "on #{os}" do
-      let(:facts) { facts }
+      let(:facts) { os_facts }
 
       context 'with app2 title' do
         let(:title) { 'app2' }
         let(:config_file) do
-          case facts[:os]['family']
+          case facts['os']['family']
           when 'RedHat'
-            if facts[:os]['release']['major'].to_i > 8
+            if facts['os']['release']['major'].to_i > 8
               '/etc/redis/redis-server-app2.conf'
             else
               '/etc/redis-server-app2.conf'
