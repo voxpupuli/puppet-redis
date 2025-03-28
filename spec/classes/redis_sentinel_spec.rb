@@ -123,7 +123,7 @@ describe 'redis::sentinel' do
             sentinel_announce_hostnames: 'yes',
             sentinel_resolve_hostnames: 'yes',
             sentinel_announce_ip: 'myhostnameOrIP',
-            sentinel_announce_port: '1234',
+            sentinel_announce_port: 1234,
             tls_cert_file: '/etc/pki/cert.pem',
             tls_key_file: '/etc/pki/privkey.pem',
             tls_ca_cert_file: '/etc/pki/cacert.pem',
