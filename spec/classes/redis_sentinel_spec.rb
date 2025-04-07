@@ -110,6 +110,7 @@ describe 'redis::sentinel' do
           {
             sentinel_tls_port: 26_380,
             auth_pass: 'password',
+            auth_user: 'username',
             sentinel_bind: '192.0.2.10',
             protected_mode: false,
             master_name: 'cow',
@@ -153,6 +154,7 @@ describe 'redis::sentinel' do
             sentinel parallel-syncs cow 1
             sentinel failover-timeout cow 28000
             sentinel auth-pass cow password
+            sentinel auth-user cow username
             sentinel notification-script cow /path/to/bar.sh
             sentinel client-reconfig-script cow /path/to/foo.sh
 
@@ -179,6 +181,7 @@ describe 'redis::sentinel' do
         let(:params) do
           {
             auth_pass: 'password',
+            auth_user: 'username',
             sentinel_bind: ['192.0.2.10', '192.168.1.1'],
             master_name: 'cow',
             down_after: 6000,
@@ -205,6 +208,7 @@ describe 'redis::sentinel' do
             sentinel parallel-syncs cow 1
             sentinel failover-timeout cow 28000
             sentinel auth-pass cow password
+            sentinel auth-user cow username
             sentinel notification-script cow /path/to/bar.sh
             sentinel client-reconfig-script cow /path/to/foo.sh
 
