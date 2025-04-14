@@ -523,6 +523,20 @@ describe 'redis' do
         }
       end
 
+      describe 'with parameter masteruser' do
+        let(:params) do
+          {
+            masteruser: '_VALUE_'
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => %r{masteruser.*_VALUE_}
+          )
+        }
+      end
+
       describe 'with parameter maxclients' do
         let(:params) do
           {

@@ -95,7 +95,9 @@
 # @param managed_by_cluster_manager
 #   Choose if redis will be managed by a cluster manager such as pacemaker or rgmanager
 # @param masterauth
-#   If the master is password protected (using the "requirepass" configuration
+#   If the master is password protected (using the "requirepass" configuration)
+# @param masteruser
+#   If the master is password protected and a user is defined (using the "user" configuration)
 # @param maxclients
 #   Set the max number of connected clients at the same time.
 # @param maxmemory
@@ -392,6 +394,7 @@ class redis (
   Boolean $manage_package                                        = true,
   Boolean $manage_repo                                           = false,
   Optional[Variant[String[1], Sensitive[String[1]], Deferred]] $masterauth = undef,
+  Optional[String[1]] $masteruser                                = undef,
   Integer[1] $maxclients                                         = 10000,
   $maxmemory                                                     = undef,
   Optional[Redis::MemoryPolicy] $maxmemory_policy                = undef,

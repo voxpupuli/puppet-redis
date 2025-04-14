@@ -23,6 +23,7 @@
   Optional[String[1]]                                $slaveof,
   Optional[String[1]]                                $replicaof,
   Optional[Variant[String[1], Sensitive[String[1]]]] $masterauth,
+  Optional[String[1]]                                $masteruser,
   Boolean                                            $slave_serve_stale_data,
   Boolean                                            $slave_read_only,
   Optional[Stdlib::Host]                             $repl_announce_ip,
@@ -410,6 +411,18 @@ dir <%= $workdir %>
 #
 # masterauth <master-password>
 <% if $masterauth { -%>masterauth <%= $masterauth %><% } -%>
+
+# However this is not enough if you are using Redis ACLs (for Redis version
+# 6 or greater), and the default user is not capable of running the PSYNC
+# command and/or other commands needed for replication. In this case it's
+# better to configure a special user to use with replication, and specify the
+# username configuration as such:
+#
+# masteruser <master-username>
+<% if $masteruser { -%>masteruser <%= $masteruser %><% } -%>
+
+# When username is specified, the replica will authenticate against its
+# master using the new AUTH form: AUTH <username> <password>.
 
 # When a slave loses the connection with the master, or when the replication
 # is still in progress, the slave can act in two different ways:

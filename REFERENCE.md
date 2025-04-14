@@ -122,6 +122,7 @@ The following parameters are available in the `redis` class:
 * [`manage_package`](#-redis--manage_package)
 * [`managed_by_cluster_manager`](#-redis--managed_by_cluster_manager)
 * [`masterauth`](#-redis--masterauth)
+* [`masteruser`](#-redis--masteruser)
 * [`maxclients`](#-redis--maxclients)
 * [`maxmemory`](#-redis--maxmemory)
 * [`maxmemory_policy`](#-redis--maxmemory_policy)
@@ -532,7 +533,15 @@ Default value: `false`
 
 Data type: `Optional[Variant[String[1], Sensitive[String[1]], Deferred]]`
 
-If the master is password protected (using the "requirepass" configuration
+If the master is password protected (using the "requirepass" configuration)
+
+Default value: `undef`
+
+##### <a name="-redis--masteruser"></a>`masteruser`
+
+Data type: `Optional[String[1]]`
+
+If the master is password protected and a user is defined (using the "user" configuration)
 
 Default value: `undef`
 
@@ -1514,6 +1523,7 @@ class {'redis::sentinel':
 The following parameters are available in the `redis::sentinel` class:
 
 * [`auth_pass`](#-redis--sentinel--auth_pass)
+* [`auth_user`](#-redis--sentinel--auth_user)
 * [`config_file`](#-redis--sentinel--config_file)
 * [`config_file_orig`](#-redis--sentinel--config_file_orig)
 * [`config_file_mode`](#-redis--sentinel--config_file_mode)
@@ -1561,6 +1571,14 @@ The following parameters are available in the `redis::sentinel` class:
 Data type: `Optional[Variant[String[1], Sensitive[String[1]]]]`
 
 The password to use to authenticate with the master and slaves.
+
+Default value: `undef`
+
+##### <a name="-redis--sentinel--auth_user"></a>`auth_user`
+
+Data type: `Optional[String[1]]`
+
+The username to use to authenticate with the master and slaves.
 
 Default value: `undef`
 
@@ -1962,6 +1980,7 @@ The following parameters are available in the `redis::instance` defined type:
 * [`managed_by_cluster_manager`](#-redis--instance--managed_by_cluster_manager)
 * [`manage_service_file`](#-redis--instance--manage_service_file)
 * [`masterauth`](#-redis--instance--masterauth)
+* [`masteruser`](#-redis--instance--masteruser)
 * [`maxclients`](#-redis--instance--maxclients)
 * [`maxmemory`](#-redis--instance--maxmemory)
 * [`maxmemory_policy`](#-redis--instance--maxmemory_policy)
@@ -2314,9 +2333,17 @@ Default value: `true`
 
 Data type: `Optional[Variant[String[1], Sensitive[String[1]], Deferred]]`
 
-If the master is password protected (using the "requirepass" configuration
+If the master is password protected (using the "requirepass" configuration)
 
 Default value: `$redis::masterauth`
+
+##### <a name="-redis--instance--masteruser"></a>`masteruser`
+
+Data type: `Optional[String[1]]`
+
+If the master is password protected and a user is defined (using the "user" configuration)
+
+Default value: `$redis::masteruser`
 
 ##### <a name="-redis--instance--maxclients"></a>`maxclients`
 
