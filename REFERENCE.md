@@ -116,6 +116,7 @@ The following parameters are available in the `redis` class:
 * [`list_max_ziplist_entries`](#-redis--list_max_ziplist_entries)
 * [`list_max_ziplist_value`](#-redis--list_max_ziplist_value)
 * [`log_dir`](#-redis--log_dir)
+* [`log_dir_group`](#-redis--log_dir_group)
 * [`log_dir_mode`](#-redis--log_dir_mode)
 * [`log_file`](#-redis--log_file)
 * [`log_level`](#-redis--log_level)
@@ -488,6 +489,14 @@ Data type: `Stdlib::Absolutepath`
 Specify directory where to write log entries.
 
 Default value: `$redis::params::log_dir`
+
+##### <a name="-redis--log_dir_group"></a>`log_dir_group`
+
+Data type: `Optional[String[1]]`
+
+Adjust filesystem group for log files.
+
+Default value: `undef`
 
 ##### <a name="-redis--log_dir_mode"></a>`log_dir_mode`
 
