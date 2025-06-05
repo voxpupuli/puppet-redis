@@ -9,4 +9,4 @@
 # * volatile-ttl (Remove the key with the nearest expire time (minor TTL)
 # * noeviction (Don't evict anything, just return an error on write operations)
 type Redis::MemoryPolicy = Enum['volatile-lru', 'allkeys-lru', 'volatile-lfu', 'allkeys-lfu', 'volatile-random',
-  'allkeys-random', 'volatile-ttl', 'noeviction']
+'allkeys-random', 'volatile-ttl', 'noeviction']
