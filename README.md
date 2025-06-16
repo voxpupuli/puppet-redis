@@ -1,3 +1,4 @@
+
 # Puppet Redis
 
 [![License](https://img.shields.io/github/license/voxpupuli/puppet-redis.svg)](https://github.com/voxpupuli/puppet-redis/blob/master/LICENSE)
