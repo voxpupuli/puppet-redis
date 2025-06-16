@@ -185,6 +185,8 @@
 #   Specify which X.509 certificate file to use for TLS connections.
 # @param tls_key_file
 #   Specify which privaye key file to use for TLS connections.
+# @param tls_key_file_pass
+#   Passphrase to encrypt the private key file.
 # @param tls_ca_cert_file
 #   Specify which X.509 CA certificate(s) bundle file to use.
 # @param tls_ca_cert_dir
@@ -368,6 +370,7 @@ define redis::instance (
   Optional[Stdlib::Port] $tls_port                               = $redis::tls_port,
   Optional[Stdlib::Absolutepath] $tls_cert_file                  = $redis::tls_cert_file,
   Optional[Stdlib::Absolutepath] $tls_key_file                   = $redis::tls_key_file,
+  Optional[Variant[String[1], Sensitive[String[1]], Deferred]] $tls_key_file_pass = $redis::tls_key_file_pass,
   Optional[Stdlib::Absolutepath] $tls_ca_cert_file               = $redis::tls_ca_cert_file,
   Optional[Stdlib::Absolutepath] $tls_ca_cert_dir                = $redis::tls_ca_cert_dir,
   Optional[String[1]] $tls_ciphers                               = $redis::tls_ciphers,
@@ -578,6 +581,7 @@ define redis::instance (
     tls_port                      => $tls_port,
     tls_cert_file                 => $tls_cert_file,
     tls_key_file                  => $tls_key_file,
+    tls_key_file_pass             => $tls_key_file_pass,
     tls_ca_cert_file              => $tls_ca_cert_file,
     tls_ca_cert_dir               => $tls_ca_cert_dir,
     tls_ciphers                   => $tls_ciphers,

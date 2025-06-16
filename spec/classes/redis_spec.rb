@@ -1442,6 +1442,7 @@ describe 'redis' do
             tls_port: 7777,
             tls_cert_file: '/etc/ssl/certs/dummy.crt',
             tls_key_file: '/etc/ssl/private/dummy.key',
+            tls_key_file_pass: '_VALUE_',
             tls_ca_cert_file: '/etc/ssl/certs/ca_bundle.pem',
             tls_ca_cert_dir: '/etc/ssl/some/dir',
             tls_auth_clients: 'no',
@@ -1459,6 +1460,7 @@ describe 'redis' do
             with_content(%r{^tls-port 7777$}).
             with_content(%r{^tls-cert-file\s*/etc/ssl/certs/dummy\.crt$}).
             with_content(%r{^tls-key-file\s*/etc/ssl/private/dummy\.key$}).
+            with_content(%r{^tls-key-file-pass\s*_VALUE_$}).
             with_content(%r{^tls-ca-cert-file\s*/etc/ssl/certs/ca_bundle\.pem$}).
             with_content(%r{^tls-ca-cert-dir\s*/etc/ssl/some/dir$}).
             with_content(%r{^tls-auth-clients\s*no$}).

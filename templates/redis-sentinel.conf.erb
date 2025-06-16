@@ -43,6 +43,9 @@ requirepass <%= @requirepass %>
 
 tls-cert-file <%= @tls_cert_file %>
 tls-key-file <%= @tls_key_file %>
+<% if @tls_key_file_pass -%>
+tls-key-file-pass <%= @tls_key_file_pass %>
+<% end -%>
 <% if @tls_ca_cert_file -%>
 tls-ca-cert-file <%= @tls_ca_cert_file %>
 <% end -%>
