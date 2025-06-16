@@ -1473,6 +1473,21 @@ describe 'redis' do
         end
       end
 
+      describe 'with TLS key file pass is set sensitive' do
+        let(:params) do
+          {
+            tls_port: 7777,
+            tls_key_file_pass: sensitive('_VALUE_'),
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => sensitive(%r{tls-key-file-pass.*_VALUE_})
+          )
+        }
+      end
+
       describe 'with parameter manage_service_file' do
         let(:params) do
           {
