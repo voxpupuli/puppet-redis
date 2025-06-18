@@ -111,6 +111,9 @@
 # @param tls_key_file
 #   Specify which privaye key file to use for TLS connections.
 #
+# @param tls_key_file_pass
+#   Passphrase to encrypt the private key file.
+#
 # @param tls_ca_cert_file
 #   Specify which X.509 CA certificate(s) bundle file to use.
 #
@@ -183,6 +186,7 @@ class redis::sentinel (
   String[1] $service_user = 'redis',
   Optional[Stdlib::Absolutepath] $tls_cert_file = undef,
   Optional[Stdlib::Absolutepath] $tls_key_file = undef,
+  Optional[Variant[String[1], Sensitive[String[1]], Deferred]] $tls_key_file_pass = undef,
   Optional[Stdlib::Absolutepath] $tls_ca_cert_file = undef,
   Optional[Stdlib::Absolutepath] $tls_ca_cert_dir = undef,
   Enum['yes', 'no', 'optional'] $tls_auth_clients = 'no',

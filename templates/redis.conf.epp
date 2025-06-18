@@ -75,6 +75,7 @@
   Optional[Stdlib::Port]                             $tls_port,
   Optional[Stdlib::Absolutepath]                     $tls_cert_file,
   Optional[Stdlib::Absolutepath]                     $tls_key_file,
+  Optional[Variant[String[1], Sensitive[String[1]]]] $tls_key_file_pass,
   Optional[Stdlib::Absolutepath]                     $tls_ca_cert_file,
   Optional[Stdlib::Absolutepath]                     $tls_ca_cert_dir,
   Optional[String[1]]                                $tls_ciphers,
@@ -177,6 +178,9 @@ tls-port <%= $tls_port %>
 # PEM formatted.
 tls-cert-file <%= $tls_cert_file %>
 tls-key-file <%= $tls_key_file %>
+<% if $tls_key_file_pass { -%>
+tls-key-file-pass <%= $tls_key_file_pass %>
+<% } -%>
 
 # Configure a CA certificate(s) bundle or directory to authenticate TLS/SSL
 # clients and peers.  Redis requires an explicit configuration of at least one

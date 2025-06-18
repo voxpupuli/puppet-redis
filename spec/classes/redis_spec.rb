@@ -1442,6 +1442,7 @@ describe 'redis' do
             tls_port: 7777,
             tls_cert_file: '/etc/ssl/certs/dummy.crt',
             tls_key_file: '/etc/ssl/private/dummy.key',
+            tls_key_file_pass: '_VALUE_',
             tls_ca_cert_file: '/etc/ssl/certs/ca_bundle.pem',
             tls_ca_cert_dir: '/etc/ssl/some/dir',
             tls_auth_clients: 'no',
@@ -1459,6 +1460,7 @@ describe 'redis' do
             with_content(%r{^tls-port 7777$}).
             with_content(%r{^tls-cert-file\s*/etc/ssl/certs/dummy\.crt$}).
             with_content(%r{^tls-key-file\s*/etc/ssl/private/dummy\.key$}).
+            with_content(%r{^tls-key-file-pass\s*_VALUE_$}).
             with_content(%r{^tls-ca-cert-file\s*/etc/ssl/certs/ca_bundle\.pem$}).
             with_content(%r{^tls-ca-cert-dir\s*/etc/ssl/some/dir$}).
             with_content(%r{^tls-auth-clients\s*no$}).
@@ -1469,6 +1471,21 @@ describe 'redis' do
             with_content(%r{^tls-protocols\s*"TLSv1\.2\sTLSv1\.3"$}).
             with_content(%r{^tls-prefer-server-ciphers\s*yes$})
         end
+      end
+
+      describe 'with TLS key file pass is set sensitive' do
+        let(:params) do
+          {
+            tls_port: 7777,
+            tls_key_file_pass: sensitive('_VALUE_'),
+          }
+        end
+
+        it {
+          is_expected.to contain_file(config_file_orig).with(
+            'content' => sensitive(%r{tls-key-file-pass.*_VALUE_})
+          )
+        }
       end
 
       describe 'with parameter manage_service_file' do
