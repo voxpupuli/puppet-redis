@@ -8,6 +8,7 @@ group :test do
   gem 'puppet_metadata', '~> 5.0',  :require => false
   gem 'redis',                      :require => false
   gem 'mock_redis',                 :require => false
+  gem 'mocha',                      :require => false
 end
 
 group :development do
