@@ -133,6 +133,14 @@
 # @param client_reconfig_script
 #   Path to the client-reconfig script
 #
+# @param sentinel_auth_pass
+#   The password that Sentinels use to authenticate with each other.
+#   This is needed for Redis 7 with ACLs enabled.
+#
+# @param sentinel_auth_user
+#   The username that Sentinels use to authenticate with each other.
+#   This is needed for Redis 7 with ACLs enabled.
+#
 # @param acls
 #   This is a way to pass an array of raw ACLs to Sentinel. The ACLs must be
 #   in the form of:
@@ -190,6 +198,8 @@ class redis::sentinel (
   Stdlib::Absolutepath $working_dir = $redis::params::sentinel_working_dir,
   Optional[Stdlib::Absolutepath] $notification_script = undef,
   Optional[Stdlib::Absolutepath] $client_reconfig_script = undef,
+  Optional[Variant[String[1], Sensitive[String[1]]]] $sentinel_auth_pass = undef,
+  Optional[String[1]] $sentinel_auth_user = undef,
   Array[String[1]] $acls = [],
 ) inherits redis::params {
   $auth_pass_unsensitive = if $auth_pass =~ Sensitive {

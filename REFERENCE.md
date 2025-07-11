@@ -1553,6 +1553,8 @@ The following parameters are available in the `redis::sentinel` class:
 * [`working_dir`](#-redis--sentinel--working_dir)
 * [`notification_script`](#-redis--sentinel--notification_script)
 * [`client_reconfig_script`](#-redis--sentinel--client_reconfig_script)
+* [`sentinel_auth_pass`](#-redis--sentinel--sentinel_auth_pass)
+* [`sentinel_auth_user`](#-redis--sentinel--sentinel_auth_user)
 * [`acls`](#-redis--sentinel--acls)
 * [`service_ensure`](#-redis--sentinel--service_ensure)
 
@@ -1886,6 +1888,24 @@ Default value: `undef`
 Data type: `Optional[Stdlib::Absolutepath]`
 
 Path to the client-reconfig script
+
+Default value: `undef`
+
+##### <a name="-redis--sentinel--sentinel_auth_pass"></a>`sentinel_auth_pass`
+
+Data type: `Optional[Variant[String[1], Sensitive[String[1]]]]`
+
+The password that Sentinels use to authenticate with each other.
+This is needed for Redis 7 with ACLs enabled.
+
+Default value: `undef`
+
+##### <a name="-redis--sentinel--sentinel_auth_user"></a>`sentinel_auth_user`
+
+Data type: `Optional[String[1]]`
+
+The username that Sentinels use to authenticate with each other.
+This is needed for Redis 7 with ACLs enabled.
 
 Default value: `undef`
 
