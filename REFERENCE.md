@@ -532,7 +532,7 @@ Default value: `false`
 
 Data type: `Optional[Variant[String[1], Sensitive[String[1]], Deferred]]`
 
-If the master is password protected (using the "requirepass" configuration
+If the master is password protected (using the "requirepass" configuration)
 
 Default value: `undef`
 
