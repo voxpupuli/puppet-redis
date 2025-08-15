@@ -95,7 +95,7 @@
 # @param managed_by_cluster_manager
 #   Choose if redis will be managed by a cluster manager such as pacemaker or rgmanager
 # @param masterauth
-#   If the master is password protected (using the "requirepass" configuration
+#   If the master is password protected (using the "requirepass" configuration)
 # @param maxclients
 #   Set the max number of connected clients at the same time.
 # @param maxmemory
