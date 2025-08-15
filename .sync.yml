@@ -4,7 +4,5 @@ Gemfile:
     ':test':
       - gem: 'redis'
       - gem: 'mock_redis'
-      - gem: 'mocha'
 spec/spec_helper.rb:
-  mock_with: ":mocha"
   facterdb_string_keys: true

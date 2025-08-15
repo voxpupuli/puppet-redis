@@ -28,7 +28,7 @@ describe 'redis::get' do
   context 'should return nil if key does not exist and no default is specified' do
     before do
       mr = MockRedis.new
-      Redis.stubs(:new).returns(mr)
+      allow(Redis).to receive(:new).and_return(mr)
     end
 
     it { is_expected.to run.with_params('nonexistent_key', REDIS_URL).and_return(nil) }
@@ -37,7 +37,7 @@ describe 'redis::get' do
   context 'should return the default value if specified and key does not exist' do
     before do
       mr = MockRedis.new
-      Redis.stubs(:new).returns(mr)
+      allow(Redis).to receive(:new).and_return(mr)
     end
 
     it { is_expected.to run.with_params('nonexistent_key', REDIS_URL, 'default_value').and_return('default_value') }
@@ -46,7 +46,7 @@ describe 'redis::get' do
   context 'should return the value of the specified key' do
     before do
       mr = MockRedis.new
-      Redis.stubs(:new).returns(mr)
+      allow(Redis).to receive(:new).and_return(mr)
       mr.set('key', 'value')
     end
 
@@ -56,7 +56,7 @@ describe 'redis::get' do
   context 'should return the value of the specified key and not the default' do
     before do
       mr = MockRedis.new
-      Redis.stubs(:new).returns(mr)
+      allow(Redis).to receive(:new).and_return(mr)
       mr.set('key', 'value')
     end
 
@@ -80,7 +80,7 @@ describe 'redis::get' do
   describe 'when an invalid type (non-string) is specified' do
     before do
       mr = MockRedis.new
-      Redis.stubs(:new).returns(mr)
+      allow(Redis).to receive(:new).and_return(mr)
     end
 
     [{ 'ha' => 'sh' }, true, 1, %w[an array]].each do |p|
