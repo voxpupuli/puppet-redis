@@ -184,6 +184,7 @@ The following parameters are available in the `redis` class:
 * [`tls_port`](#-redis--tls_port)
 * [`tls_cert_file`](#-redis--tls_cert_file)
 * [`tls_key_file`](#-redis--tls_key_file)
+* [`tls_key_file_pass`](#-redis--tls_key_file_pass)
 * [`tls_ca_cert_file`](#-redis--tls_ca_cert_file)
 * [`tls_ca_cert_dir`](#-redis--tls_ca_cert_dir)
 * [`tls_auth_clients`](#-redis--tls_auth_clients)
@@ -1043,6 +1044,14 @@ Specify which privaye key file to use for TLS connections.
 
 Default value: `undef`
 
+##### <a name="-redis--tls_key_file_pass"></a>`tls_key_file_pass`
+
+Data type: `Optional[Variant[String[1], Sensitive[String[1]], Deferred]]`
+
+Passphrase to encrypt the private key file.
+
+Default value: `undef`
+
 ##### <a name="-redis--tls_ca_cert_file"></a>`tls_ca_cert_file`
 
 Data type: `Optional[Stdlib::Absolutepath]`
@@ -1546,6 +1555,7 @@ The following parameters are available in the `redis::sentinel` class:
 * [`service_enable`](#-redis--sentinel--service_enable)
 * [`tls_cert_file`](#-redis--sentinel--tls_cert_file)
 * [`tls_key_file`](#-redis--sentinel--tls_key_file)
+* [`tls_key_file_pass`](#-redis--sentinel--tls_key_file_pass)
 * [`tls_ca_cert_file`](#-redis--sentinel--tls_ca_cert_file)
 * [`tls_ca_cert_dir`](#-redis--sentinel--tls_ca_cert_dir)
 * [`tls_auth_clients`](#-redis--sentinel--tls_auth_clients)
@@ -1834,6 +1844,14 @@ Specify which privaye key file to use for TLS connections.
 
 Default value: `undef`
 
+##### <a name="-redis--sentinel--tls_key_file_pass"></a>`tls_key_file_pass`
+
+Data type: `Optional[Variant[String[1], Sensitive[String[1]], Deferred]]`
+
+Passphrase to encrypt the private key file.
+
+Default value: `undef`
+
 ##### <a name="-redis--sentinel--tls_ca_cert_file"></a>`tls_ca_cert_file`
 
 Data type: `Optional[Stdlib::Absolutepath]`
@@ -2031,6 +2049,7 @@ The following parameters are available in the `redis::instance` defined type:
 * [`tls_port`](#-redis--instance--tls_port)
 * [`tls_cert_file`](#-redis--instance--tls_cert_file)
 * [`tls_key_file`](#-redis--instance--tls_key_file)
+* [`tls_key_file_pass`](#-redis--instance--tls_key_file_pass)
 * [`tls_ca_cert_file`](#-redis--instance--tls_ca_cert_file)
 * [`tls_ca_cert_dir`](#-redis--instance--tls_ca_cert_dir)
 * [`tls_auth_clients`](#-redis--instance--tls_auth_clients)
@@ -2741,6 +2760,14 @@ Data type: `Optional[Stdlib::Absolutepath]`
 Specify which privaye key file to use for TLS connections.
 
 Default value: `$redis::tls_key_file`
+
+##### <a name="-redis--instance--tls_key_file_pass"></a>`tls_key_file_pass`
+
+Data type: `Optional[Variant[String[1], Sensitive[String[1]], Deferred]]`
+
+Passphrase to encrypt the private key file.
+
+Default value: `$redis::tls_key_file_pass`
 
 ##### <a name="-redis--instance--tls_ca_cert_file"></a>`tls_ca_cert_file`
 

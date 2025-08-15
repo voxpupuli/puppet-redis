@@ -126,6 +126,7 @@ describe 'redis::sentinel' do
             sentinel_announce_port: 1234,
             tls_cert_file: '/etc/pki/cert.pem',
             tls_key_file: '/etc/pki/privkey.pem',
+            tls_key_file_pass: '_VALUE_',
             tls_ca_cert_file: '/etc/pki/cacert.pem',
             tls_ca_cert_dir: '/etc/pki/cacerts',
             tls_auth_clients: 'yes',
@@ -163,6 +164,7 @@ describe 'redis::sentinel' do
 
             tls-cert-file /etc/pki/cert.pem
             tls-key-file /etc/pki/privkey.pem
+            tls-key-file-pass _VALUE_
             tls-ca-cert-file /etc/pki/cacert.pem
             tls-ca-cert-dir /etc/pki/cacerts
             tls-auth-clients yes
