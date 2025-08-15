@@ -130,6 +130,8 @@ describe 'redis::sentinel' do
             tls_ca_cert_dir: '/etc/pki/cacerts',
             tls_auth_clients: 'yes',
             tls_replication: true,
+            sentinel_auth_user: 'default',
+            sentinel_auth_pass: '4321'
           }
         end
 
@@ -143,6 +145,9 @@ describe 'redis::sentinel' do
             supervised auto
             pidfile #{pidfile}
             protected-mode no
+
+            sentinel sentinel-user default
+            sentinel sentinel-pass 4321
 
             sentinel announce-hostnames yes
             sentinel announce-ip myhostnameOrIP

@@ -10,6 +10,13 @@ daemonize <%= @daemonize ? 'yes' : 'no' %>
 supervised auto
 pidfile <%= @pid_file %>
 protected-mode <%= @protected_mode ? 'yes' : 'no' %>
+<% if @sentinel_auth_user -%>
+
+sentinel sentinel-user <%= @sentinel_auth_user %>
+<% end -%>
+<% if @sentinel_auth_pass -%>
+sentinel sentinel-pass <%= @sentinel_auth_pass %>
+<% end -%>
 
 <% if @sentinel_announce_hostnames -%>
 sentinel announce-hostnames <%= @sentinel_announce_hostnames %>
