@@ -159,6 +159,9 @@
 #     log_file   => '/var/log/redis/sentinel.log',
 #   }
 #
+# @param contain_redis
+#   Contain redis base class. If set to false, sentinel is installed without redis server.
+#
 class redis::sentinel (
   Optional[Variant[String[1], Sensitive[String[1]]]] $auth_pass = undef,
   Stdlib::Absolutepath $config_file = $redis::params::sentinel_config_file,
@@ -205,6 +208,7 @@ class redis::sentinel (
   Optional[Variant[String[1], Sensitive[String[1]]]] $sentinel_auth_pass = undef,
   Optional[String[1]] $sentinel_auth_user = undef,
   Array[String[1]] $acls = [],
+  Boolean $contain_redis = true,
 ) inherits redis::params {
   $auth_pass_unsensitive = if $auth_pass =~ Sensitive {
     $auth_pass.unwrap
@@ -212,13 +216,17 @@ class redis::sentinel (
     $auth_pass
   }
 
-  contain 'redis'
+  if $contain_redis {
+    contain 'redis'
+  }
 
   if $package_name != $redis::package_name {
     stdlib::ensure_packages([$package_name], {
         ensure => $package_ensure
     })
-    Package[$package_name] -> Class['redis']
+    if $contain_redis {
+      Package[$package_name] -> Class['redis']
+    }
   }
   Package[$package_name] -> File[$config_file_orig]
 
