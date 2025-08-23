@@ -490,10 +490,11 @@ Default value: `$redis::params::log_dir_mode`
 
 ##### <a name="-redis--log_file"></a>`log_file`
 
-Data type: `String`
+Data type: `Variant[Boolean[false], String[1]]`
 
 Specify file where to write log entries. Relative paths will be prepended
-with log_dir but absolute paths are also accepted.
+with log_dir but absolute paths are also accepted. Boolean false means only
+log to systemd-journald.
 
 Default value: `'redis.log'`
 
@@ -2318,10 +2319,11 @@ Default value: `$redis::log_dir_mode`
 
 ##### <a name="-redis--instance--log_file"></a>`log_file`
 
-Data type: `String`
+Data type: `Variant[Boolean[false], String[1]]`
 
 Specify file where to write log entries. Relative paths will be prepended
-with log_dir but absolute paths are also accepted.
+with log_dir but absolute paths are also accepted. Boolean false means only
+log to systemd-journald.
 
 Default value: `"redis-server-${name}.log"`
 
