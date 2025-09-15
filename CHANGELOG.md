@@ -4,6 +4,36 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v12.0.0](https://github.com/voxpupuli/puppet-redis/tree/v12.0.0) (2025-09-15)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v11.1.0...v12.0.0)
+
+**Breaking changes:**
+
+- Use namespace function from puppetlabs-stdlib [\#555](https://github.com/voxpupuli/puppet-redis/pull/555) ([kajinamit](https://github.com/kajinamit))
+- Drop puppet, update openvox minimum version to 8.19 [\#552](https://github.com/voxpupuli/puppet-redis/pull/552) ([TheMeier](https://github.com/TheMeier))
+
+**Implemented enhancements:**
+
+- allow systemd 9 [\#557](https://github.com/voxpupuli/puppet-redis/pull/557) ([TheMeier](https://github.com/TheMeier))
+- Add sentinel auth\_user and auth\_pass [\#551](https://github.com/voxpupuli/puppet-redis/pull/551) ([BjoernHelmbold](https://github.com/BjoernHelmbold))
+- Add support for tls-key-file-pass [\#548](https://github.com/voxpupuli/puppet-redis/pull/548) ([lbetz](https://github.com/lbetz))
+- Add parameter sentinel\_announce\_port [\#543](https://github.com/voxpupuli/puppet-redis/pull/543) ([BjoernHelmbold](https://github.com/BjoernHelmbold))
+- metadata.json: Add OpenVox [\#542](https://github.com/voxpupuli/puppet-redis/pull/542) ([jstraw](https://github.com/jstraw))
+
+**Fixed bugs:**
+
+- redis::instance: do not exec cp if source and destination are equal [\#430](https://github.com/voxpupuli/puppet-redis/pull/430) ([trefzer](https://github.com/trefzer))
+
+**Closed issues:**
+
+- Add support for tls-key-file-pass [\#547](https://github.com/voxpupuli/puppet-redis/issues/547)
+- \[10.0.0\] last puppet-systemd not supported [\#523](https://github.com/voxpupuli/puppet-redis/issues/523)
+
+**Merged pull requests:**
+
+- init: `masterauth` param doc string: add missing closing parenthesis [\#553](https://github.com/voxpupuli/puppet-redis/pull/553) ([kenyon](https://github.com/kenyon))
+
 ## [v11.1.0](https://github.com/voxpupuli/puppet-redis/tree/v11.1.0) (2025-01-07)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v11.0.0...v11.1.0)
@@ -696,7 +726,6 @@ This is the first release since the module was migrated to the Vox Pupuli `puppe
 
 **Merged pull requests:**
 
-- Redis Cluster 3.0 Feature [\#71](https://github.com/voxpupuli/puppet-redis/pull/71) ([claudio-walser](https://github.com/claudio-walser))
 - Fix Support for EL7 and Puppet 4 [\#66](https://github.com/voxpupuli/puppet-redis/pull/66) ([trlinkin](https://github.com/trlinkin))
 - Add a option to override the service provider [\#63](https://github.com/voxpupuli/puppet-redis/pull/63) ([nerzhul](https://github.com/nerzhul))
 - add support for hz option [\#50](https://github.com/voxpupuli/puppet-redis/pull/50) ([nerzhul](https://github.com/nerzhul))
