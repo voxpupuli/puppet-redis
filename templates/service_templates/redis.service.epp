@@ -1,4 +1,5 @@
 <%- |
+  String                                             $provider,
   Boolean                                            $ulimit_managed,
   Integer[0]                                         $ulimit,
   Stdlib::Absolutepath                               $bin_path,
@@ -11,7 +12,7 @@
   Optional[Integer[0]]                               $service_timeout_stop,
 | -%>
 [Unit]
-Description=Redis Advanced key-value store for instance <%= $instance_title %>
+Description=<%= capitalize($provider) %> Advanced key-value store for instance <%= $instance_title %>
 After=network.target
 After=network-online.target
 Wants=network-online.target
@@ -20,8 +21,8 @@ Wants=network-online.target
 RuntimeDirectory=<%= $service_name %>
 RuntimeDirectoryMode=2755
 Type=notify
-ExecStart=<%= $bin_path %>/redis-server <%= $redis_file_name %> --supervised systemd --daemonize no
-ExecStop=<%= $bin_path %>/redis-cli -p <%= $port %> shutdown
+ExecStart=<%= $bin_path %>/<%= $provider %>-server <%= $redis_file_name %> --supervised systemd --daemonize no
+ExecStop=<%= $bin_path %>/<%= $provider %>-cli -p <%= $port %> shutdown
 Restart=always
 User=<%= $service_user %>
 Group=<%= $service_user %>

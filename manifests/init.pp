@@ -19,6 +19,8 @@
 #     bind => [],
 #   }
 #
+# @param provider
+#   Name of the redis server implementation.
 # @param activerehashing
 #   Enable/disable active rehashing.
 # @param aof_load_truncated
@@ -354,6 +356,7 @@
 #   Determine if the systemd service file should be managed
 #
 class redis (
+  String[1] $provider                                            = $redis::params::provider,
   Boolean $activerehashing                                       = true,
   Boolean $aof_load_truncated                                    = true,
   Boolean $aof_rewrite_incremental_fsync                         = true,
@@ -388,7 +391,7 @@ class redis (
   Integer[0] $list_max_ziplist_value                             = 64,
   Stdlib::Absolutepath $log_dir                                  = $redis::params::log_dir,
   Stdlib::Filemode $log_dir_mode                                 = $redis::params::log_dir_mode,
-  String $log_file                                               = 'redis.log',
+  String $log_file                                               = $redis::params::log_file,
   Redis::LogLevel $log_level                                     = 'notice',
   Boolean $manage_service_file                                   = false,
   Boolean $manage_package                                        = true,
@@ -432,10 +435,10 @@ class redis (
   Hash $save_db_to_disk_interval                                 = { '900' => '1', '300' => '10', '60' => '10000' },
   Boolean $service_enable                                        = true,
   Stdlib::Ensure::Service $service_ensure                        = 'running',
-  String[1] $service_group                                       = 'redis',
+  String[1] $service_group                                       = $redis::params::service_group,
   Boolean $service_manage                                        = true,
   String[1] $service_name                                        = $redis::params::service_name,
-  String[1] $service_user                                        = 'redis',
+  String[1] $service_user                                        = $redis::params::service_user,
   Optional[Integer[0]] $service_timeout_start                    = undef,
   Optional[Integer[0]] $service_timeout_stop                     = undef,
   Integer[0] $set_max_intset_entries                             = 512,
@@ -465,7 +468,7 @@ class redis (
   Optional[String[1]] $tls_ciphersuites                          = undef,
   Optional[String[1]] $tls_protocols                             = undef,
   Boolean $tls_prefer_server_ciphers                             = false,
-  Variant[Stdlib::Absolutepath, Enum['']] $unixsocket            = '/var/run/redis/redis.sock',
+  Variant[Stdlib::Absolutepath, Enum['']] $unixsocket            = $redis::params::unixsocket,
   Variant[Stdlib::Filemode, Enum['']] $unixsocketperm            = '0755',
   Integer[0] $ulimit                                             = 65536,
   Boolean $ulimit_managed                                        = true,
