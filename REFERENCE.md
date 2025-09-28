@@ -1765,7 +1765,7 @@ Default value: `undef`
 
 ##### <a name="-redis--sentinel--sentinel_bind"></a>`sentinel_bind`
 
-Data type: `Variant[Undef, Stdlib::IP::Address, Array[Stdlib::IP::Address]]`
+Data type: `Optional[Variant[Undef, Stdlib::IP::Address, Array[Stdlib::IP::Address]]]`
 
 Allow optional sentinel server ip binding.  Can help overcome
 issues arising from protect-mode added Redis 3.2

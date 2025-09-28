@@ -183,7 +183,7 @@ class redis::sentinel (
   Optional[Enum['yes', 'no']] $sentinel_announce_hostnames = undef,
   Optional[Stdlib::Host] $sentinel_announce_ip = undef,
   Optional[Stdlib::Port] $sentinel_announce_port = undef,
-  Variant[Undef, Stdlib::IP::Address, Array[Stdlib::IP::Address]] $sentinel_bind = undef,
+  Optional[Variant[Undef, Stdlib::IP::Address, Array[Stdlib::IP::Address]]] $sentinel_bind = undef,
   Stdlib::Port $sentinel_port = 26379,
   Optional[Enum['yes', 'no']] $sentinel_resolve_hostnames = undef,
   Optional[Stdlib::Port::Unprivileged] $sentinel_tls_port = undef,
