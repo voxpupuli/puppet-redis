@@ -9,24 +9,27 @@ describe 'redis::instance example' do
 
   instances = [6379, 6380, 6381, 6382]
 
+  redis = case fact('os.family')
+          when 'RedHat'
+            fact('os.release.major').to_i > 9 ? 'valkey' : 'redis'
+          else
+            'redis'
+          end
+
   config_path = case fact('os.family')
                 when 'Debian'
-                  '/etc/redis'
+                  "/etc/#{redis}"
                 when 'RedHat'
-                  if fact('os.release.major').to_i >= 9
-                    '/etc/redis'
-                  else
-                    '/etc'
-                  end
+                  fact('os.release.major').to_i >= 9 ? "/etc/#{redis}" : '/etc'
                 else
                   '/etc'
                 end
 
   redis_name = case fact('os.family')
                when 'Debian'
-                 'redis-server'
+                 "#{redis}-server"
                else
-                 'redis'
+                 redis
                end
 
   include_examples 'an idempotent resource' do
@@ -68,21 +71,21 @@ describe 'redis::instance example' do
 
   instances.each do |instance|
     specify do
-      expect(file("/etc/systemd/system/redis-server-#{instance}.service")).
+      expect(file("/etc/systemd/system/#{redis}-server-#{instance}.service")).
         to be_file.
-        and have_attributes(content: include("redis-server-#{instance}.conf"))
+        and have_attributes(content: include("#{redis}-server-#{instance}.conf"))
     end
 
-    specify { expect(service("redis-server-#{instance}")).to be_enabled.and be_running }
+    specify { expect(service("#{redis}-server-#{instance}")).to be_enabled.and be_running }
 
     specify do
-      expect(file("#{config_path}/redis-server-#{instance}.conf")).
+      expect(file("#{config_path}/#{redis}-server-#{instance}.conf")).
         to be_file.
         and have_attributes(content: include("port #{instance}"))
     end
 
     specify "redis instance #{instance} should respond to ping command" do
-      expect(command("redis-cli -h #{fact('networking.ip')} -p #{instance} ping")).
+      expect(command("#{redis}-cli -h #{fact('networking.ip')} -p #{instance} ping")).
         to have_attributes(stdout: %r{PONG})
     end
   end

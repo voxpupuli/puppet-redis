@@ -13,6 +13,13 @@ Facter.add(:redis_server_version) do
       # Redis server version 2.4.10 (00000000:0)
       match = redis_server_version_output.match(%r{Redis server (?:version|v=)(?<version>[\w.]+).+})
       match ? match[:version] : nil
+    elsif Facter::Util::Resolution.which('valkey-server')
+      redis_server_version_output = Facter::Util::Resolution.exec('valkey-server -v')
+      # Possible output:
+      # Valkey server v=2.8.17 sha=00000000:0 malloc=jemalloc-3.6.0 bits=64 build=4c1d5710660b9479
+      # Valkey server version 2.4.10 (00000000:0)
+      match = redis_server_version_output.match(%r{Valkey server (?:version|v=)(?<version>[\w.]+).+})
+      match ? match[:version] : nil
     end
   end
 end

@@ -3,7 +3,14 @@
 require 'spec_helper_acceptance'
 
 describe 'redis' do
-  redis_name = fact('os.family') == 'Debian' ? 'redis-server' : 'redis'
+  redis = case fact('os.family')
+          when 'RedHat'
+            fact('os.release.major').to_i > 9 ? 'valkey' : 'redis'
+          else
+            'redis'
+          end
+
+  redis_name = fact('os.family') == 'Debian' ? "#{redis}-server" : redis
 
   include_examples 'an idempotent resource' do
     let(:manifest) { 'include redis' }
@@ -11,12 +18,12 @@ describe 'redis' do
 
   it 'returns a fact' do
     pp = <<-EOS
-    notify{"Redis Version: ${::redis_server_version}":}
+    notify{"#{redis.capitalize} Version: ${::redis_server_version}":}
     EOS
 
     # Check output for fact string
     apply_manifest(pp, catch_failures: true) do |r|
-      expect(r.stdout).to match(%r{Redis Version: [\d+.]+})
+      expect(r.stdout).to match(%r{#{redis.capitalize} Version: [\d+.]+})
     end
   end
 
@@ -24,7 +31,7 @@ describe 'redis' do
   specify { expect(service(redis_name)).to be_running }
 
   specify 'redis should respond to ping command' do
-    expect(command('redis-cli ping')).
+    expect(command("#{redis}-cli ping")).
       to have_attributes(stdout: %r{PONG})
   end
 
