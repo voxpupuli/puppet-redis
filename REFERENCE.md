@@ -84,6 +84,7 @@ class { 'redis':
 
 The following parameters are available in the `redis` class:
 
+* [`provider`](#-redis--provider)
 * [`activerehashing`](#-redis--activerehashing)
 * [`aof_load_truncated`](#-redis--aof_load_truncated)
 * [`aof_rewrite_incremental_fsync`](#-redis--aof_rewrite_incremental_fsync)
@@ -231,6 +232,14 @@ The following parameters are available in the `redis` class:
 * [`dnf_module_stream`](#-redis--dnf_module_stream)
 * [`acls`](#-redis--acls)
 * [`manage_service_file`](#-redis--manage_service_file)
+
+##### <a name="-redis--provider"></a>`provider`
+
+Data type: `String[1]`
+
+Name of the redis server implementation.
+
+Default value: `$redis::params::provider`
 
 ##### <a name="-redis--activerehashing"></a>`activerehashing`
 
@@ -495,7 +504,7 @@ Data type: `String`
 Specify file where to write log entries. Relative paths will be prepended
 with log_dir but absolute paths are also accepted.
 
-Default value: `'redis.log'`
+Default value: `$redis::params::log_file`
 
 ##### <a name="-redis--log_level"></a>`log_level`
 
@@ -863,7 +872,7 @@ Data type: `String[1]`
 
 Specify which group to run as.
 
-Default value: `'redis'`
+Default value: `$redis::params::service_group`
 
 ##### <a name="-redis--service_name"></a>`service_name`
 
@@ -879,7 +888,7 @@ Data type: `String[1]`
 
 Specify which user to run as.
 
-Default value: `'redis'`
+Default value: `$redis::params::service_user`
 
 ##### <a name="-redis--service_timeout_start"></a>`service_timeout_start`
 
@@ -1147,7 +1156,7 @@ Data type: `Variant[Stdlib::Absolutepath, Enum['']]`
 
 Define unix socket path
 
-Default value: `'/var/run/redis/redis.sock'`
+Default value: `$redis::params::unixsocket`
 
 ##### <a name="-redis--unixsocketperm"></a>`unixsocketperm`
 
@@ -1802,7 +1811,7 @@ Data type: `String[1]`
 
 The group of the config file.
 
-Default value: `'redis'`
+Default value: `$redis::params::service_group`
 
 ##### <a name="-redis--sentinel--service_name"></a>`service_name`
 
@@ -1818,7 +1827,7 @@ Data type: `String[1]`
 
 The owner of the config file.
 
-Default value: `'redis'`
+Default value: `$redis::params::service_user`
 
 ##### <a name="-redis--sentinel--service_enable"></a>`service_enable`
 
@@ -2323,7 +2332,7 @@ Data type: `String`
 Specify file where to write log entries. Relative paths will be prepended
 with log_dir but absolute paths are also accepted.
 
-Default value: `"redis-server-${name}.log"`
+Default value: `"${redis::provider}-server-${name}.log"`
 
 ##### <a name="-redis--instance--log_level"></a>`log_level`
 
@@ -2443,7 +2452,7 @@ Data type: `Stdlib::Absolutepath`
 
 Where to store the pid.
 
-Default value: `"/var/run/${service_name}/redis.pid"`
+Default value: `"/var/run/${service_name}/${redis::provider}.pid"`
 
 ##### <a name="-redis--instance--port"></a>`port`
 
@@ -2564,7 +2573,7 @@ Data type: `String[1]`
 
 The service name for this instance
 
-Default value: `"redis-server-${name}"`
+Default value: `"${redis::provider}-server-${name}"`
 
 ##### <a name="-redis--instance--service_enable"></a>`service_enable`
 
@@ -2864,7 +2873,7 @@ Data type: `Variant[Stdlib::Absolutepath, Enum['']]`
 
 Define unix socket path
 
-Default value: `"/var/run/${service_name}/redis.sock"`
+Default value: `"/var/run/${service_name}/${redis::provider}.sock"`
 
 ##### <a name="-redis--instance--unixsocketperm"></a>`unixsocketperm`
 
@@ -2881,7 +2890,7 @@ Data type: `Stdlib::Absolutepath`
 The DB will be written inside this directory, with the filename specified
 above using the 'dbfilename' configuration directive.
 
-Default value: `"${redis::workdir}/redis-server-${name}"`
+Default value: `"${redis::workdir}/${redis::provider}-server-${name}"`
 
 ##### <a name="-redis--instance--workdir_mode"></a>`workdir_mode`
 

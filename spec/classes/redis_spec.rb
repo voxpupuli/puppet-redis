@@ -4,19 +4,34 @@ require 'spec_helper'
 
 # rubocop:disable RSpec/MultipleMemoizedHelpers
 describe 'redis' do
-  let(:package_name) { facts['os']['family'] == 'Debian' ? 'redis-server' : 'redis' }
+  let(:redis) do
+    case facts['os']['family']
+    when 'RedHat'
+      facts['os']['release']['major'].to_i > 9 ? 'valkey' : 'redis'
+    else
+      'redis'
+    end
+  end
+  let(:package_name) do
+    case facts['os']['family']
+    when 'Debian'
+      "#{redis}-server"
+    else
+      redis
+    end
+  end
   let(:service_name) { package_name }
   let(:config_file) do
     case facts['os']['family']
     when 'Archlinux', 'Debian'
-      '/etc/redis/redis.conf'
+      "/etc/#{redis}/#{redis}.conf"
     when 'FreeBSD'
       '/usr/local/etc/redis.conf'
     when 'RedHat'
       if facts['os']['release']['major'].to_i > 8
-        '/etc/redis/redis.conf'
+        "/etc/#{redis}/#{redis}.conf"
       else
-        '/etc/redis.conf'
+        "/etc/#{redis}.conf"
       end
     end
   end
@@ -39,7 +54,7 @@ describe 'redis' do
         it do
           is_expected.to contain_file(config_file_orig).
             with_ensure('file').
-            with_content(%r{logfile /var/log/redis/redis\.log}).
+            with_content(%r{logfile /var/log/#{redis}/#{redis}.log}).
             without_content(%r{undef})
 
           if facts['os']['family'] == 'FreeBSD'
@@ -73,12 +88,12 @@ describe 'redis' do
         it { is_expected.to compile.with_all_deps }
 
         it do
-          is_expected.to contain_file('/etc/security/limits.d/redis.conf').with(
+          is_expected.to contain_file("/etc/security/limits.d/#{redis}.conf").with(
             'ensure' => 'file',
             'owner' => 'root',
             'group' => 'root',
             'mode' => '0644',
-            'content' => "redis soft nofile 65536\nredis hard nofile 65536\n"
+            'content' => "#{redis} soft nofile 65536\n#{redis} hard nofile 65536\n"
           )
         end
 
@@ -88,12 +103,12 @@ describe 'redis' do
           it { is_expected.to compile.with_all_deps }
 
           it do
-            is_expected.to contain_file('/etc/security/limits.d/redis.conf').with(
+            is_expected.to contain_file("/etc/security/limits.d/#{redis}.conf").with(
               'ensure' => 'file',
               'owner' => 'root',
               'group' => 'root',
               'mode' => '0644',
-              'content' => "redis soft nofile 65536\nredis hard nofile 65536\n"
+              'content' => "#{redis} soft nofile 65536\n#{redis} hard nofile 65536\n"
             )
           end
         end
@@ -266,13 +281,13 @@ describe 'redis' do
       describe 'with parameter: config_dir_mode' do
         let(:params) { { config_dir_mode: '0700' } }
 
-        it { is_expected.to contain_file('/etc/redis').with_mode('0700') }
+        it { is_expected.to contain_file("/etc/#{redis}").with_mode('0700') }
       end
 
       describe 'with parameter: log_dir_mode' do
         let(:params) { { log_dir_mode: '0660' } }
 
-        it { is_expected.to contain_file('/var/log/redis').with_mode('0660') }
+        it { is_expected.to contain_file("/var/log/#{redis}").with_mode('0660') }
       end
 
       describe 'with parameter: config_file_orig' do
@@ -290,13 +305,13 @@ describe 'redis' do
       describe 'with parameter: config_group' do
         let(:params) { { config_group: '_VALUE_' } }
 
-        it { is_expected.to contain_file('/etc/redis').with_group('_VALUE_') }
+        it { is_expected.to contain_file("/etc/#{redis}").with_group('_VALUE_') }
       end
 
       describe 'with parameter: config_owner' do
         let(:params) { { config_owner: '_VALUE_' } }
 
-        it { is_expected.to contain_file('/etc/redis').with_owner('_VALUE_') }
+        it { is_expected.to contain_file("/etc/#{redis}").with_owner('_VALUE_') }
       end
 
       describe 'with parameter daemonize' do
@@ -1022,7 +1037,7 @@ describe 'redis' do
       describe 'with parameter: service_group' do
         let(:params) { { service_group: '_VALUE_' } }
 
-        it { is_expected.to contain_file('/var/log/redis').with_group('_VALUE_') }
+        it { is_expected.to contain_file("/var/log/#{redis}").with_group('_VALUE_') }
       end
 
       describe 'with parameter: service_name' do
@@ -1034,7 +1049,7 @@ describe 'redis' do
       describe 'with parameter: service_user' do
         let(:params) { { service_user: '_VALUE_' } }
 
-        it { is_expected.to contain_file('/var/log/redis').with_owner('_VALUE_') }
+        it { is_expected.to contain_file("/var/log/#{redis}").with_owner('_VALUE_') }
       end
 
       describe 'with parameter set_max_intset_entries' do
@@ -1500,7 +1515,7 @@ describe 'redis' do
         it do
           content = <<-END.gsub(%r{^\s+\|}, '')
             |[Unit]
-            |Description=Redis Advanced key-value store for instance default
+            |Description=#{redis.capitalize} Advanced key-value store for instance default
             |After=network.target
             |After=network-online.target
             |Wants=network-online.target
@@ -1509,11 +1524,11 @@ describe 'redis' do
             |RuntimeDirectory=#{service_name}
             |RuntimeDirectoryMode=2755
             |Type=notify
-            |ExecStart=/usr/bin/redis-server #{config_file} --supervised systemd --daemonize no
-            |ExecStop=/usr/bin/redis-cli -p 6379 shutdown
+            |ExecStart=/usr/bin/#{redis}-server #{config_file} --supervised systemd --daemonize no
+            |ExecStop=/usr/bin/#{redis}-cli -p 6379 shutdown
             |Restart=always
-            |User=redis
-            |Group=redis
+            |User=#{redis}
+            |Group=#{redis}
             |LimitNOFILE=65536
             |
             |[Install]
@@ -1734,7 +1749,7 @@ describe 'redis' do
             is_expected.to contain_file('/etc/default/redis-server').
               with(
                 'ensure' => 'file',
-                'owner' => 'redis',
+                'owner' => redis,
                 'group' => 'cfggroup',
                 'mode' => '0640'
               )

@@ -18,12 +18,12 @@ class redis::ulimit {
   assert_private('The redis::ulimit class is only to be called from the redis::config class')
 
   if $redis::managed_by_cluster_manager {
-    file { '/etc/security/limits.d/redis.conf':
+    file { "/etc/security/limits.d/${redis::service_user}.conf":
       ensure  => 'file',
       owner   => 'root',
       group   => 'root',
       mode    => '0644',
-      content => "redis soft nofile ${redis::ulimit}\nredis hard nofile ${redis::ulimit}\n",
+      content => "${redis::service_user} soft nofile ${redis::ulimit}\n${redis::service_user} hard nofile ${redis::ulimit}\n",
     }
   }
 

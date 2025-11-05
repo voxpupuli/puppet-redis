@@ -6,6 +6,13 @@ RSpec::Matchers.define_negated_matcher :execute_without_warning, :execute_with_w
 
 # systcl settings are untestable in docker
 describe 'redis::administration', unless: default['hypervisor'] =~ %r{docker} do
+  redis = case fact('os.family')
+          when 'RedHat'
+            fact('os.release.major').to_i > 9 ? 'valkey' : 'redis'
+          else
+            'redis'
+          end
+
   def execute_with_warning
     have_attributes(stderr: %r{WARNING})
   end
@@ -25,7 +32,7 @@ describe 'redis::administration', unless: default['hypervisor'] =~ %r{docker} do
   end
 
   specify do
-    expect(command('timeout 1s redis-server --port 7777 --loglevel verbose')).
+    expect(command("timeout 1s #{redis}-server --port 7777 --loglevel verbose")).
       to execute_without_warning.
       and have_attributes(exit_status: 124)
   end
