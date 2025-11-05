@@ -34,6 +34,9 @@ describe 'redis' do
         it { is_expected.to contain_class('redis::config') }
         it { is_expected.to contain_class('redis::service') }
 
+        it { is_expected.to contain_file(config_file_orig).with_content(%r{^appendonly no$}) }
+        it { is_expected.to contain_file(config_file_orig).with_content(%r{^save ""$}) }
+
         it { is_expected.to contain_package(package_name).with_ensure('installed') }
 
         it do
