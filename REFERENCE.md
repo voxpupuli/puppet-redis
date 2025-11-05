@@ -1610,7 +1610,7 @@ Data type: `String[1]`
 
 Define which template to use.
 
-Default value: `'redis/redis-sentinel.conf.erb'`
+Default value: `'redis/redis-sentinel.conf.epp'`
 
 ##### <a name="-redis--sentinel--daemonize"></a>`daemonize`
 
