@@ -346,13 +346,14 @@ databases <%= $databases %>
 #   like in the following example:
 #
 #   save ""
-<% if $save_db_to_disk { %>
-<%- $save_db_to_disk_interval.each |$seconds, $key_change| { -%>
-save <%= "${seconds} ${key_change}\n" -%>
+<% if $save_db_to_disk { -%>
+<% $save_db_to_disk_interval.map |$seconds, $key_change| { -%>
+save <%= $seconds %> <%= $key_change %>
 <%- } -%>
-<% } else { -%>
+<%- } else { -%>
 save ""
-<% } %>
+<%- } -%>
+
 # By default Redis will stop accepting writes if RDB snapshots are enabled
 # (at least one save point) and the latest background save failed.
 # This will make the user aware (in a hard way) that data is not persisting

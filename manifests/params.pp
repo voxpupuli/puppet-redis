@@ -16,6 +16,10 @@ class redis::params {
       $bin_path                  = '/usr/bin'
       $daemonize                 = true
       $service_name              = 'redis-server'
+      $ulimit                    = undef
+      $package_ensure            = 'present'
+      $appendonly                = 'no'
+      $save_db_to_disk           = false
 
       $sentinel_config_file      = '/etc/redis/sentinel.conf'
       $sentinel_config_file_orig = '/etc/redis/redis-sentinel.conf.puppet'
@@ -43,6 +47,10 @@ class redis::params {
       $config_group         = 'root'
       $config_dir_mode      = '0755'
       $log_dir_mode         = '0750'
+      $ulimit                = undef
+      $package_ensure        = 'present'
+      $appendonly            = 'no'
+      $save_db_to_disk       = false
 
       $sentinel_daemonize   = false
       $sentinel_working_dir = '/tmp'
@@ -89,6 +97,10 @@ class redis::params {
       $service_name              = 'redis'
       $workdir                   = '/var/db/redis'
       $bin_path                  = '/usr/bin'
+      $ulimit                    = undef
+      $package_ensure            = 'present'
+      $appendonly                = 'no'
+      $save_db_to_disk           = false
 
       $sentinel_config_file      = '/usr/local/etc/redis-sentinel.conf'
       $sentinel_config_file_orig = '/usr/local/etc/redis-sentinel.conf.puppet'
@@ -115,6 +127,10 @@ class redis::params {
       $service_name              = 'redis'
       $workdir                   = '/var/lib/redis'
       $bin_path                  = '/usr/bin'
+      $ulimit                    = undef
+      $package_ensure            = 'present'
+      $appendonly                = 'no'
+      $save_db_to_disk           = false
 
       $sentinel_config_file      = '/etc/redis/redis-sentinel.conf'
       $sentinel_config_file_orig = '/etc/redis/redis-sentinel.conf.puppet'
@@ -141,6 +157,10 @@ class redis::params {
       $service_name              = 'redis'
       $workdir                   = '/var/lib/redis'
       $bin_path                  = '/usr/bin'
+      $ulimit                    = undef
+      $package_ensure            = 'present'
+      $appendonly                = 'no'
+      $save_db_to_disk           = false
 
       $sentinel_config_file      = '/etc/redis/redis-sentinel.conf'
       $sentinel_config_file_orig = '/etc/redis/redis-sentinel.conf.puppet'

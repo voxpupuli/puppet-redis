@@ -278,7 +278,7 @@ Data type: `Boolean`
 
 Enable/disable appendonly mode.
 
-Default value: `false`
+Default value: `$redis::params::appendonly`
 
 ##### <a name="-redis--auto_aof_rewrite_min_size"></a>`auto_aof_rewrite_min_size`
 
@@ -823,7 +823,7 @@ Data type: `Boolean`
 
 Set if save db to disk.
 
-Default value: `true`
+Default value: `$redis::params::save_db_to_disk`
 
 ##### <a name="-redis--save_db_to_disk_interval"></a>`save_db_to_disk_interval`
 
