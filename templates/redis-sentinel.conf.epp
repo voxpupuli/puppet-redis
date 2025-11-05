@@ -1,0 +1,76 @@
+<%# THIS FILE IS MANAGED BY PUPPET -%>
+<% if $redis::sentinel::sentinel_bind { -%>
+bind <%= [$redis::sentinel::sentinel_bind].flatten.join(' ') %>
+<%- } -%>
+port <%= $redis::sentinel::sentinel_port %>
+<% if $redis::sentinel::sentinel_tls_port { -%>
+tls-port <%= $redis::sentinel::sentinel_tls_port %>
+<%- } -%>
+dir <%= $redis::sentinel::working_dir %>
+daemonize <%= $redis::sentinel::daemonize ? { true => 'yes', false => 'no' } %>
+supervised auto
+pidfile <%= $redis::sentinel::pid_file %>
+protected-mode <%= $redis::sentinel::protected_mode ? { true => 'yes', false => 'no' } %>
+
+<% if $redis::sentinel::sentinel_auth_user { -%>
+sentinel sentinel-user <%= $redis::sentinel::sentinel_auth_user %>
+<%- } -%>
+<% if $redis::sentinel::sentinel_auth_pass { -%>
+sentinel sentinel-pass <%= $redis::sentinel::sentinel_auth_pass.unwrap %>
+
+<%- } -%>
+<% if $redis::sentinel::sentinel_announce_hostnames { -%>
+sentinel announce-hostnames <%= $redis::sentinel::sentinel_announce_hostnames %>
+<%- } -%>
+<% if $redis::sentinel::sentinel_announce_ip { -%>
+sentinel announce-ip <%= $redis::sentinel::sentinel_announce_ip %>
+<%- } -%>
+<% if $redis::sentinel::sentinel_announce_port { -%>
+sentinel announce-port <%= $redis::sentinel::sentinel_announce_port %>
+<%- } -%>
+<% if $redis::sentinel::sentinel_resolve_hostnames { -%>
+sentinel resolve-hostnames <%= $redis::sentinel::sentinel_resolve_hostnames %>
+<%- } -%>
+sentinel monitor <%= $redis::sentinel::master_name %> <%= $redis::sentinel::redis_host %> <%= $redis::sentinel::redis_port %> <%= $redis::sentinel::quorum %>
+sentinel down-after-milliseconds <%= $redis::sentinel::master_name %> <%= $redis::sentinel::down_after %>
+sentinel parallel-syncs <%= $redis::sentinel::master_name %> <%= $redis::sentinel::parallel_sync %>
+sentinel failover-timeout <%= $redis::sentinel::master_name %> <%= $redis::sentinel::failover_timeout %>
+<% if $redis::sentinel::auth_pass { -%>
+sentinel auth-pass <%= $redis::sentinel::master_name %> <%= $redis::sentinel::auth_pass.unwrap %>
+<%- } -%>
+<% if $redis::sentinel::notification_script { -%>
+sentinel notification-script <%= $redis::sentinel::master_name %> <%= $redis::sentinel::notification_script %>
+<%- } -%>
+<% if $redis::sentinel::client_reconfig_script { -%>
+sentinel client-reconfig-script <%= $redis::sentinel::master_name %> <%= $redis::sentinel::client_reconfig_script %>
+<%- } -%>
+<% if $redis::sentinel::requirepass { -%>
+requirepass <%= $redis::sentinel::requirepass %>
+<%- } -%>
+<% if $redis::sentinel::sentinel_tls_port { -%>
+
+tls-cert-file <%= $redis::sentinel::tls_cert_file %>
+tls-key-file <%= $redis::sentinel::tls_key_file %>
+<% if $redis::sentinel::tls_key_file_pass { -%>
+tls-key-file-pass <%= $redis::sentinel::tls_key_file_pass.unwrap %>
+<%- } -%>
+<% if $redis::sentinel::tls_ca_cert_file { -%>
+tls-ca-cert-file <%= $redis::sentinel::tls_ca_cert_file %>
+<%- } -%>
+<% if $redis::sentinel::tls_ca_cert_dir { -%>
+tls-ca-cert-dir <%= $redis::sentinel::tls_ca_cert_dir %>
+<%- } -%>
+tls-auth-clients <%= $redis::sentinel::tls_auth_clients %>
+<% if $redis::sentinel::tls_replication { -%>
+tls-replication <%= $redis::sentinel::tls_replication ? { true => 'yes', false => 'no' } %>
+<%- } -%>
+<%- } -%>
+
+loglevel <%= $redis::sentinel::log_level %>
+logfile <%= $redis::sentinel::log_file %>
+<% unless $redis::sentinel::acls.empty { -%>
+
+<% $redis::sentinel::acls.each |$acl| { -%>
+<%= $acl %>
+<%- } -%>
+<%- } -%>
