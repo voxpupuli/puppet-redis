@@ -9,6 +9,7 @@
   String[1]                                          $service_user,
   Optional[Integer[0]]                               $service_timeout_start,
   Optional[Integer[0]]                               $service_timeout_stop,
+  Optional[Integer[-1000,1000]]                      $service_oom_score_adjust,
 | -%>
 [Unit]
 Description=Redis Advanced key-value store for instance <%= $instance_title %>
@@ -31,6 +32,9 @@ TimeoutStartSec=<%= $service_timeout_start %>
 <% } -%>
 <% if $service_timeout_stop { -%>
 TimeoutStopSec=<%= $service_timeout_stop %>
+<% } -%>
+<% if $service_oom_score_adjust { -%>
+OOMScoreAdjust=<%= $service_oom_score_adjust %>
 <% } -%>
 
 [Install]

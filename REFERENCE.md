@@ -167,6 +167,7 @@ The following parameters are available in the `redis` class:
 * [`service_user`](#-redis--service_user)
 * [`service_timeout_start`](#-redis--service_timeout_start)
 * [`service_timeout_stop`](#-redis--service_timeout_stop)
+* [`service_oom_score_adjust`](#-redis--service_oom_score_adjust)
 * [`set_max_intset_entries`](#-redis--set_max_intset_entries)
 * [`slave_priority`](#-redis--slave_priority)
 * [`slave_read_only`](#-redis--slave_read_only)
@@ -894,6 +895,14 @@ Default value: `undef`
 Data type: `Optional[Integer[0]]`
 
 Specify the time after which a service stop should be considered as failed.
+
+Default value: `undef`
+
+##### <a name="-redis--service_oom_score_adjust"></a>`service_oom_score_adjust`
+
+Data type: `Optional[Integer[-1000,1000]]`
+
+Specity the OOMScoreAdust parameter for the service.
 
 Default value: `undef`
 
@@ -2032,6 +2041,7 @@ The following parameters are available in the `redis::instance` defined type:
 * [`service_user`](#-redis--instance--service_user)
 * [`service_timeout_start`](#-redis--instance--service_timeout_start)
 * [`service_timeout_stop`](#-redis--instance--service_timeout_stop)
+* [`service_oom_score_adjust`](#-redis--instance--service_oom_score_adjust)
 * [`set_max_intset_entries`](#-redis--instance--set_max_intset_entries)
 * [`slave_priority`](#-redis--instance--slave_priority)
 * [`slave_read_only`](#-redis--instance--slave_read_only)
@@ -2613,6 +2623,14 @@ Data type: `Optional[Integer[0]]`
 Specify the time after which a service stop should be considered as failed.
 
 Default value: `$redis::service_timeout_stop`
+
+##### <a name="-redis--instance--service_oom_score_adjust"></a>`service_oom_score_adjust`
+
+Data type: `Optional[Integer[-1000,1000]]`
+
+Specity the OOMScoreAdust parameter for the service.
+
+Default value: `$redis::service_oom_score_adjust`
 
 ##### <a name="-redis--instance--set_max_intset_entries"></a>`set_max_intset_entries`
 
