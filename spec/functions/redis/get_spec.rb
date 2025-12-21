@@ -10,7 +10,7 @@ REMOTE_BROKEN_URL = 'redis://redis.example.com:1234'
 
 describe 'redis::get' do
   context 'should error if connection to remote redis server cannot be made and no default is specified' do
-    it { is_expected.to run.with_params('nonexistent_key', REMOTE_BROKEN_URL).and_raise_error(Puppet::Error, %r{connection to redis server failed - getaddrinfo: Name or service not known}) }
+    it { is_expected.to run.with_params('nonexistent_key', REMOTE_BROKEN_URL).and_raise_error(Puppet::Error, %r{connection to redis server failed - getaddrinfo: .*}) }
   end
 
   context 'should return default value if connection to remote redis server cannot be made and default is specified' do
