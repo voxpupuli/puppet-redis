@@ -186,6 +186,8 @@
 #   Specify the time after which a service startup should be considered as failed.
 # @param service_timeout_stop
 #   Specify the time after which a service stop should be considered as failed.
+# @param service_oom_score_adjust
+#   Specity the OOMScoreAdust parameter for the service.
 # @param set_max_intset_entries
 #   The following configuration setting sets the limit in the size of the set
 #   in order to use this special memory saving encoding.
@@ -438,6 +440,7 @@ class redis (
   String[1] $service_user                                        = 'redis',
   Optional[Integer[0]] $service_timeout_start                    = undef,
   Optional[Integer[0]] $service_timeout_stop                     = undef,
+  Optional[Integer[-1000,1000]] $service_oom_score_adjust        = undef,
   Integer[0] $set_max_intset_entries                             = 512,
   Integer[0] $slave_priority                                     = 100,
   Boolean $slave_read_only                                       = true,
