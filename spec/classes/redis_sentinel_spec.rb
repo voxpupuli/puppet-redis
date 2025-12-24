@@ -7,41 +7,66 @@ describe 'redis::sentinel' do
   on_supported_os.each do |os, os_facts|
     context "on #{os}" do
       let(:facts) { os_facts }
+      let(:redis) do
+        case facts['os']['family']
+        when 'RedHat'
+          facts['os']['release']['major'].to_i > 9 ? 'valkey' : 'redis'
+        else
+          'redis'
+        end
+      end
       let(:config_file_orig) do
         case facts['os']['family']
         when 'Archlinux', 'Debian', 'Suse'
-          '/etc/redis/redis-sentinel.conf.puppet'
+          "/etc/#{redis}/#{redis}-sentinel.conf.puppet"
         when 'FreeBSD'
           '/usr/local/etc/redis-sentinel.conf.puppet'
         when 'RedHat'
           if facts['os']['release']['major'].to_i > 8
-            '/etc/redis/sentinel.conf.puppet'
+            "/etc/#{redis}/sentinel.conf.puppet"
           else
-            '/etc/redis-sentinel.conf.puppet'
+            "/etc/#{redis}-sentinel.conf.puppet"
           end
         end
       end
 
       let(:pidfile) do
-        case facts['os']['name']
-        when 'Ubuntu'
-          '/var/run/sentinel/redis-sentinel.pid'
+        case facts['os']['family']
         when 'Debian'
-          '/run/sentinel/redis-sentinel.pid'
+          case facts['os']['name']
+          when 'Ubuntu'
+            "/var/run/sentinel/#{redis}-sentinel.pid"
+          else
+            "/run/sentinel/#{redis}-sentinel.pid"
+          end
         else
-          '/var/run/redis/redis-sentinel.pid'
+          "/var/run/#{redis}/#{redis}-sentinel.pid"
         end
       end
 
       let(:redis_package_name) do
-        'redis'
+        case facts['os']['family']
+        when 'Debian'
+          "#{redis}-server"
+        else
+          redis
+        end
       end
 
       let(:sentinel_package_name) do
-        if facts['os']['family'] == 'Debian'
-          'redis-sentinel'
+        case facts['os']['family']
+        when 'Debian'
+          "#{redis}-sentinel"
         else
-          'redis'
+          redis
+        end
+      end
+      let(:sentinel_log_file) do
+        case facts['os']['family']
+        when 'Debian'
+          "/var/log/#{redis}/#{redis}-sentinel.log"
+        else
+          "/var/log/#{redis}/sentinel.log"
         end
       end
 
@@ -61,7 +86,7 @@ describe 'redis::sentinel' do
             sentinel failover-timeout mymaster 180000
 
             loglevel notice
-            logfile #{facts['os']['family'] == 'Debian' ? '/var/log/redis/redis-sentinel.log' : '/var/log/redis/sentinel.log'}
+            logfile #{sentinel_log_file}
           CONFIG
         end
 
@@ -71,12 +96,12 @@ describe 'redis::sentinel' do
           is_expected.to contain_file(config_file_orig).
             with_ensure('file').
             with_mode('0644').
-            with_owner('redis').
+            with_owner(redis).
             with_content(expected_content)
         }
 
         it {
-          is_expected.to contain_service('redis-sentinel').
+          is_expected.to contain_service("#{redis}-sentinel").
             with_ensure('running').
             with_enable('true')
         }
