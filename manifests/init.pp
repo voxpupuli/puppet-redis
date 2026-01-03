@@ -83,6 +83,8 @@
 #   Set max ziplist values for lists.
 # @param log_dir
 #   Specify directory where to write log entries.
+# @param log_dir_group
+#   Adjust filesystem group for log files.
 # @param log_dir_mode
 #   Adjust mode for directory containing log files.
 # @param log_file
@@ -390,6 +392,7 @@ class redis (
   Integer[0] $list_max_ziplist_entries                           = 512,
   Integer[0] $list_max_ziplist_value                             = 64,
   Stdlib::Absolutepath $log_dir                                  = $redis::params::log_dir,
+  Optional[String[1]] $log_dir_group                             = undef,
   Stdlib::Filemode $log_dir_mode                                 = $redis::params::log_dir_mode,
   String $log_file                                               = $redis::params::log_file,
   Redis::LogLevel $log_level                                     = 'notice',

@@ -14,7 +14,7 @@ class redis::config {
 
   file { $redis::log_dir:
     ensure => directory,
-    group  => $redis::service_group,
+    group  => pick($redis::log_dir_group, $redis::service_group),
     mode   => $redis::log_dir_mode,
     owner  => $redis::service_user,
   }

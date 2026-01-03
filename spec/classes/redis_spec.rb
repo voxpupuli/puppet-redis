@@ -1035,9 +1035,22 @@ describe 'redis' do
       end
 
       describe 'with parameter: service_group' do
-        let(:params) { { service_group: '_VALUE_' } }
+        describe 'with defaults' do
+          let(:params) { { service_group: '_VALUE_' } }
 
-        it { is_expected.to contain_file("/var/log/#{redis}").with_group('_VALUE_') }
+          it { is_expected.to contain_file("/var/log/#{redis}").with_group('_VALUE_') }
+        end
+
+        describe 'with parameter: log_dir_group' do
+          let(:params) do
+            {
+              log_dir_group: 'logdirgroup',
+              service_group: '_VALUE_'
+            }
+          end
+
+          it { is_expected.to contain_file("/var/log/#{redis}").with_group('logdirgroup') }
+        end
       end
 
       describe 'with parameter: service_name' do
