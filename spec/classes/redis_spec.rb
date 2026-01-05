@@ -1738,6 +1738,17 @@ describe 'redis' do
         it { is_expected.to contain_systemd__unit_file("#{service_name}.service").with('content' => %r{^TimeoutStopSec=300$}) }
       end
 
+      describe 'with parameter service_oom_score_adjust set' do
+        let(:params) do
+          {
+            manage_service_file: true,
+            service_oom_score_adjust: -1000,
+          }
+        end
+
+        it { is_expected.to contain_systemd__unit_file("#{service_name}.service").with('content' => %r{^OOMScoreAdjust=-1000$}) }
+      end
+
       describe 'with non default ownership' do
         let :params do
           {
