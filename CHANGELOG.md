@@ -4,7 +4,33 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
-## [v12.0.0](https://github.com/voxpupuli/puppet-redis/tree/v12.0.0) (2025-09-15)
+## [v12.1.0](https://github.com/voxpupuli/puppet-redis/tree/v12.1.0) (2026-01-07)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v12.0.0...v12.1.0)
+
+**Implemented enhancements:**
+
+- Allow to adjust the OOM score calculation for redis [\#567](https://github.com/voxpupuli/puppet-redis/pull/567) ([dabelenda](https://github.com/dabelenda))
+- Add Ubuntu 24.04 support [\#565](https://github.com/voxpupuli/puppet-redis/pull/565) ([bwitt](https://github.com/bwitt))
+- Use Valkey in RHEL 10 family [\#559](https://github.com/voxpupuli/puppet-redis/pull/559) ([kajinamit](https://github.com/kajinamit))
+- Allow separate group owner for log directory [\#545](https://github.com/voxpupuli/puppet-redis/pull/545) ([sagepe](https://github.com/sagepe))
+
+**Closed issues:**
+
+- Missing support for Ubuntu 24.04 [\#564](https://github.com/voxpupuli/puppet-redis/issues/564)
+- Valkey support? [\#544](https://github.com/voxpupuli/puppet-redis/issues/544)
+- Sensitive Data [\#526](https://github.com/voxpupuli/puppet-redis/issues/526)
+- Systemd service stop issues with redis instances [\#428](https://github.com/voxpupuli/puppet-redis/issues/428)
+- Systemd service stop issues with multiple redis instances [\#386](https://github.com/voxpupuli/puppet-redis/issues/386)
+- Unable to AUTH to MASTER: -ERR Client sent AUTH, but no password is set [\#256](https://github.com/voxpupuli/puppet-redis/issues/256)
+- Please add instructions about multiple instances on a single node [\#240](https://github.com/voxpupuli/puppet-redis/issues/240)
+
+**Merged pull requests:**
+
+- chore: add simple test for service\_oom\_score\_adjust parameter [\#571](https://github.com/voxpupuli/puppet-redis/pull/571) ([TheMeier](https://github.com/TheMeier))
+- Convert sentinel.conf template to epp [\#563](https://github.com/voxpupuli/puppet-redis/pull/563) ([bwitt](https://github.com/bwitt))
+
+## [v12.0.0](https://github.com/voxpupuli/puppet-redis/tree/v12.0.0) (2025-09-16)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v11.1.0...v12.0.0)
 
@@ -55,7 +81,7 @@ These should not affect the functionality of the module.
 
 - Add Debian 12 Support [\#520](https://github.com/voxpupuli/puppet-redis/pull/520) ([traylenator](https://github.com/traylenator))
 - update puppet-systemd upper bound to 8.0.0 [\#518](https://github.com/voxpupuli/puppet-redis/pull/518) ([TheMeier](https://github.com/TheMeier))
-- Avoid deprecated systemd::service\_limits [\#514](https://github.com/voxpupuli/puppet-redis/pull/514) ([traylenator](https://github.com/traylenator))
+- Avoid deprecated `systemd::service_limits` [\#514](https://github.com/voxpupuli/puppet-redis/pull/514) ([traylenator](https://github.com/traylenator))
 - Allow `requirepass` to be set as a Sensitive string [\#512](https://github.com/voxpupuli/puppet-redis/pull/512) ([traylenator](https://github.com/traylenator))
 - Modernize the acceptance tests [\#438](https://github.com/voxpupuli/puppet-redis/pull/438) ([ekohl](https://github.com/ekohl))
 - add custom options parameter to instance [\#431](https://github.com/voxpupuli/puppet-redis/pull/431) ([trefzer](https://github.com/trefzer))
