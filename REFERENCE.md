@@ -238,7 +238,7 @@ The following parameters are available in the `redis` class:
 
 ##### <a name="-redis--provider"></a>`provider`
 
-Data type: `String[1]`
+Data type: `Enum['redis', 'valkey']`
 
 Name of the redis server implementation.
 

@@ -353,14 +353,14 @@
 # @param acls
 #   This is a way to pass an array of raw ACLs to Redis. The ACLs must be
 #   in the form of:
-# 
+#
 #     user USERNAME [additional ACL options]
 #
 # @param manage_service_file
 #   Determine if the systemd service file should be managed
 #
 class redis (
-  String[1] $provider                                            = $redis::params::provider,
+  Enum['redis', 'valkey'] $provider                              = $redis::params::provider,
   Boolean $activerehashing                                       = true,
   Boolean $aof_load_truncated                                    = true,
   Boolean $aof_rewrite_incremental_fsync                         = true,
