@@ -77,6 +77,8 @@
 #   Set redis background tasks frequency
 # @param latency_monitor_threshold
 #   Latency monitoring threshold in milliseconds
+# @param latency_tracking
+#   Latency monitoring enabled
 # @param list_max_ziplist_entries
 #   Set max ziplist entries for lists.
 # @param list_max_ziplist_value
@@ -162,6 +164,8 @@
 #   The replication backlog size
 # @param repl_backlog_ttl
 #   The number of seconds to elapse before freeing backlog buffer
+# @param repl_diskless_sync
+#   Enable/disable diskless replication
 # @param repl_disable_tcp_nodelay
 #   Enable/disable TCP_NODELAY on the slave socket after SYNC
 # @param repl_ping_slave_period
@@ -391,6 +395,7 @@ class redis (
   Integer[0] $hll_sparse_max_bytes                               = 3000,
   Integer[1, 500] $hz                                            = 10,
   Integer[0] $latency_monitor_threshold                          = 0,
+  Boolean $latency_tracking                                      = true,
   Integer[0] $list_max_ziplist_entries                           = 512,
   Integer[0] $list_max_ziplist_value                             = 64,
   Stdlib::Absolutepath $log_dir                                  = $redis::params::log_dir,
@@ -432,6 +437,7 @@ class redis (
   Optional[Stdlib::Port] $repl_announce_port                     = undef,
   String[1] $repl_backlog_size                                   = '1mb',
   Integer[0] $repl_backlog_ttl                                   = 3600,
+  Boolean $repl_diskless_sync                                    = true,
   Boolean $repl_disable_tcp_nodelay                              = false,
   Integer[1] $repl_ping_slave_period                             = 10,
   Integer[1] $repl_timeout                                       = 60,
