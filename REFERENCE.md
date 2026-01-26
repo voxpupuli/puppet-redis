@@ -1630,7 +1630,7 @@ Data type: `Stdlib::Filemode`
 
 Permissions of config file.
 
-Default value: `'0644'`
+Default value: `'0640'`
 
 ##### <a name="-redis--sentinel--conf_template"></a>`conf_template`
 
