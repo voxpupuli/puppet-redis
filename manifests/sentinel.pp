@@ -163,7 +163,7 @@ class redis::sentinel (
   Optional[Variant[String[1], Sensitive[String[1]]]] $auth_pass = undef,
   Stdlib::Absolutepath $config_file = $redis::params::sentinel_config_file,
   Stdlib::Absolutepath $config_file_orig = $redis::params::sentinel_config_file_orig,
-  Stdlib::Filemode $config_file_mode = '0644',
+  Stdlib::Filemode $config_file_mode = '0640',
   String[1] $conf_template = 'redis/redis-sentinel.conf.epp',
   Boolean $daemonize = $redis::params::sentinel_daemonize,
   Boolean $protected_mode = true,

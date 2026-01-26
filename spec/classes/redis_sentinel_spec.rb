@@ -95,7 +95,7 @@ describe 'redis::sentinel' do
         it {
           is_expected.to contain_file(config_file_orig).
             with_ensure('file').
-            with_mode('0644').
+            with_mode('0640').
             with_owner(redis).
             with_content(expected_content)
         }
