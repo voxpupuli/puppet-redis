@@ -4,7 +4,16 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
-## [v12.1.0](https://github.com/voxpupuli/puppet-redis/tree/v12.1.0) (2026-01-07)
+## [v12.1.1](https://github.com/voxpupuli/puppet-redis/tree/v12.1.1) (2026-01-27)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v12.1.0...v12.1.1)
+
+**Fixed bugs:**
+
+- Update config\_dir\_mode to 750 for RedHat family [\#577](https://github.com/voxpupuli/puppet-redis/pull/577) ([evgeni](https://github.com/evgeni))
+- Do not make `sentinel.conf` world readable [\#576](https://github.com/voxpupuli/puppet-redis/pull/576) ([kajinamit](https://github.com/kajinamit))
+
+## [v12.1.0](https://github.com/voxpupuli/puppet-redis/tree/v12.1.0) (2026-01-09)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v12.0.0...v12.1.0)
 
