@@ -49,7 +49,7 @@ class redis::params {
           $daemonize            = false
           $config_owner         = 'valkey'
           $config_group         = 'root'
-          $config_dir_mode      = '0755'
+          $config_dir_mode      = '0750'
           $log_dir_mode         = '0750'
           $log_file             = 'valkey.log'
 
@@ -80,7 +80,7 @@ class redis::params {
           $daemonize            = false
           $config_owner         = 'redis'
           $config_group         = 'root'
-          $config_dir_mode      = '0755'
+          $config_dir_mode      = '0750'
           $log_dir_mode         = '0750'
           $log_file             = 'redis.log'
 
