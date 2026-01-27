@@ -1,5 +1,5 @@
 <%- |
-  String                                             $provider,
+  Enum['redis', 'valkey']                            $provider,
   Boolean                                            $ulimit_managed,
   Integer[0]                                         $ulimit,
   Stdlib::Absolutepath                               $bin_path,
