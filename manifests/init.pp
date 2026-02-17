@@ -305,6 +305,9 @@
 #   Minimum number of slaves master will remain connected with, for another
 #   slave to migrate to a master which is no longer covered by any slave.
 #   Only set if cluster_enabled is true
+# @param cluster_announce_ip
+#   The IP address that a Redis Cluster node should announce to the bus.
+#   Only set if cluster_enabled is true
 # @param instances
 #   Iterate through multiple instance configurations
 # @param io_threads
@@ -493,6 +496,7 @@ class redis (
   Integer[0] $cluster_slave_validity_factor                      = 0,
   Boolean $cluster_require_full_coverage                         = true,
   Integer[0] $cluster_migration_barrier                          = 1,
+  Optional[Stdlib::Host] $cluster_announce_ip                    = undef,
   Hash[String[1], Hash] $instances                               = {},
   Optional[Integer[1]] $io_threads                               = undef,
   Optional[Boolean] $io_threads_do_reads                         = undef,
