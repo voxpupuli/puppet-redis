@@ -477,7 +477,7 @@ class redis (
   Variant[Stdlib::Absolutepath, Enum['']] $unixsocket            = $redis::params::unixsocket,
   Variant[Stdlib::Filemode, Enum['']] $unixsocketperm            = '0755',
   Integer[0] $ulimit                                             = 65536,
-  Boolean $ulimit_managed                                        = true,
+  Boolean $ulimit_managed                                        = $redis::params::ulimit_managed,
   Stdlib::Absolutepath $workdir                                  = $redis::params::workdir,
   Stdlib::Filemode $workdir_mode                                 = '0750',
   Optional[String[1]] $workdir_group                             = undef,

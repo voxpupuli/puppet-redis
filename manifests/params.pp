@@ -17,6 +17,7 @@ class redis::params {
       $workdir                   = '/var/lib/redis'
       $bin_path                  = '/usr/bin'
       $unixsocket                = '/var/run/redis/redis.sock'
+      $ulimit_managed            = true
       $daemonize                 = true
       $service_name              = 'redis-server'
       $service_group             = 'redis'
@@ -68,6 +69,7 @@ class redis::params {
           $workdir                   = '/var/lib/valkey'
           $bin_path                  = '/usr/bin'
           $unixsocket                = '/var/run/valkey/valkey.sock'
+          $ulimit_managed              = true
           $sentinel_config_file      = '/etc/valkey/sentinel.conf'
           $sentinel_config_file_orig = '/etc/valkey/sentinel.conf.puppet'
           $sentinel_service_name     = 'valkey-sentinel'
@@ -104,6 +106,7 @@ class redis::params {
           $workdir                     = '/var/lib/redis'
           $bin_path                    = '/usr/bin'
           $unixsocket                  = '/var/run/redis/redis.sock'
+          $ulimit_managed              = true
           if (versioncmp($facts['os']['release']['major'], '9') >= 0) {
             $sentinel_config_file      = '/etc/redis/sentinel.conf'
             $sentinel_config_file_orig = '/etc/redis/sentinel.conf.puppet'
@@ -137,6 +140,7 @@ class redis::params {
       $workdir                   = '/var/db/redis'
       $bin_path                  = '/usr/bin'
       $unixsocket                = '/var/run/redis/redis.sock'
+      $ulimit_managed            = false
 
       $sentinel_config_file      = '/usr/local/etc/redis-sentinel.conf'
       $sentinel_config_file_orig = '/usr/local/etc/redis-sentinel.conf.puppet'
@@ -168,6 +172,7 @@ class redis::params {
       $workdir                   = '/var/lib/redis'
       $bin_path                  = '/usr/bin'
       $unixsocket                = '/var/run/redis/redis.sock'
+      $ulimit_managed            = true
 
       $sentinel_config_file      = '/etc/redis/redis-sentinel.conf'
       $sentinel_config_file_orig = '/etc/redis/redis-sentinel.conf.puppet'
@@ -199,6 +204,7 @@ class redis::params {
       $workdir                   = '/var/lib/redis'
       $bin_path                  = '/usr/bin'
       $unixsocket                = '/var/run/redis/redis.sock'
+      $ulimit_managed            = true
 
       $sentinel_config_file      = '/etc/redis/redis-sentinel.conf'
       $sentinel_config_file_orig = '/etc/redis/redis-sentinel.conf.puppet'
