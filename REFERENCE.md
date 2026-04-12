@@ -1167,7 +1167,7 @@ Data type: `Boolean`
 Defines wheter the max number of open files for the
 systemd service unit is explicitly managed.
 
-Default value: `true`
+Default value: `$redis::params::ulimit_managed`
 
 ##### <a name="-redis--unixsocket"></a>`unixsocket`
 
