@@ -310,6 +310,7 @@ define redis::instance (
   String[1] $output_buffer_limit_pubsub                          = $redis::output_buffer_limit_pubsub,
   String[1] $conf_template                                       = $redis::conf_template,
   Stdlib::Absolutepath $config_file                              = $redis::config_file,
+  Stdlib::Absolutepath $config_dir                               = $redis::config_dir,
   Stdlib::Filemode $config_file_mode                             = $redis::config_file_mode,
   Stdlib::Absolutepath $config_file_orig                         = $redis::config_file_orig,
   String[1] $config_group                                        = $redis::config_group,
@@ -427,8 +428,8 @@ define redis::instance (
     $redis_file_name_orig = $config_file_orig
     $redis_file_name      = $config_file
   } else {
-    $redis_file_name_orig = sprintf('%s/%s.%s', dirname($config_file_orig), $service_name, 'conf.puppet')
-    $redis_file_name      = sprintf('%s/%s.%s', dirname($config_file), $service_name, 'conf')
+    $redis_file_name_orig = sprintf('%s/%s.%s', $config_dir, $service_name, 'conf.puppet')
+    $redis_file_name      = sprintf('%s/%s.%s', $config_dir, $service_name, 'conf')
   }
 
   if $log_dir != $redis::log_dir {

@@ -88,13 +88,18 @@ describe 'redis' do
         it { is_expected.to compile.with_all_deps }
 
         it do
-          is_expected.to contain_file("/etc/security/limits.d/#{redis}.conf").with(
-            'ensure' => 'file',
-            'owner' => 'root',
-            'group' => 'root',
-            'mode' => '0644',
-            'content' => "#{redis} soft nofile 65536\n#{redis} hard nofile 65536\n",
-          )
+          case facts['os']['family']
+          when 'FreeBSD'
+            # skip /etc/security/limits.d tests on FreeBSD
+          else
+            is_expected.to contain_file("/etc/security/limits.d/#{redis}.conf").with(
+              'ensure' => 'file',
+              'owner' => 'root',
+              'group' => 'root',
+              'mode' => '0644',
+              'content' => "#{redis} soft nofile 65536\n#{redis} hard nofile 65536\n",
+            )
+          end
         end
 
         context 'when not managing service' do
@@ -103,13 +108,18 @@ describe 'redis' do
           it { is_expected.to compile.with_all_deps }
 
           it do
-            is_expected.to contain_file("/etc/security/limits.d/#{redis}.conf").with(
-              'ensure' => 'file',
-              'owner' => 'root',
-              'group' => 'root',
-              'mode' => '0644',
-              'content' => "#{redis} soft nofile 65536\n#{redis} hard nofile 65536\n",
-            )
+            case facts['os']['family']
+            when 'FreeBSD'
+              # skip /etc/security/limits.d tests on FreeBSD
+            else
+              is_expected.to contain_file("/etc/security/limits.d/#{redis}.conf").with(
+                'ensure' => 'file',
+                'owner' => 'root',
+                'group' => 'root',
+                'mode' => '0644',
+                'content' => "#{redis} soft nofile 65536\n#{redis} hard nofile 65536\n",
+              )
+            end
           end
         end
       end
@@ -121,13 +131,18 @@ describe 'redis' do
           it { is_expected.to compile.with_all_deps }
 
           it do
-            is_expected.to contain_file("/etc/systemd/system/#{service_name}.service.d/limit.conf")
-              .with_ensure('absent')
+            case facts['os']['family']
+            when 'FreeBSD'
+              # skip systemd tests on FreeBSD
+            else
+              is_expected.to contain_file("/etc/systemd/system/#{service_name}.service.d/limit.conf")
+                .with_ensure('absent')
 
-            is_expected.to contain_systemd__manage_dropin("#{service_name}-90-limits.conf")
-              .with_service_entry({ 'LimitNOFILE' => 7777 })
-              .with_ensure('present')
-              .with_unit("#{service_name}.service")
+              is_expected.to contain_systemd__manage_dropin("#{service_name}-90-limits.conf")
+                .with_service_entry({ 'LimitNOFILE' => 7777 })
+                .with_ensure('present')
+                .with_unit("#{service_name}.service")
+            end
           end
         end
 
@@ -137,7 +152,12 @@ describe 'redis' do
           it { is_expected.to compile.with_all_deps }
 
           it do
-            is_expected.not_to contain_systemd__service_limits("#{service_name}.service")
+            case facts['os']['family']
+            when 'FreeBSD'
+              # skip systemd tests on FreeBSD
+            else
+              is_expected.not_to contain_systemd__service_limits("#{service_name}.service")
+            end
           end
         end
       end
@@ -279,9 +299,14 @@ describe 'redis' do
       end
 
       describe 'with parameter: config_dir_mode' do
-        let(:params) { { config_dir_mode: '0700' } }
+        let(:params) do
+          {
+            config_dir: '/etc/config_dir',
+            config_dir_mode: '0700',
+          }
+        end
 
-        it { is_expected.to contain_file("/etc/#{redis}").with_mode('0700') }
+        it { is_expected.to contain_file('/etc/config_dir').with_mode('0700') }
       end
 
       describe 'with parameter: log_dir_mode' do
@@ -303,15 +328,25 @@ describe 'redis' do
       end
 
       describe 'with parameter: config_group' do
-        let(:params) { { config_group: '_VALUE_' } }
+        let(:params) do
+          {
+            config_dir: '/etc/config_dir',
+            config_group: '_VALUE_',
+          }
+        end
 
-        it { is_expected.to contain_file("/etc/#{redis}").with_group('_VALUE_') }
+        it { is_expected.to contain_file('/etc/config_dir').with_group('_VALUE_') }
       end
 
       describe 'with parameter: config_owner' do
-        let(:params) { { config_owner: '_VALUE_' } }
+        let(:params) do
+          {
+            config_dir: '/etc/config_dir',
+            config_owner: '_VALUE_',
+          }
+        end
 
-        it { is_expected.to contain_file("/etc/#{redis}").with_owner('_VALUE_') }
+        it { is_expected.to contain_file('/etc/config_dir').with_owner('_VALUE_') }
       end
 
       describe 'with parameter daemonize' do
@@ -1523,32 +1558,44 @@ describe 'redis' do
           }
         end
 
-        it { is_expected.to contain_systemd__unit_file("#{service_name}.service") }
+        it do
+          case facts['os']['family']
+          when 'FreeBSD'
+            # skip systemd tests on FreeBSD
+          else
+            is_expected.to contain_systemd__unit_file("#{service_name}.service")
+          end
+        end
 
         it do
-          content = <<-END.gsub(%r{^\s+\|}, '')
-            |[Unit]
-            |Description=#{redis.capitalize} Advanced key-value store for instance default
-            |After=network.target
-            |After=network-online.target
-            |Wants=network-online.target
-            |
-            |[Service]
-            |RuntimeDirectory=#{service_name}
-            |RuntimeDirectoryMode=2755
-            |Type=notify
-            |ExecStart=/usr/bin/#{redis}-server #{config_file} --supervised systemd --daemonize no
-            |ExecStop=/usr/bin/#{redis}-cli -p 6379 shutdown
-            |Restart=always
-            |User=#{redis}
-            |Group=#{redis}
-            |LimitNOFILE=65536
-            |
-            |[Install]
-            |WantedBy=multi-user.target
-          END
+          case facts['os']['family']
+          when 'FreeBSD'
+            # skip systemd tests on FreeBSD
+          else
+            content = <<-END.gsub(%r{^\s+\|}, '')
+              |[Unit]
+              |Description=#{redis.capitalize} Advanced key-value store for instance default
+              |After=network.target
+              |After=network-online.target
+              |Wants=network-online.target
+              |
+              |[Service]
+              |RuntimeDirectory=#{service_name}
+              |RuntimeDirectoryMode=2755
+              |Type=notify
+              |ExecStart=/usr/bin/#{redis}-server #{config_file} --supervised systemd --daemonize no
+              |ExecStop=/usr/bin/#{redis}-cli -p 6379 shutdown
+              |Restart=always
+              |User=#{redis}
+              |Group=#{redis}
+              |LimitNOFILE=65536
+              |
+              |[Install]
+              |WantedBy=multi-user.target
+            END
 
-          is_expected.to contain_systemd__unit_file("#{service_name}.service").with_content(content)
+            is_expected.to contain_systemd__unit_file("#{service_name}.service").with_content(content)
+          end
         end
       end
 

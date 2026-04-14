@@ -137,6 +137,8 @@ class redis::params {
       $pid_file                  = '/var/run/redis/redis.pid'
       $daemonize                 = true
       $service_name              = 'redis'
+      $service_user              = 'redis'
+      $service_group             = 'redis'
       $workdir                   = '/var/db/redis'
       $bin_path                  = '/usr/bin'
       $unixsocket                = '/var/run/redis/redis.sock'

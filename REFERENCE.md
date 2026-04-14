@@ -2147,6 +2147,7 @@ The following parameters are available in the `redis::instance` defined type:
 * [`output_buffer_limit_slave`](#-redis--instance--output_buffer_limit_slave)
 * [`output_buffer_limit_pubsub`](#-redis--instance--output_buffer_limit_pubsub)
 * [`custom_options`](#-redis--instance--custom_options)
+* [`config_dir`](#-redis--instance--config_dir)
 
 ##### <a name="-redis--instance--activerehashing"></a>`activerehashing`
 
@@ -3182,6 +3183,14 @@ Data type: `Hash[String[1],Variant[String[1], Integer]]`
 hash of custom options, not available as direct parameter.
 
 Default value: `{}`
+
+##### <a name="-redis--instance--config_dir"></a>`config_dir`
+
+Data type: `Stdlib::Absolutepath`
+
+
+
+Default value: `$redis::config_dir`
 
 ## Functions
 

@@ -28,35 +28,57 @@ describe 'redis::instance' do
         let(:title) { 'app2' }
         let(:config_file) do
           case facts['os']['family']
-          when 'RedHat'
-            if facts['os']['release']['major'].to_i > 8
-              "/etc/#{redis}/#{redis}-server-app2.conf"
-            else
-              "/etc/#{redis}-server-app2.conf"
-            end
+          when 'Debian', 'Archlinux', 'RedHat'
+            "/etc/#{redis}/#{redis}-server-#{title}.conf"
           when 'FreeBSD'
-            '/usr/local/etc/redis/redis-server-app2.conf'
-          when 'Debian', 'Archlinux'
-            "/etc/#{redis}/#{redis}-server-app2.conf"
+            "/usr/local/etc/redis/redis-server-#{title}.conf"
           end
         end
 
         it do
-          is_expected.to contain_file("#{config_file}.puppet")
-            .with_content(%r{^bind 127.0.0.1})
-            .with_content(%r{^logfile /var/log/#{redis}/#{redis}-server-app2\.log})
-            .with_content(%r{^dir /var/lib/#{redis}/#{redis}-server-app2})
-            .with_content(%r{^unixsocket /var/run/#{redis}-server-app2/#{redis}\.sock})
+          case facts['os']['family']
+          when 'FreeBSD'
+            is_expected.to contain_file("#{config_file}.puppet")
+              .with_content(%r{^bind 127.0.0.1})
+              .with_content(%r{^logfile /var/log/#{redis}/#{redis}-server-#{title}\.log})
+              .with_content(%r{^dir /var/db/redis/#{redis}-server-#{title}})
+              .with_content(%r{^unixsocket /var/run/#{redis}-server-#{title}/#{redis}\.sock})
+          else
+            is_expected.to contain_file("#{config_file}.puppet")
+              .with_content(%r{^bind 127.0.0.1})
+              .with_content(%r{^logfile /var/log/#{redis}/#{redis}-server-#{title}\.log})
+              .with_content(%r{^dir /var/lib/#{redis}/#{redis}-server-#{title}})
+              .with_content(%r{^unixsocket /var/run/#{redis}-server-#{title}/#{redis}\.sock})
+          end
         end
-
-        it { is_expected.to contain_file("/var/lib/#{redis}/#{redis}-server-app2") }
 
         it do
-          is_expected.to contain_file("/etc/systemd/system/#{redis}-server-app2.service")
-            .with_content(%r{ExecStart=/usr/bin/#{redis}-server #{config_file}})
+          case facts['os']['family']
+          when 'FreeBSD'
+            is_expected.to contain_file("/var/db/redis/#{redis}-server-#{title}")
+          else
+            is_expected.to contain_file("/var/lib/#{redis}/#{redis}-server-#{title}")
+          end
         end
 
-        it { is_expected.to contain_service("#{redis}-server-app2.service").with_ensure(true).with_enable(true) }
+        it do
+          case facts['os']['family']
+          when 'FreeBSD'
+            # skip systemd tests on FreeBSD
+          else
+            is_expected.to contain_file("/etc/systemd/system/#{redis}-server-#{title}.service")
+              .with_content(%r{ExecStart=/usr/bin/#{redis}-server #{config_file}})
+          end
+        end
+
+        it do
+          case facts['os']['family']
+          when 'FreeBSD'
+            # skip systemd tests on FreeBSD
+          else
+            is_expected.to contain_service("#{redis}-server-#{title}.service").with_ensure(true).with_enable(true)
+          end
+        end
       end
 
       context 'with custom options' do
