@@ -242,6 +242,9 @@
 #   Minimum number of slaves master will remain connected with, for another
 #   slave to migrate to a  master which is no longer covered by any slave Only
 #   set if cluster_enabled is true
+# @param cluster_announce_ip
+#   The IP address that a Redis Cluster node should announce to the bus.
+#   Only set if cluster_enabled is true
 # @param io_threads
 #   Number of threads to handle IO operations in Redis
 # @param io_threads_do_reads
@@ -394,6 +397,7 @@ define redis::instance (
   Integer[0] $cluster_slave_validity_factor                      = $redis::cluster_slave_validity_factor,
   Boolean $cluster_require_full_coverage                         = $redis::cluster_require_full_coverage,
   Integer[0] $cluster_migration_barrier                          = $redis::cluster_migration_barrier,
+  Optional[Stdlib::Host] $cluster_announce_ip                    = $redis::cluster_announce_ip,
   String[1] $service_name                                        = "${redis::provider}-server-${name}",
   Stdlib::Ensure::Service $service_ensure                        = $redis::service_ensure,
   Boolean $service_enable                                        = $redis::service_enable,
@@ -576,6 +580,7 @@ define redis::instance (
     cluster_slave_validity_factor => $cluster_slave_validity_factor,
     cluster_require_full_coverage => $cluster_require_full_coverage,
     cluster_migration_barrier     => $cluster_migration_barrier,
+    cluster_announce_ip           => $cluster_announce_ip,
     extra_config_file             => $extra_config_file,
     tls_port                      => $tls_port,
     tls_cert_file                 => $tls_cert_file,

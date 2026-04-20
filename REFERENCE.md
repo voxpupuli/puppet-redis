@@ -217,6 +217,7 @@ The following parameters are available in the `redis` class:
 * [`cluster_slave_validity_factor`](#-redis--cluster_slave_validity_factor)
 * [`cluster_require_full_coverage`](#-redis--cluster_require_full_coverage)
 * [`cluster_migration_barrier`](#-redis--cluster_migration_barrier)
+* [`cluster_announce_ip`](#-redis--cluster_announce_ip)
 * [`instances`](#-redis--instances)
 * [`io_threads`](#-redis--io_threads)
 * [`io_threads_do_reads`](#-redis--io_threads_do_reads)
@@ -1314,6 +1315,15 @@ Only set if cluster_enabled is true
 
 Default value: `1`
 
+##### <a name="-redis--cluster_announce_ip"></a>`cluster_announce_ip`
+
+Data type: `Optional[Stdlib::Host]`
+
+The IP address that a Redis Cluster node should announce to the bus.
+Only set if cluster_enabled is true
+
+Default value: `undef`
+
 ##### <a name="-redis--instances"></a>`instances`
 
 Data type: `Hash[String[1], Hash]`
@@ -2129,6 +2139,7 @@ The following parameters are available in the `redis::instance` defined type:
 * [`cluster_slave_validity_factor`](#-redis--instance--cluster_slave_validity_factor)
 * [`cluster_require_full_coverage`](#-redis--instance--cluster_require_full_coverage)
 * [`cluster_migration_barrier`](#-redis--instance--cluster_migration_barrier)
+* [`cluster_announce_ip`](#-redis--instance--cluster_announce_ip)
 * [`io_threads`](#-redis--instance--io_threads)
 * [`io_threads_do_reads`](#-redis--instance--io_threads_do_reads)
 * [`cluster_allow_reads_when_down`](#-redis--instance--cluster_allow_reads_when_down)
@@ -3023,6 +3034,15 @@ slave to migrate to a  master which is no longer covered by any slave Only
 set if cluster_enabled is true
 
 Default value: `$redis::cluster_migration_barrier`
+
+##### <a name="-redis--instance--cluster_announce_ip"></a>`cluster_announce_ip`
+
+Data type: `Optional[Stdlib::Host]`
+
+The IP address that a Redis Cluster node should announce to the bus.
+Only set if cluster_enabled is true
+
+Default value: `$redis::cluster_announce_ip`
 
 ##### <a name="-redis--instance--io_threads"></a>`io_threads`
 

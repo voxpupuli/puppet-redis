@@ -71,6 +71,7 @@
   Integer[0]                                         $cluster_slave_validity_factor,
   Boolean                                            $cluster_require_full_coverage,
   Integer[0]                                         $cluster_migration_barrier,
+  Optional[Stdlib::Host]                             $cluster_announce_ip,
   Optional[String]                                   $extra_config_file,
   Optional[Stdlib::Port]                             $tls_port,
   Optional[Stdlib::Absolutepath]                     $tls_cert_file,
@@ -1046,6 +1047,7 @@ cluster-node-timeout <%= $cluster_node_timeout %>
 cluster-slave-validity-factor <%= $cluster_slave_validity_factor %>
 cluster-require-full-coverage <%= bool2str($cluster_require_full_coverage, 'yes', 'no') %>
 cluster-migration-barrier <%= $cluster_migration_barrier %>
+<% if $cluster_announce_ip { -%>cluster-announce-ip <%= $cluster_announce_ip %><% } %>
 <% if $cluster_allow_reads_when_down { -%>cluster-allow-reads-when-down <%= $cluster_allow_reads_when_down ? {true => 'yes', default => 'no'} %><% } %>
 <% if $cluster_replica_no_failover { -%>cluster-replica-no-failover <%= $cluster_replica_no_failover ? {true => 'yes', default => 'no'} %><% } %>
 <% } -%>

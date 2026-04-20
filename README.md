@@ -61,6 +61,7 @@ class { 'redis':
   cluster_enabled      => true,
   cluster_config_file  => 'nodes.conf',
   cluster_node_timeout => 5000,
+  cluster_announce_ip  => '10.0.1.2',
 }
 ```
 
