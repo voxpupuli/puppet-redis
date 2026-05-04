@@ -17,10 +17,10 @@ describe 'redis::instance example' do
           end
 
   config_path = case fact('os.family')
-                when 'Debian'
+                when 'Debian', 'RedHat'
                   "/etc/#{redis}"
-                when 'RedHat'
-                  (fact('os.release.major').to_i >= 9) ? "/etc/#{redis}" : '/etc'
+                when 'FreeBSD'
+                  '/usr/local/etc/redis'
                 else
                   '/etc'
                 end
