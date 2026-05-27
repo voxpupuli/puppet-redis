@@ -1,0 +1,6 @@
+---
+redis::config_dir_mode: '0755'
+redis::config_owner: 'root'
+redis::log_dir_mode: '0755'
+redis::pid_file: '/var/run/%{lookup("redis::provider")}.pid'
+redis::sentinel::config_file: '%{lookup("redis::config_dir")}/%{lookup("redis::provider")}-sentinel.conf'

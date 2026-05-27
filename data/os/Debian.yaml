@@ -1,0 +1,12 @@
+---
+redis::config_dir_mode: '0755'
+redis::log_dir_mode: '0755'
+redis::package_name: '%{lookup("redis::provider")}-server'
+redis::pid_file: '/var/run/%{lookup("redis::provider")}/%{lookup("redis::provider")}-server.pid'
+redis::service_name: '%{lookup("redis::provider")}-server'
+
+redis::sentinel::config_file_orig: '%{lookup("redis::config_dir")}/%{lookup("redis::provider")}-sentinel.conf.puppet'
+redis::sentinel::log_file: '%{lookup("redis::log_dir")}/%{lookup("redis::provider")}-sentinel.log'
+redis::sentinel::package_name: '%{lookup("redis::provider")}-sentinel'
+redis::sentinel::pid_file: '/run/sentinel/%{lookup("redis::provider")}-sentinel.pid'
+redis::sentinel::working_dir: '/var/lib/redis'

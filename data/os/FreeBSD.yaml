@@ -1,0 +1,10 @@
+---
+redis::config_dir: '/usr/local/etc/%{lookup("redis::provider")}'
+redis::config_dir_mode: '0755'
+redis::config_file: '/usr/local/etc/%{lookup("redis::provider")}.conf'
+redis::config_group: 'wheel'
+redis::log_dir_mode: '0755'
+redis::pid_file: '/var/run/%{lookup("redis::provider")}/%{lookup("redis::provider")}.pid'
+redis::workdir: '/var/db/%{lookup("redis::provider")}'
+
+redis::sentinel::config_file: '%{lookup("redis::config_dir")}/%{lookup("redis::provider")}-sentinel.conf'

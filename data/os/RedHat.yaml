@@ -1,0 +1,5 @@
+---
+redis::provider: 'valkey'
+redis::daemonize: false
+redis::pid_file: '/var/run/%{lookup("redis::provider")}_6379.pid'
+redis::sentinel::daemonize: false

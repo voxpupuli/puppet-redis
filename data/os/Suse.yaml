@@ -1,0 +1,6 @@
+---
+redis::config_file: '%{lookup("redis::config_dir")}/%{lookup("redis::provider")}-server.conf'
+redis::config_group: '%{lookup("redis::provider")}'
+redis::pid_file: '/var/run/%{lookup("redis::provider")}/%{lookup("redis::provider")}-server.pid'
+
+redis::sentinel::config_file: '%{lookup("redis::config_dir")}/%{lookup("redis::provider")}-sentinel.conf'

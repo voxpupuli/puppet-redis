@@ -12,8 +12,8 @@
 #
 # @api private
 class redis::dnfmodule (
+  String[1] $module,
   String[1] $ensure = 'installed',
-  String[1] $module = 'redis',
 ) {
   package { 'redis dnf module':
     ensure      => $ensure,

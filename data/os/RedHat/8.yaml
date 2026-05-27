@@ -1,0 +1,4 @@
+---
+redis::provider: 'redis'
+redis::config_file: '/etc/%{lookup("redis::provider")}.conf'
+redis::sentinel::config_file: '/etc/%{lookup("redis::provider")}-sentinel.conf'
