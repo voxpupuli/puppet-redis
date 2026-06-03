@@ -1,0 +1,3 @@
+---
+redis::config_group: '%{lookup("redis::provider")}'
+redis::sentinel::pid_file:  '/var/run/sentinel/%{lookup("redis::provider")}-sentinel.pid'

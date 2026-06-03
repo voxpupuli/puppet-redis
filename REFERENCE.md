@@ -17,7 +17,6 @@
 * `redis::config`: This class provides configuration for Redis.
 * `redis::dnfmodule`: Manage the DNF module
 * `redis::install`: This class installs the application.
-* `redis::params`: This class provides a number of parameters.
 * `redis::preinstall`: Provides anything required by the install class, such as package
 repositories.
 * `redis::service`: This class manages the Redis daemon.
@@ -242,7 +241,7 @@ Data type: `Enum['redis', 'valkey']`
 
 Name of the redis server implementation.
 
-Default value: `$redis::params::provider`
+Default value: `'redis'`
 
 ##### <a name="-redis--activerehashing"></a>`activerehashing`
 
@@ -322,7 +321,7 @@ Data type: `Stdlib::Absolutepath`
 
 Directory containing redis binary executables.
 
-Default value: `$redis::params::bin_path`
+Default value: `'/usr/bin'`
 
 ##### <a name="-redis--config_dir"></a>`config_dir`
 
@@ -330,7 +329,7 @@ Data type: `Stdlib::Absolutepath`
 
 Directory containing the configuration files.
 
-Default value: `$redis::params::config_dir`
+Default value: `'/etc/%{lookup("redis::provider")}'`
 
 ##### <a name="-redis--config_dir_mode"></a>`config_dir_mode`
 
@@ -338,7 +337,7 @@ Data type: `Stdlib::Filemode`
 
 Adjust mode for directory containing configuration files.
 
-Default value: `$redis::params::config_dir_mode`
+Default value: `'0750'`
 
 ##### <a name="-redis--config_file_orig"></a>`config_file_orig`
 
@@ -346,7 +345,7 @@ Data type: `Stdlib::Absolutepath`
 
 The location and name of a config file that provides the source
 
-Default value: `$redis::params::config_file_orig`
+Default value: `'%{lookup("redis::config_file")}.puppet'`
 
 ##### <a name="-redis--config_file"></a>`config_file`
 
@@ -354,7 +353,7 @@ Data type: `Stdlib::Absolutepath`
 
 Adjust main configuration file.
 
-Default value: `$redis::params::config_file`
+Default value: `'%{lookup("redis::config_dir")}/%{lookup("redis::provider")}.conf'`
 
 ##### <a name="-redis--config_file_mode"></a>`config_file_mode`
 
@@ -370,7 +369,7 @@ Data type: `String[1]`
 
 Adjust filesystem group for config files.
 
-Default value: `$redis::params::config_group`
+Default value: `'root'`
 
 ##### <a name="-redis--config_owner"></a>`config_owner`
 
@@ -378,7 +377,7 @@ Data type: `String[1]`
 
 Adjust filesystem owner for config files.
 
-Default value: `$redis::params::config_owner`
+Default value: `'%{lookup("redis::provider")}'`
 
 ##### <a name="-redis--conf_template"></a>`conf_template`
 
@@ -394,7 +393,7 @@ Data type: `Boolean`
 
 Have Redis run as a daemon.
 
-Default value: `$redis::params::daemonize`
+Default value: `true`
 
 ##### <a name="-redis--default_install"></a>`default_install`
 
@@ -490,7 +489,7 @@ Data type: `Stdlib::Absolutepath`
 
 Specify directory where to write log entries.
 
-Default value: `$redis::params::log_dir`
+Default value: `'/var/log/%{lookup("redis::provider")}'`
 
 ##### <a name="-redis--log_dir_group"></a>`log_dir_group`
 
@@ -506,7 +505,7 @@ Data type: `Stdlib::Filemode`
 
 Adjust mode for directory containing log files.
 
-Default value: `$redis::params::log_dir_mode`
+Default value: `'0750'`
 
 ##### <a name="-redis--log_file"></a>`log_file`
 
@@ -515,7 +514,7 @@ Data type: `String`
 Specify file where to write log entries. Relative paths will be prepended
 with log_dir but absolute paths are also accepted.
 
-Default value: `$redis::params::log_file`
+Default value: `'%{lookup("redis::provider")}.log'`
 
 ##### <a name="-redis--log_level"></a>`log_level`
 
@@ -667,7 +666,7 @@ Data type: `String[1]`
 
 Upstream package name.
 
-Default value: `$redis::params::package_name`
+Default value: `'%{lookup("redis::provider")}'`
 
 ##### <a name="-redis--pid_file"></a>`pid_file`
 
@@ -675,7 +674,7 @@ Data type: `Stdlib::Absolutepath`
 
 Where to store the pid.
 
-Default value: `$redis::params::pid_file`
+Default value: `'/var/run/%{lookup("redis::provider")}/%{lookup("redis::provider")}-server.pid'`
 
 ##### <a name="-redis--port"></a>`port`
 
@@ -883,7 +882,7 @@ Data type: `String[1]`
 
 Specify which group to run as.
 
-Default value: `$redis::params::service_group`
+Default value: `'%{lookup("redis::provider")}'`
 
 ##### <a name="-redis--service_name"></a>`service_name`
 
@@ -891,7 +890,7 @@ Data type: `String[1]`
 
 Specify the service name for Init or Systemd.
 
-Default value: `$redis::params::service_name`
+Default value: `'%{lookup("redis::provider")}'`
 
 ##### <a name="-redis--service_user"></a>`service_user`
 
@@ -899,7 +898,7 @@ Data type: `String[1]`
 
 Specify which user to run as.
 
-Default value: `$redis::params::service_user`
+Default value: `'%{lookup("redis::provider")}'`
 
 ##### <a name="-redis--service_timeout_start"></a>`service_timeout_start`
 
@@ -1175,7 +1174,7 @@ Data type: `Variant[Stdlib::Absolutepath, Enum['']]`
 
 Define unix socket path
 
-Default value: `$redis::params::unixsocket`
+Default value: `'/var/run/%{lookup("redis::provider")}/%{lookup("redis::provider")}.sock'`
 
 ##### <a name="-redis--unixsocketperm"></a>`unixsocketperm`
 
@@ -1192,7 +1191,7 @@ Data type: `Stdlib::Absolutepath`
 The DB will be written inside this directory, with the filename specified
 above using the 'dbfilename' configuration directive.
 
-Default value: `$redis::params::workdir`
+Default value: `'/var/lib/%{lookup("redis::provider")}'`
 
 ##### <a name="-redis--workdir_mode"></a>`workdir_mode`
 
@@ -1582,6 +1581,7 @@ The following parameters are available in the `redis::sentinel` class:
 * [`service_group`](#-redis--sentinel--service_group)
 * [`service_name`](#-redis--sentinel--service_name)
 * [`service_user`](#-redis--sentinel--service_user)
+* [`service_ensure`](#-redis--sentinel--service_ensure)
 * [`service_enable`](#-redis--sentinel--service_enable)
 * [`tls_cert_file`](#-redis--sentinel--tls_cert_file)
 * [`tls_key_file`](#-redis--sentinel--tls_key_file)
@@ -1597,7 +1597,6 @@ The following parameters are available in the `redis::sentinel` class:
 * [`sentinel_auth_user`](#-redis--sentinel--sentinel_auth_user)
 * [`acls`](#-redis--sentinel--acls)
 * [`manage_redis`](#-redis--sentinel--manage_redis)
-* [`service_ensure`](#-redis--sentinel--service_ensure)
 
 ##### <a name="-redis--sentinel--auth_pass"></a>`auth_pass`
 
@@ -1613,7 +1612,7 @@ Data type: `Stdlib::Absolutepath`
 
 The location and name of the sentinel config file.
 
-Default value: `$redis::params::sentinel_config_file`
+Default value: `'%{lookup("redis::config_dir")}/sentinel.conf'`
 
 ##### <a name="-redis--sentinel--config_file_orig"></a>`config_file_orig`
 
@@ -1625,7 +1624,7 @@ because sentinel itself writes to its own config file and we do
 not want override that when puppet is run unless there are
 changes from the manifests.
 
-Default value: `$redis::params::sentinel_config_file_orig`
+Default value: `'%{lookup("redis::sentinel::config_file")}.puppet'`
 
 ##### <a name="-redis--sentinel--config_file_mode"></a>`config_file_mode`
 
@@ -1641,7 +1640,7 @@ Data type: `String[1]`
 
 Adjust filesystem group for config files.
 
-Default value: `$redis::params::config_group`
+Default value: `'%{alias("redis::config_group")}'`
 
 ##### <a name="-redis--sentinel--config_owner"></a>`config_owner`
 
@@ -1649,7 +1648,7 @@ Data type: `String[1]`
 
 Adjust filesystem owner for config files.
 
-Default value: `$redis::params::config_owner`
+Default value: `'%{alias("redis::config_owner")}'`
 
 ##### <a name="-redis--sentinel--conf_template"></a>`conf_template`
 
@@ -1665,7 +1664,7 @@ Data type: `Boolean`
 
 Have Redis sentinel run as a daemon.
 
-Default value: `$redis::params::sentinel_daemonize`
+Default value: `true`
 
 ##### <a name="-redis--sentinel--down_after"></a>`down_after`
 
@@ -1691,7 +1690,7 @@ Data type: `Stdlib::Absolutepath`
 
 Specify where to write log entries.
 
-Default value: `$redis::params::sentinel_log_file`
+Default value: `'%{lookup("redis::log_dir")}/sentinel.log'`
 
 ##### <a name="-redis--sentinel--log_level"></a>`log_level`
 
@@ -1748,7 +1747,7 @@ Data type: `String[1]`
 
 The name of the package that installs sentinel.
 
-Default value: `$redis::params::sentinel_package_name`
+Default value: `'%{lookup("redis::provider")}'`
 
 ##### <a name="-redis--sentinel--package_ensure"></a>`package_ensure`
 
@@ -1774,7 +1773,7 @@ Data type: `Stdlib::Absolutepath`
 
 If sentinel is daemonized it will write its pid at this location.
 
-Default value: `$redis::params::sentinel_pid_file`
+Default value: `'/var/run/%{lookup("redis::provider")}/%{lookup("redis::provider")}-sentinel.pid'`
 
 ##### <a name="-redis--sentinel--quorum"></a>`quorum`
 
@@ -1849,7 +1848,7 @@ Data type: `String[1]`
 
 The group of the config file.
 
-Default value: `$redis::params::service_group`
+Default value: `'%{alias("redis::service_group")}'`
 
 ##### <a name="-redis--sentinel--service_name"></a>`service_name`
 
@@ -1857,7 +1856,7 @@ Data type: `String[1]`
 
 The name of the service (for puppet to manage).
 
-Default value: `$redis::params::sentinel_service_name`
+Default value: `'%{lookup("redis::provider")}-sentinel'`
 
 ##### <a name="-redis--sentinel--service_user"></a>`service_user`
 
@@ -1865,7 +1864,15 @@ Data type: `String[1]`
 
 The owner of the config file.
 
-Default value: `$redis::params::service_user`
+Default value: `'%{alias("redis::service_user")}'`
+
+##### <a name="-redis--sentinel--service_ensure"></a>`service_ensure`
+
+Data type: `Stdlib::Ensure::Service`
+
+Ensure the service state at run time.
+
+Default value: `'running'`
 
 ##### <a name="-redis--sentinel--service_enable"></a>`service_enable`
 
@@ -1938,7 +1945,7 @@ Data type: `Stdlib::Absolutepath`
 The directory into which sentinel will change to avoid mount
 conflicts.
 
-Default value: `$redis::params::sentinel_working_dir`
+Default value: `'/tmp'`
 
 ##### <a name="-redis--sentinel--notification_script"></a>`notification_script`
 
@@ -1992,14 +1999,6 @@ Data type: `Boolean`
 Manage redis base class. If set to false, sentinel is installed without redis server.
 
 Default value: `true`
-
-##### <a name="-redis--sentinel--service_ensure"></a>`service_ensure`
-
-Data type: `Stdlib::Ensure::Service`
-
-
-
-Default value: `'running'`
 
 ## Defined types
 

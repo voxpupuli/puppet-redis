@@ -46,7 +46,7 @@ class redis::config {
   # Adjust /etc/default/redis-server on Debian systems
   case $facts['os']['family'] {
     'Debian': {
-      file { '/etc/default/redis-server':
+      file { "/etc/default/${redis::provider}-server":
         ensure => file,
         group  => pick($redis::debdefault_group, $redis::config_group),
         mode   => pick($redis::debdefault_file_mode, $redis::config_file_mode),
