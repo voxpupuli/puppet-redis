@@ -4,6 +4,27 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v13.0.0](https://github.com/voxpupuli/puppet-redis/tree/v13.0.0) (2026-06-08)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v12.1.1...v13.0.0)
+
+**Breaking changes:**
+
+- Migrate params to hiera layers with extended provider switch support [\#587](https://github.com/voxpupuli/puppet-redis/pull/587) ([cruelsmith](https://github.com/cruelsmith))
+
+**Implemented enhancements:**
+
+- Make it possible to install sentinel independently [\#579](https://github.com/voxpupuli/puppet-redis/pull/579) ([mouchymouchy](https://github.com/mouchymouchy))
+
+**Closed issues:**
+
+- Broken idempotency of redis-sentinel deployment in CentOS Stream 9 [\#580](https://github.com/voxpupuli/puppet-redis/issues/580)
+
+**Merged pull requests:**
+
+- Sentinel: Use consistent owner/group for config file [\#581](https://github.com/voxpupuli/puppet-redis/pull/581) ([kajinamit](https://github.com/kajinamit))
+- Improve `provider` data type [\#574](https://github.com/voxpupuli/puppet-redis/pull/574) ([smortex](https://github.com/smortex))
+
 ## [v12.1.1](https://github.com/voxpupuli/puppet-redis/tree/v12.1.1) (2026-01-27)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v12.1.0...v12.1.1)
