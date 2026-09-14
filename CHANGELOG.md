@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v13.1.0](https://github.com/voxpupuli/puppet-redis/tree/v13.1.0) (2026-09-14)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v13.0.0...v13.1.0)
+
+**Implemented enhancements:**
+
+- Replace deprecated calls with `Facter::Core::Execution` [\#590](https://github.com/voxpupuli/puppet-redis/pull/590) ([corporate-gadfly](https://github.com/corporate-gadfly))
+
 ## [v13.0.0](https://github.com/voxpupuli/puppet-redis/tree/v13.0.0) (2026-06-08)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v12.1.1...v13.0.0)
