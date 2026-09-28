@@ -3268,7 +3268,7 @@ Alias of `Integer[-1000, 1000]`
 
 validate URL matches redis protocol
 
-Alias of `Pattern[/(^redis:\/\/)/]`
+Alias of `Pattern[/(^rediss?:\/\/)/]`
 
 ## Tasks
 
