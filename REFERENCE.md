@@ -1487,13 +1487,13 @@ Note that this class requires the herculesteam/augeasproviders_sysctl module.
 
 #### Examples
 
-##### 
+#####
 
 ```puppet
 include redis::administration
 ```
 
-##### 
+#####
 
 ```puppet
 class {'redis::administration':
@@ -2009,7 +2009,7 @@ multiple redis instances on one machine without conflicts
 
 #### Examples
 
-##### 
+#####
 
 ```puppet
 redis::instance {'6380':
@@ -3285,4 +3285,3 @@ Executes a redis-cli command on the target system
 Data type: `String[1]`
 
 The command to run, including all arguments
-
