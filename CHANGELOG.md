@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v13.2.0](https://github.com/voxpupuli/puppet-redis/tree/v13.2.0) (2026-10-16)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v13.1.0...v13.2.0)
+
+**Implemented enhancements:**
+
+- puppetlabs/stdlib: Allow 10.x & puppet/systemd: Allow 10.x [\#595](https://github.com/voxpupuli/puppet-redis/pull/595) ([bastelfreak](https://github.com/bastelfreak))
+- Update requirements to allow OpenVox 9 [\#594](https://github.com/voxpupuli/puppet-redis/pull/594) ([sebastianrakel](https://github.com/sebastianrakel))
+- Allow the `rediss://` \(TLS\) scheme in `Redis::RedisUrl` [\#592](https://github.com/voxpupuli/puppet-redis/pull/592) ([Jilano5](https://github.com/Jilano5))
+
 ## [v13.1.0](https://github.com/voxpupuli/puppet-redis/tree/v13.1.0) (2026-09-14)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v13.0.0...v13.1.0)
