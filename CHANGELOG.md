@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v13.3.0](https://github.com/voxpupuli/puppet-redis/tree/v13.3.0) (2026-10-28)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v13.2.0...v13.3.0)
+
+**Implemented enhancements:**
+
+- puppet/systemd: Allow 11.x [\#597](https://github.com/voxpupuli/puppet-redis/pull/597) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [v13.2.0](https://github.com/voxpupuli/puppet-redis/tree/v13.2.0) (2026-10-16)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-redis/compare/v13.1.0...v13.2.0)
