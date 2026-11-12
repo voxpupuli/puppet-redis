@@ -51,3 +51,5 @@ jobs:
       beaker_collection: ${{ inputs.beaker_collection }}
       beaker_staging_version: ${{ inputs.beaker_staging_version }}
       beaker_hypervisor: 'docker'
+      pidfile_workaround: 'false'
+      unit_runs_on: 'cern-self-hosted'

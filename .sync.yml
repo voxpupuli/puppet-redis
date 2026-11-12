@@ -10,3 +10,4 @@ spec/spec_helper.rb:
 .github/workflows/ci.yml:
   with:
     beaker_hypervisor: 'docker'
+    unit_runs_on: 'cern-self-hosted'
