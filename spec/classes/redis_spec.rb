@@ -21,6 +21,14 @@ describe 'redis' do
     end
   end
   let(:service_name) { package_name }
+  let(:config_dir) do
+    case facts['os']['family']
+    when 'FreeBSD'
+      "/usr/local/etc/#{redis}"
+    else
+      "/etc/#{redis}"
+    end
+  end
   let(:config_file) do
     case facts['os']['family']
     when 'Archlinux', 'Debian'
@@ -64,7 +72,41 @@ describe 'redis' do
           end
         end
 
-        it { is_expected.to contain_service(service_name).with_ensure('running').with_enable('true') }
+        if facts['os']['family'] == 'FreeBSD'
+          it { is_expected.to contain_service(service_name).with_ensure('running').without_enable.that_requires("File[/etc/rc.conf.d/#{redis}/enable]") }
+
+          it do
+            is_expected.to contain_file("/etc/rc.conf.d/#{redis}")
+              .with_ensure('directory')
+              .with_owner('root')
+              .with_group('wheel')
+              .with_mode('0755')
+              .with_recurse(true)
+              .with_purge(true)
+          end
+
+          it do
+            is_expected.to contain_file("/etc/rc.conf.d/#{redis}/enable")
+              .with_ensure('file')
+              .with_owner('root')
+              .with_group('wheel')
+              .with_mode('0644')
+              .with_content("#{redis}_enable=\"YES\"\n")
+          end
+
+          it do
+            is_expected.to contain_file("/etc/rc.conf.d/#{redis}/limits")
+              .with_ensure('file')
+              .with_content("#{redis}_limits=\"-n 65536\"\n")
+          end
+
+          it { is_expected.not_to contain_file("/etc/systemd/system/#{service_name}.service.d/limit.conf") }
+          it { is_expected.not_to contain_systemd__manage_dropin("#{service_name}-90-limits.conf") }
+          it { is_expected.not_to contain_systemd__unit_file("#{service_name}.service") }
+        else
+          it { is_expected.to contain_service(service_name).with_ensure('running').with_enable('true') }
+          it { is_expected.not_to contain_file("/etc/rc.conf.d/#{redis}") }
+        end
 
         describe 'with manage_dnf_module true', if: facts['os']['family'] == 'RedHat' && facts['os']['release']['major'].to_i == 8 do
           let(:pre_condition) do
@@ -82,7 +124,14 @@ describe 'redis' do
         end
       end
 
-      context 'with managed_by_cluster_manager true' do
+      context 'with managed_by_cluster_manager true', if: facts['os']['family'] == 'FreeBSD' do
+        let(:params) { { managed_by_cluster_manager: true } }
+
+        it { is_expected.to compile.with_all_deps }
+        it { is_expected.not_to contain_file("/etc/security/limits.d/#{redis}.conf") }
+      end
+
+      context 'with managed_by_cluster_manager true', unless: facts['os']['family'] == 'FreeBSD' do
         let(:params) { { managed_by_cluster_manager: true } }
 
         it { is_expected.to compile.with_all_deps }
@@ -120,14 +169,27 @@ describe 'redis' do
 
           it { is_expected.to compile.with_all_deps }
 
-          it do
-            is_expected.to contain_file("/etc/systemd/system/#{service_name}.service.d/limit.conf")
-              .with_ensure('absent')
+          if facts['os']['family'] == 'FreeBSD'
+            it do
+              is_expected.to contain_file("/etc/rc.conf.d/#{redis}/limits")
+                .with_ensure('file')
+                .with_owner('root')
+                .with_group('wheel')
+                .with_mode('0644')
+                .with_content("#{redis}_limits=\"-n 7777\"\n")
+            end
 
-            is_expected.to contain_systemd__manage_dropin("#{service_name}-90-limits.conf")
-              .with_service_entry({ 'LimitNOFILE' => 7777 })
-              .with_ensure('present')
-              .with_unit("#{service_name}.service")
+            it { is_expected.not_to contain_systemd__manage_dropin("#{service_name}-90-limits.conf") }
+          else
+            it do
+              is_expected.to contain_file("/etc/systemd/system/#{service_name}.service.d/limit.conf")
+                .with_ensure('absent')
+
+              is_expected.to contain_systemd__manage_dropin("#{service_name}-90-limits.conf")
+                .with_service_entry({ 'LimitNOFILE' => 7777 })
+                .with_ensure('present')
+                .with_unit("#{service_name}.service")
+            end
           end
         end
 
@@ -139,6 +201,8 @@ describe 'redis' do
           it do
             is_expected.not_to contain_systemd__service_limits("#{service_name}.service")
           end
+
+          it { is_expected.not_to contain_file("/etc/rc.conf.d/#{redis}/limits") }
         end
       end
 
@@ -281,7 +345,7 @@ describe 'redis' do
       describe 'with parameter: config_dir_mode' do
         let(:params) { { config_dir_mode: '0700' } }
 
-        it { is_expected.to contain_file("/etc/#{redis}").with_mode('0700') }
+        it { is_expected.to contain_file(config_dir).with_mode('0700') }
       end
 
       describe 'with parameter: log_dir_mode' do
@@ -305,13 +369,13 @@ describe 'redis' do
       describe 'with parameter: config_group' do
         let(:params) { { config_group: '_VALUE_' } }
 
-        it { is_expected.to contain_file("/etc/#{redis}").with_group('_VALUE_') }
+        it { is_expected.to contain_file(config_dir).with_group('_VALUE_') }
       end
 
       describe 'with parameter: config_owner' do
         let(:params) { { config_owner: '_VALUE_' } }
 
-        it { is_expected.to contain_file("/etc/#{redis}").with_owner('_VALUE_') }
+        it { is_expected.to contain_file(config_dir).with_owner('_VALUE_') }
       end
 
       describe 'with parameter daemonize' do
@@ -1020,12 +1084,62 @@ describe 'redis' do
         let(:params) { { service_manage: false } }
 
         it { is_expected.not_to contain_service(package_name) }
+        it { is_expected.not_to contain_file("/etc/rc.conf.d/#{redis}/enable") }
       end
 
       describe 'with parameter: service_enable' do
         let(:params) { { service_enable: true } }
 
-        it { is_expected.to contain_service(package_name).with_enable(true) }
+        if facts['os']['family'] == 'FreeBSD'
+          it { is_expected.to contain_service(package_name).without_enable }
+          it { is_expected.to contain_file("/etc/rc.conf.d/#{redis}/enable").with_content("#{redis}_enable=\"YES\"\n") }
+        else
+          it { is_expected.to contain_service(package_name).with_enable(true) }
+        end
+      end
+
+      describe 'with parameter: service_enable (set to false)', if: facts['os']['family'] == 'FreeBSD' do
+        let(:params) { { service_enable: false } }
+
+        it { is_expected.to contain_service(package_name).without_enable }
+        it { is_expected.to contain_file("/etc/rc.conf.d/#{redis}/enable").with_content("#{redis}_enable=\"NO\"\n") }
+      end
+
+      describe 'with parameter: default_install (set to false)', if: facts['os']['family'] == 'FreeBSD' do
+        let(:params) { { default_install: false } }
+
+        it { is_expected.to compile.with_all_deps }
+        it { is_expected.not_to contain_service(package_name) }
+        it { is_expected.not_to contain_redis__instance('default') }
+        it { is_expected.to contain_file("/etc/rc.conf.d/#{redis}/enable").with_content("#{redis}_enable=\"YES\"\n") }
+        it { is_expected.to contain_file("/etc/rc.conf.d/#{redis}").with_ensure('directory').with_purge(true) }
+      end
+
+      describe 'with parameter: instances', if: facts['os']['family'] == 'FreeBSD' do
+        let(:params) do
+          {
+            default_install: false,
+            instances: {
+              'app1' => { 'port' => 6380 },
+              'app2' => { 'port' => 6381 },
+            },
+          }
+        end
+
+        it { is_expected.to compile.with_all_deps }
+        it { is_expected.not_to contain_service(package_name) }
+
+        %w[app1 app2].each do |instance|
+          it { is_expected.to contain_file("/etc/rc.conf.d/#{redis}/profile_server-#{instance}").with_content("#{redis}_profiles=\"${#{redis}_profiles} server-#{instance}\"\n") }
+          it { is_expected.to contain_service("#{redis}-server-#{instance}").with_start("/usr/sbin/service #{redis} onestart server-#{instance}") }
+          it { is_expected.to contain_file("/usr/local/etc/#{redis}-server-#{instance}.conf.puppet").with_content(%r{^pidfile /var/run/#{redis}/server-#{instance}\.pid$}) }
+        end
+      end
+
+      describe 'with parameter: instances and default_install', if: facts['os']['family'] == 'FreeBSD' do
+        let(:params) { { instances: { 'app1' => {} } } }
+
+        it { is_expected.to compile.and_raise_error(%r{additional instances require redis::default_install to be false}) }
       end
 
       describe 'with parameter: service_ensure' do
@@ -1516,7 +1630,19 @@ describe 'redis' do
         }
       end
 
-      describe 'with parameter manage_service_file' do
+      describe 'with parameter manage_service_file', if: facts['os']['family'] == 'FreeBSD' do
+        let(:params) do
+          {
+            manage_service_file: true,
+          }
+        end
+
+        it { is_expected.to compile.with_all_deps }
+        it { is_expected.not_to contain_systemd__unit_file("#{service_name}.service") }
+        it { is_expected.to contain_service(service_name).without_enable }
+      end
+
+      describe 'with parameter manage_service_file', unless: facts['os']['family'] == 'FreeBSD' do
         let(:params) do
           {
             manage_service_file: true,
@@ -1725,7 +1851,7 @@ describe 'redis' do
         it { is_expected.to contain_file(config_file_orig).with('content' => %r{^rdb-save-incremental-fsync yes$}) }
       end
 
-      describe 'test systemd service timeouts' do
+      describe 'test systemd service timeouts', unless: facts['os']['family'] == 'FreeBSD' do
         let(:params) do
           {
             manage_service_file: true,
@@ -1738,7 +1864,7 @@ describe 'redis' do
         it { is_expected.to contain_systemd__unit_file("#{service_name}.service").with('content' => %r{^TimeoutStopSec=300$}) }
       end
 
-      describe 'with parameter service_oom_score_adjust set' do
+      describe 'with parameter service_oom_score_adjust set', unless: facts['os']['family'] == 'FreeBSD' do
         let(:params) do
           {
             manage_service_file: true,

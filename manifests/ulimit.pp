@@ -17,18 +17,30 @@
 class redis::ulimit {
   assert_private('The redis::ulimit class is only to be called from the redis::config class')
 
-  if $redis::managed_by_cluster_manager {
-    file { "/etc/security/limits.d/${redis::service_user}.conf":
+  if $redis::service_provider == 'freebsd' {
+    # Sets the open files limit (limits(1) -n) for the default instance and
+    # all profiles.
+    file { "/etc/rc.conf.d/${redis::provider}/limits":
       ensure  => 'file',
       owner   => 'root',
-      group   => 'root',
+      group   => 'wheel',
       mode    => '0644',
-      content => "${redis::service_user} soft nofile ${redis::ulimit}\n${redis::service_user} hard nofile ${redis::ulimit}\n",
+      content => "${redis::provider}_limits=\"-n ${redis::ulimit}\"\n",
     }
-  }
+  } else {
+    if $redis::managed_by_cluster_manager {
+      file { "/etc/security/limits.d/${redis::service_user}.conf":
+        ensure  => 'file',
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0644',
+        content => "${redis::service_user} soft nofile ${redis::ulimit}\n${redis::service_user} hard nofile ${redis::ulimit}\n",
+      }
+    }
 
-  # Migrate from the old managed service
-  file { "/etc/systemd/system/${redis::service_name}.service.d/limit.conf":
-    ensure => absent,
+    # Migrate from the old managed service
+    file { "/etc/systemd/system/${redis::service_name}.service.d/limit.conf":
+      ensure => absent,
+    }
   }
 }

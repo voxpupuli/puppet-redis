@@ -91,6 +91,55 @@ $listening_ports.each |$port| {
 }
 ```
 
+### FreeBSD
+
+On FreeBSD, the module uses the rc(8) script of the `databases/redis` or
+`databases/valkey` port (`redis::service_provider` is set to `freebsd`).
+
+Without additional instances, the default instance runs from
+`/usr/local/etc/redis.conf`. Additional instances run as profiles of the rc
+script. Each `redis::instance` is registered as a profile in
+`/etc/rc.conf.d/redis/` and its service is controlled with
+`service redis <command> <profile>`:
+
+* The profile name is the `service_name` of the instance without the `redis-`
+  prefix, i.e. `server-6380` for `redis::instance { '6380': }`. The rc script
+  reads the configuration of this profile from
+  `/usr/local/etc/redis-server-6380.conf` and its pid from
+  `/var/run/redis/server-6380.pid`.
+* The rc script does not start the default instance once profiles are
+  configured, therefore `default_install` must be `false` when using
+  `redis::instance`.
+* `redis_enable` and `redis_limits` apply to all profiles. They are set from
+  `redis::service_enable` and `redis::ulimit` (if `redis::ulimit_managed` is
+  `true`); the per-instance parameters `service_enable`, `ulimit` and
+  `ulimit_managed` are not used.
+* The directory `/etc/rc.conf.d/redis/` is managed exclusively by this module,
+  files not managed by Puppet are removed.
+
+```puppet
+class { 'redis':
+  default_install => false,
+  service_enable  => true,
+}
+
+redis::instance { '6380':
+  port => 6380,
+}
+```
+
+When using Valkey (`redis::provider: 'valkey'` in Hiera), all paths and names
+above use `valkey` instead of `redis`. The sentinel of the Valkey port differs in name
+and paths:
+
+```puppet
+class { 'redis::sentinel':
+  config_file  => '/usr/local/etc/valkey-sentinel.conf',
+  pid_file     => '/var/run/valkey/valkey-sentinel.pid',
+  service_name => 'valkeysentinel',
+}
+```
+
 ### Manage repositories
 
 Disabled by default but if you really want the module to manage the required

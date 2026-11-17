@@ -20,7 +20,7 @@ describe 'redis::sentinel' do
         when 'Archlinux', 'Debian', 'Suse'
           "/etc/#{redis}/#{redis}-sentinel.conf.puppet"
         when 'FreeBSD'
-          '/usr/local/etc/redis-sentinel.conf.puppet'
+          '/usr/local/etc/sentinel.conf.puppet'
         when 'RedHat'
           if facts['os']['release']['major'].to_i > 8
             "/etc/#{redis}/sentinel.conf.puppet"
@@ -39,8 +39,19 @@ describe 'redis::sentinel' do
           else
             "/run/sentinel/#{redis}-sentinel.pid"
           end
+        when 'FreeBSD'
+          '/var/run/redis/sentinel.pid'
         else
           "/var/run/#{redis}/#{redis}-sentinel.pid"
+        end
+      end
+
+      let(:sentinel_service_name) do
+        case facts['os']['family']
+        when 'FreeBSD'
+          'sentinel'
+        else
+          "#{redis}-sentinel"
         end
       end
 
@@ -101,10 +112,15 @@ describe 'redis::sentinel' do
         }
 
         it {
-          is_expected.to contain_service("#{redis}-sentinel")
+          is_expected.to contain_service(sentinel_service_name)
             .with_ensure('running')
             .with_enable('true')
         }
+
+        it 'copies the config file read by the rc script', if: os_facts['os']['family'] == 'FreeBSD' do
+          is_expected.to contain_exec('cp -p /usr/local/etc/sentinel.conf.puppet /usr/local/etc/sentinel.conf')
+            .that_notifies('Service[sentinel]')
+        end
 
         it { is_expected.to contain_package(sentinel_package_name).with_ensure('installed') }
       end

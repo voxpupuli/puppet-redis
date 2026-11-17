@@ -26,6 +26,19 @@ class redis::config {
     owner  => pick($redis::workdir_owner, $redis::service_user),
   }
 
+  # Directory for the rc.conf snippets of the rc script (enable, limits and
+  # one file per instance profile); unmanaged snippets are purged.
+  if $redis::service_provider == 'freebsd' {
+    file { "/etc/rc.conf.d/${redis::provider}":
+      ensure  => directory,
+      owner   => 'root',
+      group   => 'wheel',
+      mode    => '0755',
+      recurse => true,
+      purge   => true,
+    }
+  }
+
   if $redis::default_install {
     redis::instance { 'default':
       pid_file            => $redis::pid_file,

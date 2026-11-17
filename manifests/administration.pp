@@ -17,6 +17,9 @@
 #   Enable the overcommit memory setting
 # @param somaxconn
 #   Set somaxconn value
+# @param somaxconn_sysctl
+#   Name of the sysctl that sets the somaxconn value
+#   (`kern.ipc.soacceptqueue` on FreeBSD).
 #
 # @author - Peter Souter
 # @see https://redis.io/topics/admin
@@ -25,6 +28,7 @@
 class redis::administration (
   Boolean $enable_overcommit_memory = true,
   Integer[0] $somaxconn             = 65535,
+  String[1] $somaxconn_sysctl       = 'net.core.somaxconn',
 ) {
   if $enable_overcommit_memory {
     sysctl { 'vm.overcommit_memory':
@@ -34,7 +38,7 @@ class redis::administration (
   }
 
   if $somaxconn > 0 {
-    sysctl { 'net.core.somaxconn':
+    sysctl { $somaxconn_sysctl:
       ensure => 'present',
       value  => $somaxconn,
     }

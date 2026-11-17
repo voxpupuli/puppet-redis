@@ -178,12 +178,21 @@
 #   Specify if the service should be part of the catalog.
 # @param service_enable
 #   Enable/disable daemon at boot.
+#   With `service_provider` set to `freebsd`, this sets `<provider>_enable`,
+#   which applies to the default instance and to all instance profiles.
 # @param service_ensure
 #   Specify if the server should be running.
 # @param service_group
 #   Specify which group to run as.
 # @param service_name
 #   Specify the service name for Init or Systemd.
+# @param service_provider
+#   The service management framework used to run Redis instances.
+#   `systemd` manages systemd units and drop-ins. `freebsd` uses the rc(8)
+#   script of the FreeBSD port: the default instance runs from `config_file`,
+#   additional instances run as profiles of this script. Profiles are
+#   registered in `/etc/rc.conf.d/<provider>/`, which is managed exclusively
+#   by this module (unmanaged files are purged).
 # @param service_user
 #   Specify which user to run as.
 # @param service_timeout_start
@@ -259,6 +268,9 @@
 #   Specify if the server's preference should be used when choosing a cipher.
 # @param ulimit
 #   Limit the use of system-wide resources.
+#   With `service_provider` set to `freebsd`, this sets the open files limit
+#   in `<provider>_limits`, which applies to the default instance and to all
+#   instance profiles.
 # @param ulimit_managed
 #   Defines wheter the max number of open files for the
 #   systemd service unit is explicitly managed.
@@ -375,6 +387,7 @@ class redis (
   Stdlib::Absolutepath $pid_file,
   String[1] $service_group,
   String[1] $service_name,
+  Enum['freebsd', 'systemd'] $service_provider,
   String[1] $service_user,
   Variant[Stdlib::Absolutepath, Enum['']] $unixsocket,
   Stdlib::Absolutepath $workdir,
