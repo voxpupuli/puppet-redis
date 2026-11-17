@@ -166,6 +166,7 @@ The following parameters are available in the `redis` class:
 * [`service_ensure`](#-redis--service_ensure)
 * [`service_group`](#-redis--service_group)
 * [`service_name`](#-redis--service_name)
+* [`service_provider`](#-redis--service_provider)
 * [`service_user`](#-redis--service_user)
 * [`service_timeout_start`](#-redis--service_timeout_start)
 * [`service_timeout_stop`](#-redis--service_timeout_stop)
@@ -865,6 +866,8 @@ Default value: `true`
 Data type: `Boolean`
 
 Enable/disable daemon at boot.
+With `service_provider` set to `freebsd`, this sets `<provider>_enable`,
+which applies to the default instance and to all instance profiles.
 
 Default value: `true`
 
@@ -891,6 +894,19 @@ Data type: `String[1]`
 Specify the service name for Init or Systemd.
 
 Default value: `'%{lookup("redis::provider")}'`
+
+##### <a name="-redis--service_provider"></a>`service_provider`
+
+Data type: `Enum['freebsd', 'systemd']`
+
+The service management framework used to run Redis instances.
+`systemd` manages systemd units and drop-ins. `freebsd` uses the rc(8)
+script of the FreeBSD port: the default instance runs from `config_file`,
+additional instances run as profiles of this script. Profiles are
+registered in `/etc/rc.conf.d/<provider>/`, which is managed exclusively
+by this module (unmanaged files are purged).
+
+Default value: `'systemd'`
 
 ##### <a name="-redis--service_user"></a>`service_user`
 
@@ -1156,6 +1172,9 @@ Default value: `false`
 Data type: `Integer[0]`
 
 Limit the use of system-wide resources.
+With `service_provider` set to `freebsd`, this sets the open files limit
+in `<provider>_limits`, which applies to the default instance and to all
+instance profiles.
 
 Default value: `65536`
 
@@ -1507,6 +1526,7 @@ The following parameters are available in the `redis::administration` class:
 
 * [`enable_overcommit_memory`](#-redis--administration--enable_overcommit_memory)
 * [`somaxconn`](#-redis--administration--somaxconn)
+* [`somaxconn_sysctl`](#-redis--administration--somaxconn_sysctl)
 
 ##### <a name="-redis--administration--enable_overcommit_memory"></a>`enable_overcommit_memory`
 
@@ -1523,6 +1543,15 @@ Data type: `Integer[0]`
 Set somaxconn value
 
 Default value: `65535`
+
+##### <a name="-redis--administration--somaxconn_sysctl"></a>`somaxconn_sysctl`
+
+Data type: `String[1]`
+
+Name of the sysctl that sets the somaxconn value
+(`kern.ipc.soacceptqueue` on FreeBSD).
+
+Default value: `'net.core.somaxconn'`
 
 ### <a name="redis--sentinel"></a>`redis::sentinel`
 
@@ -2401,6 +2430,9 @@ Default value: `$redis::managed_by_cluster_manager`
 Data type: `Boolean`
 
 Determine if the systemd service file should be managed
+With `redis::service_provider` set to `freebsd`, this registers the
+instance as a profile in `/etc/rc.conf.d/<provider>/` and manages the
+service of this profile.
 
 Default value: `true`
 
@@ -2497,8 +2529,16 @@ Default value: `true`
 Data type: `Stdlib::Absolutepath`
 
 Where to store the pid.
+With `redis::service_provider` set to `freebsd`, the rc script expects
+`/var/run/<provider>/<profile>.pid`, which is the default.
 
-Default value: `"/var/run/${service_name}/${redis::provider}.pid"`
+Default value:
+
+```puppet
+$redis::service_provider ? {
+    'freebsd' => "/var/run/${redis::provider}/${regsubst($service_name, "^${redis::provider}-", '')}.pid",
+    default   => "/var/run/${service_name}/${redis::provider}.pid"
+```
 
 ##### <a name="-redis--instance--port"></a>`port`
 
@@ -2618,6 +2658,10 @@ Default value: `$redis::save_db_to_disk_interval`
 Data type: `String[1]`
 
 The service name for this instance
+With `redis::service_provider` set to `freebsd`, the service name must
+consist of `<provider>-` followed by the rc script profile name, which
+may only contain the characters `A-Za-z0-9._-`. The rc script reads the
+configuration of the profile from `/usr/local/etc/<service_name>.conf`.
 
 Default value: `"${redis::provider}-server-${name}"`
 
@@ -2626,6 +2670,8 @@ Default value: `"${redis::provider}-server-${name}"`
 Data type: `Boolean`
 
 Enable/disable daemon at boot.
+Not used with `redis::service_provider` set to `freebsd`, where
+`redis::service_enable` applies to all profiles.
 
 Default value: `$redis::service_enable`
 
@@ -2909,6 +2955,8 @@ Default value: `$redis::tls_prefer_server_ciphers`
 Data type: `Integer[0]`
 
 Limit the use of system-wide resources.
+Not used with `redis::service_provider` set to `freebsd`, where
+`redis::ulimit` applies to all profiles.
 
 Default value: `$redis::ulimit`
 
@@ -2918,6 +2966,8 @@ Data type: `Boolean`
 
 Defines wheter the max number of open files for the
 systemd service unit is explicitly managed.
+Not used with `redis::service_provider` set to `freebsd`, where
+`redis::ulimit_managed` applies to all profiles.
 
 Default value: `$redis::ulimit_managed`
 
@@ -2926,8 +2976,16 @@ Default value: `$redis::ulimit_managed`
 Data type: `Variant[Stdlib::Absolutepath, Enum['']]`
 
 Define unix socket path
+With `redis::service_provider` set to `freebsd`, the default is
+`/var/run/<provider>/<profile>.sock`.
 
-Default value: `"/var/run/${service_name}/${redis::provider}.sock"`
+Default value:
+
+```puppet
+$redis::service_provider ? {
+    'freebsd' => "/var/run/${redis::provider}/${regsubst($service_name, "^${redis::provider}-", '')}.sock",
+    default   => "/var/run/${service_name}/${redis::provider}.sock"
+```
 
 ##### <a name="-redis--instance--unixsocketperm"></a>`unixsocketperm`
 

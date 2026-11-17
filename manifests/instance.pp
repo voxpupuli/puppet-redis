@@ -73,6 +73,9 @@
 #   Choose if redis will be managed by a cluster manager such as pacemaker or rgmanager
 # @param manage_service_file
 #   Determine if the systemd service file should be managed
+#   With `redis::service_provider` set to `freebsd`, this registers the
+#   instance as a profile in `/etc/rc.conf.d/<provider>/` and manages the
+#   service of this profile.
 # @param masterauth
 #   If the master is password protected (using the "requirepass" configuration
 # @param maxclients
@@ -97,6 +100,8 @@
 #   You may disable instance service reloads when config file changes
 # @param pid_file
 #   Where to store the pid.
+#   With `redis::service_provider` set to `freebsd`, the rc script expects
+#   `/var/run/<provider>/<profile>.pid`, which is the default.
 # @param port
 #   Configure which port to listen on.
 # @param protected_mode
@@ -128,8 +133,14 @@
 #   save the dataset every N seconds if there are at least M changes in the dataset
 # @param service_name
 #   The service name for this instance
+#   With `redis::service_provider` set to `freebsd`, the service name must
+#   consist of `<provider>-` followed by the rc script profile name, which
+#   may only contain the characters `A-Za-z0-9._-`. The rc script reads the
+#   configuration of the profile from `/usr/local/etc/<service_name>.conf`.
 # @param service_enable
 #   Enable/disable daemon at boot.
+#   Not used with `redis::service_provider` set to `freebsd`, where
+#   `redis::service_enable` applies to all profiles.
 # @param service_ensure
 #   Specify if the server should be running.
 # @param service_group
@@ -209,11 +220,17 @@
 #   Specify if the server's preference should be used when choosing a cipher.
 # @param ulimit
 #   Limit the use of system-wide resources.
+#   Not used with `redis::service_provider` set to `freebsd`, where
+#   `redis::ulimit` applies to all profiles.
 # @param ulimit_managed
 #   Defines wheter the max number of open files for the
 #   systemd service unit is explicitly managed.
+#   Not used with `redis::service_provider` set to `freebsd`, where
+#   `redis::ulimit_managed` applies to all profiles.
 # @param unixsocket
 #   Define unix socket path
+#   With `redis::service_provider` set to `freebsd`, the default is
+#   `/var/run/<provider>/<profile>.sock`.
 # @param unixsocketperm
 #   Define unix socket file permissions
 # @param workdir
@@ -403,8 +420,14 @@ define redis::instance (
   Optional[Redis::OOMScoreAdjust] $service_oom_score_adjust      = $redis::service_oom_score_adjust,
   Boolean $manage_service_file                                   = true,
   String $log_file                                               = "${redis::provider}-server-${name}.log",
-  Stdlib::Absolutepath $pid_file                                 = "/var/run/${service_name}/${redis::provider}.pid",
-  Variant[Stdlib::Absolutepath, Enum['']] $unixsocket            = "/var/run/${service_name}/${redis::provider}.sock",
+  Stdlib::Absolutepath $pid_file                                 = $redis::service_provider ? {
+    'freebsd' => "/var/run/${redis::provider}/${regsubst($service_name, "^${redis::provider}-", '')}.pid",
+    default   => "/var/run/${service_name}/${redis::provider}.pid",
+  },
+  Variant[Stdlib::Absolutepath, Enum['']] $unixsocket            = $redis::service_provider ? {
+    'freebsd' => "/var/run/${redis::provider}/${regsubst($service_name, "^${redis::provider}-", '')}.sock",
+    default   => "/var/run/${service_name}/${redis::provider}.sock",
+  },
   Stdlib::Absolutepath $workdir                                  = "${redis::workdir}/${redis::provider}-server-${name}",
   Optional[Integer[1]] $io_threads                               = $redis::io_threads,
   Optional[Boolean] $io_threads_do_reads                         = $redis::io_threads_do_reads,
@@ -449,7 +472,46 @@ define redis::instance (
     }
   }
 
-  if $manage_service_file {
+  if $redis::service_provider == 'freebsd' {
+    if $title != 'default' {
+      # Additional instances and the default instance are mutually exclusive.
+      if $redis::default_install {
+        fail("redis::instance[${title}]: additional instances require redis::default_install to be false with service_provider 'freebsd'")
+      }
+
+      # Derives the rc script profile name from the service name and restricts
+      # it to characters that are safe in rc.conf and in file names.
+      unless $service_name =~ "^${redis::provider}-[A-Za-z0-9._-]+\$" {
+        fail("redis::instance[${title}]: service_name '${service_name}' must match '${redis::provider}-<profile>' with service_provider 'freebsd'")
+      }
+      $_rc_profile = regsubst($service_name, "^${redis::provider}-", '')
+
+      if $manage_service_file {
+        $_rc_profile_file = "/etc/rc.conf.d/${redis::provider}/profile_${_rc_profile}"
+        $_rc_service = "/usr/sbin/service ${redis::provider}"
+
+        file { $_rc_profile_file:
+          ensure  => file,
+          owner   => 'root',
+          group   => 'wheel',
+          mode    => '0644',
+          content => "${redis::provider}_profiles=\"\${${redis::provider}_profiles} ${_rc_profile}\"\n",
+        }
+
+        # The one* commands control the profile independent of
+        # <provider>_enable, which is managed by redis::service.
+        service { $service_name:
+          ensure   => $service_ensure,
+          provider => 'base',
+          start    => "${_rc_service} onestart ${_rc_profile}",
+          stop     => "${_rc_service} onestop ${_rc_profile}",
+          restart  => "${_rc_service} onerestart ${_rc_profile}",
+          status   => "${_rc_service} onestatus ${_rc_profile}",
+          require  => File[$_rc_profile_file],
+        }
+      }
+    }
+  } elsif $manage_service_file {
     if $title != 'default' {
       $real_service_ensure = $service_ensure == 'running'
       $real_service_enable = $service_enable
@@ -648,10 +710,15 @@ define redis::instance (
     }
 
     if $title != 'default' and $manage_service_file {
+      $_service = $redis::service_provider ? {
+        'freebsd' => Service[$service_name],
+        default   => Service["${service_name}.service"],
+      }
+
       if $notify_service {
-        Exec["copy ${redis_file_name_orig} to ${redis_file_name}"] ~> Service["${service_name}.service"]
+        Exec["copy ${redis_file_name_orig} to ${redis_file_name}"] ~> $_service
       } else {
-        Exec["copy ${redis_file_name_orig} to ${redis_file_name}"] -> Service["${service_name}.service"]
+        Exec["copy ${redis_file_name_orig} to ${redis_file_name}"] -> $_service
       }
     }
   }
